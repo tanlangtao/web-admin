@@ -62,7 +62,7 @@ export default class Admin extends Component {
               <Route component={NotFound} />
             </Switch>
           </Content>
-          <Footer style={{ textAlign: "center", color: "#cccccc" }}>
+          <Footer style={{ textAlign: "center", color: "#cccccc", padding: 5 }}>
             推荐使用谷歌浏览器，可以获得更佳页面操作体验
           </Footer>
         </Layout>

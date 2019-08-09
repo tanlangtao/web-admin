@@ -9,14 +9,20 @@ import jsonp from "jsonp";
 import { message } from "antd";
 import ajax from "./ajax";
 
-
-// const BASE = 'http://localhost:5000'
-const BASE = "";
+const BASE = 'http://localhost:5000'
+// const BASE = "";
 // 登陆
 /*
 export function reqLogin(username, password) {
   return ajax('/login', {username, password}, 'POST')
 }*/
+//user界面
+export const reqUsers = (token, page, limit) =>
+  ajax(
+    "http://operation.0717996.com/admin/user/index",
+    { token, page, limit },
+    "POST"
+  );
 export const reqLogin = (username, password) =>
   ajax(BASE + "/login", { username, password }, "POST");
 
@@ -35,14 +41,6 @@ export const reqUpdateCategory = ({ categoryId, categoryName }) =>
 // 获取一个分类
 export const reqCategory = categoryId =>
   ajax(BASE + "/manage/category/info", { categoryId });
-
-//user界面
-export const reqUsers = (token, page, limit) =>
-ajax(
-  "http://operation.0717996.com/admin/user/index",
-  { token, page, limit },
-  "POST"
-);
 
 // 获取商品分页列表
 export const reqProducts = (pageNum, pageSize) =>
