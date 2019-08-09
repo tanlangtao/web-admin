@@ -9,13 +9,17 @@ import jsonp from "jsonp";
 import { message } from "antd";
 import ajax from "./ajax";
 
-const BASE = 'http://localhost:5000'
-// const BASE = "";
+
+const BASE = process.env.REACT_APP_HOST;
+console.log(BASE);
 // 登陆
-/*
-export function reqLogin(username, password) {
-  return ajax('/login', {username, password}, 'POST')
-}*/
+export const reqLogin = (username, password) =>
+    ajax(BASE + "/login/login", { username, password }, "POST");
+
+// 获取authCode
+export const reqAuthCode = (username, password) =>
+    ajax(BASE + "/login/authCode", { username, password }, "POST");
+
 //user界面
 export const reqUsers = (token, page, limit) =>
   ajax(

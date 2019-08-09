@@ -5,11 +5,13 @@ import {
   Icon,
   Input,
   Button,
+  Modal,
   message
 } from 'antd'
 import './login.less'
 import logo from '../../assets/images/logo.png'
 import {reqLogin} from '../../api'
+import {reqAuthCode} from '../../api'
 import memoryUtils from '../../utils/memoryUtils'
 import storageUtils from '../../utils/storageUtils'
 
@@ -48,6 +50,42 @@ class Login extends Component {
           // 跳转到管理界面 (不需要再回退回到登陆)
           this.props.history.replace('/')
 
+        } else { // 登陆失败
+          // 提示错误信息
+          message.error(result.msg)
+        }
+
+      } else {
+        console.log('检验失败!')
+      }
+    });
+
+    // 得到form对象
+    // const form = this.props.form
+    // // 获取表单项的输入数据
+    // const values = form.getFieldsValue()
+    // console.log('handleSubmit()', values)
+  }
+
+  handleClick = () => {
+
+    this.props.form.validateFields(async (err, values) => {
+      // 检验成功
+      if (!err) {
+        // 请求登陆
+        const {username, password} = values
+        const result = await reqAuthCode(username, password) 
+        console.log('请求成功', result)
+        if (result.status===0 && result.data ) { // 登陆成功
+          Modal.info({
+            title: '首次登录扫码获取验证码',
+            content: (
+              <div>
+              <img src= { result.data.qrurl } alt="验证码"/>
+              </div>
+            )
+          });
+  
         } else { // 登陆失败
           // 提示错误信息
           message.error(result.msg)
@@ -107,7 +145,7 @@ class Login extends Component {
       <div className="login">
         <header className="login-header">
           <img src={logo} alt="logo"/>
-          <h1>React项目: 后台管理系统</h1>
+          <h1>QGame: 后台管理系统</h1>
         </header>
         <section className="login-content">
           <h2>用户登陆</h2>
@@ -127,7 +165,7 @@ class Login extends Component {
                   // 声明式验证: 直接使用别人定义好的验证规则进行验证
                   rules: [
                     { required: true, whitespace: true, message: '用户名必须输入' },
-                    { min: 4, message: '用户名至少4位' },
+                    { min: 3, message: '用户名至少3位' },
                     { max: 12, message: '用户名最多12位' },
                     { pattern: /^[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字或下划线组成' },
                   ],
@@ -159,10 +197,30 @@ class Login extends Component {
 
             </Form.Item>
             <Form.Item>
+              {
+                getFieldDecorator('authcode', {
+                  rules:  [
+                    //{ required: true, whitespace: true, message: '验证码必须输入' },
+                    //{ min: 4, message: '验证码至少4位' }
+                  ],
+                })(
+                  <Input
+                    prefix={<Icon type="qrcode" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                    type="password"
+                    placeholder="验证码"
+                  />
+                )
+              }
+            </Form.Item>
+            <span style={{ marginTop: 5  }} onClick={ this.handleClick }>
+            首次登录，手机下载Google Authenticator 安装，点击此处扫码获取验证码
+            </span>
+            <Form.Item>
               <Button type="primary" htmlType="submit" className="login-form-button">
                 登陆
               </Button>
             </Form.Item>
+            
           </Form>
         </section>
       </div>
