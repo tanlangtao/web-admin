@@ -8,27 +8,22 @@
 import jsonp from "jsonp";
 import { message } from "antd";
 import ajax from "./ajax";
-
+import storageUtils from '../utils/storageUtils'
 
 const BASE = process.env.REACT_APP_HOST;
+const token =  storageUtils.getUser();
 console.log(BASE);
 // 登陆
-export const reqLogin = (username, password) =>
-    ajax(BASE + "/login/login", { username, password }, "POST");
+export const reqLogin = (username, password, authcode) =>
+    ajax(BASE + "/login/login", { username, password, authcode }, "POST");
 
 // 获取authCode
 export const reqAuthCode = (username, password) =>
     ajax(BASE + "/login/authCode", { username, password }, "POST");
 
 //user界面
-export const reqUsers = (token, page, limit) =>
-  ajax(
-    "http://operation.0717996.com/admin/user/index",
-    { token, page, limit },
-    "POST"
-  );
-export const reqLogin = (username, password) =>
-  ajax(BASE + "/login", { username, password }, "POST");
+export const reqUsers = (page, limit) =>
+  ajax(BASE + "/user/index",{ token, page, limit },"POST");
 
 // 获取一级/二级分类的列表
 export const reqCategorys = parentId =>
