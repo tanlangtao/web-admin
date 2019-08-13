@@ -24,7 +24,7 @@ export default {
   删除user
    */
   removeUser () {
-    // localStorage.removeItem(USER_TOKEN)
+    localStorage.removeItem(USER_TOKEN)
     store.remove(USER_TOKEN)
   }
 }

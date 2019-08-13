@@ -10,8 +10,7 @@ import {
 } from 'antd'
 import './login.less'
 import logo from '../../assets/images/logo.png'
-import {reqLogin} from '../../api'
-import {reqAuthCode} from '../../api'
+import {reqLogin, reqAuthCode} from '../../api'
 import memoryUtils from '../../utils/memoryUtils'
 import storageUtils from '../../utils/storageUtils'
 
@@ -41,9 +40,8 @@ class Login extends Component {
           message.success('登陆成功')
           // 保存user
           const user = result.data
-          //memoryUtils.user = user // 保存在内存中
+          memoryUtils.user = user // 保存在内存中
           storageUtils.saveUser(user.token) // 保存到local中
-
           // 跳转到管理界面 (不需要再回退回到登陆)
           this.props.history.replace('/')
 

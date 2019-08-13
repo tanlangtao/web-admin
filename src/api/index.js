@@ -21,6 +21,10 @@ export const reqLogin = (username, password, authcode) =>
 export const reqAuthCode = (username, password) =>
     ajax(BASE + "/login/authCode", { username, password }, "POST");
 
+// 获取菜单
+export const navList = () =>
+    ajax(BASE + "/acl/navList", { token }, "POST");
+
 //user界面
 export const reqUsers = (page, limit) =>
   ajax(BASE + "/user/index",{ token, page, limit },"POST");
