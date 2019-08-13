@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { Layout } from "antd";
 
-import memoryUtils from "../../utils/memoryUtils";
+import storageUtils from "../../utils/storageUtils";
 import LeftNav from "../../components/left-nav";
 import Header from "../../components/header";
 import Home from "../home/home";
@@ -30,7 +30,7 @@ export default class Admin extends Component {
     this.child1 = ref;
   };
   render() {
-    const user = memoryUtils.user;
+    const user =  storageUtils.getUser();
     // 如果内存没有存储user ==> 当前没有登陆
     if (!user || !user.id) {
       // 自动跳转到登陆(在render()中)

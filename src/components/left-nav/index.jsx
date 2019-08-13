@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Menu, Icon, message } from 'antd';
+//import menuList from "../../config/menuConfig";
 import logo from '../../assets/images/logo.png'
 import { navList } from '../../api'
 import './index.less'
@@ -125,6 +126,9 @@ class LeftNav extends Component {
     const path = this.props.location.pathname
 
     return menuList.reduce((pre, item) => {
+
+      // 如果当前用户有item对应的权限, 才需要显示对应的菜单项
+
       // 向pre添加<Menu.Item>
       if (!item.children) {
         pre.push((
@@ -132,7 +136,7 @@ class LeftNav extends Component {
             onClick={() => {
               this.props.onClick(item);
             }}>
-            <Link to='/'>
+            <Link to={'/home'}>
               <Icon type={item.icon} />
               <span>{item.title}</span>
             </Link>

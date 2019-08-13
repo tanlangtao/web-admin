@@ -11,7 +11,6 @@ import {
 import './login.less'
 import logo from '../../assets/images/logo.png'
 import {reqLogin, reqAuthCode} from '../../api'
-import memoryUtils from '../../utils/memoryUtils'
 import storageUtils from '../../utils/storageUtils'
 
 
@@ -40,8 +39,9 @@ class Login extends Component {
           message.success('登陆成功')
           // 保存user
           const user = result.data
-          memoryUtils.user = user // 保存在内存中
-          storageUtils.saveUser(user.token) // 保存到local中
+          //console.log(user,'user')
+          //memoryUtils.user = user // 保存在内存中
+          storageUtils.saveUser(user) // 保存到local中
           // 跳转到管理界面 (不需要再回退回到登陆)
           this.props.history.replace('/')
 
@@ -127,7 +127,7 @@ class Login extends Component {
   render () {
 
     // 如果用户已经登陆, 自动跳转到管理界面
-    const user = memoryUtils.user
+    const user = storageUtils.getUser()
     if(user && user._id) {
       return <Redirect to='/'/>
     }

@@ -11,7 +11,7 @@ import ajax from "./ajax";
 import storageUtils from '../utils/storageUtils'
 
 const BASE = process.env.REACT_APP_HOST;
-const token =  storageUtils.getUser();
+const token =  storageUtils.getUser().token;
 console.log(BASE);
 // 登陆
 export const reqLogin = (username, password, authcode) =>
