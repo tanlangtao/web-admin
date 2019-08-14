@@ -1,14 +1,16 @@
 {
-  "name": "admin-client_final",
+  "name": "admin-web",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@antv/data-set": "^0.10.2",
-    "antd": "^3.17.0",
-    "axios": "^0.18.0",
-    "babel-plugin-import": "^1.11.0",
-    "bizcharts": "^3.5.2",
-    "customize-cra": "^0.2.12",
+    "antd": "^3.21.2",
+    "axios": "^0.18.1",
+    "babel-plugin-import": "^1.12.0",
+    "bizcharts": "^3.5.5",
+    "customize-cra": "^0.2.14",
+    "dotenv": "^8.0.0",
+    "dotenv-expand": "^5.1.0",
     "draft-js": "0.10.5",
     "draftjs-to-html": "^0.8.4",
     "echarts": "^4.2.1",
@@ -18,14 +20,14 @@
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
     "prop-types": "^15.7.2",
-    "react": "^16.8.6",
+    "react": "^16.9.0",
     "react-app-rewired": "^2.1.3",
-    "react-dom": "^16.8.6",
+    "react-dom": "^16.9.0",
     "react-draft-wysiwyg": "^1.13.2",
-    "react-redux": "^7.0.3",
-    "react-router-dom": "^5.0.0",
+    "react-redux": "^7.1.0",
+    "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
-    "redux": "^4.0.1",
+    "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "store": "^2.0.12"
@@ -50,5 +52,20 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "1). 描述项目\r     2). 技术选型 \r     3). API接口/接口文档/测试接口",
+  "main": "config-overrides.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "http://git.0717996.com/roland/admin-web.git"
+  },
+  "keywords": [
+    "admin-web"
+  ],
+  "author": "roland",
+  "license": "ISC"
 }
