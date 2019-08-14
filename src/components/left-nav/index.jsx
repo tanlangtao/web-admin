@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { Menu, Icon, message } from "antd";
-//import menuList from "../../config/menuConfig";
+import { Menu, message } from "antd";
 import { navList } from "../../api";
 import "./index.less";
 
@@ -49,74 +48,69 @@ class LeftNav extends Component {
     const path = this.props.location.pathname;
     return menuList.reduce((pre, item) => {
       // 向pre添加<Menu.Item>
-      if (!item.children) {
-        pre.push(
-          <Menu.Item
-            key={item.id}
-            onClick={() => {
-              this.props.onClick(item);
-            }}
-          >
-            <Link to="/user">
-              {/* <Icon type={item.icon} /> */}
-              <span>{item.title}</span>
-            </Link>
-          </Menu.Item>
-        );
-      } else {
-        // 查找一个与当前请求路径匹配的子Item
-        const cItem = item.children.find(
-          cItem => path.indexOf(cItem.path) === 0
-        );
-        // 如果存在, 说明当前item的子列表需要打开
-        if (cItem) {
-          this.openKey = item.id;
-        }
-        pre.push(
-          <SubMenu
-            key={item.id}
-            title={
-              <span>
+      if (item.key) {
+        if (!item.children) {
+          pre.push(
+            <Menu.Item
+              key={item.key}
+              onClick={() => {
+                this.props.onClick(item);
+              }}
+            >
+              <Link to={item.key}>
+                {/* <Icon type={item.icon} /> */}
                 <span>{item.title}</span>
-              </span>
-            }
-          >
-            {item.children.reduce((cpre, ele) => {
-              cpre.push(
-                <Menu.Item
-                  key={ele.id}
-                  onClick={() => {
-                    this.props.onClick(ele);
-                  }}
-                >
-                  <Link to="/">
-                    <span>{ele.title}</span>
-                  </Link>
-                </Menu.Item>
-              );
-              return cpre;
-            }, [])}
-          </SubMenu>
-        );
+              </Link>
+            </Menu.Item>
+          );
+        } else {
+          // 查找一个与当前请求路径匹配的子Item
+          const cItem = item.children.find(
+            cItem => path.indexOf(cItem.key) === 0
+          );
+          // 如果存在, 说明当前item的子列表需要打开
+          if (cItem) {
+            this.openKey = item.key;
+          }
+          pre.push(
+            <SubMenu
+              key={item.key}
+              title={
+                <span>
+                  <span>{item.title}</span>
+                </span>
+              }
+            >
+              {item.children.reduce((cpre, ele) => {
+                cpre.push(
+                  <Menu.Item
+                    key={ele.key}
+                    onClick={() => {
+                      this.props.onClick(ele);
+                    }}
+                  >
+                    <Link to={ele.key}>
+                      <span>{ele.title}</span>
+                    </Link>
+                  </Menu.Item>
+                );
+                return cpre;
+              }, [])}
+            </SubMenu>
+          );
+        }
       }
-
-      return pre;
+        return pre;
     }, []);
   };
-  componentDidMount() {
-    this.getMenuList();
-  }
-
+  // componentDidMount() {
+  //   this.getMenuList();
+  // }
   render() {
-    const menuNodes = this.getMenuNodes(this.state.data);
-    console.log(menuNodes);
-
+    const menuList = JSON.parse(localStorage.getItem("menuList"));
+    const menuNodes = this.getMenuNodes(menuList);
     // 得到当前请求的路由路径
     let path = this.props.location.pathname;
-    if (path.indexOf("/product") === 0) {
-      // 当前请求的是商品或其子路由界面
-      path = "/product";
-    }
     // 得到需要打开菜单项的key
     const openKey = this.openKey;
 

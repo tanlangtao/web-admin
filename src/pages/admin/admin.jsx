@@ -6,15 +6,8 @@ import storageUtils from "../../utils/storageUtils";
 import LeftNav from "../../components/left-nav";
 import Header from "../../components/header";
 import Home from "../home/home";
-import Category from "../category/category";
-import Product from "../product/product";
-import Role from "../role/role";
 import User from "../user/user";
-import Bar from "../charts/bar";
-import Line from "../charts/line";
-import Pie from "../charts/pie";
 import NotFound from "../not-found/not-found";
-import Order from "../order/order";
 
 const { Footer, Sider, Content } = Layout;
 
@@ -51,14 +44,7 @@ export default class Admin extends Component {
             <Switch>
               <Redirect from="/" exact to="/home" />
               <Route path="/home" exact component={Home} />
-              <Route path="/category" exact component={Category} />
-              <Route path="/product" exact component={Product} />
-              <Route path="/user" exact component={User} />
-              <Route path="/role" exact component={Role} />
-              <Route path="/charts/bar" component={Bar} />
-              <Route path="/charts/pie" component={Pie} />
-              <Route path="/charts/line" component={Line} />
-              <Route path="/order" component={Order} />
+              <Route path="/user/user-list" exact component={User} />
               <Route component={NotFound} />
             </Switch>
           </Content>

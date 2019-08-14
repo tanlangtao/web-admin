@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Icon, Input, Button, Modal, message } from "antd";
 import "./login.less";
-import { reqLogin, reqAuthCode } from "../../api";
+import { reqLogin, reqAuthCode, navList } from "../../api";
 import storageUtils from "../../utils/storageUtils";
 
 const Item = Form.Item; // 不能写在import之前
@@ -11,6 +11,22 @@ const Item = Form.Item; // 不能写在import之前
 登陆的路由组件
  */
 class Login extends Component {
+  getMenuList = async () => {
+    const result = await navList();
+    if (result.status === 0) {
+      let { data } = result;
+      data.forEach(element => {
+        if (element.children) {
+          element.children.forEach(item => {
+            item.title = item.title.slice(24);
+          });
+        }
+      });
+      localStorage.setItem("menuList", JSON.stringify(data));
+      // 跳转到管理界面 (不需要再回退回到登陆)
+      this.props.history.replace("/");
+    }
+  };
   handleSubmit = event => {
     // 阻止事件的默认行为
     event.preventDefault();
@@ -28,8 +44,7 @@ class Login extends Component {
           message.success("登陆成功");
           const user = result.data;
           storageUtils.saveUser(user); // 保存到local中
-          // 跳转到管理界面 (不需要再回退回到登陆)
-          this.props.history.replace("/");
+          this.getMenuList();
         } else {
           // 登陆失败
           // 提示错误信息

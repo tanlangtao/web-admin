@@ -3,9 +3,6 @@ import { withRouter, Link } from "react-router-dom";
 import { Modal, Tabs } from "antd";
 
 import LinkButton from "../link-button";
-import { reqWeather } from "../../api";
-import menuList from "../../config/menuConfig";
-import { formateDate } from "../../utils/dateUtils";
 import memoryUtils from "../../utils/memoryUtils";
 import storageUtils from "../../utils/storageUtils";
 import "./index.less";
@@ -40,6 +37,8 @@ class Header extends Component {
   };
 
   add = tabConfig => {
+    console.log("tabConfig", tabConfig);
+
     const { panes } = this.state;
     let isTabExist = false;
     let oldKey;
@@ -82,12 +81,37 @@ class Header extends Component {
     }
     this.setState({ panes, activeKey });
   };
+
+  /*
+  退出登陆
+   */
+  logout = () => {
+    // 显示确认框
+    Modal.confirm({
+      content: "确定退出吗?",
+      onOk: () => {
+        console.log("OK", this);
+        // 删除保存的user数据
+        storageUtils.removeUser();
+        memoryUtils.user = {};
+        localStorage.removeItem('menuList')
+        // 跳转到login
+        this.props.history.replace("/login");
+      }
+    });
+  };
+
+  componentWillUnmount() {
+    // 清除定时器
+    clearInterval(this.intervalId);
+  }
   componentDidMount() {
     this.props.onRef && this.props.onRef(this);
     let data = this.state;
     const path = this.props.location.pathname;
     let title;
     if (path !== "/home" && path !== "/") {
+      const menuList=JSON.parse(localStorage.getItem('menuList'))
       menuList.forEach(item => {
         if (!item.children && item.key === path) {
           title = item.title;
@@ -105,107 +129,15 @@ class Header extends Component {
         key: "2",
         path: path
       });
-      console.log(data);
       this.setState({
         ...data
       });
     }
   }
 
-  state = {
-    currentTime: formateDate(Date.now()), // 当前时间字符串
-    dayPictureUrl: "" // 天气图片url
-    // weather: '', // 天气的文本
-  };
-
-  getTime = () => {
-    // 每隔1s获取当前时间, 并更新状态数据currentTime
-    this.intervalId = setInterval(() => {
-      const currentTime = formateDate(Date.now());
-      this.setState({ currentTime });
-    }, 1000);
-  };
-
-  // getWeather = async () => {
-  //   // 调用接口请求异步获取数据
-  //   const {dayPictureUrl, weather} = await reqWeather('北京')
-  //   // 更新状态
-  //   this.setState({dayPictureUrl, weather})
-  // }
-
-  getTitle = () => {
-    // 得到当前请求路径
-    const path = this.props.location.pathname;
-    let title;
-    menuList.forEach(item => {
-      if (item.key === path) {
-        // 如果当前item对象的key与path一样,item的title就是需要显示的title
-        title = item.title;
-      } else if (item.children) {
-        // 在所有子item中查找匹配的
-        const cItem = item.children.find(
-          cItem => path.indexOf(cItem.key) === 0
-        );
-        // 如果有值才说明有匹配的
-        if (cItem) {
-          // 取出它的title
-          title = cItem.title;
-        }
-      }
-    });
-    return title;
-  };
-
-  /*
-  退出登陆
-   */
-  logout = () => {
-    // 显示确认框
-    Modal.confirm({
-      content: "确定退出吗?",
-      onOk: () => {
-        console.log("OK", this);
-        // 删除保存的user数据
-        storageUtils.removeUser();
-        memoryUtils.user = {};
-
-        // 跳转到login
-        this.props.history.replace("/login");
-      }
-    });
-  };
-
-  /*
-  第一次render()之后执行一次
-  一般在此执行异步操作: 发ajax请求/启动定时器
-   */
-  // componentDidMount() {
-  // 获取当前的时间
-  // this.getTime()
-  // 获取当前天气
-  // this.getWeather()
-  // }
-  /*
-  // 不能这么做: 不会更新显示
-  componentWillMount () {
-    this.title = this.getTitle()
-  }*/
-
-  /*
-  当前组件卸载之前调用
-   */
-  componentWillUnmount() {
-    // 清除定时器
-    clearInterval(this.intervalId);
-  }
-
   render() {
-    // const { currentTime, dayPictureUrl, weather } = this.state;
-
     const username = memoryUtils.user.username;
 
-    // 得到当前需要显示的title
-    const title = this.getTitle();
     return (
       <div className="header">
         <div className="header-top">
@@ -230,11 +162,6 @@ class Header extends Component {
               />
             ))}
           </Tabs>
-
-          {/* <div className="header-bottom-right"> */}
-          {/* <span>{currentTime}</span> */}
-          {/* <span>{weather}</span> */}
-          {/* </div> */}
         </div>
       </div>
     );

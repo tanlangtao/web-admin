@@ -162,10 +162,12 @@ export default class User extends Component {
           onClick: event => {}
         };
       },
-      render: () => (
+      render: record => (
         <span>
-          <LinkButton>资金明细</LinkButton>
-          <LinkButton>更多</LinkButton>
+          <LinkButton onClick={() => this.getGoldDetail(record)}>
+            资金明细
+          </LinkButton>
+          <LinkButton onClick={() => this.moreDetail(record)}>更多</LinkButton>
         </span>
       )
     },
@@ -296,6 +298,14 @@ export default class User extends Component {
       });
     }
   };
+  getGoldDetail=async record=>{
+    // const id = record.id;
+    // const result = await reqLoadGold(id);
+      // Modal.success({
+      //   title: "资金明细",
+      //   content: `用户${record.id}实时余额是 : ${result.data[0].game_gold}`
+      // });
+  }
   componentWillMount() {
     this.initColumns();
   }
@@ -353,9 +363,13 @@ export default class User extends Component {
         </button>
       </span>
     );
-
+    const extra = (
+      <button onClick={() => this.getUsers(1, 20)}>
+        <Icon type="reload" />
+      </button>
+    );
     return (
-      <Card title={title}>
+      <Card title={title} extra={extra}>
         <Table
           bordered
           rowKey="_id"
