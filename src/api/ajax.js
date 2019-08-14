@@ -15,6 +15,15 @@ import { message } from "antd";
 //设置axios为form-data
 
 export default function ajax(url, data = {}, type = "GET") {
+  // axios.interceptors.request.use((config) => {
+  //   if (['/user/login', '/user/register'].indexOf(config.url) === -1) {
+  //     const token = localStorage.getItem('token')
+  //     if (token) {
+  //       config.headers.Authorization = token
+  //     }
+  //   }
+  //   return config
+  // })
   return new Promise((resolve, reject) => {
     let promise;
     // 1. 执行异步ajax请求
@@ -52,8 +61,3 @@ export default function ajax(url, data = {}, type = "GET") {
       });
   });
 }
-
-// 请求登陆接口
-// ajax('/login', {username: 'Tom', passsword: '12345'}, 'POST').then()
-// 添加用户
-// ajax('/manage/user/add', {username: 'Tom', passsword: '12345', phone: '13712341234'}, 'POST').then()

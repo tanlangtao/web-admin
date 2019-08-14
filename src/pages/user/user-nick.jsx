@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
  
 const FormItem = Form.Item;
-//form代码，没有什么改进，把下面的提交按钮去掉就行
 class NormalLoginForm extends Component {
  
   render() {

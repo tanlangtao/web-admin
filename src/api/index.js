@@ -1,28 +1,56 @@
 /*
-要求: 能根据接口文档定义接口请求
-包含应用中所有接口请求函数的模块
 每个函数的返回值都是promise
-
-基本要求: 能根据接口文档定义接口请求函数
  */
 import jsonp from "jsonp";
 import { message } from "antd";
 import ajax from "./ajax";
 
-const BASE = 'http://localhost:5000'
-// const BASE = "";
-// 登陆
-/*
-export function reqLogin(username, password) {
-  return ajax('/login', {username, password}, 'POST')
-}*/
+const token = "23344cb9aa5bf";
+// const BASE = "http://localhost:5000";
+const BASE = "";
+
+//home界面
+export const navList = () =>
+    ajax("http://operation.0717996.com/admin/acl/navList", { token }, "POST");
+
 //user界面
-export const reqUsers = (token, page, limit) =>
+export const reqUsers = (page, limit) =>
   ajax(
     "http://operation.0717996.com/admin/user/index",
     { token, page, limit },
     "POST"
   );
+export const setGameUserNickName = (id, game_nick) =>
+  ajax(
+    "https://operation.0717996.com/admin/user/setGameUserNickName",
+    { token, id, game_nick },
+    "POST"
+  );
+
+// export const changeGold = (params) =>
+//   ajax(
+//     "https://operation.0717996.com/admin/user/changeGold",
+//     { token, task_type: 0, params },
+//     "POST"
+//   );
+export const searchData = (page, limit, start, end, param) => {
+  let key = param.key;
+  let obj = { page, limit, token, start, end };
+  obj[key] = param.val ? param.val : "";
+  return ajax("http://operation.0717996.com/admin/user/index", obj, "POST");
+};
+export const reqLoadGold = id => {
+  return ajax(
+    "http://operation.0717996.com/admin/user/getGameUser",
+    {
+      page: 1,
+      limit: 10,
+      token,
+      id
+    },
+    "POST"
+  );
+};
 export const reqLogin = (username, password) =>
   ajax(BASE + "/login", { username, password }, "POST");
 
