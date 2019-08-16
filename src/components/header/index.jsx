@@ -37,8 +37,7 @@ class Header extends Component {
   };
 
   add = tabConfig => {
-    console.log("tabConfig", tabConfig);
-
+    // console.log("tabConfig", tabConfig);
     const { panes } = this.state;
     let isTabExist = false;
     let oldKey;
@@ -141,7 +140,7 @@ class Header extends Component {
     return (
       <div className="header">
         <div className="header-top">
-          <span>欢迎, {username}</span>
+          <span>欢迎！{username}</span>
           <LinkButton onClick={this.logout}>退出</LinkButton>
         </div>
         <div className="header-bottom">

@@ -1,20 +1,17 @@
 import React, { Component } from "react";
 import {
   Card,
-  Button,
   Table,
   Modal,
   message,
   DatePicker,
   Icon,
-  Pagination,
-  IForm,
   Select,
   Input,
   LocaleProvider
 } from "antd";
 import zh_CN from "antd/lib/locale-provider/zh_CN";
-import moment from "moment";
+// import moment from "moment";
 import "moment/locale/zh-cn";
 import { formateDate } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-button/index";
@@ -24,7 +21,6 @@ import {
   searchData,
   reqLoadGold
 } from "../../api/index";
-import UserForm from "./user-form";
 import WrappedNormalLoginForm from "././user-nick";
 
 const { RangePicker } = DatePicker;
@@ -156,12 +152,7 @@ export default class User extends Component {
     },
     {
       title: "操作",
-      dataIndex: "",
-      onCell: (record, rowIndex) => {
-        return {
-          onClick: event => {}
-        };
-      },
+      dataIndex: "handle",
       render: record => (
         <span>
           <LinkButton onClick={() => this.getGoldDetail(record)}>
@@ -173,7 +164,6 @@ export default class User extends Component {
     },
     {
       title: "实时余额",
-      dataIndex: "",
       width: 100,
       render: record => (
         <span>
@@ -201,7 +191,7 @@ export default class User extends Component {
     }
   };
   changeNickName = () => {
-    let form = this.refs.getFormVlaue; //通过refs属性可以获得对话框内form对象
+    let form = this.refs.getFormValue; //通过refs属性可以获得对话框内form对象
     form.validateFields(async (err, value) => {
       if (!err) {
         this.setState({ isNickShow: false });
@@ -225,7 +215,7 @@ export default class User extends Component {
   };
   // changeGold=()=>{
   //   //注意这里直接复用了user-nick的模态框，所以取input的值时用value.name
-  //   let form = this.refs.getFormVlaue;
+  //   let form = this.refs.getFormValue;
   //   form.validateFields(async (err, value) => {
   //     if (!err) {
   //       this.setState({ isGoldShow: false });
@@ -388,7 +378,7 @@ export default class User extends Component {
               });
             }
           }}
-          scroll={{ x: 2000, y: 500 }}
+          scroll={{ x: 2000, y: 550 }}
         />
         <Modal
           title="修改昵称"
@@ -398,7 +388,7 @@ export default class User extends Component {
             this.setState({ isNickShow: false });
           }}
         >
-          <WrappedNormalLoginForm ref="getFormVlaue" val={this.game_nick} />
+          <WrappedNormalLoginForm ref="getFormValue" val={this.game_nick} />
         </Modal>
         {/* <Modal
           title="修改金额"
@@ -408,7 +398,7 @@ export default class User extends Component {
             this.setState({ isGoldShow: false });
           }}
         >
-          <WrappedNormalLoginForm ref="getFormVlaue" val={this.game_gold} />
+          <WrappedNormalLoginForm ref="getFormValue" val={this.game_gold} />
         </Modal> */}
       </Card>
     );

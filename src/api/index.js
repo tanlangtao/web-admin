@@ -38,12 +38,56 @@ export const searchData = (page, limit, start, end, param) => {
 };
 export const reqLoadGold = id => {
   return ajax(
-    BASE +"/user/getGameUser",
+    BASE + "/user/getGameUser",
     {
       page: 1,
       limit: 10,
       token,
       id
+    },
+    "POST"
+  );
+};
+
+//后台管理-账户列表
+export const reqAdminList = (page, limit) => {
+  return ajax(
+    BASE + "/acl/index",
+    {
+      page,
+      limit,
+      token
+    },
+    "POST"
+  );
+};
+export const searchAdminData = name => {
+  return ajax(
+    BASE + "/acl/index",
+    {
+      page: 1,
+      limit: 20,
+      token,
+      name
+    },
+    "POST"
+  );
+};
+
+export const roleList = () => {
+  return ajax(
+    BASE + "/acl/roleList",
+    {
+      token
+    },
+    "POST"
+  );
+};
+export const packageList = () => {
+  return ajax(
+    BASE + "/user/packageList",
+    {
+      token
     },
     "POST"
   );

@@ -7,6 +7,7 @@ import LeftNav from "../../components/left-nav";
 import Header from "../../components/header";
 import Home from "../home/home";
 import User from "../user/user";
+import Admin_manage_list from "../admin_manage/admin_manage_list";
 import NotFound from "../not-found/not-found";
 
 const { Footer, Sider, Content } = Layout;
@@ -45,6 +46,7 @@ export default class Admin extends Component {
               <Redirect from="/" exact to="/home" />
               <Route path="/home" exact component={Home} />
               <Route path="/user/user-list" exact component={User} />
+              <Route path="/admin_manage/list" exact component={Admin_manage_list} />
               <Route component={NotFound} />
             </Switch>
           </Content>
