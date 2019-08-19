@@ -7,7 +7,8 @@ import LeftNav from "../../components/left-nav";
 import Header from "../../components/header";
 import Home from "../home/home";
 import User from "../user/user";
-import Admin_manage_list from "../admin_manage/admin_manage_list";
+import Admin_manage_list from "../admin_manage/admin_manage_list/admin_manage_list";
+import Role from "../admin_manage/role/role";
 import NotFound from "../not-found/not-found";
 
 const { Footer, Sider, Content } = Layout;
@@ -24,7 +25,7 @@ export default class Admin extends Component {
     this.child1 = ref;
   };
   render() {
-    const user =  storageUtils.getUser();
+    const user = storageUtils.getUser();
     // 如果内存没有存储user ==> 当前没有登陆
     if (!user || !user.id) {
       // 自动跳转到登陆(在render()中)
@@ -46,7 +47,16 @@ export default class Admin extends Component {
               <Redirect from="/" exact to="/home" />
               <Route path="/home" exact component={Home} />
               <Route path="/user/user-list" exact component={User} />
-              <Route path="/admin_manage/list" exact component={Admin_manage_list} />
+              <Route
+                path="/admin_manage/list"
+                exact
+                component={Admin_manage_list}
+              />
+              <Route
+              path="/admin_manage/role"
+              exact
+              component={Role}
+            />
               <Route component={NotFound} />
             </Switch>
           </Content>

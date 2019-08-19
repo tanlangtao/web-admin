@@ -8,7 +8,7 @@ import {
   Icon,
   Select,
   Input,
-  LocaleProvider
+  ConfigProvider
 } from "antd";
 import zh_CN from "antd/lib/locale-provider/zh_CN";
 // import moment from "moment";
@@ -29,6 +29,7 @@ export default class User extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
+    this.initColumns();
   }
   state = {
     data: [],
@@ -288,17 +289,14 @@ export default class User extends Component {
       });
     }
   };
-  getGoldDetail=async record=>{
+  getGoldDetail = async record => {
     // const id = record.id;
     // const result = await reqLoadGold(id);
-      // Modal.success({
-      //   title: "资金明细",
-      //   content: `用户${record.id}实时余额是 : ${result.data[0].game_gold}`
-      // });
-  }
-  componentWillMount() {
-    this.initColumns();
-  }
+    // Modal.success({
+    //   title: "资金明细",
+    //   content: `用户${record.id}实时余额是 : ${result.data[0].game_gold}`
+    // });
+  };
   componentDidMount() {
     this.getUsers(1, 20);
   }
@@ -306,7 +304,7 @@ export default class User extends Component {
     const { data, count } = this.state;
     const title = (
       <span>
-        <LocaleProvider locale={zh_CN}>
+        <ConfigProvider locale={zh_CN}>
           <RangePicker
             // defaultValue={[moment().locale("zh-cn")]}
             // showTime={{ format: "HH:mm" }}
@@ -314,7 +312,7 @@ export default class User extends Component {
             placeholder={["开始日期", "结束日期"]}
             onChange={this.dataPickerOnChange}
           />
-        </LocaleProvider>
+        </ConfigProvider>
         &nbsp; &nbsp;
         <Select
           style={{ width: 200 }}
