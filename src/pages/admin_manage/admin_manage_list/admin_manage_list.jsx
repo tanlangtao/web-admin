@@ -185,7 +185,6 @@ class Admin_manage_list extends Component {
               style={{ width: 150 }}
               value={this.state.inputParam}
               onChange={this.handleChange}
-              required
             />
             &nbsp; &nbsp;
             <button onClick={this.onSearchData}>
@@ -220,9 +219,12 @@ class Admin_manage_list extends Component {
               this.setState({
                 pageSize: pageSize
               });
+            },
+            onShowSizeChange: (current, size) => {
+              this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1500, y: 550 }}
+          scroll={{ x: 1500, y: 600 }}
         />
         <Modal
           title="添加用户"

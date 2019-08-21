@@ -24,12 +24,27 @@ export const reqUsers = (page, limit) =>
   ajax(BASE + "/user/index", { token, page, limit }, "POST");
 export const setGameUserNickName = (id, game_nick) =>
   ajax(BASE + "/user/setGameUserNickName", { token, id, game_nick }, "POST");
-// export const changeGold = (params) =>
-//   ajax(
-//     "https://operation.0717996.com/admin/user/changeGold",
-//     { token, task_type: 0, params },
-//     "POST"
-//   );
+export const changeGold = (record, value) => {
+  let obj = {};
+  let str = "params[user_id]";
+  obj[str] = record.id;
+  str = "params[amount]";
+  obj[str] = value.gold;
+  str = "params[reason]";
+  obj[str] = value.desc;
+  str = "params[user_name]";
+  obj[str] = record.game_nick;
+  str = "params[proxy_user_id]";
+  obj[str] = record.proxy_user_id;
+  str = "params[package_id]";
+  obj[str] = record.package_id;
+  return ajax(
+    BASE + "/user/changeGold",
+    { token, task_type: 0, ...obj },
+    "POST"
+  );
+};
+
 export const searchData = (page, limit, start, end, param) => {
   let key = param.key;
   let obj = { page, limit, token, start, end };
@@ -149,6 +164,184 @@ export const getRoleList = (page, limit) => {
       page,
       limit,
       token
+    },
+    "POST"
+  );
+};
+export const getRuleList = () => {
+  return ajax(
+    BASE + "/acl/ruleList",
+    {
+      page: 1,
+      limit: 10,
+      token,
+      flag: 1
+    },
+    "POST"
+  );
+};
+
+export const addRole = (name, rules, desc) => {
+  let obj = {};
+  rules.forEach(element => {
+    let str = "rules[" + element + "]";
+    obj[str] = element;
+  });
+  let newobj = {
+    name,
+    ...obj,
+    desc,
+    token
+  };
+  return ajax(BASE + "/acl/addRole", newobj, "POST");
+};
+export const editRole = (name, rules, desc, id) => {
+  let obj = {};
+  rules.forEach(element => {
+    let str = "rules[" + element + "]";
+    obj[str] = element;
+  });
+  let newobj = {
+    role_name: name,
+    role_id: id,
+    ...obj,
+    desc,
+    token
+  };
+  return ajax(BASE + "/acl/editRole", newobj, "POST");
+};
+
+//充值-充值订单
+export const reqOrder_list = (page, limit, searchData) => {
+  if (searchData) {
+    let {
+      start_time,
+      end_time,
+      order_status,
+      type,
+      inputParam,
+      paramKey,
+      order_id,
+      user_id
+    } = searchData;
+    //处理输入关键字和选择关键字，组合成传输参数
+    let obj = {};
+    if (paramKey === "1" || paramKey === "2") {
+      obj.time_type = paramKey;
+    } else {
+      let str = paramKey;
+      obj[str] = inputParam;
+    }
+    return ajax(
+      BASE + "/order/recharge",
+      {
+        page,
+        limit,
+        token,
+        start_time,
+        end_time,
+        order_status,
+        type,
+        order_id,
+        user_id,
+        ...obj
+      },
+      "POST"
+    );
+  } else {
+    return ajax(
+      BASE + "/order/recharge",
+      {
+        page,
+        limit,
+        token
+      },
+      "POST"
+    );
+  }
+};
+export const downloadList = searchData => {
+  let {
+    start_time,
+    end_time,
+    order_status,
+    type,
+    inputParam,
+    paramKey
+  } = searchData;
+  if (!paramKey || paramKey === "") {
+    paramKey = 0;
+  }
+  let params =
+    "token=" +
+    token +
+    "&filed=" +
+    paramKey +
+    "&keyword=" +
+    inputParam +
+    "&start_time=" +
+    start_time +
+    "&end_time=" +
+    end_time +
+    "&order_status=" +
+    order_status +
+    "&type=" +
+    type;
+  let url = BASE + "/order/recharge/?export=2&" + params;
+  if (paramKey) {
+    switch (paramKey) {
+      case "user_id":
+        url = url + "&user_id=" + inputParam;
+        break;
+      case "order_id":
+        url = url + "&order_id=" + inputParam;
+        break;
+      case "create_time":
+        url = url + "&time_type=1";
+        break;
+      case "arrival_time":
+        url = url + "&time_type=2";
+        break;
+      default:
+        break;
+    }
+  }
+  console.log(url);
+  window.open(url);
+};
+export const getChannelList = (page, limit, name) => {
+  return ajax(
+    BASE + "/order/channelList",
+    {
+      page,
+      limit,
+      token,
+      name: name ? name : ""
+    },
+    "POST"
+  );
+};
+export const addChannel = value => {
+  console.log(value);
+  return ajax(
+    BASE + "/order/addChannel",
+    {
+      ...value,
+      token,
+      action: "add"
+    },
+    "POST"
+  );
+};
+export const editPayChannel = (value,id) => {
+  console.log(value);
+  return ajax(
+    BASE + "/order/editPayChannel",
+    {
+      ...value,
+      token,
+      id,
+      action: "edit"
     },
     "POST"
   );

@@ -18,6 +18,7 @@ import LinkButton from "../../components/link-button/index";
 import {
   reqUsers,
   setGameUserNickName,
+  changeGold,
   searchData,
   reqLoadGold
 } from "../../api/index";
@@ -89,9 +90,7 @@ export default class User extends Component {
       onCell: (record, rowIndex) => {
         return {
           onClick: event => {
-            this.game_gold = record.game_gold;
-            this.id = record.id;
-            this.rowIndex = rowIndex;
+            this.goldRecord = record;
             this.setState({
               isGoldShow: true
             });
@@ -147,7 +146,6 @@ export default class User extends Component {
       title: "登陆时间",
       dataIndex: "login_time",
       render: formateDate,
-      key: "login_time",
       sorter: (a, b) => a.login_time - b.login_time,
       width: 200
     },
@@ -189,6 +187,8 @@ export default class User extends Component {
         data: game_user,
         count: result.count
       });
+    } else {
+      message.error(result.msg);
     }
   };
   changeNickName = () => {
@@ -214,32 +214,21 @@ export default class User extends Component {
       form.resetFields();
     });
   };
-  // changeGold=()=>{
-  //   //注意这里直接复用了user-nick的模态框，所以取input的值时用value.name
-  //   let form = this.refs.getFormValue;
-  //   form.validateFields(async (err, value) => {
-  //     if (!err) {
-  //       this.setState({ isGoldShow: false });
-  //       if (value.name !== this.game_gold) {
-  //         const result = await setGameUserNickName( this.id, value.name);
-  //         console.log(result);
-  //         if (result.status === 0) {
-  //           message.success("修改成功!");
-  //           // 首先拿到索引, 也可以从参数中传递过来
-  //           let index = this.rowIndex;
-  //           // 然后根据索引修改
-  //           this.state.data[index][`game_nick`] = value.name;
-  //           // 这个时候并不会更新视图, 需要 setState更新 arr
-  //           console.log(this.state.data);
-  //           this.setState({
-  //             data: this.state.data
-  //           });
-  //         }
-  //       }
-  //     }
-  //     form.resetFields();
-  //   });
-  // }
+  changeGold = () => {
+    //注意这里直接复用了user-nick的模态框，所以取input的值时用value.name
+    let form = this.refs.getFormValue;
+    let goldRecord = this.goldRecord;
+    form.validateFields(async (err, value) => {
+      const res = await changeGold(goldRecord, value);
+      if (res.status === 0) {
+        message.success(res.msg);
+        this.setState({ isGoldShow: false });
+      } else {
+        message.error(res.msg);
+      }
+      form.resetFields();
+    });
+  };
   dataPickerOnChange = (date, dateString) => {
     let startTime = dateString[0] + " 00:00:00";
     let endTime = dateString[1] + " 00:00:00";
@@ -374,9 +363,12 @@ export default class User extends Component {
               this.setState({
                 pageSize: pageSize
               });
+            },
+            onShowSizeChange: (current, size) => {
+              this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 2000, y: 550 }}
+          scroll={{ x: 2000, y: 600 }}
         />
         <Modal
           title="修改昵称"
@@ -386,9 +378,13 @@ export default class User extends Component {
             this.setState({ isNickShow: false });
           }}
         >
-          <WrappedNormalLoginForm ref="getFormValue" val={this.game_nick} />
+          <WrappedNormalLoginForm
+            ref="getFormValue"
+            val={this.game_nick}
+            isNickModal
+          />
         </Modal>
-        {/* <Modal
+        <Modal
           title="修改金额"
           visible={this.state.isGoldShow}
           onOk={this.changeGold}
@@ -396,8 +392,11 @@ export default class User extends Component {
             this.setState({ isGoldShow: false });
           }}
         >
-          <WrappedNormalLoginForm ref="getFormValue" val={this.game_gold} />
-        </Modal> */}
+          <WrappedNormalLoginForm
+            ref="getFormValue"
+            goldRecord={this.goldRecord}
+          />
+        </Modal>
       </Card>
     );
   }

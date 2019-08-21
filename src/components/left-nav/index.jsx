@@ -19,7 +19,6 @@ class LeftNav extends Component {
       this.setState({
         data: result.data
       });
-      console.log(this.state.data);
     } else {
       // 提示错误信息
       message.error(result.msg);
@@ -49,6 +48,7 @@ class LeftNav extends Component {
     return menuList.reduce((pre, item) => {
       // 向pre添加<Menu.Item>
       if (item.key) {
+        //按需渲染侧边栏，必须已经在后台-权限管理中设置了路由key才能渲染
         if (!item.children) {
           pre.push(
             <Menu.Item
@@ -100,7 +100,7 @@ class LeftNav extends Component {
           );
         }
       }
-        return pre;
+      return pre;
     }, []);
   };
   // componentDidMount() {

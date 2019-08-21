@@ -9,6 +9,8 @@ import Home from "../home/home";
 import User from "../user/user";
 import Admin_manage_list from "../admin_manage/admin_manage_list/admin_manage_list";
 import Role from "../admin_manage/role/role";
+import Order_list from "../charge/order_list/order_list";
+import Channel_list from "../charge/channel_list/channel_list";
 import NotFound from "../not-found/not-found";
 
 const { Footer, Sider, Content } = Layout;
@@ -42,7 +44,7 @@ export default class Admin extends Component {
         </Sider>
         <Layout>
           <Header onRef={this.onRef}>Header</Header>
-          <Content style={{ margin: 20, backgroundColor: "#fff" }}>
+          <Content style={{ margin: 5, backgroundColor: "#fff" }}>
             <Switch>
               <Redirect from="/" exact to="/home" />
               <Route path="/home" exact component={Home} />
@@ -52,17 +54,15 @@ export default class Admin extends Component {
                 exact
                 component={Admin_manage_list}
               />
-              <Route
-              path="/admin_manage/role"
-              exact
-              component={Role}
-            />
+              <Route path="/admin_manage/role" exact component={Role} />
+              <Route path="/charge/order_list" exact component={Order_list} />
+              <Route path="/charge/channel-list" exact component={Channel_list} />
               <Route component={NotFound} />
             </Switch>
           </Content>
-          <Footer style={{ textAlign: "center", color: "#cccccc", padding: 5 }}>
+          {/* <Footer style={{ textAlign: "center", color: "#cccccc", padding: 5 }}>
             推荐使用谷歌浏览器，可以获得更佳页面操作体验
-          </Footer>
+          </Footer> */}
         </Layout>
       </Layout>
     );
