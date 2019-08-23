@@ -17,8 +17,6 @@ export const navList = () => {
   const token = storageUtils.getUser().token;
   return ajax(BASE + "/acl/navList", { token }, "POST");
 };
-// ajax(BASE + "/acl/navList", { token }, "POST");
-
 //user界面
 export const reqUsers = (page, limit) =>
   ajax(BASE + "/user/index", { token, page, limit }, "POST");
@@ -306,7 +304,6 @@ export const downloadList = searchData => {
         break;
     }
   }
-  console.log(url);
   window.open(url);
 };
 export const getChannelList = (page, limit, name) => {
@@ -322,7 +319,6 @@ export const getChannelList = (page, limit, name) => {
   );
 };
 export const addChannel = value => {
-  console.log(value);
   return ajax(
     BASE + "/order/addChannel",
     {
@@ -333,8 +329,7 @@ export const addChannel = value => {
     "POST"
   );
 };
-export const editPayChannel = (value,id) => {
-  console.log(value);
+export const editPayChannel = (value, id) => {
   return ajax(
     BASE + "/order/editPayChannel",
     {
@@ -342,6 +337,81 @@ export const editPayChannel = (value,id) => {
       token,
       id,
       action: "edit"
+    },
+    "POST"
+  );
+};
+//充值-古都银行卡
+export const bankList = (page, limit) => {
+  return ajax(
+    BASE + "/order/bankList",
+    {
+      page,
+      limit,
+      token
+    },
+    "POST"
+  );
+};
+
+export const saveBankCard = (searchData, id) => {
+  if (id) {
+    searchData.id = id;
+  }
+  return ajax(
+    BASE + "/order/saveBankCard",
+    {
+      ...searchData,
+      action: id ? "edit" : "add",
+      token
+    },
+    "POST"
+  );
+};
+export const deleteBankCard = id => {
+  return ajax(
+    BASE + "/order/saveBankCard",
+    {
+      id,
+      action: "del",
+      token
+    },
+    "POST"
+  );
+};
+//充值-代充订单
+export const rechargeOrder = (page, limit) => {
+  return ajax(
+    BASE + "/order/rechargeOrder",
+    {
+      page,
+      limit,
+      token,
+      type: 14
+    },
+    "POST"
+  );
+};
+//充值-渠道配置
+export const getChannel = (page, limit) => {
+  return ajax(
+    BASE + "/order/getChannel",
+    {
+      page,
+      limit,
+      token
+    },
+    "POST"
+  );
+};
+export const getChannelInfo = (channel_id) => {
+  return ajax(
+    BASE + "/order/getChannelInfo",
+    {
+      page:1,
+      limit:20,
+      token,
+      channel_id
     },
     "POST"
   );
