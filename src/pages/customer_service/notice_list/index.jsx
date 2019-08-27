@@ -1,11 +1,20 @@
 import React, { Component } from "react";
-import { Card, Table, Modal, message, Icon, Input } from "antd";
+import {
+  Card,
+  Table,
+  Modal,
+  message,
+  Icon,
+  Input,
+  Popover,
+  Popconfirm
+} from "antd";
 import LinkButton from "../../../components/link-button/index";
-import { getChannelList, getRuleList } from "../../../api/index";
+import { getList, packageList, addNotice, delNotice } from "../../../api/index";
 import WrappedAddDataForm from "./addorEdit";
 import { formateDate } from "../../../utils/dateUtils";
 
-class Channel_list extends Component {
+class Notice_list extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,7 +28,7 @@ class Channel_list extends Component {
     this.initColumns();
   }
   getUsers = async (page, limit) => {
-    const result = await getChannelList(page, limit);
+    const result = await getList(page, limit);
     if (result.status === 0) {
       this.setState({
         data: result.data,
@@ -29,17 +38,17 @@ class Channel_list extends Component {
       message.error("网络问题");
     }
   };
-  onSearchData = async () => {
-    const res = await getChannelList(1, 20, this.state.inputParam);
-    if (res.status === 0) {
-      this.setState({
-        data: res.data,
-        count: parseInt(res.count)
-      });
-    } else {
-      message.error("网络问题");
-    }
-  };
+  // onSearchData = async () => {
+  //   const res = await getChannelList(1, 20, this.state.inputParam);
+  //   if (res.status === 0) {
+  //     this.setState({
+  //       data: res.data,
+  //       count: parseInt(res.count)
+  //     });
+  //   } else {
+  //     message.error("网络问题");
+  //   }
+  // };
   addData = () => {
     this.setState({
       isAddDataShow: true
@@ -51,7 +60,16 @@ class Channel_list extends Component {
       isEditDataShow: true
     });
   };
-  refreshPage=()=>{
+  onDelete = async record => {
+    let res = await delNotice(record._id.$oid);
+    if (res.status === 0) {
+      message.success("删除成功");
+      this.refreshPage();
+    } else {
+      message.error("出错了：" + res.msg);
+    }
+  };
+  refreshPage = () => {
     this.setState({
       data: [],
       count: 0,
@@ -61,7 +79,7 @@ class Channel_list extends Component {
       isEditDataShow: false
     });
     this.getUsers(1, 20);
-  }
+  };
   componentDidMount() {
     this.getUsers(1, 20);
   }
@@ -70,35 +88,18 @@ class Channel_list extends Component {
       <Card
         title={
           <span>
-            <Input
-              type="text"
-              placeholder="请输入支付名称"
-              style={{ width: 150 }}
-              value={this.state.inputParam}
-              onChange={e => this.setState({ inputParam: e.target.value })}
-            />
-            &nbsp; &nbsp;
-            <button onClick={this.onSearchData}>
-              <Icon type="search" />
-            </button>
-            &nbsp; &nbsp;
-            <button onClick={this.addData}>
-              <Icon type="user-add" />
-              添加
-            </button>
+            <button onClick={this.addData}>添加</button>
           </span>
         }
         extra={
-          <button
-            onClick={this.refreshPage}
-          >
+          <button onClick={this.refreshPage}>
             <Icon type="reload" />
           </button>
         }
       >
         <Table
           bordered
-          rowKey="id"
+          rowKey={record => record._id.$oid}
           dataSource={this.state.data}
           columns={this.initColumns()}
           size="small"
@@ -118,10 +119,10 @@ class Channel_list extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1900, y: 600 }}
+          scroll={{ x: 1700, y: 600 }}
         />
         <Modal
-          title="添加角色"
+          title="新增公告"
           visible={this.state.isAddDataShow}
           // onOk={this.handleAddData}
           onCancel={() => {
@@ -165,106 +166,81 @@ class Channel_list extends Component {
   }
   initColumns = () => [
     {
-      title: "ID",
-      dataIndex: "id",
-      width: 80
+      title: "标题",
+      dataIndex: "title",
+      width: 300
     },
     {
-      title: "支付名称",
-      dataIndex: "name",
-      width: 120
+      title: "品牌",
+      dataIndex: "package_ids",
+      width: 120,
+      render: (text, record) => <span>{text.join(",")}</span>
     },
     {
-      title: "渠道昵称",
-      dataIndex: "nick_name",
+      title: "代理",
+      dataIndex: "proxy_user_id",
       width: 100
     },
     {
-      title: "单笔-最小限额",
-      dataIndex: "min_amount",
-      width: 120
+      title: "公告类型",
+      dataIndex: "type",
+      width: 120,
+      render: (text, record) => (
+        <span>{text === "1" || text === 1 ? "活动" : "公告"}</span>
+      )
     },
     {
-      title: "单笔-最大限额",
-      dataIndex: "max_amount",
-      width: 120
+      title: "是否跑马灯",
+      dataIndex: "is_slider",
+      width: 120,
+      render: (text, record) => <span>{text === "1" ? "是" : "否"}</span>
     },
     {
-      title: "单笔间隔",
-      dataIndex: "seed",
-      width: 100
-    },
-    {
-      title: "玩家承担的费率%",
-      dataIndex: "rate",
-      width: 150
-    },
-    {
-      title: "固定面值",
-      dataIndex: "span_amount",
-      width: 250
-    },
-    {
-      title: "支付方式",
-      dataIndex: "pay_type",
-      width: 100,
-      render: (text, record, index) => {
-        let word;
-        switch (text) {
-          case "7":
-            word = "支付宝H5";
-            break;
-          case "8":
-            word = "支付宝扫码";
-            break;
-          case "2":
-            word = "快捷支付";
-            break;
-          case "4":
-            word = "微信H5";
-            break;
-          case "5":
-            word = "微信扫码";
-            break;
-          case "1":
-            word = "网银支付";
-            break;
-          case "13":
-            word = "银联扫码";
-            break;
-          case "17":
-            word = "转账银行卡";
-            break;
-          default:
-            word = "";
-            break;
-        }
-        return <span>{word}</span>;
+      title: "公告内容",
+      dataIndex: "words",
+      width: 300,
+      render: (text, record) => (
+        <Popover content={text} trigger="click" overlayStyle={{ width: "60%" }}>
+          <div
+            style={{
+              width: 250,
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              overflow: "hidden"
+            }}
+          >
+            {text}
+          </div>
+        </Popover>
+      ),
+      onCell: (record, rowIndex) => {
+        return {
+          onClick: event => {}, // 点击行
+          onDoubleClick: event => {},
+          onContextMenu: event => {},
+          onMouseEnter: event => {
+            event.target.style.cursor = "pointer";
+          }, // 鼠标移入行
+          onMouseLeave: event => {}
+        };
       }
     },
     {
-      title: "状态",
-      dataIndex: "status",
-      width: 80,
-      render: (text, record, index) => {
-        return <span>{text === "1" ? "开启" : "关闭"}</span>;
-      }
-    },
-    {
-      title: "显示顺序",
-      width: 100,
-      dataIndex: "sort"
-    },
-    {
-      title: "创建时间",
-      dataIndex: "created_at",
-      width: 200,
+      title: "开始时间",
+      dataIndex: "start_time",
+      width: 150,
       render: formateDate
     },
     {
-      title: "修改时间",
-      dataIndex: "updated_at",
-      width: 200,
+      title: "截止时间",
+      dataIndex: "end_time",
+      width: 150,
+      render: formateDate
+    },
+    {
+      title: "创建时间",
+      dataIndex: "create_time",
+      width: 150,
       render: formateDate
     },
     {
@@ -273,10 +249,20 @@ class Channel_list extends Component {
       render: (text, record, index) => (
         <span>
           <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>
+          <LinkButton>
+            <Popconfirm
+              title="确定要删除吗?"
+              onConfirm={()=>this.onDelete(record)}
+              okText="删除"
+              cancelText="取消"
+            >
+              删除
+            </Popconfirm>
+          </LinkButton>
         </span>
       )
     }
   ];
 }
 
-export default Channel_list;
+export default Notice_list;

@@ -14,6 +14,8 @@ import Channel_list from "../charge/channel_list/channel_list";
 import Bankcard_list from "../charge/bankcard_list/bankcard_list";
 import Recharge_order from "../charge/recharge_order/recharge_order";
 import Recharge_channel from "../charge/recharge_channel/recharge_channel";
+import Notice_list from "../customer_service/notice_list";
+import Customer_list from "../customer_service/customer_list";
 import NotFound from "../not-found/not-found";
 
 const { Footer, Sider, Content } = Layout;
@@ -53,16 +55,42 @@ export default class Admin extends Component {
               <Route path="/home" exact component={Home} />
               <Route path="/user/user-list" exact component={User} />
               <Route
+                path="/customer_service/notice_list"
+                exact
+                component={Notice_list}
+              />
+              <Route
+                path="/customer_service/customer_list"
+                exact
+                component={Customer_list}
+              />
+              <Route
                 path="/admin_manage/list"
                 exact
                 component={Admin_manage_list}
               />
               <Route path="/admin_manage/role" exact component={Role} />
               <Route path="/charge/order_list" exact component={Order_list} />
-              <Route path="/charge/channel-list" exact component={Channel_list} />
-              <Route path="/charge/bankcard-list" exact component={Bankcard_list} />
-              <Route path="/charge/recharge_order" exact component={Recharge_order} />
-              <Route path="/charge/recharge_channel" exact component={Recharge_channel} />
+              <Route
+                path="/charge/channel-list"
+                exact
+                component={Channel_list}
+              />
+              <Route
+                path="/charge/bankcard-list"
+                exact
+                component={Bankcard_list}
+              />
+              <Route
+                path="/charge/recharge_order"
+                exact
+                component={Recharge_order}
+              />
+              <Route
+                path="/charge/recharge_channel"
+                exact
+                component={Recharge_channel}
+              />
               <Route component={NotFound} />
             </Switch>
           </Content>

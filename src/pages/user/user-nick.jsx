@@ -34,7 +34,6 @@ class NormalLoginForm extends Component {
                 message: "必须为数字，减少时金额为负"
               }
             ],
-            initialValue: isNickModal ? "" : goldRecord.game_gold
           })(<Input placeholder="必须为数字，减少时金额为负" />)}
         </FormItem>
         <FormItem label="备注" style={isNickModal ? { display: "none" } : {}}>

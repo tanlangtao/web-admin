@@ -17,7 +17,7 @@ export const navList = () => {
   const token = storageUtils.getUser().token;
   return ajax(BASE + "/acl/navList", { token }, "POST");
 };
-//user界面
+//用户列表
 export const reqUsers = (page, limit) =>
   ajax(BASE + "/user/index", { token, page, limit }, "POST");
 export const setGameUserNickName = (id, game_nick) =>
@@ -61,7 +61,54 @@ export const reqLoadGold = id => {
     "POST"
   );
 };
-
+export const userDetail = (page, limit, id) => {
+  return ajax(
+    BASE + "/user/userDetail",
+    {
+      page,
+      limit,
+      token,
+      id
+    },
+    "POST"
+  );
+};
+export const bindInfo = (page, limit, id) => {
+  return ajax(
+    BASE + "/user/bindInfo",
+    {
+      page,
+      limit,
+      token,
+      user_id: id
+    },
+    "POST"
+  );
+};
+export const saveUserBlack = (user_id, action) => {
+  return ajax(
+    BASE + "/trade/saveUserBlack",
+    {
+      token,
+      type: 1,
+      user_id,
+      action
+    },
+    "POST"
+  );
+};
+export const createTask = (user_id, resetpwd) => {
+  return ajax(
+    BASE + "/tasks/createTask",
+    {
+      token,
+      task_type: 2,
+      "params[id]": user_id,
+      "params[account_pass]": resetpwd
+    },
+    "POST"
+  );
+};
 //后台管理-账户列表
 export const reqAdminList = (page, limit) => {
   return ajax(
@@ -208,7 +255,50 @@ export const editRole = (name, rules, desc, id) => {
   };
   return ajax(BASE + "/acl/editRole", newobj, "POST");
 };
-
+//客服-公告设置
+export const getList = (page, limit) => {
+  return ajax(
+    BASE + "/notice/getList",
+    {
+      page,
+      limit,
+      token
+    },
+    "POST"
+  );
+};
+export const addNotice = (formData) => {
+  return ajax(
+    BASE + "/notice/addNotice",
+    {
+      token,
+      ...formData
+    },
+    "POST"
+  );
+};
+export const updateNotice = (formData,id) => {
+  return ajax(
+    BASE + "/notice/updateNotice",
+    {
+      token,
+      id,
+      ...formData
+    },
+    "POST"
+  );
+};
+export const delNotice = (id) => {
+  return ajax(
+    BASE + "/notice/delNotice",
+    {
+      token,
+      id
+    },
+    "POST"
+  );
+};
+//客服-代充账号
 //充值-充值订单
 export const reqOrder_list = (page, limit, searchData) => {
   if (searchData) {
@@ -404,14 +494,26 @@ export const getChannel = (page, limit) => {
     "POST"
   );
 };
-export const getChannelInfo = (channel_id) => {
+export const getChannelInfo = channel_id => {
   return ajax(
     BASE + "/order/getChannelInfo",
     {
-      page:1,
-      limit:20,
+      page: 1,
+      limit: 20,
       token,
       channel_id
+    },
+    "POST"
+  );
+};
+
+export const editChannelInfo = (id, pay_code) => {
+  return ajax(
+    BASE + "/order/editChannelInfo",
+    {
+      id,
+      token,
+      pay_code
     },
     "POST"
   );

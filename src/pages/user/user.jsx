@@ -8,7 +8,9 @@ import {
   Icon,
   Select,
   Input,
-  ConfigProvider
+  ConfigProvider,
+  Popconfirm,
+  Button
 } from "antd";
 import zh_CN from "antd/lib/locale-provider/zh_CN";
 // import moment from "moment";
@@ -20,9 +22,14 @@ import {
   setGameUserNickName,
   changeGold,
   searchData,
-  reqLoadGold
+  reqLoadGold,
+  userDetail,
+  bindInfo,
+  saveUserBlack,
+  createTask
 } from "../../api/index";
 import WrappedNormalLoginForm from "././user-nick";
+import WrappedComponent from "./gold_details";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -38,13 +45,18 @@ export default class User extends Component {
     pageSize: 20,
     isNickShow: false,
     isGoldShow: false,
+    isGoldDetailShow: false,
+    isBindInfoShow: false,
+    isResetPwdShow: false,
+    resetpwd: "",
     game_nick: "",
     startTime: "",
     endTime: "",
     inputParam: {
       key: "id",
       val: ""
-    }
+    },
+    loading: false
   };
 
   initColumns = () => [
@@ -151,13 +163,27 @@ export default class User extends Component {
     },
     {
       title: "操作",
-      dataIndex: "handle",
+      dataIndex: "",
       render: record => (
         <span>
           <LinkButton onClick={() => this.getGoldDetail(record)}>
             资金明细
           </LinkButton>
-          <LinkButton onClick={() => this.moreDetail(record)}>更多</LinkButton>
+          <LinkButton onClick={() => this.getGoldDetail(record, true)}>
+            查看绑定信息
+          </LinkButton>
+          <Popconfirm
+            title="交易所黑名单"
+            onConfirm={() => this.saveUserBlack(record, true)}
+            onCancel={() => this.saveUserBlack(record, false)}
+            okText="添加"
+            cancelText="移除"
+          >
+            <LinkButton>交易所黑名单</LinkButton>
+          </Popconfirm>
+          <LinkButton onClick={() => this.resetPwd(record)}>
+            重置密码
+          </LinkButton>
         </span>
       )
     },
@@ -215,14 +241,15 @@ export default class User extends Component {
     });
   };
   changeGold = () => {
-    //注意这里直接复用了user-nick的模态框，所以取input的值时用value.name
+    this.setState({ loading: true });
+    //这里直接复用了user-nick的模态框，所以取input的值时用value.name
     let form = this.refs.getFormValue;
     let goldRecord = this.goldRecord;
     form.validateFields(async (err, value) => {
       const res = await changeGold(goldRecord, value);
       if (res.status === 0) {
         message.success(res.msg);
-        this.setState({ isGoldShow: false });
+        this.setState({ isGoldShow: false, loading: false });
       } else {
         message.error(res.msg);
       }
@@ -278,13 +305,43 @@ export default class User extends Component {
       });
     }
   };
-  getGoldDetail = async record => {
-    // const id = record.id;
-    // const result = await reqLoadGold(id);
-    // Modal.success({
-    //   title: "资金明细",
-    //   content: `用户${record.id}实时余额是 : ${result.data[0].game_gold}`
-    // });
+  getGoldDetail = async (record, isBindInfo) => {
+    this.isBindInfo = isBindInfo;
+    this.GoldDetailRecord = {
+      data: [],
+      count: 0,
+      id: record.id
+    };
+    const res = !isBindInfo
+      ? await userDetail(1, 20, record.id)
+      : await bindInfo(1, 20, record.id);
+    if (res.status === 0) {
+      this.GoldDetailRecord.data = res.data;
+      this.GoldDetailRecord.count = res.count;
+    }
+    this.setState({ isGoldDetailShow: true });
+  };
+  saveUserBlack = async (record, isAdd) => {
+    let action = isAdd ? "add" : "remove";
+    const res = await saveUserBlack(record.id, action);
+    if (res.status === 0) {
+      message.success("操作成功！");
+    } else {
+      message.success("操作失败:" + res.msg);
+    }
+  };
+  resetPwd = record => {
+    this.setState({ isResetPwdShow: true });
+    this.resetPwdId = record.id;
+  };
+  handleResetpwd = async () => {
+    const res = await createTask(this.resetPwdId, this.state.resetpwd);
+    if (res.status === 0) {
+      message.success("操作成功！");
+      this.setState({ resetpwd: "", isResetPwdShow: false });
+    } else {
+      message.success("操作失败:" + res.msg);
+    }
   };
   componentDidMount() {
     this.getUsers(1, 20);
@@ -368,7 +425,7 @@ export default class User extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 2000, y: 600 }}
+          scroll={{ x: 2100, y: 600 }}
         />
         <Modal
           title="修改昵称"
@@ -387,14 +444,60 @@ export default class User extends Component {
         <Modal
           title="修改金额"
           visible={this.state.isGoldShow}
-          onOk={this.changeGold}
+          // onOk={this.changeGold}
           onCancel={() => {
             this.setState({ isGoldShow: false });
           }}
+          footer={[
+            <Button
+              key="back"
+              onClick={() => {
+                this.setState({ isGoldShow: false });
+              }}
+            >
+              取消
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              loading={this.state.loading}
+              onClick={this.changeGold}
+            >
+              确定
+            </Button>
+          ]}
         >
           <WrappedNormalLoginForm
             ref="getFormValue"
             goldRecord={this.goldRecord}
+          />
+        </Modal>
+        <Modal
+          title={this.isBindInfo ? "查看绑定信息" : "资金明细"}
+          visible={this.state.isGoldDetailShow}
+          onCancel={() => {
+            this.setState({ isGoldDetailShow: false });
+          }}
+          footer={null}
+          width="70%"
+        >
+          <WrappedComponent
+            GoldDetailRecord={this.GoldDetailRecord}
+            isBindInfo={this.isBindInfo}
+          />
+        </Modal>
+        <Modal
+          title="重置密码"
+          visible={this.state.isResetPwdShow}
+          onOk={this.handleResetpwd}
+          onCancel={() => {
+            this.setState({ isResetPwdShow: false });
+          }}
+        >
+          <span>重置密码</span>
+          <Input
+            value={this.state.resetpwd}
+            onChange={e => this.setState({ resetpwd: e.target.value })}
           />
         </Modal>
       </Card>

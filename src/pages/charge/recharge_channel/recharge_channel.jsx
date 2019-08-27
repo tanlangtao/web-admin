@@ -4,34 +4,23 @@ import {
   Table,
   Modal,
   message,
-  Icon,
   Input,
-  Select,
-  ConfigProvider,
-  DatePicker,
   Button,
-  Dropdown,
-  Badge,
-  Menu
 } from "antd";
-import LinkButton from "../../../components/link-button/index";
-import { getChannel, getChannelInfo } from "../../../api/index";
+import { getChannel, getChannelInfo,editChannelInfo } from "../../../api/index";
 
 class Recharge_channel extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
+      childData: [],
+      expandedRowKeys: [],
       count: 0,
       pageSize: 20,
-      start_time: "",
-      end_time: "",
-      order_status: "",
-      type: "",
-      paramKey: "",
       inputParam: "",
-      user_id: "",
-      order_id: ""
+      isEditDataShow: false,
+      recordId: ""
     };
     this.initColumns();
   }
@@ -69,6 +58,9 @@ class Recharge_channel extends Component {
           dataSource={this.state.data}
           columns={this.initColumns()}
           expandedRowRender={this.expandedRowRender}
+          expandRowByClick
+          onExpand={this.onExpandRow}
+          expandedRowKeys={this.state.expandedRowKeys}
           pagination={{
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
@@ -90,6 +82,23 @@ class Recharge_channel extends Component {
             }
           }}
         />
+        <Modal
+          title="修改"
+          visible={this.state.isEditDataShow}
+          onOk={this.handleEditData}
+          onCancel={() => {
+            this.setState({ isEditDataShow: false });
+          }}
+        >
+          <span>pay_code:</span>
+          <Input
+            type="text"
+            value={this.state.inputParam}
+            onChange={event =>
+              this.setState({ inputParam: event.target.value })
+            }
+          />
+        </Modal>
       </Card>
     );
   }
@@ -107,44 +116,85 @@ class Recharge_channel extends Component {
       dataIndex: "member_id"
     }
   ];
-  expandedRowRender = () => {
-    const menu = (
-      <Menu>
-        <Menu.Item>Action 1</Menu.Item>
-        <Menu.Item>Action 2</Menu.Item>
-      </Menu>
-    );
-
+  expandedRowRender = (record, index, indent, expanded) => {
     const columns = [
-      { title: "Date", dataIndex: "date", key: "date" },
-      { title: "Name", dataIndex: "name", key: "name" },
       {
-        title: "Status",
-        key: "state",
-        render: () => (
-          <span>
-            <Badge status="success" />
-            Finished
-          </span>
-        )
+        title: "支付方式名称",
+        dataIndex: "pay_name",
+        width: 200
       },
-      { title: "Upgrade Status", dataIndex: "upgradeNum", key: "upgradeNum" },
       {
-        title: "Action",
-        dataIndex: "operation",
+        title: "所属支付渠道",
+        dataIndex: "channel_name",
+        width: 200
+      },
+      {
+        title: "pay_code",
+        dataIndex: "pay_code",
+        width: 200
+      },
+      {
+        title: "操作",
+        dataIndex: "action",
+        render: (text, record, index) => (
+          <Button onClick={() => this.edit(record)}>修改pay_code</Button>
+        )
       }
     ];
-    const data = [];
-    for (let i = 0; i < 3; ++i) {
-      data.push({
-        key: i,
-        date: "2014-12-24 23:12:00",
-        name: "This is production name",
-        upgradeNum: "Upgraded: 56"
+    return (
+      <Table
+        columns={columns}
+        dataSource={this.state.childData}
+        pagination={false}
+      />
+    );
+  };
+  onExpandRow = async (expanded, record) => {
+    let keys = [];
+    if (expanded) {
+      keys.push(record.id);
+      this.setState({
+        expandedRowKeys: keys
+      });
+      const result = await getChannelInfo(record.id);
+      if (result.status === 0) {
+        result.data.forEach((element, index) => {
+          element.key = index;
+        });
+        this.setState({
+          childData: result.data
+        });
+      } else {
+        message.error("网络问题");
+        this.setState({
+          childData: []
+        });
+      }
+    } else {
+      this.setState({
+        expandedRowKeys: []
       });
     }
-    return <Table columns={columns} dataSource={data} pagination={false} />;
+  };
+  edit = record => {
+    console.log(record.pay_code);
+    this.setState({
+      recordId: record.id,
+      inputParam: record.pay_code,
+      isEditDataShow: true
+    });
+  };
+  handleEditData = async () => {
+    const result = await editChannelInfo(this.state.recordId, this.state.inputParam);
+    if (result.status === 0) {
+      message.success(result.msg);
+      this.setState({
+        isEditDataShow: false,
+        expandedRowKeys:[],
+      });
+    } else {
+      message.error("网络问题");
+    }
   };
 }
-
 export default Recharge_channel;

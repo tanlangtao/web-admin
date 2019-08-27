@@ -1,5 +1,4 @@
 import moment from "moment";
-import { parse } from "@babel/parser";
 /*
 包含n个日期时间处理的工具函数模块
 */

@@ -5,7 +5,7 @@ import { getChannelList, getRuleList } from "../../../api/index";
 import WrappedAddDataForm from "./addorEdit";
 import { formateDate } from "../../../utils/dateUtils";
 
-class Channel_list extends Component {
+class Customer_list extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -279,4 +279,4 @@ class Channel_list extends Component {
   ];
 }
 
-export default Channel_list;
+export default Customer_list;

@@ -203,10 +203,10 @@ class Bankcard_list extends Component {
         <span>
           <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>
           <Popconfirm
-            title="Are you sure delete this task?"
+            title="确定要删除吗"
             onConfirm={() => this.delete(record)}
-            okText="Yes"
-            cancelText="No"
+            okText="删除"
+            cancelText="取消"
           >
             <LinkButton>删除</LinkButton>
           </Popconfirm>
