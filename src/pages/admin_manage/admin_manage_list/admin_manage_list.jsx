@@ -122,12 +122,12 @@ class Admin_manage_list extends Component {
   }
   onSearchData = async () => {
     const result = await searchAdminData(this.state.inputParam);
-    if (result.status === 0) {
+    // if (result.status === 0) {
       this.setState({
         data: result.data,
         count: 1
       });
-    }
+    // }
   };
   addData = async () => {
     const res = await roleList();
@@ -224,7 +224,7 @@ class Admin_manage_list extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1500, y: 600 }}
+          scroll={{ x: 1500, y: "60vh" }}
         />
         <Modal
           title="添加用户"

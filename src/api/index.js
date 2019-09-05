@@ -267,7 +267,7 @@ export const getList = (page, limit) => {
     "POST"
   );
 };
-export const addNotice = (formData) => {
+export const addNotice = formData => {
   return ajax(
     BASE + "/notice/addNotice",
     {
@@ -277,7 +277,7 @@ export const addNotice = (formData) => {
     "POST"
   );
 };
-export const updateNotice = (formData,id) => {
+export const updateNotice = (formData, id) => {
   return ajax(
     BASE + "/notice/updateNotice",
     {
@@ -288,7 +288,7 @@ export const updateNotice = (formData,id) => {
     "POST"
   );
 };
-export const delNotice = (id) => {
+export const delNotice = id => {
   return ajax(
     BASE + "/notice/delNotice",
     {
@@ -299,6 +299,78 @@ export const delNotice = (id) => {
   );
 };
 //客服-代充账号
+export const customerList = (page, limit, user_id) => {
+  return ajax(
+    BASE + "/customer/customerList",
+    {
+      page,
+      limit,
+      token,
+      user_id: user_id ? user_id : ""
+    },
+    "POST"
+  );
+};
+export const saveCustomerService = (formData, action, user_id) => {
+  if (user_id) {
+    formData.user_id = user_id;
+  }
+  return ajax(
+    BASE + "/customer/saveCustomerService",
+    {
+      token,
+      ...formData,
+      action
+    },
+    "POST"
+  );
+};
+//风控-日常运营
+export const dailyReport = (page, limit, package_id, start = "", end = "") => {
+  return ajax(
+    BASE + "/report/dailyReport",
+    {
+      page,
+      limit,
+      token,
+      package_id,
+      start,
+      end
+    },
+    "POST"
+  );
+};
+export const dateReport = (page, limit, package_id, start = "", end = "") => {
+  return ajax(
+    BASE + "/report/dateReport",
+    {
+      page,
+      limit,
+      token,
+      package_id,
+      start,
+      end,
+      group_by: "date"
+    },
+    "POST"
+  );
+};
+export const gameReport = (page, limit, package_id, start = "", end = "") => {
+  return ajax(
+    BASE + "/report/dateReport",
+    {
+      page,
+      limit,
+      token,
+      package_id,
+      start,
+      end,
+      group_by: "date"
+    },
+    "POST"
+  );
+};
+
 //充值-充值订单
 export const reqOrder_list = (page, limit, searchData) => {
   if (searchData) {
@@ -514,6 +586,171 @@ export const editChannelInfo = (id, pay_code) => {
       id,
       token,
       pay_code
+    },
+    "POST"
+  );
+};
+//兑换-兑换订单&代提设置
+export const withDraw = (page, limit, flag, searchData) => {
+  if (searchData) {
+    let {
+      start_time,
+      end_time,
+      order_status,
+      type,
+      inputParam,
+      filed
+    } = searchData;
+    //处理输入关键字和选择关键字，组合成传输参数
+    let obj = {};
+    if (filed !== "create_time" && filed !== "arrival_time") {
+      obj[filed] = inputParam;
+    } else if (filed !== "create_time") {
+      obj.time_type = 1;
+    } else if (filed !== "arrival_time") {
+      obj.time_type = 2;
+    }
+    return ajax(
+      BASE + "/order/withDraw",
+      {
+        page,
+        limit,
+        token,
+        start_time,
+        end_time,
+        order_status,
+        type,
+        ...obj,
+        flag
+      },
+      "POST"
+    );
+  } else {
+    return ajax(
+      BASE + "/order/withDraw",
+      {
+        page,
+        limit,
+        token,
+        flag: 3
+      },
+      "POST"
+    );
+  }
+};
+export const reviewInfo = (page, limit, id) => {
+  return ajax(
+    BASE + "/order/reviewInfo",
+    {
+      page,
+      limit,
+      token,
+      id,
+      type: 2
+    },
+    "POST"
+  );
+};
+export const remarkInfo = (page, limit, id) => {
+  return ajax(
+    BASE + "/order/remarkInfo",
+    {
+      page,
+      limit,
+      token,
+      id,
+      type: 2
+    },
+    "POST"
+  );
+};
+export const downloadWithdrawList = searchData => {
+  let {
+    start_time,
+    end_time,
+    order_status,
+    type,
+    inputParam,
+    filed
+  } = searchData;
+  let params =
+    "token=" +
+    token +
+    "&filed=" +
+    filed +
+    "&keyword=" +
+    inputParam +
+    "&start_time=" +
+    start_time +
+    "&end_time=" +
+    end_time +
+    "&order_status=" +
+    order_status +
+    "&type=" +
+    type;
+  let url = BASE + "/order/withDraw/?export=2&flag=2&" + params;
+  if (filed) {
+    switch (filed) {
+      case "user_id":
+        url = url + "&user_id=" + inputParam;
+        break;
+      case "order_id":
+        url = url + "&order_id=" + inputParam;
+        break;
+      case "create_time":
+        url = url + "&time_type=1";
+        break;
+      case "arrival_time":
+        url = url + "&time_type=2";
+        break;
+      case "replace_id":
+        url = url + "&replace_id=" + inputParam;
+        break;
+      default:
+        break;
+    }
+  }
+  window.open(url);
+};
+export const withDrawRemark = (id, temarks, remark_type) => {
+  return ajax(
+    BASE + "/order/withDrawRemark",
+    {
+      token,
+      id,
+      temarks,
+      remark_type,
+      type: 2
+    },
+    "POST"
+  );
+};
+//兑换-第三方提款设置
+export const getConfigList = () => {
+  return ajax(
+    BASE + "/config/list",
+    {
+      conf_key: "withdraw_channel_info",
+      get_val: 1,
+      token
+    },
+    "POST"
+  );
+};
+export const saveWithDrawChannel = (id, name, value) => {
+  return ajax(
+    BASE + "/config/saveWithDrawChannel",
+    {
+      id,
+      name,
+      ...value,
+      "alipay[name]": "支付宝",
+      "alipay[withdraw_type]": 1,
+      "bankcard[name]": "银行卡",
+      "bankcard[withdraw_type]": 2,
+      conf_key: "withdraw_channel_info",
+      action: "edit",
+      token
     },
     "POST"
   );

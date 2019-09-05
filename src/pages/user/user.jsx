@@ -38,6 +38,10 @@ export default class User extends Component {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.initColumns();
+    this.inputParam = {
+      key: "id",
+      val: ""
+    };
   }
   state = {
     data: [],
@@ -52,10 +56,6 @@ export default class User extends Component {
     game_nick: "",
     startTime: "",
     endTime: "",
-    inputParam: {
-      key: "id",
-      val: ""
-    },
     loading: false
   };
 
@@ -271,12 +271,13 @@ export default class User extends Component {
     this.setState({ inputParam: data });
   }
   onSearchData = async () => {
+    this.inputParam.val=this.input.input.value
     const result = await searchData(
       1,
       this.state.pageSize,
       this.state.startTime,
       this.state.endTime,
-      this.state.inputParam
+      this.inputParam
     );
     if (result.status === 0) {
       const { game_user, proxy_user } = result.data;
@@ -365,15 +366,7 @@ export default class User extends Component {
           placeholder="Select a person"
           defaultValue="id"
           onChange={val => {
-            let data = Object.assign({}, this.state.inputParam, { key: val });
-            this.setState(
-              {
-                inputParam: data
-              },
-              () => {
-                console.log(this.state);
-              }
-            );
+            this.inputParam.key= val
           }}
         >
           <Option value="id">user_id</Option>
@@ -388,8 +381,9 @@ export default class User extends Component {
           type="text"
           placeholder="请输入关键字搜索"
           style={{ width: 150 }}
-          value={this.state.inputParam.val}
-          onChange={this.handleChange}
+          // value={this.state.inputParam.val}
+          // onChange={this.handleChange}
+          ref={Input => (this.input = Input)}
         />
         &nbsp; &nbsp;
         <button onClick={this.onSearchData}>
@@ -398,7 +392,7 @@ export default class User extends Component {
       </span>
     );
     const extra = (
-      <button onClick={() => this.getUsers(1, 20)}>
+      <button onClick={() => {this.getUsers(1, 20);this.input.handleReset()}}>
         <Icon type="reload" />
       </button>
     );
@@ -425,7 +419,7 @@ export default class User extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 2100, y: 600 }}
+          scroll={{ x: 2100, y: "60vh" }}
         />
         <Modal
           title="修改昵称"

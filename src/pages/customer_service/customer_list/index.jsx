@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Card, Table, Modal, message, Icon, Input } from "antd";
+import { Card, Table, Modal, message, Icon, Input,Popconfirm } from "antd";
 import LinkButton from "../../../components/link-button/index";
-import { getChannelList, getRuleList } from "../../../api/index";
+import { customerList, saveCustomerService } from "../../../api/index";
 import WrappedAddDataForm from "./addorEdit";
 import { formateDate } from "../../../utils/dateUtils";
 
@@ -12,14 +12,13 @@ class Customer_list extends Component {
       data: [],
       count: 0,
       pageSize: 20,
-      inputParam: "",
       isAddDataShow: false,
       isEditDataShow: false
     };
     this.initColumns();
   }
   getUsers = async (page, limit) => {
-    const result = await getChannelList(page, limit);
+    const result = await customerList(page, limit);
     if (result.status === 0) {
       this.setState({
         data: result.data,
@@ -30,15 +29,13 @@ class Customer_list extends Component {
     }
   };
   onSearchData = async () => {
-    const res = await getChannelList(1, 20, this.state.inputParam);
+    const res = await customerList(1, 20, this.input.input.value);
     if (res.status === 0) {
       this.setState({
         data: res.data,
         count: parseInt(res.count)
       });
-    } else {
-      message.error("网络问题");
-    }
+    } 
   };
   addData = () => {
     this.setState({
@@ -51,17 +48,27 @@ class Customer_list extends Component {
       isEditDataShow: true
     });
   };
-  refreshPage=()=>{
+  onDelete = async record => {
+    let user_id=record.user_id
+    let res = await saveCustomerService({user_id},"del");
+    if (res.status === 0) {
+      message.success("删除成功");
+      this.refreshPage();
+    } else {
+      message.error("出错了：" + res.msg);
+    }
+  };
+  refreshPage = () => {
     this.setState({
       data: [],
       count: 0,
       pageSize: 20,
-      inputParam: "",
       isAddDataShow: false,
       isEditDataShow: false
     });
     this.getUsers(1, 20);
-  }
+    this.input.handleReset()
+  };
   componentDidMount() {
     this.getUsers(1, 20);
   }
@@ -74,8 +81,7 @@ class Customer_list extends Component {
               type="text"
               placeholder="请输入支付名称"
               style={{ width: 150 }}
-              value={this.state.inputParam}
-              onChange={e => this.setState({ inputParam: e.target.value })}
+              ref={input => (this.input = input)}
             />
             &nbsp; &nbsp;
             <button onClick={this.onSearchData}>
@@ -89,16 +95,14 @@ class Customer_list extends Component {
           </span>
         }
         extra={
-          <button
-            onClick={this.refreshPage}
-          >
+          <button onClick={this.refreshPage}>
             <Icon type="reload" />
           </button>
         }
       >
         <Table
           bordered
-          rowKey="id"
+          rowKey="user_id"
           dataSource={this.state.data}
           columns={this.initColumns()}
           size="small"
@@ -118,12 +122,11 @@ class Customer_list extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1900, y: 600 }}
+          scroll={{ x: 1200, y: "60vh" }}
         />
         <Modal
-          title="添加角色"
+          title="新增"
           visible={this.state.isAddDataShow}
-          // onOk={this.handleAddData}
           onCancel={() => {
             this.setState({ isAddDataShow: false });
           }}
@@ -165,105 +168,40 @@ class Customer_list extends Component {
   }
   initColumns = () => [
     {
-      title: "ID",
-      dataIndex: "id",
-      width: 80
-    },
-    {
-      title: "支付名称",
-      dataIndex: "name",
-      width: 120
-    },
-    {
-      title: "渠道昵称",
-      dataIndex: "nick_name",
-      width: 100
-    },
-    {
-      title: "单笔-最小限额",
-      dataIndex: "min_amount",
-      width: 120
-    },
-    {
-      title: "单笔-最大限额",
-      dataIndex: "max_amount",
-      width: 120
-    },
-    {
-      title: "单笔间隔",
-      dataIndex: "seed",
-      width: 100
-    },
-    {
-      title: "玩家承担的费率%",
-      dataIndex: "rate",
+      title: "账号",
+      dataIndex: "user_id",
       width: 150
     },
     {
-      title: "固定面值",
-      dataIndex: "span_amount",
-      width: 250
+      title: "昵称",
+      dataIndex: "nick_name",
+      width: 150
     },
     {
-      title: "支付方式",
-      dataIndex: "pay_type",
-      width: 100,
-      render: (text, record, index) => {
-        let word;
-        switch (text) {
-          case "7":
-            word = "支付宝H5";
-            break;
-          case "8":
-            word = "支付宝扫码";
-            break;
-          case "2":
-            word = "快捷支付";
-            break;
-          case "4":
-            word = "微信H5";
-            break;
-          case "5":
-            word = "微信扫码";
-            break;
-          case "1":
-            word = "网银支付";
-            break;
-          case "13":
-            word = "银联扫码";
-            break;
-          case "17":
-            word = "转账银行卡";
-            break;
-          default:
-            word = "";
-            break;
-        }
-        return <span>{word}</span>;
-      }
+      title: "品牌ID",
+      dataIndex: "package_ids",
+      width: 100
     },
     {
-      title: "状态",
+      title: "是否显示",
       dataIndex: "status",
-      width: 80,
-      render: (text, record, index) => {
-        return <span>{text === "1" ? "开启" : "关闭"}</span>;
-      }
+      width: 100,
+      render: (text, record) => (text === 1 ? "是" : "否")
     },
     {
-      title: "显示顺序",
-      width: 100,
-      dataIndex: "sort"
+      title: "排序",
+      dataIndex: "sort",
+      width: 100
     },
     {
       title: "创建时间",
-      dataIndex: "created_at",
+      dataIndex: "create_time",
       width: 200,
       render: formateDate
     },
     {
       title: "修改时间",
-      dataIndex: "updated_at",
+      dataIndex: "update_time",
       width: 200,
       render: formateDate
     },
@@ -273,6 +211,16 @@ class Customer_list extends Component {
       render: (text, record, index) => (
         <span>
           <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>
+          <LinkButton>
+            <Popconfirm
+              title="确定要删除吗?"
+              onConfirm={()=>this.onDelete(record)}
+              okText="删除"
+              cancelText="取消"
+            >
+              删除
+            </Popconfirm>
+          </LinkButton>
         </span>
       )
     }

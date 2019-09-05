@@ -55,12 +55,12 @@ class Order_list extends Component {
   }
   onSearchData = async () => {
     const result = await reqOrder_list(1, 20, this.state);
-    if (result.status === 0) {
+    // if (result.status === 0) {
       this.setState({
         data: result.data,
         count: parseInt(result.count)
       });
-    }
+    // }
   };
   download = () => {
     downloadList(this.state);
@@ -205,7 +205,7 @@ class Order_list extends Component {
               } else return;
             }
           }}
-          scroll={{ x: 1900, y: 600 }}
+          scroll={{ x: 1900, y: "60vh" }}
         />
       </Card>
     );
@@ -224,7 +224,7 @@ class Order_list extends Component {
     {
       title: "昵称",
       dataIndex: "user_name",
-      width: 100
+      width: 150
     },
     {
       title: "所属品牌",

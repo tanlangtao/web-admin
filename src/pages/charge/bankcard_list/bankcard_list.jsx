@@ -102,7 +102,7 @@ class Bankcard_list extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1000, y: 600 }}
+          scroll={{ x: 1000, y: "60vh" }}
         />
         <Modal
           title="添加角色"

@@ -16,9 +16,13 @@ import Recharge_order from "../charge/recharge_order/recharge_order";
 import Recharge_channel from "../charge/recharge_channel/recharge_channel";
 import Notice_list from "../customer_service/notice_list";
 import Customer_list from "../customer_service/customer_list";
+import Withdraw_list from "../withdraw/withdraw_list";
+import Daiti_list from "../withdraw/Daiti_list";
+import Channel from "../withdraw/Channel";
 import NotFound from "../not-found/not-found";
-
-const { Footer, Sider, Content } = Layout;
+import DailyReport from "../list/DailyReport";
+import { Provider, KeepAlive } from "react-keep-alive";
+const { Sider, Content } = Layout;
 
 /*
 后台管理的路由组件
@@ -28,9 +32,10 @@ export default class Admin extends Component {
     super(props);
     this.state = {};
   }
-  onRef = ref => {
-    this.child1 = ref;
-  };
+  //header和left-nav通过共同父组件传值
+  // onRef = ref => {
+  //   this.child1 = ref;
+  // };
   render() {
     const user = storageUtils.getUser();
     // 如果内存没有存储user ==> 当前没有登陆
@@ -48,51 +53,131 @@ export default class Admin extends Component {
           />
         </Sider>
         <Layout>
-          <Header onRef={this.onRef}>Header</Header>
+          <Header onRef={ref => (this.child1 = ref)}>Header</Header>
           <Content style={{ margin: 5, backgroundColor: "#fff" }}>
-            <Switch>
-              <Redirect from="/" exact to="/home" />
-              <Route path="/home" exact component={Home} />
-              <Route path="/user/user-list" exact component={User} />
-              <Route
-                path="/customer_service/notice_list"
-                exact
-                component={Notice_list}
-              />
-              <Route
-                path="/customer_service/customer_list"
-                exact
-                component={Customer_list}
-              />
-              <Route
-                path="/admin_manage/list"
-                exact
-                component={Admin_manage_list}
-              />
-              <Route path="/admin_manage/role" exact component={Role} />
-              <Route path="/charge/order_list" exact component={Order_list} />
-              <Route
-                path="/charge/channel-list"
-                exact
-                component={Channel_list}
-              />
-              <Route
-                path="/charge/bankcard-list"
-                exact
-                component={Bankcard_list}
-              />
-              <Route
-                path="/charge/recharge_order"
-                exact
-                component={Recharge_order}
-              />
-              <Route
-                path="/charge/recharge_channel"
-                exact
-                component={Recharge_channel}
-              />
-              <Route component={NotFound} />
-            </Switch>
+            <Provider>
+              <div style={{ height: "100%" }}>
+                <Switch>
+                  <Redirect from="/" exact to="/home" />
+                  <Route path="/home" exact component={Home}>
+                    <KeepAlive name="Home">
+                      <Home></Home>
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/user/user-list" exact component={User}>
+                    <KeepAlive name="User">
+                      <User></User>
+                    </KeepAlive>
+                  </Route>
+                  <Route
+                    path="/customer_service/notice_list"
+                    exact
+                    component={Notice_list}
+                  >
+                    <KeepAlive name="Notice_list">
+                      <Notice_list></Notice_list>
+                    </KeepAlive>
+                  </Route>
+                  <Route
+                    path="/customer_service/customer_list"
+                    exact
+                    component={Customer_list}
+                  >
+                    <KeepAlive name="Customer_list">
+                      <Customer_list></Customer_list>
+                    </KeepAlive>
+                  </Route>
+                  <Route
+                    path="/admin_manage/list"
+                    exact
+                    component={Admin_manage_list}
+                  >
+                    <KeepAlive name="Admin_manage_list">
+                      <Admin_manage_list></Admin_manage_list>
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/admin_manage/role" exact component={Role}>
+                    <KeepAlive name="Role">
+                      <Role></Role>
+                    </KeepAlive>
+                  </Route>
+
+                  <Route
+                    path="/list/daily-report"
+                    exact
+                  >
+                    <KeepAlive name="DailyReport">
+                      <DailyReport></DailyReport>
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/charge/order_list" exact component={Order_list}>
+                    <KeepAlive name="Order_list">
+                      <Order_list></Order_list>
+                    </KeepAlive>
+                  </Route>
+                  <Route
+                    path="/charge/channel-list"
+                    exact
+                    component={Channel_list}
+                  >
+                    <KeepAlive name="Channel_list">
+                      <Channel_list></Channel_list>
+                    </KeepAlive>
+                  </Route>
+                  <Route
+                    path="/charge/bankcard-list"
+                    exact
+                    component={Bankcard_list}
+                  >
+                    <KeepAlive name="Bankcard_list">
+                      <Bankcard_list></Bankcard_list>
+                    </KeepAlive>
+                  </Route>
+                  <Route
+                    path="/charge/recharge_order"
+                    exact
+                    component={Recharge_order}
+                  >
+                    <KeepAlive name="Recharge_order">
+                      <Recharge_order></Recharge_order>
+                    </KeepAlive>
+                  </Route>
+                  <Route
+                    path="/charge/recharge_channel"
+                    exact
+                    component={Recharge_channel}
+                  >
+                    <KeepAlive name="Recharge_channel">
+                      <Recharge_channel></Recharge_channel>
+                    </KeepAlive>
+                  </Route>
+                  <Route
+                    path="/withdraw/withdraw_list"
+                    exact
+                    component={Withdraw_list}
+                  >
+                    <KeepAlive name="Withdraw_list">
+                      <Withdraw_list></Withdraw_list>
+                    </KeepAlive>
+                  </Route>
+                  <Route
+                    path="/withdraw/daiti_list"
+                    exact
+                    component={Daiti_list}
+                  >
+                    <KeepAlive name="Daiti_list">
+                      <Daiti_list></Daiti_list>
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/withdraw/channel" exact component={Channel}>
+                    <KeepAlive name="Channel">
+                      <Channel></Channel>
+                    </KeepAlive>
+                  </Route>
+                  <Route component={NotFound} />
+                </Switch>
+              </div>
+            </Provider>
           </Content>
           {/* <Footer style={{ textAlign: "center", color: "#cccccc", padding: 5 }}>
             推荐使用谷歌浏览器，可以获得更佳页面操作体验

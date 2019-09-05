@@ -5,7 +5,7 @@ import { Modal, Tabs } from "antd";
 import LinkButton from "../link-button";
 import memoryUtils from "../../utils/memoryUtils";
 import storageUtils from "../../utils/storageUtils";
-import "./index.less";
+import "./index.less"
 const { TabPane } = Tabs;
 /*
 左侧导航的组件

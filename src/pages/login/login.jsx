@@ -24,7 +24,8 @@ class Login extends Component {
       });
       localStorage.setItem("menuList", JSON.stringify(data));
       // 跳转到管理界面 (不需要再回退回到登陆)
-      this.props.history.replace("/");
+      // this.props.history.replace("/");
+      setTimeout(() => this.props.history.replace("/"), 300);
     }
   };
   handleSubmit = event => {
@@ -42,8 +43,7 @@ class Login extends Component {
         if (result.status === 0) {
           // 登陆成功
           message.success("登陆成功");
-          const user = result.data;
-          storageUtils.saveUser(user); // 保存到local中
+          storageUtils.saveUser(result.data); // 保存到local中
           this.getMenuList();
         } else {
           // 登陆失败

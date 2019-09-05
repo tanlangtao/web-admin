@@ -119,7 +119,7 @@ class Notice_list extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1700, y: 600 }}
+          scroll={{ x: 1700, y: "60vh" }}
         />
         <Modal
           title="新增公告"

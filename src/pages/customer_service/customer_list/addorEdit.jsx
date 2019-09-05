@@ -1,61 +1,58 @@
 import React, { Component } from "react";
-import { Form, Icon, Input, Button, message, Radio, Select } from "antd";
-import { addChannel, editPayChannel } from "../../../api";
-
+import {
+  Form,
+  Input,
+  Button,
+  Radio,
+  Checkbox,
+  DatePicker,
+  message
+} from "antd";
+import { packageList, saveCustomerService} from "../../../api";
+import moment from "moment";
+import { formateDate } from "../../../utils/dateUtils";
 class AddDataForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-  }
-  //   componentDidMount() {
-  //     if (this.props.isEdit) {
-  //       if (this.props.editDataRecord.rules) {
-  //         let defaultValue = this.props.editDataRecord.rules.split(",");
-  //         this.setState({
-  //           defaultCheckedKeys: defaultValue
-  //         });
-  //       }
-  //     }
-  //   }
-  //index.js:1375 Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.              in AddDataForm (created by Form(AddDataForm))
-  //解决上诉错误：
-  componentWillUnmount() {
-    this.setState = (state, callback) => {
-      return;
+    this.state = {
+      options: [],
+      checkedList: this.props.isEdit
+        ? this.props.editDataRecord.package_ids.split(",").map(Number)
+        : []
     };
+  }
+  getPackageList = async () => {
+    let res = await packageList();
+    if (res.status === 0) {
+      let arr = [];
+      res.data.forEach(element => {
+        arr.push({ label: element.name, value: element.id });
+      });
+      this.setState({
+        options: arr
+      });
+    }
+  };
+  componentDidMount() {
+    this.getPackageList();
   }
   render() {
     const { getFieldDecorator } = this.props.form;
     const { editDataRecord, isEdit } = this.props;
     return (
-      <Form
-        labelCol={{ span: 7 }}
-        wrapperCol={{ span: 17 }}
-        onSubmit={this.handleSubmit}
-      >
-        <Form.Item label="支付名称">
-          {getFieldDecorator("name", {
+      <Form labelCol={{ span: 5 }} onSubmit={this.handleSubmit}>
+        <Form.Item label="账号">
+          {getFieldDecorator("user_id", {
             rules: [
               {
                 required: true,
                 message: "该项不能为空"
               }
             ],
-            initialValue: isEdit ? editDataRecord.name : ""
+            initialValue: isEdit ? parseInt(editDataRecord.user_id) : ''
           })(<Input style={{ width: "60%" }} />)}
         </Form.Item>
-        <Form.Item label="所属渠道ID">
-          {getFieldDecorator("channel_id", {
-            rules: [
-              {
-                required: true,
-                message: "该项不能为空"
-              }
-            ],
-            initialValue: isEdit ? editDataRecord.channel_id : ""
-          })(<Input style={{ width: "60%" }} />)}
-        </Form.Item>
-        <Form.Item label="支付名称">
+        <Form.Item label="昵称">
           {getFieldDecorator("nick_name", {
             rules: [
               {
@@ -66,102 +63,39 @@ class AddDataForm extends Component {
             initialValue: isEdit ? editDataRecord.nick_name : ""
           })(<Input style={{ width: "60%" }} />)}
         </Form.Item>
-        <Form.Item label="状态">
+        <Form.Item label="授权品牌">
+          {getFieldDecorator("package_ids", {
+            rules: [{ required: true, message: "请选择品牌!" }],
+            initialValue:
+              isEdit && editDataRecord.package_ids.split(",").map(Number)
+          })(
+            <Checkbox.Group
+              options={this.state.options}
+              onChange={checkedList => this.checkboxOnChange(checkedList)}
+            />
+          )}
+        </Form.Item>
+        <Form.Item label="是否显示">
           {getFieldDecorator("status", {
             rules: [
               {
-                required: true,
-                message: "该项不能为空"
+                required: true
               }
             ],
             initialValue: isEdit ? parseInt(editDataRecord.status) : 1
           })(
             <Radio.Group>
-              <Radio value={1}>开启</Radio>
-              <Radio value={0}>关闭</Radio>
+              <Radio value={1}>是</Radio>
+              <Radio value={0}>否</Radio>
             </Radio.Group>
           )}
         </Form.Item>
-        <Form.Item label="支付方式">
-          {getFieldDecorator("pay_type", {
-            rules: [{ required: true, message: "请选择支付方式!" }],
-            initialValue: isEdit && editDataRecord.pay_type
-          })(
-            <Select style={{ width: " 40%" }} placeholder="选择支付方式">
-              <Select.Option value="7">支付宝H5</Select.Option>
-              <Select.Option value="8">支付宝扫码</Select.Option>
-              <Select.Option value="2">快捷支付</Select.Option>
-              <Select.Option value="4">微信H5</Select.Option>
-              <Select.Option value="5">微信扫码</Select.Option>
-              <Select.Option value="1">网银支付</Select.Option>
-              <Select.Option value="13">银联扫码</Select.Option>
-              <Select.Option value="17">转账银行卡</Select.Option>
-            </Select>
-          )}
-        </Form.Item>
-        <Form.Item label="支付限额最小面值">
-          {getFieldDecorator("min_amount", {
-            rules: [
-              {
-                required: true,
-                message: "该项不能为空"
-              }
-            ],
-            initialValue: isEdit ? editDataRecord.min_amount : ""
-          })(<Input style={{ width: "30%" }} />)}
-        </Form.Item>
-        <Form.Item label="支付限额最大面值">
-          {getFieldDecorator("max_amount", {
-            rules: [
-              {
-                required: true,
-                message: "该项不能为空"
-              }
-            ],
-            initialValue: isEdit ? editDataRecord.max_amount : ""
-          })(<Input style={{ width: "30%" }} />)}
-        </Form.Item>
-        <Form.Item label="固定面值">
-          {getFieldDecorator("span_amount", {
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: "请输入有效数字"
-              }
-            ],
-            initialValue: isEdit && editDataRecord.span_amount
-          })(<Input style={{ width: "60%" }} />)}
-        </Form.Item>
-        <Form.Item label="单笔间隔">
-          {getFieldDecorator("seed", {
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: "请输入有效数字"
-              }
-            ],
-            initialValue: isEdit && editDataRecord.seed
-          })(<Input style={{ width: "60%" }} />)}
-        </Form.Item>
-        <Form.Item label="玩家承担费率%">
-          {getFieldDecorator("rate", {
-            rules: [
-              {
-                required: true,
-                message: "该项不能为空"
-              }
-            ],
-            initialValue: isEdit && editDataRecord.rate
-          })(<Input style={{ width: "60%" }} />)}
-        </Form.Item>
         <Form.Item label="显示排序">
           {getFieldDecorator("sort", {
-            initialValue: isEdit ? editDataRecord.sort : "0"
+            rules: [{ required: true }],
+            initialValue: isEdit && editDataRecord.sort
           })(<Input style={{ width: "60%" }} />)}
         </Form.Item>
-
         <Form.Item>
           <Button
             type="primary"
@@ -177,11 +111,18 @@ class AddDataForm extends Component {
   handleSubmit = event => {
     event.preventDefault();
     this.props.form.validateFields(async (err, value) => {
-      let id = this.props.editDataRecord ? this.props.editDataRecord.id : "";
+      let id = this.props.editDataRecord
+        ? this.props.editDataRecord.user_id
+        : "";
       if (!err) {
+        value.package_ids.forEach(item => {
+          let str = "group[" + item + "]";
+          value[str] = item;
+        });
+        delete value.package_ids;
         const res = !this.props.isEdit
-          ? await addChannel(value)
-          : await editPayChannel(value,id);
+          ? await saveCustomerService(value, "add")
+          : await saveCustomerService(value, "edit", id);
         if (res.status === 0) {
           message.success("提交成功");
           this.props.refreshPage();
@@ -193,6 +134,11 @@ class AddDataForm extends Component {
       } else {
         message.error("提交失败");
       }
+    });
+  };
+  checkboxOnChange = checkedList => {
+    this.setState({
+      checkedList: checkedList
     });
   };
 }

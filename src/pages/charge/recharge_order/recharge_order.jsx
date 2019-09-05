@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import {
   Card,
   Table,
-  Modal,
   message,
   Icon,
   Input,
@@ -11,9 +10,8 @@ import {
   DatePicker,
   Button
 } from "antd";
-import "moment/locale/zh-cn";
-import LinkButton from "../../../components/link-button/index";
 import { formateDate } from "../../../utils/dateUtils";
+import "moment/locale/zh-cn";
 import zh_CN from "antd/lib/locale-provider/zh_CN";
 import { rechargeOrder, reqOrder_list, downloadList } from "../../../api/index";
 
@@ -53,12 +51,12 @@ class Recharge_order extends Component {
   }
   onSearchData = async () => {
     const result = await reqOrder_list(1, 20, this.state);
-    if (result.status === 0) {
+    // if (result.status === 0) {
       this.setState({
         data: result.data,
         count: parseInt(result.count)
       });
-    }
+    // }
   };
   download = () => {
     downloadList(this.state);
@@ -163,7 +161,7 @@ class Recharge_order extends Component {
               } else return;
             }
           }}
-          scroll={{ x: 1900, y: 600 }}
+          scroll={{ x: 1900, y: "60vh" }}
         />
       </Card>
     );
