@@ -6,9 +6,10 @@ import Admin from "./pages/admin/admin";
 
 import { Provider } from "react-redux";
 import store from "./store";
-/*
-应用的根组件
- */
+
+
+//应用的根组件
+ 
 export default class App extends Component {
   render() {
     return (

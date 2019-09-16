@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { Layout } from "antd";
 
-import storageUtils from "../../utils/storageUtils";
 import LeftNav from "../../components/left-nav";
 import Header from "../../components/header";
 import Home from "../home/home";
@@ -14,13 +13,26 @@ import Channel_list from "../charge/channel_list/channel_list";
 import Bankcard_list from "../charge/bankcard_list/bankcard_list";
 import Recharge_order from "../charge/recharge_order/recharge_order";
 import Recharge_channel from "../charge/recharge_channel/recharge_channel";
-import Notice_list from "../customer_service/notice_list";
+import NoticeList from "../customer_service/notice_list";
 import Customer_list from "../customer_service/customer_list";
 import Withdraw_list from "../withdraw/withdraw_list";
+import WrappedConfig from "../gameSetting/config";
+import Tasks from "../messageCenter/tasks";
+import AccountList from "../trade/accountList";
+import ApplyHistory from "../trade/applyHistory";
+import TradeOrder from "../trade/tradeOrder";
+import ActivityList from "../activity/activityList";
+import GiftVoucher from "../activity/giftVoucher";
+import GiftList from "../gift/giftList";
+import GiftSetting from "../gift/giftSetting";
+import AI from "../AI/robot";
+// import Withdraw_list from "../withdraw/withdraw_list";
+
 import Daiti_list from "../withdraw/Daiti_list";
 import Channel from "../withdraw/Channel";
 import NotFound from "../not-found/not-found";
 import DailyReport from "../list/DailyReport";
+import RuleManage from "../admin_manage/ruleManage";
 import { Provider, KeepAlive } from "react-keep-alive";
 const { Sider, Content } = Layout;
 
@@ -37,10 +49,9 @@ export default class Admin extends Component {
   //   this.child1 = ref;
   // };
   render() {
-    const user = storageUtils.getUser();
-    // 如果内存没有存储user ==> 当前没有登陆
-    if (!user || !user.id) {
-      // 自动跳转到登陆(在render()中)
+    const token = localStorage.token;
+    // 如果内存没有存储token ==> 当前没有登陆
+    if (!token) {
       return <Redirect to="/login" />;
     }
     return (
@@ -59,23 +70,15 @@ export default class Admin extends Component {
               <div style={{ height: "100%" }}>
                 <Switch>
                   <Redirect from="/" exact to="/home" />
-                  <Route path="/home" exact component={Home}>
-                    <KeepAlive name="Home">
-                      <Home></Home>
-                    </KeepAlive>
-                  </Route>
-                  <Route path="/user/user-list" exact component={User}>
+                  <Route path="/home" exact component={Home} />
+                  <Route path="/user/user-list" exact>
                     <KeepAlive name="User">
-                      <User></User>
+                      <User />
                     </KeepAlive>
                   </Route>
-                  <Route
-                    path="/customer_service/notice_list"
-                    exact
-                    component={Notice_list}
-                  >
+                  <Route path="/customer_service/notice_list">
                     <KeepAlive name="Notice_list">
-                      <Notice_list></Notice_list>
+                      <NoticeList />
                     </KeepAlive>
                   </Route>
                   <Route
@@ -96,18 +99,58 @@ export default class Admin extends Component {
                       <Admin_manage_list></Admin_manage_list>
                     </KeepAlive>
                   </Route>
+                  <Route path="/admin_manage/rule" exact component={RuleManage}>
+                    <KeepAlive name="RuleManage">
+                      <RuleManage></RuleManage>
+                    </KeepAlive>
+                  </Route>
                   <Route path="/admin_manage/role" exact component={Role}>
                     <KeepAlive name="Role">
                       <Role></Role>
                     </KeepAlive>
                   </Route>
 
-                  <Route
-                    path="/list/daily-report"
-                    exact
-                  >
+                  <Route path="/list/daily-report" exact>
                     <KeepAlive name="DailyReport">
                       <DailyReport></DailyReport>
+                    </KeepAlive>
+                  </Route>
+
+                  <Route path="/gameSetting/config" exact>
+                    <KeepAlive name="WrappedConfig">
+                      <WrappedConfig></WrappedConfig>
+                    </KeepAlive>
+                  </Route>
+
+                  <Route path="/messageCenter/tasks" exact>
+                    <KeepAlive name="Tasks">
+                      <Tasks></Tasks>
+                    </KeepAlive>
+                  </Route>
+
+                  <Route path="/trade/accountList" exact>
+                    <KeepAlive name="AccountList">
+                      <AccountList></AccountList>
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/trade/applyHistory" exact>
+                    <KeepAlive name="ApplyHistory">
+                      <ApplyHistory></ApplyHistory>
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/trade/tradeOrder" exact>
+                    <KeepAlive name="TradeOrder">
+                      <TradeOrder></TradeOrder>
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/activity/list" exact>
+                    <KeepAlive name="ActivityList">
+                      <ActivityList />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/activity/giftVoucher" exact>
+                    <KeepAlive name="giftVoucher">
+                      <GiftVoucher />
                     </KeepAlive>
                   </Route>
                   <Route path="/charge/order_list" exact component={Order_list}>
@@ -166,12 +209,27 @@ export default class Admin extends Component {
                     component={Daiti_list}
                   >
                     <KeepAlive name="Daiti_list">
-                      <Daiti_list></Daiti_list>
+                      <Daiti_list />
                     </KeepAlive>
                   </Route>
-                  <Route path="/withdraw/channel" exact component={Channel}>
+                  <Route path="/withdraw/channel" exact>
                     <KeepAlive name="Channel">
                       <Channel></Channel>
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/gift/list" exact>
+                    <KeepAlive name="GiftList">
+                      <GiftList></GiftList>
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/gift/setting" exact>
+                    <KeepAlive name="GiftSetting">
+                      <GiftSetting></GiftSetting>
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/AI/robot" exact>
+                    <KeepAlive name="AI">
+                      <AI></AI>
                     </KeepAlive>
                   </Route>
                   <Route component={NotFound} />

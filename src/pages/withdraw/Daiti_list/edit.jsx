@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Icon, Input, Button, message, Radio, Select } from "antd";
+import {  Input, Button, message } from "antd";
 import { withDrawRemark } from "../../../api";
 
 export default class AddDataForm extends Component {

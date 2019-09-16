@@ -1,29 +1,19 @@
 import React, { Component } from "react";
-import {
-  Card,
-  Table,
-  Modal,
-  message,
-  Icon,
-  Input,
-  Select,
-  ConfigProvider,
-  DatePicker,
-  Button
-} from "antd";
-import "moment/locale/zh-cn";
-// import ReactHTMLTableToExcel from "react-html-table-to-excel";
-import LinkButton from "../../../components/link-button/index";
+import { Card, Table, message, Icon, Input, Select, Modal, Button } from "antd";
 import { formateDate } from "../../../utils/dateUtils";
-import zh_CN from "antd/lib/locale-provider/zh_CN";
 import "moment/locale/zh-cn";
-import { reqOrder_list, downloadList } from "../../../api/index";
+import {
+  reqOrder_list,
+  downloadList,
+  orderReviewEdit
+} from "../../../api/index";
+import LinkButton from "../../../components/link-button";
+import MyDatePicker from "../../../components/MyDatePicker";
+import Diaodan from "./editData";
 
-const { RangePicker } = DatePicker;
 class Order_list extends Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
     this.state = {
       data: [],
       count: 0,
@@ -32,35 +22,34 @@ class Order_list extends Component {
       end_time: "",
       order_status: "",
       type: "",
-      paramKey: "",
-      inputParam: "",
       user_id: "",
-      order_id: ""
+      order_id: "",
+      isQueryShow: false,
+      isEditShow: false
     };
-    this.initColumns();
+    this.inputKey = "";
+    this.inputValue = "";
+    this.order_status = "";
+    this.type = "";
   }
   getUsers = async (page, limit) => {
-    const result = await reqOrder_list(page, limit);
-    if (result.status === 0) {
-      this.setState({
-        data: result.data,
-        count: parseInt(result.count)
-      });
-    } else {
-      message.error("网络问题");
-    }
+    const result = await reqOrder_list(
+      page,
+      limit,
+      this.state.start_time,
+      this.state.end_time,
+      this.order_status,
+      this.type,
+      this.inputKey,
+      this.inputValue
+    );
+    this.setState({
+      data: result.data,
+      count: parseInt(result.count)
+    });
   };
-  handleChange(event) {
-    this.setState({ inputParam: event.target.value });
-  }
   onSearchData = async () => {
-    const result = await reqOrder_list(1, 20, this.state);
-    // if (result.status === 0) {
-      this.setState({
-        data: result.data,
-        count: parseInt(result.count)
-      });
-    // }
+    this.setState({ isQueryShow: true });
   };
   download = () => {
     downloadList(this.state);
@@ -74,20 +63,10 @@ class Order_list extends Component {
         title={
           <div>
             <div>
-              <ConfigProvider locale={zh_CN}>
-                <RangePicker
-                  // defaultValue={[moment().locale("zh-cn")]}
-                  // showTime={{ format: "HH:mm" }}
-                  format="YYYY-MM-DD"
-                  placeholder={["开始日期", "结束日期"]}
-                  onChange={this.dataPickerOnChange}
-                />
-              </ConfigProvider>
-              &nbsp; &nbsp;
               <Select
                 placeholder="请选择"
                 style={{ width: 120 }}
-                onSelect={value => this.setState({ paramKey: value })}
+                onSelect={value => (this.inputKey = value)}
               >
                 <Select.Option value="order_id">订单id</Select.Option>
                 <Select.Option value="user_id">user_id</Select.Option>
@@ -99,14 +78,22 @@ class Order_list extends Component {
                 type="text"
                 placeholder="请输入关键字"
                 style={{ width: 150 }}
-                value={this.state.inputParam}
-                onChange={this.handleChange}
+                ref={Input => (this.input = Input)}
+              />
+              &nbsp; &nbsp;
+              <MyDatePicker
+                handleValue={val => {
+                  this.setState({
+                    start_time: val[0],
+                    end_time: val[1]
+                  });
+                }}
               />
               &nbsp; &nbsp;
               <Select
                 defaultValue=""
                 style={{ width: 200 }}
-                onSelect={value => this.setState({ order_status: value })}
+                onSelect={value => (this.order_status = value)}
               >
                 <Select.Option value="">订单状态</Select.Option>
                 <Select.Option value="0">全部</Select.Option>
@@ -124,7 +111,7 @@ class Order_list extends Component {
               <Select
                 defaultValue=""
                 style={{ width: 120 }}
-                onSelect={value => this.setState({ type: value })}
+                onSelect={value => (this.type = value)}
               >
                 <Select.Option value="">订单类型</Select.Option>
                 <Select.Option value="0">全部</Select.Option>
@@ -138,44 +125,41 @@ class Order_list extends Component {
                 <Select.Option value="9">快捷支付</Select.Option>
               </Select>
               &nbsp; &nbsp;
-              <button onClick={this.onSearchData}>
+              <LinkButton
+                onClick={() => {
+                  this.inputValue = this.input.input.value;
+                  this.getUsers(1, this.state.pageSize);
+                }}
+                size="default"
+              >
                 <Icon type="search" />
-                订单查询
-              </button>
+              </LinkButton>
               &nbsp; &nbsp;
             </div>
             <div style={{ marginTop: 10 }}>
-              <Input
-                type="text"
-                placeholder="user_id"
-                style={{ width: 150 }}
-                value={this.state.user_id}
-                onChange={e => this.setState({ user_id: e.target.value })}
-              />
-              &nbsp; &nbsp;
-              <Input
-                type="text"
-                placeholder="订单Id"
-                style={{ width: 300 }}
-                value={this.state.order_id}
-                onChange={e => this.setState({ order_id: e.target.value })}
-              />
-              &nbsp; &nbsp;
-              <button onClick={this.onSearchData}>
+              <LinkButton onClick={this.onSearchData} size="default">
                 <Icon type="search" />
                 玩家掉单查询
-              </button>
+              </LinkButton>
             </div>
           </div>
         }
         extra={
           <span>
-            <Button style={{ float: "right" }} onClick={() => this.getUsers(1, 20)} icon="reload" />
+            <LinkButton
+              style={{ float: "right" }}
+              onClick={() => window.location.reload()}
+              icon="reload"
+              size="default"
+            />
             <br />
             <br />
-            <Button onClick={this.download} icon="download">
-              下载列表
-            </Button>
+            <LinkButton
+              size="default"
+              style={{ float: "right" }}
+              onClick={this.download}
+              icon="download"
+            ></LinkButton>
           </span>
         }
       >
@@ -189,6 +173,7 @@ class Order_list extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
+            showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
@@ -207,6 +192,39 @@ class Order_list extends Component {
           }}
           scroll={{ x: 1900, y: "60vh" }}
         />
+        <Modal
+          title="玩家调单查询"
+          visible={this.state.isQueryShow}
+          onCancel={() => {
+            this.setState({ isQueryShow: false });
+          }}
+          footer={null}
+          width="70%"
+        >
+          <Diaodan />
+        </Modal>
+        <Modal
+          title="编辑"
+          visible={this.state.isEditShow}
+          onCancel={() => {
+            this.setState({ isEditShow: false });
+          }}
+          footer={null}
+          width="50%"
+        >
+          <div>
+            <div>用户ID：{this.state.editUser_id}</div>
+            <br />
+            <div>金额：{this.state.editMount}</div>
+            <br />
+            <div>
+              手动到账复审：<Button type="primary">通过</Button>{" "}
+              <Button type="primary" onClick={this.editRefused}>
+                拒绝
+              </Button>
+            </div>
+          </div>
+        </Modal>
       </Card>
     );
   }
@@ -388,21 +406,50 @@ class Order_list extends Component {
     },
     {
       title: "操作",
-      dataIndex: "handle",
-      width: 100
+      dataIndex: "",
+      width: 100,
+      render: (text, record, index) => {
+        if (record.status === "7") {
+          return (
+            <LinkButton size="small" onClick={() => this.edit(record)}>
+              编辑
+            </LinkButton>
+          );
+        } else {
+          return;
+        }
+      }
     },
     {
       title: "备注",
       dataIndex: "remark"
     }
   ];
-  dataPickerOnChange = (date, dateString) => {
-    let startTime = dateString[0] + " 00:00:00";
-    let endTime = dateString[1] + " 00:00:00";
+  edit = record => {
     this.setState({
-      start_time: startTime,
-      end_time: endTime
+      isEditShow: true,
+      editUser_id: record.user_id,
+      editMount: record.amount
     });
+    this.user_id = record.user_id;
+    this.order_id = record.order_id;
+    this.editType = record.type;
+  };
+  editRefused = async () => {
+    const res = await orderReviewEdit(
+      this.user_id,
+      this.order_id,
+      this.editType
+    );
+    if (res.status === 0) {
+      message.success(res.msg);
+      this.setState({
+        isEditShow: false
+      });
+      this.getUsers(1, this.pageSize);
+    } else {
+      message.error(res.msg);
+    }
   };
 }
 

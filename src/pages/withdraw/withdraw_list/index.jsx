@@ -7,17 +7,13 @@ import {
   Icon,
   Input,
   Select,
-  ConfigProvider,
   DatePicker,
   Button,
   Popover
 } from "antd";
-import "moment/locale/zh-cn";
-// import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import LinkButton from "../../../components/link-button/index";
 import { formateDate } from "../../../utils/dateUtils";
-import zh_CN from "antd/lib/locale-provider/zh_CN";
-import "moment/locale/zh-cn";
+import MyDatePicker from "../../../components/MyDatePicker";
 import {
   withDraw,
   downloadWithdrawList,
@@ -27,7 +23,6 @@ import {
 } from "../../../api";
 import WrappedComponent from "./details";
 
-const { RangePicker } = DatePicker;
 class Withdraw_list extends Component {
   constructor(props) {
     super(props);
@@ -50,32 +45,20 @@ class Withdraw_list extends Component {
   }
   getUsers = async (page, limit) => {
     const result = await withDraw(page, limit, 3);
-    if (result.status === 0) {
-      this.setState({
-        data: result.data,
-        count: parseInt(result.count)
-      });
-    } else {
-      message.error("网络问题");
-    }
+    this.setState({
+      data: result.data,
+      count: parseInt(result.count)
+    });
   };
   handleChange(event) {
     this.setState({ inputParam: event.target.value });
   }
   onSearchData = async () => {
     const result = await withDraw(1, 20, 3, this.state);
-    if (result.status === 0) {
-      this.setState({
-        data: result.data,
-        count: parseInt(result.count)
-      });
-    } else {
-      this.setState({
-        data: result.data,
-        count: parseInt(result.count)
-      });
-      message.error("请检查输入的关键词或网络");
-    }
+    this.setState({
+      data: result.data,
+      count: parseInt(result.count)
+    });
   };
   download = () => {
     downloadWithdrawList(this.state);
@@ -88,16 +71,6 @@ class Withdraw_list extends Component {
       <Card
         title={
           <div>
-            <ConfigProvider locale={zh_CN}>
-              <RangePicker
-                // defaultValue={[moment().locale("zh-cn")]}
-                // showTime={{ format: "HH:mm" }}
-                format="YYYY-MM-DD"
-                placeholder={["开始日期", "结束日期"]}
-                onChange={this.dataPickerOnChange}
-              />
-            </ConfigProvider>
-            &nbsp; &nbsp;
             <Select
               placeholder="请选择"
               style={{ width: 150 }}
@@ -115,6 +88,15 @@ class Withdraw_list extends Component {
               style={{ width: 150 }}
               value={this.state.inputParam}
               onChange={this.handleChange}
+            />
+            &nbsp; &nbsp;
+            <MyDatePicker
+              handleValue={val => {
+                this.setState({
+                  start_time: val[0],
+                  end_time: val[1]
+                });
+              }}
             />
             &nbsp; &nbsp;
             <Select
@@ -140,34 +122,21 @@ class Withdraw_list extends Component {
               <Select.Option value="2">bank</Select.Option>
             </Select>
             &nbsp; &nbsp;
-            <button onClick={this.onSearchData}>
+            <LinkButton onClick={this.onSearchData} size="default">
               <Icon type="search" />
-            </button>
+            </LinkButton>
           </div>
         }
         extra={
           <span>
-            <Button
+            <LinkButton
               style={{ float: "right" }}
               onClick={() => {
-                this.setState(
-                  {
-                    data: [],
-                    count: 0,
-                    pageSize: 20
-                  },
-                  () => {
-                    this.getUsers(1, 20);
-                  }
-                );
+                window.location.reload();
               }}
               icon="reload"
+              size="default"
             />
-            <br />
-            <br />
-            <Button onClick={this.download} icon="download">
-              下载列表
-            </Button>
           </span>
         }
       >
@@ -181,6 +150,7 @@ class Withdraw_list extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
+            showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
@@ -335,7 +305,7 @@ class Withdraw_list extends Component {
     {
       title: "风控",
       dataIndex: "",
-      width: 150,
+      width: 200,
       render: record => (
         <span>
           <LinkButton onClick={() => this.getDetail(record, "risk")}>

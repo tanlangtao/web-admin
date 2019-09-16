@@ -1,21 +1,11 @@
 import React, { Component } from "react";
-import {
-  Card,
-  Table,
-  message,
-  Icon,
-  Input,
-  Select,
-  ConfigProvider,
-  DatePicker,
-  Button
-} from "antd";
+import { Card, Table, Icon, Input, Select, Button } from "antd";
 import { formateDate } from "../../../utils/dateUtils";
 import "moment/locale/zh-cn";
-import zh_CN from "antd/lib/locale-provider/zh_CN";
-import { rechargeOrder, reqOrder_list, downloadList } from "../../../api/index";
+import { rechargeOrder, downloadList } from "../../../api/index";
+import LinkButton from "../../../components/link-button";
+import MyDatePicker from "../../../components/MyDatePicker";
 
-const { RangePicker } = DatePicker;
 class Recharge_order extends Component {
   constructor(props) {
     super(props);
@@ -26,38 +16,34 @@ class Recharge_order extends Component {
       pageSize: 20,
       start_time: "",
       end_time: "",
-      order_status: "",
       type: "14",
       paramKey: "",
       inputParam: "",
       user_id: "",
       order_id: ""
     };
-    this.initColumns();
+    this.inputKey = "";
+    this.inputValue = "";
+    this.order_status = "";
   }
   getUsers = async (page, limit) => {
-    const result = await rechargeOrder(page, limit);
-    if (result.status === 0) {
-      this.setState({
-        data: result.data,
-        count: parseInt(result.count)
-      });
-    } else {
-      message.error("网络问题");
-    }
+    const result = await rechargeOrder(
+      page,
+      limit,
+      this.state.start_time,
+      this.state.end_time,
+      this.order_status,
+      this.inputKey,
+      this.inputValue
+    );
+    this.setState({
+      data: result.data,
+      count: parseInt(result.count)
+    });
   };
   handleChange(event) {
     this.setState({ inputParam: event.target.value });
   }
-  onSearchData = async () => {
-    const result = await reqOrder_list(1, 20, this.state);
-    // if (result.status === 0) {
-      this.setState({
-        data: result.data,
-        count: parseInt(result.count)
-      });
-    // }
-  };
   download = () => {
     downloadList(this.state);
   };
@@ -70,20 +56,19 @@ class Recharge_order extends Component {
         title={
           <div>
             <div>
-              <ConfigProvider locale={zh_CN}>
-                <RangePicker
-                  // defaultValue={[moment().locale("zh-cn")]}
-                  // showTime={{ format: "HH:mm" }}
-                  format="YYYY-MM-DD"
-                  placeholder={["开始日期", "结束日期"]}
-                  onChange={this.dataPickerOnChange}
-                />
-              </ConfigProvider>
+              <MyDatePicker
+                handleValue={val => {
+                  this.setState({
+                    start_time: val[0],
+                    end_time: val[1]
+                  });
+                }}
+              />
               &nbsp; &nbsp;
               <Select
                 placeholder="请选择"
                 style={{ width: 120 }}
-                onSelect={value => this.setState({ paramKey: value })}
+                onSelect={value => (this.inputKey = value)}
               >
                 <Select.Option value="order_id">订单id</Select.Option>
                 <Select.Option value="user_id">user_id</Select.Option>
@@ -93,14 +78,13 @@ class Recharge_order extends Component {
                 type="text"
                 placeholder="请输入关键字"
                 style={{ width: 150 }}
-                value={this.state.inputParam}
-                onChange={this.handleChange}
+                ref={Input => (this.input = Input)}
               />
               &nbsp; &nbsp;
               <Select
                 defaultValue=""
                 style={{ width: 100 }}
-                onSelect={value => this.setState({ order_status: value })}
+                onSelect={value => (this.order_status = value)}
               >
                 <Select.Option value="">状态</Select.Option>
                 <Select.Option value="0">未成功</Select.Option>
@@ -113,9 +97,14 @@ class Recharge_order extends Component {
                 <Select.Option value="10">复审拒绝</Select.Option>
               </Select>
               &nbsp; &nbsp;
-              <button onClick={this.onSearchData}>
+              <LinkButton
+                onClick={() => {
+                  this.inputValue = this.input.input.value;
+                  this.getUsers(1, this.state.pageSize);
+                }}
+              >
                 <Icon type="search" />
-              </button>
+              </LinkButton>
               &nbsp; &nbsp;
             </div>
           </div>
@@ -124,7 +113,7 @@ class Recharge_order extends Component {
           <span>
             <Button
               style={{ float: "right" }}
-              onClick={() => this.getUsers(1, 20)}
+              onClick={() => window.location.reload()}
               icon="reload"
             />
             <br />
@@ -145,6 +134,7 @@ class Recharge_order extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
+            showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
@@ -161,7 +151,7 @@ class Recharge_order extends Component {
               } else return;
             }
           }}
-          scroll={{ x: 1900, y: "60vh" }}
+          scroll={{ x: 1500, y: "60vh" }}
         />
       </Card>
     );
@@ -170,7 +160,7 @@ class Recharge_order extends Component {
     {
       title: "订单ID",
       dataIndex: "order_id",
-      width: 300
+      width: 280
     },
     {
       title: "user_id",
@@ -180,7 +170,7 @@ class Recharge_order extends Component {
     {
       title: "昵称",
       dataIndex: "user_name",
-      width: 100
+      width: 200
     },
     {
       title: "代充ID",
@@ -257,14 +247,13 @@ class Recharge_order extends Component {
     {
       title: "创建时间",
       dataIndex: "created_at",
-      width: 200,
+      width: 150,
       render: formateDate,
       sorter: (a, b) => a.created_at - b.created_at
     },
     {
       title: "到账时间",
       dataIndex: "arrival_at",
-      width: 200,
       render: (text, record, index) => {
         if (text === "0" || !text) {
           return "";
@@ -273,14 +262,6 @@ class Recharge_order extends Component {
       sorter: (a, b) => a.arrival_at - b.arrival_at
     }
   ];
-  dataPickerOnChange = (date, dateString) => {
-    let startTime = dateString[0] + " 00:00:00";
-    let endTime = dateString[1] + " 00:00:00";
-    this.setState({
-      start_time: startTime,
-      end_time: endTime
-    });
-  };
 }
 
 export default Recharge_order;

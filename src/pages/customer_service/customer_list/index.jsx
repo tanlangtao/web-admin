@@ -1,9 +1,18 @@
 import React, { Component } from "react";
-import { Card, Table, Modal, message, Icon, Input,Popconfirm } from "antd";
-import LinkButton from "../../../components/link-button/index";
+import {
+  Card,
+  Table,
+  Modal,
+  message,
+  Icon,
+  Input,
+  Popconfirm,
+  Button
+} from "antd";
 import { customerList, saveCustomerService } from "../../../api/index";
 import WrappedAddDataForm from "./addorEdit";
 import { formateDate } from "../../../utils/dateUtils";
+import LinkButton from "../../../components/link-button";
 
 class Customer_list extends Component {
   constructor(props) {
@@ -35,7 +44,7 @@ class Customer_list extends Component {
         data: res.data,
         count: parseInt(res.count)
       });
-    } 
+    }
   };
   addData = () => {
     this.setState({
@@ -49,8 +58,8 @@ class Customer_list extends Component {
     });
   };
   onDelete = async record => {
-    let user_id=record.user_id
-    let res = await saveCustomerService({user_id},"del");
+    let user_id = record.user_id;
+    let res = await saveCustomerService({ user_id }, "del");
     if (res.status === 0) {
       message.success("删除成功");
       this.refreshPage();
@@ -67,7 +76,7 @@ class Customer_list extends Component {
       isEditDataShow: false
     });
     this.getUsers(1, 20);
-    this.input.handleReset()
+    this.input.handleReset();
   };
   componentDidMount() {
     this.getUsers(1, 20);
@@ -84,20 +93,20 @@ class Customer_list extends Component {
               ref={input => (this.input = input)}
             />
             &nbsp; &nbsp;
-            <button onClick={this.onSearchData}>
+            <LinkButton onClick={this.onSearchData} size='default'>
               <Icon type="search" />
-            </button>
+            </LinkButton>
             &nbsp; &nbsp;
-            <button onClick={this.addData}>
+            <LinkButton onClick={this.addData} size='default'>
               <Icon type="user-add" />
               添加
-            </button>
+            </LinkButton>
           </span>
         }
         extra={
-          <button onClick={this.refreshPage}>
+          <LinkButton onClick={() => window.location.reload()} size='default'>
             <Icon type="reload" />
-          </button>
+          </LinkButton>
         }
       >
         <Table
@@ -110,6 +119,7 @@ class Customer_list extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
+            showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
@@ -197,30 +207,37 @@ class Customer_list extends Component {
       title: "创建时间",
       dataIndex: "create_time",
       width: 200,
-      render: formateDate
+      render: (text, record) => (
+        <span>{formateDate(record.create_time / 1000)}</span>
+      )
     },
     {
       title: "修改时间",
       dataIndex: "update_time",
       width: 200,
-      render: formateDate
+      render: (text, record) => (
+        <span>{formateDate(record.create_time / 1000)}</span>
+      )
     },
     {
       title: "操作",
       dataIndex: "",
       render: (text, record, index) => (
         <span>
-          <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>
-          <LinkButton>
-            <Popconfirm
-              title="确定要删除吗?"
-              onConfirm={()=>this.onDelete(record)}
-              okText="删除"
-              cancelText="取消"
-            >
+          <Button type="primary" onClick={() => this.edit(record)} size="small">
+            编辑
+          </Button>
+          &nbsp;&nbsp;&nbsp;
+          <Popconfirm
+            title="确定要删除吗?"
+            onConfirm={() => this.onDelete(record)}
+            okText="删除"
+            cancelText="取消"
+          >
+            <Button type="danger" size="small">
               删除
-            </Popconfirm>
-          </LinkButton>
+            </Button>
+          </Popconfirm>
         </span>
       )
     }

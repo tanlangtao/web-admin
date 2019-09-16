@@ -131,34 +131,21 @@ class Daiti extends Component {
               <Select.Option value="5">已失败</Select.Option>
             </Select>
             &nbsp; &nbsp;
-            <button onClick={this.onSearchData}>
+            <LinkButton onClick={this.onSearchData} size="default">
               <Icon type="search" />
-            </button>
+            </LinkButton>
           </div>
         }
         extra={
           <span>
-            <Button
+            <LinkButton
               style={{ float: "right" }}
               onClick={() => {
-                this.setState(
-                  {
-                    data: [],
-                    count: 0,
-                    pageSize: 20
-                  },
-                  () => {
-                    this.getUsers(1, 20);
-                  }
-                );
+                window.location.reload();
               }}
               icon="reload"
+              size="default"
             />
-            <br />
-            <br />
-            <Button onClick={this.download} icon="download">
-              下载列表
-            </Button>
           </span>
         }
       >
@@ -172,6 +159,7 @@ class Daiti extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
+            showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
@@ -344,7 +332,7 @@ class Daiti extends Component {
     {
       title: "风控",
       dataIndex: "",
-      width: 150,
+      width: 180,
       render: record => (
         <span>
           <LinkButton onClick={() => this.getDetail(record, "risk")}>

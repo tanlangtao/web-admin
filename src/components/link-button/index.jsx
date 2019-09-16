@@ -1,8 +1,12 @@
-import React from 'react'
-import './index.less'
-/*
-外形像链接的按钮
- */
+import React from "react";
+import { Button } from "antd";
 export default function LinkButton(props) {
-  return <button {...props} className="link-button"></button>
+  return (
+    <Button
+      type="primary"
+      size='small'
+      style={{ marginRight: 10}}
+      {...props}
+    ></Button>
+  );
 }

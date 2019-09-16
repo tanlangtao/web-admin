@@ -8,8 +8,6 @@ import {
   Input,
   Popconfirm,
   Select,
-  ConfigProvider,
-  DatePicker,
   Button
 } from "antd";
 import LinkButton from "../../../components/link-button/index";
@@ -21,9 +19,10 @@ import {
 } from "../../../api/index";
 import MoreDetail from "./details";
 import { formateDate } from "../../../utils/dateUtils";
-import "moment/locale/zh-cn";
-import zh_CN from "antd/lib/locale-provider/zh_CN";
-const { RangePicker } = DatePicker;
+import moment from "moment";
+import MyDatePicker from "../../../components/MyDatePicker";
+import DateGameReport from "./dateGameReport";
+
 class DailyReport extends Component {
   constructor(props) {
     super(props);
@@ -32,7 +31,8 @@ class DailyReport extends Component {
       packageList: [],
       count: 0,
       pageSize: 20,
-      reportTable: false
+      reportTable: false,
+      isGameReportShow:false
     };
   }
   getInitialData = async () => {
@@ -42,7 +42,7 @@ class DailyReport extends Component {
         packageList: res.data
       });
     } else {
-      message.error("网络问题:" + res.msg);
+      message.error(res.msg);
     }
   };
   componentDidMount() {
@@ -61,15 +61,20 @@ class DailyReport extends Component {
         title={
           <div>
             <div>
-              <ConfigProvider locale={zh_CN}>
-                <RangePicker
-                  // defaultValue={[moment().locale("zh-cn")]}
-                  // showTime={{ format: "HH:mm" }}
-                  format="YYYY-MM-DD"
-                  placeholder={["开始日期", "结束日期"]}
-                  onChange={this.dataPickerOnChange}
-                />
-              </ConfigProvider>
+              <MyDatePicker
+                handleValue={val => {
+                  let diffDays = moment(val[1]).diff(
+                    moment(val[0]),
+                    "days"
+                  );
+                  if (diffDays > 7) {
+                    message.error("请选择时间范围小于7天");
+                  } else {
+                    this.startTime = val[0];
+                    this.endTime = val[1];
+                  }
+                }}
+              />
               &nbsp; &nbsp;
               <Select
                 placeholder="请选择"
@@ -79,9 +84,9 @@ class DailyReport extends Component {
                 {packageNode}
               </Select>
               &nbsp; &nbsp;
-              <button onClick={this.onSearchData}>
+              <LinkButton onClick={this.onSearchData} size='default'>
                 <Icon type="search" />
-              </button>
+              </LinkButton>
               &nbsp; &nbsp;
             </div>
           </div>
@@ -110,6 +115,7 @@ class DailyReport extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
+            showTotal:(total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
@@ -122,19 +128,34 @@ class DailyReport extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 3000, y: "60vh" }}
+          scroll={{ x: 2500}}
         />
         <Modal
-          title={this.action === "getDateReport" ? "按日期查看" : "游戏数据"}
+          title="按日期查看"
           width="80%"
           visible={this.state.reportTable}
-          // onOk={this.handleAddData}
           onCancel={() => {
             this.setState({ reportTable: false });
           }}
           footer={null}
         >
-          <MoreDetail reportData={this.reportData} action={this.action} />
+          <MoreDetail
+            reportData={this.reportData}
+            action={this.action}
+            package_id={this.package_id}
+            parse={this.parseGameData}
+          />
+        </Modal>
+        <Modal
+          title="游戏数据"
+          width="80%"
+          visible={this.state.isGameReportShow}
+          onCancel={() => {
+            this.setState({ isGameReportShow: false });
+          }}
+          footer={null}
+        >
+          <DateGameReport data={this.state.nextLevelData} />
         </Modal>
       </Card>
     );
@@ -143,111 +164,85 @@ class DailyReport extends Component {
     {
       title: "品牌",
       dataIndex: "package_nick",
-      width: 120
     },
     {
       title: "新增用户",
       dataIndex: "regin_user_number",
-      width: 80
     },
     {
       title: "活跃用户",
       dataIndex: "active_user_number",
-      width: 80
     },
     {
       title: "官方首充用户",
       dataIndex: "first_pay_user_number",
-      width: 150
-      // render: (text, record) => (
-      //   <div style={{ wordWrap: "break-word", wordBreak: "break-all" }}>
-      //     {text}
-      //   </div>
-      // )
     },
     {
       title: "官方首充金额",
       dataIndex: "first_pay_money_total",
-      width: 150
     },
     {
       title: "官方充值用户",
       dataIndex: "pay_user_number",
-      width: 150
     },
     {
       title: "官方充值金额",
       dataIndex: "pay_money_total",
-      width: 150
     },
     {
       title: "人工首充用户",
       dataIndex: "first_pay_user_number_res",
-      width: 150
     },
     {
       title: "人工首充金额",
       dataIndex: "first_pay_money_total_res",
-      width: 150
     },
     {
       title: "人工充值用户",
       dataIndex: "pay_user_number_res",
-      width: 150
     },
     {
       title: "人工充值金额",
       dataIndex: "pay_money_total_res",
-      width: 150
     },
     {
       title: "官方兑换用户",
       dataIndex: "exchange_user_number",
-      width: 150
     },
     {
       title: "官方兑换金额",
       dataIndex: "exchange_money_total",
-      width: 150
     },
     {
       title: "人工兑换用户",
       dataIndex: "exchange_user_number_res",
-      width: 150
     },
     {
       title: "人工兑换金额",
       dataIndex: "exchange_money_total_res",
-      width: 150
     },
     {
       title: "玩家总赢额",
       dataIndex: "win_statement_total",
-      width: 150
     },
     {
       title: "玩家总输额",
       dataIndex: "lose_statement_total",
-      width: 150
     },
     {
       title: "玩家总流水",
       dataIndex: "statement_total",
-      width: 150
     },
     {
       title: "盈亏比",
       dataIndex: "statement_ratio",
-      width: 150
     },
     {
       title: "操作",
       dataIndex: "",
       render: (text, record, index) => (
         <span>
-          <LinkButton 
-          // onClick={() => this.getDateReport(record)}
-          >
+          <LinkButton onClick={() => this.getDateReport(record)}>
             日期
           </LinkButton>
           <LinkButton onClick={() => this.getGameReport(record)}>
@@ -257,10 +252,6 @@ class DailyReport extends Component {
       )
     }
   ];
-  dataPickerOnChange = (date, dateString) => {
-    this.startTime = dateString[0] + " 00:00:00";
-    this.endTime = dateString[1] + " 00:00:00";
-  };
   onSearchData = async () => {
     const res = await dailyReport(
       1,
@@ -270,7 +261,6 @@ class DailyReport extends Component {
       this.endTime
     );
     const newRes = this.parseData(res);
-    console.log("newRes", newRes);
     this.setState({ data: newRes.data, count: newRes.count });
   };
   parseData = res => {
@@ -435,6 +425,28 @@ class DailyReport extends Component {
       data: format_data
     };
   };
+  parseGameData = res => {
+    console.log(res);
+    //总流水
+    if (res.status === 0 && res.data) {
+      res.data.map(
+        e => (
+          (e.statement_ratio = (
+            (Math.abs(e.lose_statement_total) - e.win_statement_total) /
+            (e.win_statement_total + Math.abs(e.lose_statement_total))
+          ).toFixed(4)),
+          (e.win_statement_total =
+            Math.round(e.win_statement_total * 10000) / 10000),
+          (e.lose_statement_total =
+            Math.round(e.lose_statement_total * 10000) / 10000),
+          (e.statement_total =
+            Math.round(
+              (e.win_statement_total + Math.abs(e.lose_statement_total)) * 10000
+            ) / 10000)
+        )
+      );
+    }
+  };
   getDateReport = async record => {
     const res = await dateReport(
       1,
@@ -445,11 +457,23 @@ class DailyReport extends Component {
     );
     const reportData = this.parseDateData(res);
     this.reportData = reportData;
-    console.log("reportData", reportData);
     this.action = "getDateReport";
     this.setState({ reportTable: true });
   };
-  getGameReport = record => {};
+  getGameReport = async record => {
+    const res = await gameReport(
+      1,
+      20,
+      this.package_id,
+      record.date
+    );
+    this.parseGameData(res);
+    this.setState({
+      date: record.date,
+      isGameReportShow: true,
+      nextLevelData: res.data
+    });
+  };
 }
 
 export default DailyReport;

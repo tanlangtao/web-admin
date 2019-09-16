@@ -89,16 +89,16 @@ class Role extends Component {
       <Card
         title={
           <span>
-            <button onClick={this.addData}>
+            <LinkButton onClick={this.addData} size='default'>
               <Icon type="user-add" />
               添加账户
-            </button>
+            </LinkButton>
           </span>
         }
         extra={
-          <button onClick={() => this.getUsers(1, 20)}>
+          <LinkButton onClick={() => window.location.reload()} size='default'>
             <Icon type="reload" />
-          </button>
+          </LinkButton>
         }
       >
         <Table
@@ -110,6 +110,7 @@ class Role extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
+            showTotal:(total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {

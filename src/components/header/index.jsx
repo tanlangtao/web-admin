@@ -1,11 +1,23 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
-import { Modal, Tabs } from "antd";
+import {
+  Modal,
+  Tabs,
+  Dropdown,
+  Menu,
+  Icon,
+  Button,
+  message,
+  Input,
+  Form
+} from "antd";
 
 import LinkButton from "../link-button";
 import memoryUtils from "../../utils/memoryUtils";
 import storageUtils from "../../utils/storageUtils";
-import "./index.less"
+import { getAuthCode, editPass } from "../../api";
+import QRCode from "qrcode.react";
+import "./index.less";
 const { TabPane } = Tabs;
 /*
 左侧导航的组件
@@ -25,7 +37,8 @@ class Header extends Component {
     ];
     this.state = {
       activeKey: panes[0].key,
-      panes
+      panes,
+      isEditFormShow: false
     };
   }
   onChange = activeKey => {
@@ -93,7 +106,9 @@ class Header extends Component {
         // 删除保存的user数据
         storageUtils.removeUser();
         memoryUtils.user = {};
-        localStorage.removeItem('menuList')
+        localStorage.removeItem("menuList");
+        localStorage.removeItem("token");
+        localStorage.removeItem("name");
         // 跳转到login
         this.props.history.replace("/login");
       }
@@ -110,7 +125,7 @@ class Header extends Component {
     const path = this.props.location.pathname;
     let title;
     if (path !== "/home" && path !== "/") {
-      const menuList=JSON.parse(localStorage.getItem('menuList'))
+      const menuList = JSON.parse(localStorage.getItem("menuList"));
       menuList.forEach(item => {
         if (!item.children && item.key === path) {
           title = item.title;
@@ -135,13 +150,35 @@ class Header extends Component {
   }
 
   render() {
-    const username = memoryUtils.user.username;
-
+    const username = localStorage.getItem("name");
+    const { getFieldDecorator, getFieldValue } = this.props.form;
     return (
       <div className="header">
         <div className="header-top">
-          <span>欢迎！{username}</span>
-          <LinkButton onClick={this.logout}>退出</LinkButton>
+          <Dropdown
+            overlay={
+              <Menu>
+                <Menu.Item key="0">
+                  <Button type="link" onClick={this.authCode}>
+                    安全码设置
+                  </Button>
+                </Menu.Item>
+                <Menu.Item key="1">
+                  <Button type="link" onClick={this.resetPWD}>
+                    修改密码
+                  </Button>
+                </Menu.Item>
+              </Menu>
+            }
+            trigger={["click"]}
+          >
+            <Button type="link">
+              {username} <Icon type="down" />
+            </Button>
+          </Dropdown>
+          <LinkButton onClick={this.logout} size="default">
+            退出
+          </LinkButton>
         </div>
         <div className="header-bottom">
           {/* <div className="header-bottom-left">{title}</div> */}
@@ -162,9 +199,104 @@ class Header extends Component {
             ))}
           </Tabs>
         </div>
+        {this.state.isEditFormShow && (
+          <Modal
+            title="编辑"
+            visible={this.state.isEditFormShow}
+            onCancel={() => {
+              this.setState({ isEditFormShow: false });
+            }}
+            footer={null}
+          >
+            <Form
+              labelCol={{ span: 6 }}
+              labelAlign="left"
+              onSubmit={this.handleEditSubmit}
+            >
+              <Form.Item label="新密码">
+                {getFieldDecorator("editPass", {
+                  rules: [
+                    { required: true, message: "密码不能为空" },
+                    { whitespace: true },
+                    { min: 6, message: "密码至少6位" },
+                    { max: 16, message: "密码最多16位" }
+                    // {
+                    //   pattern: /^[a-zA-Z0-9_]+$/,
+                    //   message: "用户名必须是英文、数字或下划线组成"
+                    // }
+                  ]
+                })(
+                  <Input
+                    style={{ width: "40%" }}
+                    type="password"
+                    placeholder="6到16个字符"
+                  />
+                )}
+              </Form.Item>
+              <Form.Item label="重复密码">
+                {getFieldDecorator("repeat", {
+                  rules: [
+                    { required: true },
+                    {
+                      validator: (rule, value, callback) => {
+                        if (!value) {
+                          callback(); //如果还没填写，则不进行一致性验证
+                        }
+                        if (value === getFieldValue("editPass")) {
+                          callback();
+                        } else {
+                          callback("两次密码不一致");
+                        }
+                      }
+                    }
+                  ]
+                })(
+                  <Input
+                    style={{ width: "40%" }}
+                    type="password"
+                    placeholder="6到16个字符"
+                  />
+                )}
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  提交
+                </Button>
+              </Form.Item>
+            </Form>
+          </Modal>
+        )}
       </div>
     );
   }
+  authCode = async () => {
+    const res = await getAuthCode();
+    if (res.status === 0) {
+      Modal.info({
+        title: "扫码获取验证码",
+        content: <QRCode value={res.data.qrurl}></QRCode>,
+        width: 300
+      });
+    } else {
+      message.error(res.msg);
+    }
+  };
+  resetPWD = () => {
+    this.setState({ isEditFormShow: true });
+  };
+  handleEditSubmit = event => {
+    event.preventDefault();
+    this.props.form.validateFields(async (err, value) => {
+      if (!err) {
+        const res = await editPass(value.editPass);
+        if (res.status === 0) {
+          message.success(res.msg);
+        } else {
+          message.error(res.msg);
+        }
+      }
+    });
+  };
 }
-
-export default withRouter(Header);
+const WrappedHeader = Form.create()(Header);
+export default withRouter(WrappedHeader);

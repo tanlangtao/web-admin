@@ -4,24 +4,19 @@ import {
   Table,
   Modal,
   message,
-  DatePicker,
   Icon,
   Select,
   Input,
-  ConfigProvider,
   Popconfirm,
   Button
 } from "antd";
-import zh_CN from "antd/lib/locale-provider/zh_CN";
 // import moment from "moment";
-import "moment/locale/zh-cn";
 import { formateDate } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-button/index";
 import {
   reqUsers,
   setGameUserNickName,
   changeGold,
-  searchData,
   reqLoadGold,
   userDetail,
   bindInfo,
@@ -30,34 +25,30 @@ import {
 } from "../../api/index";
 import WrappedNormalLoginForm from "././user-nick";
 import WrappedComponent from "./gold_details";
+import MyDatePicker from "../../components/MyDatePicker";
 
-const { RangePicker } = DatePicker;
 const { Option } = Select;
 export default class User extends Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.initColumns();
-    this.inputParam = {
-      key: "id",
-      val: ""
+    this.state = {
+      data: [],
+      count: 0,
+      pageSize: 20,
+      isNickShow: false,
+      isGoldShow: false,
+      isGoldDetailShow: false,
+      isBindInfoShow: false,
+      isResetPwdShow: false,
+      resetpwd: "",
+      game_nick: "",
+      startTime: "",
+      endTime: "",
+      loading: false
     };
+    this.inputKey = "id";
+    this.inputValue = "";
   }
-  state = {
-    data: [],
-    count: 0,
-    pageSize: 20,
-    isNickShow: false,
-    isGoldShow: false,
-    isGoldDetailShow: false,
-    isBindInfoShow: false,
-    isResetPwdShow: false,
-    resetpwd: "",
-    game_nick: "",
-    startTime: "",
-    endTime: "",
-    loading: false
-  };
 
   initColumns = () => [
     {
@@ -166,10 +157,13 @@ export default class User extends Component {
       dataIndex: "",
       render: record => (
         <span>
-          <LinkButton onClick={() => this.getGoldDetail(record)}>
+          <LinkButton onClick={() => this.getGoldDetail(record)} size="small">
             资金明细
           </LinkButton>
-          <LinkButton onClick={() => this.getGoldDetail(record, true)}>
+          <LinkButton
+            onClick={() => this.getGoldDetail(record, true)}
+            size="small"
+          >
             查看绑定信息
           </LinkButton>
           <Popconfirm
@@ -179,9 +173,9 @@ export default class User extends Component {
             okText="添加"
             cancelText="移除"
           >
-            <LinkButton>交易所黑名单</LinkButton>
+            <LinkButton size="small">交易所黑名单</LinkButton>
           </Popconfirm>
-          <LinkButton onClick={() => this.resetPwd(record)}>
+          <LinkButton onClick={() => this.resetPwd(record)} size="small">
             重置密码
           </LinkButton>
         </span>
@@ -192,14 +186,23 @@ export default class User extends Component {
       width: 100,
       render: record => (
         <span>
-          <LinkButton onClick={() => this.getLoadGold(record)}>查看</LinkButton>
+          <LinkButton size="small" onClick={() => this.getLoadGold(record)}>
+            查看
+          </LinkButton>
         </span>
       )
     }
   ];
 
   getUsers = async (page, limit) => {
-    const result = await reqUsers(page, limit);
+    const result = await reqUsers(
+      page,
+      limit,
+      this.state.startTime,
+      this.state.endTime,
+      this.inputKey,
+      this.inputValue
+    );
     if (result.status === 0) {
       const { game_user, proxy_user } = result.data;
       game_user.forEach(element => {
@@ -256,46 +259,12 @@ export default class User extends Component {
       form.resetFields();
     });
   };
-  dataPickerOnChange = (date, dateString) => {
-    let startTime = dateString[0] + " 00:00:00";
-    let endTime = dateString[1] + " 00:00:00";
-    this.setState({
-      startTime: startTime,
-      endTime: endTime
-    });
-  };
   handleChange(event) {
     let data = Object.assign({}, this.state.inputParam, {
       val: event.target.value
     });
     this.setState({ inputParam: data });
   }
-  onSearchData = async () => {
-    this.inputParam.val=this.input.input.value
-    const result = await searchData(
-      1,
-      this.state.pageSize,
-      this.state.startTime,
-      this.state.endTime,
-      this.inputParam
-    );
-    if (result.status === 0) {
-      const { game_user, proxy_user } = result.data;
-      game_user.forEach(element => {
-        proxy_user.forEach(item => {
-          if (element.id === item.id) {
-            element.proxy_nick = item.proxy_pid;
-          }
-        });
-      });
-      this.setState({
-        data: game_user,
-        count: result.count
-      });
-    } else {
-      message.error("查不到输入的关键字");
-    }
-  };
   getLoadGold = async record => {
     const id = record.id;
     const result = await reqLoadGold(id);
@@ -351,22 +320,21 @@ export default class User extends Component {
     const { data, count } = this.state;
     const title = (
       <span>
-        <ConfigProvider locale={zh_CN}>
-          <RangePicker
-            // defaultValue={[moment().locale("zh-cn")]}
-            // showTime={{ format: "HH:mm" }}
-            format="YYYY-MM-DD"
-            placeholder={["开始日期", "结束日期"]}
-            onChange={this.dataPickerOnChange}
-          />
-        </ConfigProvider>
+        <MyDatePicker
+          handleValue={val => {
+            this.setState({
+              startTime: val[0],
+              endTime: val[1]
+            });
+          }}
+        />
         &nbsp; &nbsp;
         <Select
           style={{ width: 200 }}
           placeholder="Select a person"
           defaultValue="id"
           onChange={val => {
-            this.inputParam.key= val
+            this.inputKey = val;
           }}
         >
           <Option value="id">user_id</Option>
@@ -381,20 +349,29 @@ export default class User extends Component {
           type="text"
           placeholder="请输入关键字搜索"
           style={{ width: 150 }}
-          // value={this.state.inputParam.val}
-          // onChange={this.handleChange}
           ref={Input => (this.input = Input)}
         />
         &nbsp; &nbsp;
-        <button onClick={this.onSearchData}>
+        <LinkButton
+          onClick={() => {
+            this.inputValue = this.input.input.value;
+            this.getUsers(1, this.state.pageSize);
+          }}
+          size='default'
+        >
           <Icon type="search" />
-        </button>
+        </LinkButton>
       </span>
     );
     const extra = (
-      <button onClick={() => {this.getUsers(1, 20);this.input.handleReset()}}>
+      <LinkButton
+        onClick={() => {
+          window.location.reload();
+        }}
+        size='default'
+      >
         <Icon type="reload" />
-      </button>
+      </LinkButton>
     );
     return (
       <Card title={title} extra={extra}>
@@ -403,23 +380,22 @@ export default class User extends Component {
           rowKey="_id"
           dataSource={data}
           columns={this.initColumns()}
+          size="small"
           pagination={{
-            defaultPageSize: this.state.pageSize,
+            defaultPageSize: 20,
             showSizeChanger: true,
             showQuickJumper: true,
+            showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: count,
             onChange: (page, pageSize) => {
               this.getUsers(page, pageSize);
-              this.setState({
-                pageSize: pageSize
-              });
             },
             onShowSizeChange: (current, size) => {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 2100, y: "60vh" }}
+          scroll={{ x: 2150, y: "65vh" }}
         />
         <Modal
           title="修改昵称"

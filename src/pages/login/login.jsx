@@ -2,10 +2,9 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Icon, Input, Button, Modal, message } from "antd";
 import "./login.less";
-import { reqLogin, reqAuthCode, navList } from "../../api";
-import storageUtils from "../../utils/storageUtils";
+import { reqLogin, reqAuthCode, navList,setToken } from "../../api";
 
-const Item = Form.Item; // 不能写在import之前
+const Item = Form.Item; 
 
 /*
 登陆的路由组件
@@ -22,10 +21,11 @@ class Login extends Component {
           });
         }
       });
-      localStorage.setItem("menuList", JSON.stringify(data));
+      localStorage.menuList = JSON.stringify(data);
       // 跳转到管理界面 (不需要再回退回到登陆)
-      // this.props.history.replace("/");
-      setTimeout(() => this.props.history.replace("/"), 300);
+      this.props.history.replace("/");
+
+      // setTimeout(() => this.props.history.replace("/"), 300);
     }
   };
   handleSubmit = event => {
@@ -43,7 +43,10 @@ class Login extends Component {
         if (result.status === 0) {
           // 登陆成功
           message.success("登陆成功");
-          storageUtils.saveUser(result.data); // 保存到local中
+          // storageUtils.saveUser(result.data); // 保存到local中
+          localStorage.token = result.data.token;
+          localStorage.name = result.data.name;
+          setToken()
           this.getMenuList();
         } else {
           // 登陆失败
@@ -54,12 +57,6 @@ class Login extends Component {
         console.log("检验失败!");
       }
     });
-
-    // 得到form对象
-    // const form = this.props.form
-    // // 获取表单项的输入数据
-    // const values = form.getFieldsValue()
-    // console.log('handleSubmit()', values)
   };
 
   handleClick = () => {
@@ -124,11 +121,10 @@ class Login extends Component {
 
   render() {
     // 如果用户已经登陆, 自动跳转到管理界面
-    const user = storageUtils.getUser();
-    if (user && user._id) {
+    const token = localStorage.token;
+    if (token) {
       return <Redirect to="/" />;
     }
-
     // 得到具强大功能的form对象
     const form = this.props.form;
     const { getFieldDecorator } = form;
@@ -231,26 +227,3 @@ class Login extends Component {
 }
 const WrapLogin = Form.create()(Login);
 export default WrapLogin;
-/*
-1. 高阶函数
-    1). 一类特别的函数
-        a. 接受函数类型的参数
-        b. 返回值是函数
-    2). 常见
-        a. 定时器: setTimeout()/setInterval()
-        b. Promise: Promise(() => {}) then(value => {}, reason => {})
-        c. 数组遍历相关的方法: forEach()/filter()/map()/reduce()/find()/findIndex()
-        d. 函数对象的bind()
-        e. Form.create()() / getFieldDecorator()()
-    3). 高阶函数更新动态, 更加具有扩展性
-
-2. 高阶组件
-    1). 本质就是一个函数
-    2). 接收一个组件(被包装组件), 返回一个新的组件(包装组件), 包装组件会向被包装组件传入特定属性
-    3). 作用: 扩展组件的功能
-    4). 高阶组件也是高阶函数: 接收一个组件函数, 返回是一个新的组件函数
- */
-/*
-包装Form组件生成一个新的组件: Form(Login)
-新组件会向Form组件传递一个强大的对象属性: form
- */

@@ -45,7 +45,7 @@ class Recharge_channel extends Component {
           <span>
             <Button
               style={{ float: "right" }}
-              onClick={() => this.getUsers(1, 20)}
+              onClick={() => window.location.reload()}
               icon="reload"
             />
           </span>
@@ -65,6 +65,7 @@ class Recharge_channel extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
+            showTotal:(total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {

@@ -28,14 +28,10 @@ class Admin_manage_list extends Component {
     {
       title: "user_id",
       dataIndex: "id",
-      fixed: "left",
-      width: 80
     },
     {
       title: "用户名",
       dataIndex: "name",
-      fixed: "left",
-      width: 150,
       render: (text, record) => (
         <div style={{ wordWrap: "break-word", wordBreak: "break-all" }}>
           {text}
@@ -45,27 +41,22 @@ class Admin_manage_list extends Component {
     {
       title: "角色",
       dataIndex: "role_name",
-      width: 200
     },
     {
       title: "授权品牌",
       dataIndex: "group",
-      width: 100
     },
     {
       title: "授权代理",
       dataIndex: "proxy",
-      width: 100
     },
     {
       title: "可使用金额",
       dataIndex: "use_balance",
-      width: 150
     },
     {
       title: "创建时间",
       dataIndex: "created_at",
-      width: 180,
       render: (text, record) => (
         <div style={{ wordWrap: "break-word", wordBreak: "break-all" }}>
           {text}
@@ -75,7 +66,6 @@ class Admin_manage_list extends Component {
     {
       title: "更新时间",
       dataIndex: "updated_at",
-      width: 180,
       render: (text, record) => (
         <div style={{ wordWrap: "break-word", wordBreak: "break-all" }}>
           {text}
@@ -85,7 +75,6 @@ class Admin_manage_list extends Component {
     {
       title: "状态",
       dataIndex: "status",
-      //   width: 80,
       align: "center",
       render: (text, record, index) => (
         <span>{text === 1 ? "启用" : "禁用"}</span>
@@ -94,7 +83,6 @@ class Admin_manage_list extends Component {
     {
       title: "操作",
       dataIndex: "handle",
-      width: 200,
       render: (text, record, index) => (
         <span>
           <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>
@@ -187,20 +175,20 @@ class Admin_manage_list extends Component {
               onChange={this.handleChange}
             />
             &nbsp; &nbsp;
-            <button onClick={this.onSearchData}>
+            <LinkButton onClick={this.onSearchData} size='default'>
               <Icon type="search" />
-            </button>
+            </LinkButton>
             &nbsp; &nbsp;
-            <button onClick={this.addData}>
+            <LinkButton onClick={this.addData} size='default'>
               <Icon type="user-add" />
               添加账户
-            </button>
+            </LinkButton>
           </span>
         }
         extra={
-          <button onClick={() => this.getUsers(1, 20)}>
+          <LinkButton onClick={() => window.location.reload()} size='default'>
             <Icon type="reload" />
-          </button>
+          </LinkButton>
         }
       >
         <Table
@@ -208,23 +196,21 @@ class Admin_manage_list extends Component {
           rowKey="id"
           dataSource={this.state.data}
           columns={this.initColumns()}
+          size="small"
           pagination={{
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
+            showTotal:(total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
               this.getUsers(page, pageSize);
-              this.setState({
-                pageSize: pageSize
-              });
             },
             onShowSizeChange: (current, size) => {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1500, y: "60vh" }}
         />
         <Modal
           title="添加用户"

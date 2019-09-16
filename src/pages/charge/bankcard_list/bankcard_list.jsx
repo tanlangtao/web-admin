@@ -68,16 +68,16 @@ class Bankcard_list extends Component {
       <Card
         title={
           <span>
-            <button onClick={this.addData}>
+            <LinkButton onClick={this.addData}>
               <Icon type="user-add" />
               添加
-            </button>
+            </LinkButton>
           </span>
         }
         extra={
-          <button onClick={this.refreshPage}>
+          <LinkButton onClick={() => window.location.reload()}>
             <Icon type="reload" />
-          </button>
+          </LinkButton>
         }
       >
         <Table
@@ -90,6 +90,7 @@ class Bankcard_list extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
+            showTotal:(total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {

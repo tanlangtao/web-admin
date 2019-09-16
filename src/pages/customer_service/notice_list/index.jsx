@@ -5,12 +5,12 @@ import {
   Modal,
   message,
   Icon,
-  Input,
+  Button,
   Popover,
   Popconfirm
 } from "antd";
 import LinkButton from "../../../components/link-button/index";
-import { getList, packageList, addNotice, delNotice } from "../../../api/index";
+import { getList, delNotice } from "../../../api/index";
 import WrappedAddDataForm from "./addorEdit";
 import { formateDate } from "../../../utils/dateUtils";
 
@@ -25,7 +25,6 @@ class Notice_list extends Component {
       isAddDataShow: false,
       isEditDataShow: false
     };
-    this.initColumns();
   }
   getUsers = async (page, limit) => {
     const result = await getList(page, limit);
@@ -88,13 +87,13 @@ class Notice_list extends Component {
       <Card
         title={
           <span>
-            <button onClick={this.addData}>添加</button>
+            <LinkButton onClick={this.addData} size='default'>添加</LinkButton>
           </span>
         }
         extra={
-          <button onClick={this.refreshPage}>
+          <LinkButton onClick={() => window.location.reload()} size='default'>
             <Icon type="reload" />
-          </button>
+          </LinkButton>
         }
       >
         <Table
@@ -107,6 +106,7 @@ class Notice_list extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
+            showTotal:(total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
@@ -119,7 +119,7 @@ class Notice_list extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1700, y: "60vh" }}
+          scroll={{ x: 2000 }}
         />
         <Modal
           title="新增公告"
@@ -167,24 +167,20 @@ class Notice_list extends Component {
   initColumns = () => [
     {
       title: "标题",
-      dataIndex: "title",
-      width: 300
+      dataIndex: "title"
     },
     {
       title: "品牌",
       dataIndex: "package_ids",
-      width: 120,
       render: (text, record) => <span>{text.join(",")}</span>
     },
     {
       title: "代理",
-      dataIndex: "proxy_user_id",
-      width: 100
+      dataIndex: "proxy_user_id"
     },
     {
       title: "公告类型",
       dataIndex: "type",
-      width: 120,
       render: (text, record) => (
         <span>{text === "1" || text === 1 ? "活动" : "公告"}</span>
       )
@@ -192,18 +188,16 @@ class Notice_list extends Component {
     {
       title: "是否跑马灯",
       dataIndex: "is_slider",
-      width: 120,
       render: (text, record) => <span>{text === "1" ? "是" : "否"}</span>
     },
     {
       title: "公告内容",
       dataIndex: "words",
-      width: 300,
       render: (text, record) => (
-        <Popover content={text} trigger="click" overlayStyle={{ width: "60%" }}>
+        <Popover content={text} trigger="click" overlayStyle={{ width: "30%" }}>
           <div
             style={{
-              width: 250,
+              width: "100px",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
               overflow: "hidden"
@@ -228,19 +222,16 @@ class Notice_list extends Component {
     {
       title: "开始时间",
       dataIndex: "start_time",
-      width: 150,
       render: formateDate
     },
     {
       title: "截止时间",
       dataIndex: "end_time",
-      width: 150,
       render: formateDate
     },
     {
       title: "创建时间",
       dataIndex: "create_time",
-      width: 150,
       render: formateDate
     },
     {
@@ -248,17 +239,20 @@ class Notice_list extends Component {
       dataIndex: "",
       render: (text, record, index) => (
         <span>
-          <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>
-          <LinkButton>
-            <Popconfirm
-              title="确定要删除吗?"
-              onConfirm={()=>this.onDelete(record)}
-              okText="删除"
-              cancelText="取消"
-            >
+          <Button type="primary" onClick={() => this.edit(record)} size="small">
+            编辑
+          </Button>
+          &nbsp;&nbsp;&nbsp;
+          <Popconfirm
+            title="确定要删除吗?"
+            onConfirm={() => this.onDelete(record)}
+            okText="删除"
+            cancelText="取消"
+          >
+            <Button type="danger" size="small">
               删除
-            </Popconfirm>
-          </LinkButton>
+            </Button>
+          </Popconfirm>
         </span>
       )
     }

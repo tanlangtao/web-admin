@@ -9,7 +9,7 @@ const SubMenu = Menu.SubMenu;
 class LeftNav extends Component {
   constructor() {
     super();
-    this.state = { data: [] };
+    this.state = { data: [], openKey: "" };
   }
   getMenuList = async () => {
     const result = await navList();
@@ -47,7 +47,7 @@ class LeftNav extends Component {
     const path = this.props.location.pathname;
     return menuList.reduce((pre, item) => {
       // 向pre添加<Menu.Item>
-      if (item.key) {
+      // if (item.key) {
         //按需渲染侧边栏，必须已经在后台-权限管理中设置了路由key才能渲染
         if (!item.children) {
           pre.push(
@@ -55,6 +55,7 @@ class LeftNav extends Component {
               key={item.key}
               onClick={() => {
                 this.props.onClick(item);
+                this.openMenu = item.key;
               }}
             >
               <Link to={item.key}>
@@ -66,11 +67,12 @@ class LeftNav extends Component {
         } else {
           // 查找一个与当前请求路径匹配的子Item
           const cItem = item.children.find(
-            cItem => path.indexOf(cItem.key) === 0
+            currentValue => path.indexOf(currentValue.key) === 0
           );
           // 如果存在, 说明当前item的子列表需要打开
           if (cItem) {
             this.openKey = item.key;
+            // this.setState({ openKey: item.key });
           }
           pre.push(
             <SubMenu
@@ -80,6 +82,10 @@ class LeftNav extends Component {
                   <span>{item.title}</span>
                 </span>
               }
+              onClick={() => {
+                this.openMenu = item.key;
+                // console.log(this.openMenu);
+              }}
             >
               {item.children.reduce((cpre, ele) => {
                 cpre.push(
@@ -99,20 +105,20 @@ class LeftNav extends Component {
             </SubMenu>
           );
         }
-      }
+      // }
       return pre;
     }, []);
   };
-  // componentDidMount() {
-  //   this.getMenuList();
-  // }
+  componentDidMount() {
+    this.setState({openKey:this.openKey})
+  }
   render() {
     const menuList = JSON.parse(localStorage.getItem("menuList"));
     const menuNodes = this.getMenuNodes(menuList);
     // 得到当前请求的路由路径
     let path = this.props.location.pathname;
     // 得到需要打开菜单项的key
-    const openKey = this.openKey;
+    // const openKey = this.openKey;
 
     return (
       <div className="left-nav">
@@ -123,12 +129,20 @@ class LeftNav extends Component {
         >
           <h1>QGame后台管理</h1>
         </Link>
-
         <Menu
           mode="inline"
           theme="dark"
           selectedKeys={[path]}
-          defaultOpenKeys={[openKey]}
+          // defaultOpenKeys={[this.openKey]}
+          onOpenChange={key => {
+            console.log(key);
+            if (key[1] && key[0] !== key[1]) {
+              this.setState({ openKey: key[1] });
+            } else {
+              this.setState({ openKey: null });
+            }
+          }}
+          openKeys={[this.state.openKey]}
         >
           {menuNodes}
         </Menu>

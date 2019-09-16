@@ -1,8 +1,15 @@
 import ajax from "./ajax";
-import storageUtils from "../utils/storageUtils";
+//import storageUtils from "../utils/storageUtils";
+// import token from '../pages/login'
+//import memory from
 
 const BASE = process.env.REACT_APP_HOST;
-const token = storageUtils.getUser().token;
+
+var token = localStorage.token || "";
+//登陆成功后赋值token
+export const setToken = () => {
+  token = localStorage.token;
+};
 
 // 登陆
 export const reqLogin = (username, password, authcode) =>
@@ -14,12 +21,24 @@ export const reqAuthCode = (username, password) =>
 
 // 获取菜单
 export const navList = () => {
-  const token = storageUtils.getUser().token;
+  const token = localStorage.token;
   return ajax(BASE + "/acl/navList", { token }, "POST");
 };
+//安全码设置
+export const getAuthCode = () =>
+  ajax(BASE + "/index/getAuthCode", { token }, "POST");
+//修改密码
+export const editPass = password =>
+  ajax(BASE + "/acl/editPass", { token, password }, "POST");
 //用户列表
-export const reqUsers = (page, limit) =>
-  ajax(BASE + "/user/index", { token, page, limit }, "POST");
+export const reqUsers = (page, limit, start, end, inputKey, inputValue) => {
+  return ajax(
+    BASE + "/user/index",
+    { page, limit, start, end, [inputKey]: inputValue, token },
+    "POST"
+  );
+};
+
 export const setGameUserNickName = (id, game_nick) =>
   ajax(BASE + "/user/setGameUserNickName", { token, id, game_nick }, "POST");
 export const changeGold = (record, value) => {
@@ -41,13 +60,6 @@ export const changeGold = (record, value) => {
     { token, task_type: 0, ...obj },
     "POST"
   );
-};
-
-export const searchData = (page, limit, start, end, param) => {
-  let key = param.key;
-  let obj = { page, limit, token, start, end };
-  obj[key] = param.val ? param.val : "";
-  return ajax(BASE + "/user/index", obj, "POST");
 };
 export const reqLoadGold = id => {
   return ajax(
@@ -200,7 +212,41 @@ export const resetAuthCode = id => {
     "POST"
   );
 };
+//后台管理-权限列表
+export const ruleList = () => {
+  return ajax(
+    BASE + "/acl/ruleList",
+    {
+      token
+    },
+    "POST"
+  );
+};
+export const addRule = value => {
+  return ajax(
+    BASE + "/acl/addRule",
+    {
+      ...value,
+      token
+    },
+    "POST"
+  );
+};
+export const editRule = (rule_id, value) => {
+  console.log(value);
 
+  return ajax(BASE + "/acl/editRule", { ...value, rule_id, token }, "POST");
+};
+export const ruleDel = id => {
+  return ajax(
+    BASE + "/acl/ruleDel",
+    {
+      id,
+      token
+    },
+    "POST"
+  );
+};
 //后台管理-角色管理
 export const getRoleList = (page, limit) => {
   return ajax(
@@ -325,7 +371,7 @@ export const saveCustomerService = (formData, action, user_id) => {
     "POST"
   );
 };
-//风控-日常运营
+//报表-日常运营
 export const dailyReport = (page, limit, package_id, start = "", end = "") => {
   return ajax(
     BASE + "/report/dailyReport",
@@ -357,7 +403,7 @@ export const dateReport = (page, limit, package_id, start = "", end = "") => {
 };
 export const gameReport = (page, limit, package_id, start = "", end = "") => {
   return ajax(
-    BASE + "/report/dateReport",
+    BASE + "/report/gameReport",
     {
       page,
       limit,
@@ -365,60 +411,263 @@ export const gameReport = (page, limit, package_id, start = "", end = "") => {
       package_id,
       start,
       end,
-      group_by: "date"
+      group_by: "game_id"
+    },
+    "POST"
+  );
+};
+export const oneDayGameReport = (page, limit, package_id, date) => {
+  return ajax(
+    BASE + "/report/gameReport",
+    {
+      page,
+      limit,
+      token,
+      package_id,
+      date,
+      group_by: "game_id"
+    },
+    "POST"
+  );
+};
+//游戏设置-配置项
+export const configList = (page, limit, conf_key) => {
+  return ajax(
+    BASE + "/config/list",
+    {
+      page,
+      limit,
+      token,
+      conf_key: conf_key ? conf_key : ""
+    },
+    "POST"
+  );
+};
+export const saveConf = (value, action) => {
+  return ajax(
+    BASE + "/config/saveConf",
+    {
+      ...value,
+      action,
+      token
+    },
+    "POST"
+  );
+};
+//消息中心-任务列表
+export const tasksList = (page, limit, value) => {
+  return ajax(
+    BASE + "/tasks/tasksList",
+    {
+      page,
+      limit,
+      ...value,
+      token
+    },
+    "POST"
+  );
+};
+
+export const changeUserBalance = value => {
+  return ajax(
+    BASE + "/tasks/changeUserBalance",
+    {
+      ...value,
+      token
+    },
+    "POST"
+  );
+};
+//交易所-收付款管理
+export const allAccountList = (page, limit, value) => {
+  return ajax(
+    BASE + "/trade/allAccountList",
+    {
+      page,
+      limit,
+      ...value,
+      token
+    },
+    "POST"
+  );
+};
+export const resetPassword = user_id => {
+  return ajax(
+    BASE + "/trade/resetPassword",
+    {
+      user_id,
+      token
+    },
+    "POST"
+  );
+};
+export const accountList = user_id => {
+  return ajax(BASE + "/trade/accountList", { user_id, token }, "POST");
+};
+
+//交易所-申请上架历史
+export const sellGoldApplyList = (page, limit, value) => {
+  return ajax(
+    BASE + "/trade/sellGoldApplyList",
+    {
+      page,
+      limit,
+      ...value,
+      token
+    },
+    "POST"
+  );
+};
+export const tradeRemark = value => {
+  return ajax(
+    BASE + "/trade/tradeRemark",
+    {
+      ...value,
+      token
+    },
+    "POST"
+  );
+};
+export const sellGoldInfoList = (page, limit, user_id) => {
+  return ajax(
+    BASE + "/order/sellGoldInfoList",
+    {
+      page,
+      limit,
+      user_id,
+      token
+    },
+    "POST"
+  );
+};
+export const reviewInfo2 = (page, limit, id) => {
+  return ajax(
+    BASE + "/order/reviewInfo",
+    {
+      page,
+      limit,
+      id,
+      type: 3,
+      token
+    },
+    "POST"
+  );
+};
+export const remarkInfo2 = (page, limit, id) => {
+  return ajax(
+    BASE + "/order/remarkInfo",
+    {
+      page,
+      limit,
+      id,
+      type: 6,
+      token
+    },
+    "POST"
+  );
+};
+//交易所-交易订单
+export const sellGoldOrderList = (page, limit, value) => {
+  return ajax(
+    BASE + "/trade/sellGoldOrderList",
+    {
+      page,
+      limit,
+      ...value,
+      token
+    },
+    "POST"
+  );
+};
+//活动-活动列表
+export const activityConfigList = (page, limit, value) => {
+  return ajax(
+    BASE + "/activity/activityConfigList",
+    {
+      page,
+      limit,
+      ...value,
+      token
+    },
+    "POST"
+  );
+};
+export const saveActivityConfig = value => {
+  return ajax(
+    BASE + "/activity/saveActivityConfig",
+    {
+      ...value,
+      token
+    },
+    "POST"
+  );
+};
+export const delActivityConfig = id => {
+  return ajax(
+    BASE + "/activity/delActivityConfig",
+    {
+      id,
+      token
+    },
+    "POST"
+  );
+};
+
+//活动-礼金券领取列表
+export const giftVoucherList = (page, limit, value) => {
+  return ajax(
+    BASE + "/activity/giftVoucherList",
+    {
+      page,
+      limit,
+      ...value,
+      token
     },
     "POST"
   );
 };
 
 //充值-充值订单
-export const reqOrder_list = (page, limit, searchData) => {
-  if (searchData) {
-    let {
-      start_time,
-      end_time,
-      order_status,
-      type,
-      inputParam,
-      paramKey,
-      order_id,
-      user_id
-    } = searchData;
-    //处理输入关键字和选择关键字，组合成传输参数
-    let obj = {};
-    if (paramKey === "1" || paramKey === "2") {
-      obj.time_type = paramKey;
-    } else {
-      let str = paramKey;
-      obj[str] = inputParam;
-    }
-    return ajax(
-      BASE + "/order/recharge",
-      {
-        page,
-        limit,
-        token,
-        start_time,
-        end_time,
-        order_status,
-        type,
-        order_id,
-        user_id,
-        ...obj
-      },
-      "POST"
-    );
-  } else {
-    return ajax(
-      BASE + "/order/recharge",
-      {
-        page,
-        limit,
-        token
-      },
-      "POST"
-    );
+export const reqOrder_list = (
+  page,
+  limit,
+  start_time,
+  end_time,
+  order_status,
+  type,
+  inputKey,
+  inputValue
+) => {
+  if (inputKey === "1" || inputKey === "2") {
+    inputValue = inputKey;
+    inputKey = "time_type";
   }
+  return ajax(
+    BASE + "/order/recharge",
+    { start_time, end_time, order_status, type, token, [inputKey]: inputValue },
+    "POST"
+  );
+};
+export const reqLostOrder_list = (page, limit, user_id, order_id) => {
+  return ajax(
+    BASE + "/order/recharge",
+    { page, limit, order_id, user_id, token },
+    "POST"
+  );
+};
+export const orderReview = (user_id, order_id) => {
+  return ajax(
+    BASE + "/order/orderReview",
+    { user_id, order_id, status: 7, review_type: 1, token },
+    "POST"
+  );
+};
+export const orderReviewEdit = (user_id, order_id, type) => {
+  return ajax(
+    BASE + "/order/orderReview",
+    { user_id, order_id, status: 8, review_type: 2, token, type },
+    "POST"
+  );
 };
 export const downloadList = searchData => {
   let {
@@ -542,14 +791,26 @@ export const deleteBankCard = id => {
   );
 };
 //充值-代充订单
-export const rechargeOrder = (page, limit) => {
+export const rechargeOrder = (
+  page,
+  limit,
+  start_time,
+  end_time,
+  order_status,
+  inputKey,
+  inputValue
+) => {
   return ajax(
     BASE + "/order/rechargeOrder",
     {
       page,
       limit,
       token,
-      type: 14
+      type: 14,
+      start_time,
+      end_time,
+      order_status,
+      [inputKey]: inputValue
     },
     "POST"
   );
@@ -632,7 +893,7 @@ export const withDraw = (page, limit, flag, searchData) => {
         page,
         limit,
         token,
-        flag: 3
+        flag
       },
       "POST"
     );
@@ -750,6 +1011,35 @@ export const saveWithDrawChannel = (id, name, value) => {
       "bankcard[withdraw_type]": 2,
       conf_key: "withdraw_channel_info",
       action: "edit",
+      token
+    },
+    "POST"
+  );
+};
+//赠送-赠送订单
+export const withDrawReview = (order_id, user_id, review_status) => {
+  return ajax(
+    BASE + "/order/withDraw",
+    {
+      token,
+      order_id,
+      review_status,
+      user_id,
+      review_type: 1,
+      is_pass: 1
+    },
+    "POST"
+  );
+};
+//AI
+export const getAIList = (page, limit, package_id, value) => {
+  return ajax(
+    BASE + "/user/index",
+    {
+      page,
+      limit,
+      package_id,
+      ...value,
       token
     },
     "POST"
