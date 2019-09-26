@@ -10,7 +10,6 @@ import {
 } from "antd";
 import { packageList, addNotice, updateNotice } from "../../../api";
 import moment from "moment";
-import { formateDate } from "../../../utils/dateUtils";
 class AddDataForm extends Component {
   constructor(props) {
     super(props);
@@ -142,7 +141,7 @@ class AddDataForm extends Component {
               }
             ],
             initialValue: isEdit && moment(editDataRecord.start_time * 1000)
-          })(<DatePicker format={"YYYY-MM-DD 00:00:00"} />)}
+          })(<DatePicker showTime format={"YYYY-MM-DD HH:mm:ss"} />)}
         </Form.Item>
         <Form.Item label="截止日期">
           {getFieldDecorator("end_time", {
@@ -152,7 +151,7 @@ class AddDataForm extends Component {
               }
             ],
             initialValue: isEdit && moment(editDataRecord.end_time * 1000)
-          })(<DatePicker format={"YYYY-MM-DD 00:00:00"} />)}
+          })(<DatePicker showTime format={"YYYY-MM-DD HH:mm:ss"} />)}
         </Form.Item>
         <Form.Item>
           <Button
@@ -169,6 +168,7 @@ class AddDataForm extends Component {
   handleSubmit = event => {
     event.preventDefault();
     this.props.form.validateFields(async (err, value) => {
+      console.log(value);
       let id = this.props.editDataRecord
         ? this.props.editDataRecord._id.$oid
         : "";
@@ -177,8 +177,8 @@ class AddDataForm extends Component {
           let str = "group[" + item + "]";
           value[str] = item;
         });
-        value.start_time = value.start_time.format("YYYY-MM-DD 00:00:00");
-        value.end_time = value.end_time.format("YYYY-MM-DD 00:00:00");
+        value.start_time = value.start_time.format("YYYY-MM-DD HH:mm:ss");
+        value.end_time = value.end_time.format("YYYY-MM-DD HH:mm:ss");
         delete value.packageList;
         const res = !this.props.isEdit
           ? await addNotice(value)

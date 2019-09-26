@@ -1,24 +1,14 @@
 import React, { Component } from "react";
-import {
-  Card,
-  Table,
-  Modal,
-  message,
-  Icon,
-  Input,
-  Popconfirm,
-  Select,
-  Button
-} from "antd";
+import { Card, Table, Modal, message, Icon, Select } from "antd";
 import LinkButton from "../../../components/link-button/index";
 import {
+  dailyReportInit,
   dailyReport,
   packageList,
   dateReport,
   gameReport
 } from "../../../api/index";
 import MoreDetail from "./details";
-import { formateDate } from "../../../utils/dateUtils";
 import moment from "moment";
 import MyDatePicker from "../../../components/MyDatePicker";
 import DateGameReport from "./dateGameReport";
@@ -32,21 +22,21 @@ class DailyReport extends Component {
       count: 0,
       pageSize: 20,
       reportTable: false,
-      isGameReportShow:false
+      isGameReportShow: false
     };
   }
-  getInitialData = async () => {
+  getInitialData = async (page, limit) => {
     const res = await packageList();
-    if (res.status === 0) {
+    const result = await dailyReportInit(page, limit);
+    if (res.status === 0 && result.status === 0) {
       this.setState({
+        data: result.data,
         packageList: res.data
       });
-    } else {
-      message.error(res.msg);
     }
   };
   componentDidMount() {
-    this.getInitialData();
+    this.getInitialData(1, 20);
   }
   render() {
     const packageNode = this.state.packageList.map(item => {
@@ -63,10 +53,7 @@ class DailyReport extends Component {
             <div>
               <MyDatePicker
                 handleValue={val => {
-                  let diffDays = moment(val[1]).diff(
-                    moment(val[0]),
-                    "days"
-                  );
+                  let diffDays = moment(val[1]).diff(moment(val[0]), "days");
                   if (diffDays > 7) {
                     message.error("请选择时间范围小于7天");
                   } else {
@@ -84,7 +71,7 @@ class DailyReport extends Component {
                 {packageNode}
               </Select>
               &nbsp; &nbsp;
-              <LinkButton onClick={this.onSearchData} size='default'>
+              <LinkButton onClick={this.onSearchData} size="default">
                 <Icon type="search" />
               </LinkButton>
               &nbsp; &nbsp;
@@ -111,24 +98,7 @@ class DailyReport extends Component {
           dataSource={this.state.data}
           columns={this.initColumns()}
           size="small"
-          pagination={{
-            defaultPageSize: this.state.pageSize,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal:(total, range) => `共${total}条`,
-            defaultCurrent: 1,
-            total: this.state.count,
-            onChange: (page, pageSize) => {
-              this.getUsers(page, pageSize);
-              this.setState({
-                pageSize: pageSize
-              });
-            },
-            onShowSizeChange: (current, size) => {
-              this.getUsers(current, size);
-            }
-          }}
-          scroll={{ x: 2500}}
+          scroll={{ x: 2500 }}
         />
         <Modal
           title="按日期查看"
@@ -163,79 +133,79 @@ class DailyReport extends Component {
   initColumns = () => [
     {
       title: "品牌",
-      dataIndex: "package_nick",
+      dataIndex: "package_nick"
     },
     {
       title: "新增用户",
-      dataIndex: "regin_user_number",
+      dataIndex: "regin_user_number"
     },
     {
       title: "活跃用户",
-      dataIndex: "active_user_number",
+      dataIndex: "active_user_number"
     },
     {
       title: "官方首充用户",
-      dataIndex: "first_pay_user_number",
+      dataIndex: "first_pay_user_number"
     },
     {
       title: "官方首充金额",
-      dataIndex: "first_pay_money_total",
+      dataIndex: "first_pay_money_total"
     },
     {
       title: "官方充值用户",
-      dataIndex: "pay_user_number",
+      dataIndex: "pay_user_number"
     },
     {
       title: "官方充值金额",
-      dataIndex: "pay_money_total",
+      dataIndex: "pay_money_total"
     },
     {
       title: "人工首充用户",
-      dataIndex: "first_pay_user_number_res",
+      dataIndex: "first_pay_user_number_res"
     },
     {
       title: "人工首充金额",
-      dataIndex: "first_pay_money_total_res",
+      dataIndex: "first_pay_money_total_res"
     },
     {
       title: "人工充值用户",
-      dataIndex: "pay_user_number_res",
+      dataIndex: "pay_user_number_res"
     },
     {
       title: "人工充值金额",
-      dataIndex: "pay_money_total_res",
+      dataIndex: "pay_money_total_res"
     },
     {
       title: "官方兑换用户",
-      dataIndex: "exchange_user_number",
+      dataIndex: "exchange_user_number"
     },
     {
       title: "官方兑换金额",
-      dataIndex: "exchange_money_total",
+      dataIndex: "exchange_money_total"
     },
     {
       title: "人工兑换用户",
-      dataIndex: "exchange_user_number_res",
+      dataIndex: "exchange_user_number_res"
     },
     {
       title: "人工兑换金额",
-      dataIndex: "exchange_money_total_res",
+      dataIndex: "exchange_money_total_res"
     },
     {
       title: "玩家总赢额",
-      dataIndex: "win_statement_total",
+      dataIndex: "win_statement_total"
     },
     {
       title: "玩家总输额",
-      dataIndex: "lose_statement_total",
+      dataIndex: "lose_statement_total"
     },
     {
       title: "玩家总流水",
-      dataIndex: "statement_total",
+      dataIndex: "statement_total"
     },
     {
       title: "盈亏比",
-      dataIndex: "statement_ratio",
+      dataIndex: "statement_ratio"
     },
     {
       title: "操作",
@@ -461,12 +431,7 @@ class DailyReport extends Component {
     this.setState({ reportTable: true });
   };
   getGameReport = async record => {
-    const res = await gameReport(
-      1,
-      20,
-      this.package_id,
-      record.date
-    );
+    const res = await gameReport(1, 20, this.package_id, record.date);
     this.parseGameData(res);
     this.setState({
       date: record.date,

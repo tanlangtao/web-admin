@@ -160,23 +160,8 @@ export default class User extends Component {
           <LinkButton onClick={() => this.getGoldDetail(record)} size="small">
             资金明细
           </LinkButton>
-          <LinkButton
-            onClick={() => this.getGoldDetail(record, true)}
-            size="small"
-          >
-            查看绑定信息
-          </LinkButton>
-          <Popconfirm
-            title="交易所黑名单"
-            onConfirm={() => this.saveUserBlack(record, true)}
-            onCancel={() => this.saveUserBlack(record, false)}
-            okText="添加"
-            cancelText="移除"
-          >
-            <LinkButton size="small">交易所黑名单</LinkButton>
-          </Popconfirm>
-          <LinkButton onClick={() => this.resetPwd(record)} size="small">
-            重置密码
+          <LinkButton onClick={() => this.getMoreDetail(record)} size="small">
+            更多
           </LinkButton>
         </span>
       )
@@ -254,6 +239,7 @@ export default class User extends Component {
         message.success(res.msg);
         this.setState({ isGoldShow: false, loading: false });
       } else {
+        this.setState({ loading: false });
         message.error(res.msg);
       }
       form.resetFields();
@@ -276,6 +262,7 @@ export default class User extends Component {
     }
   };
   getGoldDetail = async (record, isBindInfo) => {
+    this.moreModal.destroy();
     this.isBindInfo = isBindInfo;
     this.GoldDetailRecord = {
       data: [],
@@ -301,6 +288,7 @@ export default class User extends Component {
     }
   };
   resetPwd = record => {
+    this.moreModal.destroy();
     this.setState({ isResetPwdShow: true });
     this.resetPwdId = record.id;
   };
@@ -312,6 +300,34 @@ export default class User extends Component {
     } else {
       message.success("操作失败:" + res.msg);
     }
+  };
+  getMoreDetail = record => {
+    this.moreModal = Modal.info({
+      title: "更多",
+      okText: "关闭",
+      content: (
+        <div>
+          <LinkButton
+            onClick={() => this.getGoldDetail(record, true)}
+            size="small"
+          >
+            查看绑定信息
+          </LinkButton>
+          <Popconfirm
+            title="交易所黑名单"
+            onConfirm={() => this.saveUserBlack(record, true)}
+            onCancel={() => this.saveUserBlack(record, false)}
+            okText="添加"
+            cancelText="移除"
+          >
+            <LinkButton size="small">交易所黑名单</LinkButton>
+          </Popconfirm>
+          <LinkButton onClick={() => this.resetPwd(record)} size="small">
+            重置密码
+          </LinkButton>
+        </div>
+      )
+    });
   };
   componentDidMount() {
     this.getUsers(1, 20);
@@ -357,7 +373,7 @@ export default class User extends Component {
             this.inputValue = this.input.input.value;
             this.getUsers(1, this.state.pageSize);
           }}
-          size='default'
+          size="default"
         >
           <Icon type="search" />
         </LinkButton>
@@ -368,7 +384,7 @@ export default class User extends Component {
         onClick={() => {
           window.location.reload();
         }}
-        size='default'
+        size="default"
       >
         <Icon type="reload" />
       </LinkButton>
@@ -395,7 +411,7 @@ export default class User extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 2150, y: "65vh" }}
+          scroll={{ x: 1900, y: "65vh" }}
         />
         <Modal
           title="修改昵称"

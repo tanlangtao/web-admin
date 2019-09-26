@@ -7,8 +7,7 @@ import {
   Icon,
   Input,
   Popconfirm,
-  Button,
-  Divider
+  Button
 } from "antd";
 import { configList, saveConf } from "../../../api/index";
 import LinkButton from "../../../components/link-button";
@@ -66,7 +65,7 @@ class Config extends Component {
           </div>
         }
         extra={
-          <LinkButton onClick={() => window.location.reload()} size='default'>
+          <LinkButton onClick={() => window.location.reload()} size="default">
             <Icon type="reload" />
           </LinkButton>
         }
@@ -107,6 +106,7 @@ class Config extends Component {
               this.setState({ isEditFormShow: false });
             }}
             footer={null}
+            width="50%"
           >
             <WrappedEditForm
               finished={() => {

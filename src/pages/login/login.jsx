@@ -161,7 +161,6 @@ class Login extends Component {
                     message: "用户名必须是英文、数字或下划线组成"
                   }
                 ],
-                initialValue: "ice" // 初始值
               })(
                 <Input
                   prefix={
@@ -178,7 +177,6 @@ class Login extends Component {
                     validator: this.validatePwd
                   }
                 ],
-                initialValue: "123456"
               })(
                 <Input
                   prefix={
@@ -195,7 +193,6 @@ class Login extends Component {
                   //{ required: true, whitespace: true, message: '验证码必须输入' },
                   //{ min: 4, message: '验证码至少4位' }
                 ],
-                initialValue: "123456"
               })(
                 <Input
                   prefix={

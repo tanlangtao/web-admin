@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { Table } from "antd";
-import { userDetail } from "../../api/index";
 class GoldDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
   render() {
-    const { data, count, id } = this.props.GoldDetailRecord;
+    const { data } = this.props.GoldDetailRecord;
     return (
       <Table
         bordered

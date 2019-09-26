@@ -24,6 +24,7 @@ h5,
 h6 {
   margin: 0;
   padding: 0;
+  font-weight: 600
 }
 
 h1,
@@ -93,5 +94,28 @@ html, body {
   width: 100%;
 }
 .ant-card-head-title{
-  white-space: normal !important
+  white-space: normal !important;
+}
+
+/* json编辑器样式 */
+.json-editor{
+  height: 100%;
+  position: relative;
+}
+.json-editor >>> .ReactCodeMirror {
+  height: auto;
+  min-height: 300px;
+}
+.json-editor >>> .CodeMirror-scroll{
+  min-height: 300px;
+}
+.json-editor >>> .cm-s-rubyblue span.cm-string {
+  color: #F08047;
+}
+span.cm-string {
+  font-weight: normal!important;
+}
+pre.CodeMirror-line{
+  line-height: 25px!important;
+  font-weight: normal!important;
 }

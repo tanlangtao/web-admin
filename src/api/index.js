@@ -176,7 +176,7 @@ export const addUser = formValue => {
     group_id: formValue.userGroup,
     source: formValue.proxy ? formValue.proxy : [],
     ...obj,
-    user_money: formValue.loadGold,
+    use_money: formValue.loadGold,
     pass: formValue.password,
     repass: formValue.confirmPssword,
     token
@@ -196,7 +196,7 @@ export const editUser = (formValue, id) => {
     group_id: formValue.userGroup,
     source: formValue.proxy ? formValue.proxy : [],
     ...obj,
-    user_money: formValue.loadGold,
+    use_money: formValue.loadGold,
     pass: formValue.password ? formValue.password : [],
     token
   };
@@ -372,6 +372,17 @@ export const saveCustomerService = (formData, action, user_id) => {
   );
 };
 //报表-日常运营
+export const dailyReportInit = (page, limit) => {
+  return ajax(
+    BASE + "/report/dailyReport",
+    {
+      page,
+      limit,
+      token
+    },
+    "POST"
+  );
+};
 export const dailyReport = (page, limit, package_id, start = "", end = "") => {
   return ajax(
     BASE + "/report/dailyReport",
@@ -1040,6 +1051,17 @@ export const getAIList = (page, limit, package_id, value) => {
       limit,
       package_id,
       ...value,
+      token
+    },
+    "POST"
+  );
+};
+export const changeInternalUserBalance = (user_id, amount) => {
+  return ajax(
+    BASE + "/user/changeInternalUserBalance",
+    {
+      user_id,
+      amount,
       token
     },
     "POST"

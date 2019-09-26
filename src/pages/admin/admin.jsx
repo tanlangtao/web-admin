@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+import { createHashHistory } from "history";
+
 import { Layout } from "antd";
 
 import LeftNav from "../../components/left-nav";
@@ -36,6 +38,7 @@ import RuleManage from "../admin_manage/ruleManage";
 import { Provider, KeepAlive } from "react-keep-alive";
 const { Sider, Content } = Layout;
 
+const history = createHashHistory();
 /*
 后台管理的路由组件
  */
@@ -64,7 +67,9 @@ export default class Admin extends Component {
           />
         </Sider>
         <Layout>
-          <Header onRef={ref => (this.child1 = ref)}>Header</Header>
+          <Header onRef={ref => (this.child1 = ref)} history={history}>
+            Header
+          </Header>
           <Content style={{ margin: 5, backgroundColor: "#fff" }}>
             <Provider>
               <div style={{ height: "100%" }}>

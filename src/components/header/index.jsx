@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { browserHistory } from "react-router";
 import { withRouter, Link } from "react-router-dom";
 import {
   Modal,
@@ -87,6 +88,8 @@ class Header extends Component {
     if (panes.length && activeKey === targetKey) {
       if (lastIndex >= 0) {
         activeKey = panes[lastIndex].key;
+        // browserHistory.push(panes[lastIndex].path);
+        this.props.history.push(panes[lastIndex].path);
       } else {
         activeKey = panes[0].key;
       }
@@ -94,9 +97,7 @@ class Header extends Component {
     this.setState({ panes, activeKey });
   };
 
-  /*
-  退出登陆
-   */
+  //退出LOG OUT
   logout = () => {
     // 显示确认框
     Modal.confirm({

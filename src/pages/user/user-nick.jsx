@@ -5,7 +5,7 @@ const FormItem = Form.Item;
 class NormalLoginForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { isNickModal, goldRecord } = this.props;
+    const { isNickModal } = this.props;
     return (
       <Form className="login-form">
         <FormItem style={isNickModal ? {} : { display: "none" }}>
