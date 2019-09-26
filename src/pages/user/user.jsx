@@ -305,6 +305,7 @@ export default class User extends Component {
     this.moreModal = Modal.info({
       title: "更多",
       okText: "关闭",
+      width:'50%',
       content: (
         <div>
           <LinkButton

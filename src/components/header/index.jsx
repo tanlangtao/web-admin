@@ -105,11 +105,13 @@ class Header extends Component {
       onOk: () => {
         console.log("OK", this);
         // 删除保存的user数据
-        storageUtils.removeUser();
-        memoryUtils.user = {};
+        // storageUtils.removeUser();
+        // memoryUtils.user = {};
+        // localStorage={}
         localStorage.removeItem("menuList");
         localStorage.removeItem("token");
         localStorage.removeItem("name");
+        localStorage.removeItem("tokenTimeStamp");
         // 跳转到login
         this.props.history.replace("/login");
       }

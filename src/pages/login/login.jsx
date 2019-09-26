@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Icon, Input, Button, Modal, message } from "antd";
 import "./login.less";
-import { reqLogin, reqAuthCode, navList,setToken } from "../../api";
+import { reqLogin, reqAuthCode, navList, setToken } from "../../api";
 
-const Item = Form.Item; 
+const Item = Form.Item;
 
 /*
 登陆的路由组件
@@ -43,10 +43,10 @@ class Login extends Component {
         if (result.status === 0) {
           // 登陆成功
           message.success("登陆成功");
-          // storageUtils.saveUser(result.data); // 保存到local中
           localStorage.token = result.data.token;
           localStorage.name = result.data.name;
-          setToken()
+          localStorage.tokenTimeStamp = new Date().getTime();
+          setToken();
           this.getMenuList();
         } else {
           // 登陆失败
@@ -66,7 +66,7 @@ class Login extends Component {
         // 请求登陆
         const { username, password } = values;
         const result = await reqAuthCode(username, password);
-        console.log("请求成功", result);
+        // console.log("请求成功", result);
         if (result.status === 0 && result.data) {
           // 登陆成功
           Modal.info({
@@ -160,7 +160,7 @@ class Login extends Component {
                     pattern: /^[a-zA-Z0-9_]+$/,
                     message: "用户名必须是英文、数字或下划线组成"
                   }
-                ],
+                ]
               })(
                 <Input
                   prefix={
@@ -176,7 +176,7 @@ class Login extends Component {
                   {
                     validator: this.validatePwd
                   }
-                ],
+                ]
               })(
                 <Input
                   prefix={
@@ -192,7 +192,7 @@ class Login extends Component {
                 rules: [
                   //{ required: true, whitespace: true, message: '验证码必须输入' },
                   //{ min: 4, message: '验证码至少4位' }
-                ],
+                ]
               })(
                 <Input
                   prefix={

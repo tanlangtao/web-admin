@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { createHashHistory } from "history";
-
+import { reqUsers } from "../../api/index";
 import { Layout } from "antd";
 
 import LeftNav from "../../components/left-nav";
@@ -56,6 +56,20 @@ export default class Admin extends Component {
     // 如果内存没有存储token ==> 当前没有登陆
     if (!token) {
       return <Redirect to="/login" />;
+    }
+    //如果内存中存储的token超过24小时，需要验证token，如果已经延期更新时间戳，如果未延期，更新token
+    const timeStamp = new Date().getTime();
+    const tokenTimeStamp = localStorage.tokenTimeStamp;
+    let time = timeStamp - tokenTimeStamp;
+    if (time > 24 * 3600 * 1000) {
+      const res = reqUsers(1, 20);
+      if (res.status === 0) {
+        localStorage.removeItem("menuList");
+        localStorage.removeItem("token");
+        localStorage.removeItem("name");
+        localStorage.removeItem("tokenTimeStamp");
+        return <Redirect to="/login" />;
+      }
     }
     return (
       <Layout style={{ minHeight: "100%" }}>
