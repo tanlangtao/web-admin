@@ -63,7 +63,7 @@ export default class Admin extends Component {
     let time = timeStamp - tokenTimeStamp;
     if (time > 24 * 3600 * 1000) {
       const res = reqUsers(1, 20);
-      if (res.status === 0) {
+      if (res.status !== 0) {
         localStorage.removeItem("menuList");
         localStorage.removeItem("token");
         localStorage.removeItem("name");

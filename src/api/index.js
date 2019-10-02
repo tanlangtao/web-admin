@@ -73,14 +73,15 @@ export const reqLoadGold = id => {
     "POST"
   );
 };
-export const userDetail = (page, limit, id) => {
+export const userDetail = (page, limit, id, goldDetails) => {
   return ajax(
     BASE + "/user/userDetail",
     {
       page,
       limit,
       token,
-      id
+      id,
+      ...goldDetails
     },
     "POST"
   );

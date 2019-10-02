@@ -1,20 +1,63 @@
 import React, { Component } from "react";
-import { Table } from "antd";
+import { Table, Card, Icon } from "antd";
+import MyDatePicker from "../../components/MyDatePicker";
+import LinkButton from "../../components/link-button/index";
+import { userDetail } from "../../api/index";
 class GoldDetail extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      data: []
+    };
   }
+  componentDidMount() {
+    this.setState({
+      data: this.props.GoldDetailRecord.data
+    });
+  }
+  search = async () => {
+    let goldDetails = {
+      start: this.startTime ? this.startTime : "",
+      end: this.endTime ? this.endTime : "",
+      funds_type: 0
+    };
+    const res = await userDetail(
+      1,
+      100,
+      this.props.GoldDetailRecord.id,
+      goldDetails
+    );
+    this.setState({ data: res.data });
+  };
   render() {
-    const { data } = this.props.GoldDetailRecord;
+    // const { data } = this.props.GoldDetailRecord;
+    let title;
+    if (!this.props.isBindInfo) {
+      title = (
+        <span>
+          <MyDatePicker
+            handleValue={val => {
+              this.startTime = val[0];
+              this.endTime = val[1];
+            }}
+          />
+          &nbsp; &nbsp;
+          <LinkButton onClick={this.search} size="default">
+            <Icon type="search" />
+          </LinkButton>
+        </span>
+      );
+    }
     return (
-      <Table
-        bordered
-        rowKey="_id"
-        dataSource={data}
-        columns={this.initColumns()}
-        size="small"
-      />
+      <Card title={title}>
+        <Table
+          bordered
+          rowKey="_id"
+          dataSource={this.state.data}
+          columns={this.initColumns()}
+          size="small"
+        />
+      </Card>
     );
   }
   initColumns = () => {
@@ -35,7 +78,7 @@ class GoldDetail extends Component {
         },
         {
           title: "银行名称",
-          dataIndex: "bank_name",
+          dataIndex: "bank_name"
         },
         {
           title: "银行卡号",
