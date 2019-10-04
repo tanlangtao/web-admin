@@ -262,7 +262,9 @@ export default class User extends Component {
     }
   };
   getGoldDetail = async (record, isBindInfo) => {
-    this.moreModal.destroy();
+    if (this.moreModal) {
+      this.moreModal.destroy();
+    }
     this.isBindInfo = isBindInfo;
     this.GoldDetailRecord = {
       data: [],
@@ -288,7 +290,9 @@ export default class User extends Component {
     }
   };
   resetPwd = record => {
-    this.moreModal.destroy();
+    if (this.moreModal) {
+      this.moreModal.destroy();
+    }
     this.setState({ isResetPwdShow: true });
     this.resetPwdId = record.id;
   };
@@ -305,7 +309,7 @@ export default class User extends Component {
     this.moreModal = Modal.info({
       title: "更多",
       okText: "关闭",
-      width:'50%',
+      width: "50%",
       content: (
         <div>
           <LinkButton
