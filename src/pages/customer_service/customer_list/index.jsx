@@ -199,6 +199,12 @@ class Customer_list extends Component {
       render: (text, record) => (text === 1 ? "是" : "否")
     },
     {
+      title: "账号类型",
+      dataIndex: "user_type",
+      width: 100,
+      render: (text) => (text === 1 ? "人工充值" : "人工兑换")
+    },
+    {
       title: "排序",
       dataIndex: "sort",
       width: 100

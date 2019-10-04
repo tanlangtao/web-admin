@@ -75,6 +75,21 @@ class AddDataForm extends Component {
             />
           )}
         </Form.Item>
+        <Form.Item label="账号类型">
+          {getFieldDecorator("user_type", {
+            rules: [
+              {
+                required: true
+              }
+            ],
+            initialValue: isEdit ? parseInt(editDataRecord.user_type) : 1
+          })(
+            <Radio.Group>
+              <Radio value={1}>人工充值</Radio>
+              <Radio value={2}>人工兑换</Radio>
+            </Radio.Group>
+          )}
+        </Form.Item>
         <Form.Item label="是否显示">
           {getFieldDecorator("status", {
             rules: [
