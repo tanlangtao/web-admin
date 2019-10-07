@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { browserHistory } from "react-router";
+// import { browserHistory } from "react-router";
 import { withRouter, Link } from "react-router-dom";
 import {
   Modal,
@@ -14,8 +14,8 @@ import {
 } from "antd";
 
 import LinkButton from "../link-button";
-import memoryUtils from "../../utils/memoryUtils";
-import storageUtils from "../../utils/storageUtils";
+// import memoryUtils from "../../utils/memoryUtils";
+// import storageUtils from "../../utils/storageUtils";
 import { getAuthCode, editPass } from "../../api";
 import QRCode from "qrcode.react";
 import "./index.less";

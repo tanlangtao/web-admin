@@ -1,27 +1,21 @@
 import React, { Component } from "react";
-import {  withRouter } from "react-router-dom";
-import {
-  Card,
-  message,
-  Input,
-  Button,
-  Form,
-  Radio,
-} from "antd";
-import { getConfigList,  } from "../../../api/index";
+import { withRouter } from "react-router-dom";
+import { Card, message, Input, Button, Form, Radio } from "antd";
+import { getConfigList, setGiftConfig } from "../../../api/index";
 
 class Channel extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      data: ""
-    };
+    this.state = {};
   }
-  getUsers = async (page, limit) => {
-    const res = await getConfigList();
+  getUsers = async () => {
+    let reqData = {
+      conf_key: "give_info",
+      get_val: 1
+    };
+    const res = await getConfigList(reqData);
     if (res.status === 0) {
-      this.initialData = res.data;
-      this.setState({ data: JSON.parse(res.data.conf_val) });
+      this.resData = res.data;
     } else {
       message.error(res.msg);
     }
@@ -30,8 +24,7 @@ class Channel extends Component {
     this.getUsers();
   }
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const data = this.state.data;
+    const { getFieldDecorator, getFieldValue } = this.props.form;
     return (
       <Card
         extra={
@@ -66,8 +59,8 @@ class Channel extends Component {
               initialValue: 1
             })(
               <Radio.Group>
-                <Radio value={1}>启用</Radio>
-                <Radio value={0}>停用</Radio>
+                <Radio value={0}>开启</Radio>
+                <Radio value={1}>关闭</Radio>
               </Radio.Group>
             )}
           </Form.Item>
@@ -77,14 +70,24 @@ class Channel extends Component {
             labelCol={{ span: 9, offset: 7 }}
             wrapperCol={{ span: 8 }}
           >
-            {getFieldDecorator("qujian", {
+            {getFieldDecorator("min_amount", {
               rules: [
                 {
                   required: true,
                   message: "该项不能为空"
+                },
+                {
+                  validator: (rule, value, callback) => {
+                    if (value < 0) {
+                      callback("金额不能为负"); //如果还没填写，则不进行验证
+                    }
+                    if (!value) {
+                      callback();
+                    }
+                    callback();
+                  }
                 }
-              ],
-              initialValue: ""
+              ]
             })(<Input style={{ width: "80%", marginRight: 5 }} />)}
             <span>-</span>
           </Form.Item>
@@ -92,14 +95,27 @@ class Channel extends Component {
             style={{ display: "inline-block", width: "25%" }}
             wrapperCol={{ span: 8 }}
           >
-            {getFieldDecorator("bankcard[channel][2][max_amount]", {
+            {getFieldDecorator("max_amount", {
               rules: [
                 {
                   required: true,
                   message: "该项不能为空"
+                },
+                {
+                  validator: (rule, value, callback) => {
+                    if (!value) {
+                      callback(); //如果还没填写，则不进行一致性验证
+                    }
+                    if (value < getFieldValue("min_amount")) {
+                      callback("最大面值小于最小面值");
+                    }
+                    if (value < 0) {
+                      callback("金额不能为负");
+                    }
+                    callback();
+                  }
                 }
-              ],
-              initialValue: ""
+              ]
             })(<Input style={{ width: "80%" }} />)}
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 4 }}>
@@ -117,33 +133,32 @@ class Channel extends Component {
   }
   handleSubmit = e => {
     e.preventDefault();
-    // this.props.form.validateFields(async (err, value) => {
-    //   let { id, name } = this.initialData;
-    //   let obj = {};
-    //   value.bankcard.channel.forEach((item, index) => {
-    //     for (const key in item) {
-    //       obj[`bankcard[channel][${index}][${key}]`] = item[key];
-    //     }
-    //   });
-
-    //   obj["bankcard[is_close]"] = value.bankcard.is_close ? "on" : "off";
-    //   obj["alipay[is_close]"] = value.alipay.is_close ? "on" : "off";
-    //   for (const key in value.artificial) {
-    //     obj[`artificial[${key}]`] = value.artificial[key];
-    //   }
-    //   if (!err) {
-    //     const res = await saveWithDrawChannel(id, name, obj);
-    //     if (res.status === 0) {
-    //       message.success("提交成功:" + res.msg);
-    //       console.log(res);
-    //       this.getUsers();
-    //     } else {
-    //       message.error("出错了：" + res.msg);
-    //     }
-    //   } else {
-    //     message.error("提交失败");
-    //   }
-    // });
+    this.props.form.validateFields(async (err, value) => {
+      console.log(value);
+      if (!err) {
+        console.log(this.resData);
+        const { id, name, conf_val, conf_key } = this.resData;
+        let new_conf_val = JSON.parse(conf_val);
+        let reqData = {
+          id,
+          name,
+          ...value,
+          action: "edit",
+          conf_key
+        };
+        reqData.give_info = new_conf_val;
+        const res = await setGiftConfig(reqData);
+        if (res.status === 0) {
+          message.success("提交成功:" + res.msg);
+          console.log(res);
+          this.getUsers();
+        } else {
+          message.error("出错了：" + res.msg);
+        }
+      } else {
+        message.error("提交失败");
+      }
+    });
   };
 }
 const WrappedChannel = Form.create()(Channel);

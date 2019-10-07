@@ -19,8 +19,12 @@ class Channel extends Component {
       data: ""
     };
   }
-  getUsers = async (page, limit) => {
-    const res = await getConfigList();
+  getUsers = async () => {
+    let reqData = {
+      conf_key: "withdraw_channel_info",
+      get_val: 1
+    };
+    const res = await getConfigList(reqData);
     if (res.status === 0) {
       this.initialData = res.data;
       this.setState({ data: JSON.parse(res.data.conf_val) });

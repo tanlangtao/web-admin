@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Select, Button, message } from "antd";
+import { Form, Input, Select, Button, message, Radio } from "antd";
 import { editRule } from "../../../api/index";
 const EditForm = props => {
   const { getFieldDecorator } = props.form;
@@ -29,7 +29,7 @@ const EditForm = props => {
       <Form.Item label="父级权限">
         {getFieldDecorator("pid", {
           rules: [{ required: true, message: "请选择权限" }],
-          initialValue:  data.pid
+          initialValue: data.pid
         })(
           <Select style={{ width: "60%" }}>
             <Select.Option value={0}>一级权限</Select.Option>
@@ -73,6 +73,16 @@ const EditForm = props => {
           rules: [{ required: true, message: "请输入排序值" }],
           initialValue: data.sort
         })(<Input style={{ width: "60%" }} placeholder="菜单排序" />)}
+      </Form.Item>
+      <Form.Item label="显示状态">
+        {getFieldDecorator("status", {
+          initialValue: data.status
+        })(
+          <Radio.Group>
+            <Radio value={1}>显示</Radio>
+            <Radio value={0}>不显示</Radio>
+          </Radio.Group>
+        )}
       </Form.Item>
 
       <Form.Item>

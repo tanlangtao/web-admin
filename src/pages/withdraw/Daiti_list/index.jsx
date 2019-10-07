@@ -9,7 +9,6 @@ import {
   Select,
   ConfigProvider,
   DatePicker,
-  Button,
   Popover
 } from "antd";
 import "moment/locale/zh-cn";
@@ -22,10 +21,11 @@ import {
   downloadWithdrawList,
   userDetail,
   reviewInfo,
-  remarkInfo
+  remarkInfo,
+  auditOrder
 } from "../../../api";
 import WrappedComponent from "./details";
-import AddDataForm from "./edit";
+import WrappedEdit from "./edit";
 
 const { RangePicker } = DatePicker;
 class Daiti extends Component {
@@ -54,8 +54,6 @@ class Daiti extends Component {
         data: result.data,
         count: parseInt(result.count)
       });
-    } else {
-      message.error("网络问题");
     }
   };
   onSearchData = async () => {
@@ -176,7 +174,7 @@ class Daiti extends Component {
               } else return;
             }
           }}
-          scroll={{ x: 2500, y: "60vh" }}
+          scroll={{ x: 2600, y: "60vh" }}
         />
         <Modal
           title={
@@ -206,9 +204,14 @@ class Daiti extends Component {
               this.setState({ isEditShow: false });
             }}
             footer={null}
-            width="40%"
+            width="50%"
           >
-            <AddDataForm editDataRecord={this.editDataRecord} />
+            <WrappedEdit
+              editData={this.editData}
+              onclose={() => {
+                this.setState({ isEditShow: false });
+              }}
+            />
           </Modal>
         )}
       </Card>
@@ -231,10 +234,25 @@ class Daiti extends Component {
       width: 150
     },
     {
+      title: "所属品牌",
+      dataIndex: "package_nick",
+      width: 100
+    },
+    {
+      title: "所属代理",
+      dataIndex: "proxy_user_id",
+      width: 100
+    },
+    {
       title: "下单金额",
       dataIndex: "amount",
       width: 100,
       sorter: (a, b) => a.amount - b.amount
+    },
+    {
+      title: "实际费率",
+      dataIndex: "platform_rate",
+      width: 100
     },
     {
       title: "到账金额",
@@ -295,16 +313,6 @@ class Daiti extends Component {
           <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>
         </span>
       )
-    },
-    {
-      title: "所属品牌",
-      dataIndex: "package_nick",
-      width: 100
-    },
-    {
-      title: "所属代理",
-      dataIndex: "proxy_user_id",
-      width: 100
     },
     {
       title: "代提ID",
@@ -401,8 +409,18 @@ class Daiti extends Component {
     this.setState({ isDetailShow: true });
   };
   edit = async record => {
-    this.setState({ isEditShow: true });
-    this.editDataRecord = record;
+    let reqData = {
+      flag: 1,
+      type: 3,
+      order_id: record.order_id
+    };
+    const res = await auditOrder(reqData);
+    if (res.status === 0) {
+      this.editData = res.data[0];
+      this.setState({ isEditShow: true });
+    } else {
+      message.error("操作失败");
+    }
   };
 }
 

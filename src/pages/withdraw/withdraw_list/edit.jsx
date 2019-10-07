@@ -25,24 +25,25 @@ class EditForm extends React.Component {
       case 1:
         orderStatusShow = true;
         confirmButtonShow = true;
-        successRadio = true;
-        failRadio = true;
         break;
       case 2:
         orderStatusShow = true;
         reviewShow = true;
-        submitRadio = true;
-        successRadio = true;
-        failRadio = true;
         switch (review_status) {
           case 1:
-            submitRadio = false;
+            successRadio = true;
+            failRadio = true;
+            submitRadioChecked = true;
             break;
           case 2:
-            successRadio = false;
+            submitRadio = true;
+            failRadio = true;
+            successRadioChecked = true;
             break;
           case 3:
-            failRadio = false;
+            successRadio = true;
+            submitRadio = true;
+            failRadioChecked = true;
             break;
           default:
             break;

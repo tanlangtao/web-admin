@@ -3,13 +3,11 @@ import {
   Card,
   Table,
   Modal,
-  message,
   Icon,
   Input,
   Select,
-  DatePicker,
-  Button,
-  Popover
+  Popover,
+  message
 } from "antd";
 import LinkButton from "../../../components/link-button/index";
 import { formateDate } from "../../../utils/dateUtils";
@@ -19,9 +17,11 @@ import {
   downloadWithdrawList,
   userDetail,
   reviewInfo,
-  remarkInfo
+  remarkInfo,
+  auditOrder
 } from "../../../api";
 import WrappedComponent from "./details";
+import WrappedEdit from "./edit";
 
 class Withdraw_list extends Component {
   constructor(props) {
@@ -39,7 +39,8 @@ class Withdraw_list extends Component {
       inputParam: "",
       user_id: "",
       order_id: "",
-      isBindInfoShow: false
+      isBindInfoShow: false,
+      isEditShow: false
     };
     this.initColumns();
   }
@@ -167,7 +168,7 @@ class Withdraw_list extends Component {
               } else return;
             }
           }}
-          scroll={{ x: 2400, y: "60vh" }}
+          scroll={{ x: 2600, y: "60vh" }}
         />
         <Modal
           title={
@@ -189,6 +190,24 @@ class Withdraw_list extends Component {
             action={this.action}
           />
         </Modal>
+        {this.state.isEditShow && (
+          <Modal
+            title="编辑"
+            visible={this.state.isEditShow}
+            onCancel={() => {
+              this.setState({ isEditShow: false });
+            }}
+            footer={null}
+            width="50%"
+          >
+            <WrappedEdit
+              editData={this.editData}
+              onclose={() => {
+                this.setState({ isEditShow: false });
+              }}
+            />
+          </Modal>
+        )}
       </Card>
     );
   }
@@ -206,6 +225,16 @@ class Withdraw_list extends Component {
     {
       title: "昵称",
       dataIndex: "user_name",
+      width: 100
+    },
+    {
+      title: "所属品牌",
+      dataIndex: "package_nick",
+      width: 100
+    },
+    {
+      title: "所属代理",
+      dataIndex: "proxy_user_id",
       width: 100
     },
     {
@@ -233,16 +262,6 @@ class Withdraw_list extends Component {
     {
       title: "兑换方式",
       dataIndex: "order_type",
-      width: 100
-    },
-    {
-      title: "兑换账号",
-      dataIndex: "pay_account",
-      width: 200
-    },
-    {
-      title: "账号名称",
-      dataIndex: "pay_name",
       width: 100
     },
     {
@@ -275,15 +294,26 @@ class Withdraw_list extends Component {
       }
     },
     {
-      title: "所属品牌",
-      dataIndex: "package_nick",
-      width: 100
+      title: "操作",
+      dataIndex: "",
+      width: 80,
+      render: record => (
+        <span>
+          <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>
+        </span>
+      )
     },
     {
-      title: "所属代理",
-      dataIndex: "proxy_user_id",
+      title: "兑换账号",
+      dataIndex: "pay_account",
+      width: 200
+    },
+    {
+      title: "账号名称",
+      dataIndex: "pay_name",
       width: 100
     },
+
     {
       title: "创建时间",
       dataIndex: "created_at",
@@ -346,14 +376,6 @@ class Withdraw_list extends Component {
       )
     }
   ];
-  dataPickerOnChange = (date, dateString) => {
-    let startTime = dateString[0] + " 00:00:00";
-    let endTime = dateString[1] + " 00:00:00";
-    this.setState({
-      start_time: startTime,
-      end_time: endTime
-    });
-  };
   getDetail = async (record, action) => {
     this.action = action;
     this.detailRecord = {
@@ -372,6 +394,19 @@ class Withdraw_list extends Component {
       this.detailRecord.count = res.count;
     }
     this.setState({ isDetailShow: true });
+  };
+  edit = async record => {
+    let reqData = {
+      flag: 3,
+      order_id: record.order_id
+    };
+    const res = await auditOrder(reqData);
+    if (res.status === 0) {
+      this.editData = res.data[0];
+      this.setState({ isEditShow: true });
+    } else {
+      message.error("操作失败");
+    }
   };
 }
 

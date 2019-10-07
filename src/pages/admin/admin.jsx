@@ -24,6 +24,7 @@ import AccountList from "../trade/accountList";
 import ApplyHistory from "../trade/applyHistory";
 import TradeOrder from "../trade/tradeOrder";
 import ActivityList from "../activity/activityList";
+import ActivityRecieve from "../activity/recieve";
 import GiftVoucher from "../activity/giftVoucher";
 import GiftList from "../gift/giftList";
 import GiftSetting from "../gift/giftSetting";
@@ -165,6 +166,11 @@ export default class Admin extends Component {
                   <Route path="/activity/list" exact>
                     <KeepAlive name="ActivityList">
                       <ActivityList />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/activity/recieve" exact>
+                    <KeepAlive name="ActivityRecieve">
+                      <ActivityRecieve />
                     </KeepAlive>
                   </Route>
                   <Route path="/activity/giftVoucher" exact>

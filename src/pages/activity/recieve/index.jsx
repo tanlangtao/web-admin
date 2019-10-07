@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Card, Table, Modal, message, Input, Popconfirm } from "antd";
-import { giftVoucherList, delActivityConfig } from "../../../api/index";
+import { Card, Table, message, Input, Popconfirm, Modal } from "antd";
+import { activityList } from "../../../api/index";
 import LinkButton from "../../../components/link-button";
 import MyDatePicker from "../../../components/MyDatePicker";
-import WrappedEditForm from "./editForm";
+import { formateDate } from "../../../utils/dateUtils";
 
 class AccountList extends Component {
   constructor(props) {
@@ -12,12 +12,11 @@ class AccountList extends Component {
       data: [],
       count: 0,
       page: 1,
-      pageSize: 20,
-      isEditFormShow: false
+      pageSize: 20
     };
   }
   getInitialData = async (page, limit) => {
-    const res = await giftVoucherList(page, limit);
+    const res = await activityList(page, limit);
     if (res.status === 0) {
       this.setState({
         data: res.data,
@@ -37,10 +36,8 @@ class AccountList extends Component {
           <div>
             <MyDatePicker
               handleValue={val => {
-                this.setState({
-                  start_time: val[0],
-                  end_time: val[1]
-                });
+                this.start_time = val[0];
+                this.end_time = val[1];
               }}
             />
             &nbsp;&nbsp;&nbsp;
@@ -101,25 +98,6 @@ class AccountList extends Component {
             }
           }}
         />
-        {this.state.isEditFormShow && (
-          <Modal
-            title={this.action === "add" ? "添加" : "编辑"}
-            visible={this.state.isEditFormShow}
-            onCancel={() => {
-              this.setState({ isEditFormShow: false });
-            }}
-            footer={null}
-          >
-            <WrappedEditForm
-              finished={() => {
-                this.getInitialData(this.state.page, this.state.pageSize);
-                this.setState({ isEditFormShow: false });
-              }}
-              record={this.editDataRecord}
-              action={this.action}
-            />
-          </Modal>
-        )}
       </Card>
     );
   }
@@ -129,92 +107,65 @@ class AccountList extends Component {
       dataIndex: "id"
     },
     {
-      title: "领取人ID",
-      dataIndex: ""
+      title: "user_id",
+      dataIndex: "user_id"
     },
     {
-      title: "领取人昵称",
-      dataIndex: ""
+      title: "活动Id",
+      dataIndex: "activity_id"
     },
     {
-      title: "代理ID",
-      dataIndex: "",
-      render: text => <span>{text === "1" ? "关闭" : "开启"}</span>
+      title: "活动名称",
+      dataIndex: "activity_name"
     },
     {
-      title: "code",
-      dataIndex: "",
-      render: text => <span>{text === "1" ? "是" : "否"}</span>
+      title: "品牌Id",
+      dataIndex: "package_id"
     },
     {
-      title: "领取金额",
-      dataIndex: "",
-      render: text => <span>{text === "1" ? "是" : "否"}</span>
+      title: "领取日期",
+      dataIndex: "receive_date"
     },
     {
-      title: "创建时间",
-      dataIndex: "",
-      width: 200
-    },
-    {
-      title: "领取时间",
-      dataIndex: "order_by"
-    },
-    {
-      title: "操作",
+      title: "领取详情",
       dataIndex: "",
       render: (text, record) => (
         <span>
           <LinkButton
             size="small"
             onClick={() => {
-              this.edit(record);
+              this.check(record);
             }}
           >
-            编辑
+            查看
           </LinkButton>
-          <Popconfirm
-            title="确定要删除吗?"
-            onConfirm={() => this.delete(record)}
-            okText="删除"
-            cancelText="取消"
-          >
-            <LinkButton type="danger" size="small">
-              删除
-            </LinkButton>
-          </Popconfirm>
         </span>
       )
+    },
+    {
+      title: "创建时间",
+      dataIndex: "created_at",
+      render: formateDate
     }
   ];
+  check=(record)=>{
+    Modal.info({
+      title:"领取详情",
+      content:record.receive_info
+    })
+  }
   onSearch = async () => {
     let value = {
-      user_id: this.input.input.value
+      user_id: this.input.input.value,
+      start_time: this.start_time,
+      end_time: this.end_time
     };
-    const res = await giftVoucherList(
-      this.state.page,
-      this.state.pageSize,
-      value
-    );
-    this.setState({ data: res.data, count: parseInt(res.count) });
-  };
-  add = async record => {
-    this.action = "add";
-    this.setState({ isEditFormShow: true });
-  };
-  edit = async record => {
-    this.action = "edit";
-    this.editDataRecord = record;
-    this.setState({ isEditFormShow: true });
-  };
-  delete = async record => {
-    const res = await delActivityConfig(record.id);
+    const res = await activityList(this.state.page, this.state.pageSize, value);
     if (res.status === 0) {
-      message.success(res.msg);
+      this.setState({ data: res.data, count: parseInt(res.count) });
     } else {
-      message.error(res.msg);
+      message.error("接口异常,未检索到数据");
     }
-    this.getInitialData(1, 20);
   };
 }
 export default AccountList;

@@ -638,7 +638,19 @@ export const giftVoucherList = (page, limit, value) => {
     "POST"
   );
 };
-
+//活动-活动领取列表
+export const activityList = (page, limit, value) => {
+  return ajax(
+    BASE + "/activity/activityList",
+    {
+      page,
+      limit,
+      ...value,
+      token
+    },
+    "POST"
+  );
+};
 //充值-充值订单
 export const reqOrder_list = (
   page,
@@ -998,13 +1010,33 @@ export const withDrawRemark = (id, temarks, remark_type) => {
     "POST"
   );
 };
+export const auditOrder = reqData => {
+  return ajax(
+    BASE + "/order/withDraw",
+    {
+      ...reqData,
+      token
+    },
+    "POST"
+  );
+};
+export const orderWithDrawReview = reqData => {
+  return ajax(
+    BASE + "/order/withDrawReview",
+    {
+      ...reqData,
+      token
+    },
+    "POST"
+  );
+};
+
 //兑换-第三方提款设置
-export const getConfigList = () => {
+export const getConfigList = reqData => {
   return ajax(
     BASE + "/config/list",
     {
-      conf_key: "withdraw_channel_info",
-      get_val: 1,
+      ...reqData,
       token
     },
     "POST"
@@ -1039,6 +1071,16 @@ export const withDrawReview = (order_id, user_id, review_status) => {
       user_id,
       review_type: 1,
       is_pass: 1
+    },
+    "POST"
+  );
+};
+export const setGiftConfig = reqData => {
+  return ajax(
+    BASE + "/config/setGiftConfig",
+    {
+      ...reqData,
+      token
     },
     "POST"
   );

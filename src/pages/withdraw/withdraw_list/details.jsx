@@ -9,8 +9,6 @@ class GoldDetail extends Component {
   }
   render() {
     const { data } = this.props.detailRecord;
-    console.log(data);
-
     return (
       <Table
         bordered

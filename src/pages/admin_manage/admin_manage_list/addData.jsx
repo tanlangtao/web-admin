@@ -23,7 +23,7 @@ class AddDataForm extends Component {
     };
   }
   checkboxOnChange = checkedList => {
-    console.log(checkedList);
+    // console.log(checkedList);
     this.setState({
       checkedList,
       indeterminate:
