@@ -123,6 +123,7 @@ class Channel extends Component {
               type="primary"
               htmlType="submit"
               className="login-form-button"
+              disabled
             >
               提交
             </Button>
