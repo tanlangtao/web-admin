@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { Card, message, Input, Button, Form, Radio } from "antd";
+import { Card, message, Input, Button, Form, Radio, Select } from "antd";
 import { getConfigList, setGiftConfig } from "../../../api/index";
 
 class Channel extends Component {
@@ -45,9 +45,11 @@ class Channel extends Component {
           onSubmit={this.handleSubmit}
         >
           <Form.Item label="品牌">
-            {getFieldDecorator("package_id", {
-              initialValue: 1
-            })(
+            {getFieldDecorator("package_id", {})(
+              // <Select defaultValue="请选择">
+              //   <Select.Option value="jack">Jack</Select.Option>
+              //   <Select.Option value="lucy">Lucy</Select.Option>
+              // </Select>
               <Radio.Group>
                 <Radio value={1}>博臣娱乐</Radio>
                 <Radio value={0}>机器人首领</Radio>
@@ -139,19 +141,19 @@ class Channel extends Component {
       if (!err) {
         console.log(this.resData);
         const { id, name, conf_val, conf_key } = this.resData;
-        let new_conf_val = JSON.parse(conf_val);
         let reqData = {
           id,
           name,
           ...value,
           action: "edit",
-          conf_key
+          conf_key,
+          give_info: conf_val,
+          version: "V2.0"
         };
-        reqData.give_info = new_conf_val;
+        // reqData.give_info = new_conf_val;
         const res = await setGiftConfig(reqData);
         if (res.status === 0) {
           message.success("提交成功:" + res.msg);
-          console.log(res);
           this.getUsers();
         } else {
           message.error("出错了：" + res.msg);

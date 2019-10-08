@@ -93,18 +93,18 @@ class Customer_list extends Component {
               ref={input => (this.input = input)}
             />
             &nbsp; &nbsp;
-            <LinkButton onClick={this.onSearchData} size='default'>
+            <LinkButton onClick={this.onSearchData} size="default">
               <Icon type="search" />
             </LinkButton>
             &nbsp; &nbsp;
-            <LinkButton onClick={this.addData} size='default'>
+            <LinkButton onClick={this.addData} size="default">
               <Icon type="user-add" />
               添加
             </LinkButton>
           </span>
         }
         extra={
-          <LinkButton onClick={() => window.location.reload()} size='default'>
+          <LinkButton onClick={() => window.location.reload()} size="default">
             <Icon type="reload" />
           </LinkButton>
         }
@@ -132,7 +132,7 @@ class Customer_list extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1200, y: "60vh" }}
+          scroll={{ x: 1300, y: "60vh" }}
         />
         <Modal
           title="新增"
@@ -202,7 +202,7 @@ class Customer_list extends Component {
       title: "账号类型",
       dataIndex: "user_type",
       width: 100,
-      render: (text) => (text === 1 ? "人工充值" : "人工兑换")
+      render: text => (parseInt(text) === 1 ? "人工充值" : "人工兑换")
     },
     {
       title: "排序",
@@ -222,7 +222,7 @@ class Customer_list extends Component {
       dataIndex: "update_time",
       width: 200,
       render: (text, record) => (
-        <span>{formateDate(record.create_time / 1000)}</span>
+        <span>{formateDate(record.update_time / 1000)}</span>
       )
     },
     {
