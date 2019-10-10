@@ -180,9 +180,11 @@ export default class User extends Component {
     },
     {
       title: "是否为客服账号",
-      dataIndex: "proxy_user_type",
+      dataIndex: "game_user_type",
       width: 120,
-      render: (text, record, index) => <span>{parseInt(text)===4?"是":""}</span>
+      render: (text, record, index) => (
+        <span>{parseInt(text) === 4 ? "是" : ""}</span>
+      )
     }
   ];
 
@@ -201,7 +203,7 @@ export default class User extends Component {
         proxy_user.forEach(item => {
           if (element.id === item.id) {
             element.proxy_nick = item.proxy_pid;
-            element.proxy_user_type = item.proxy_user_type;
+            // element.proxy_user_type = item.proxy_user_type;
           }
         });
       });
