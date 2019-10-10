@@ -122,6 +122,16 @@ export const createTask = (user_id, resetpwd) => {
     "POST"
   );
 };
+export const setCustomer = id => {
+  return ajax(
+    BASE + "/user/setCustomer ",
+    {
+      token,
+      id
+    },
+    "POST"
+  );
+};
 //后台管理-账户列表
 export const reqAdminList = (page, limit) => {
   return ajax(

@@ -21,7 +21,8 @@ import {
   userDetail,
   bindInfo,
   saveUserBlack,
-  createTask
+  createTask,
+  setCustomer
 } from "../../api/index";
 import WrappedNormalLoginForm from "././user-nick";
 import WrappedComponent from "./gold_details";
@@ -129,7 +130,7 @@ export default class User extends Component {
       title: "账号",
       dataIndex: "role_name",
       key: "role_name",
-      width: 150
+      width: 100
     },
     {
       title: "注册时间",
@@ -143,7 +144,7 @@ export default class User extends Component {
       title: "登录IP",
       dataIndex: "login_ip",
       key: "login_ip",
-      width: 200
+      width: 150
     },
     {
       title: "登陆时间",
@@ -176,6 +177,12 @@ export default class User extends Component {
           </LinkButton>
         </span>
       )
+    },
+    {
+      title: "是否为客服账号",
+      dataIndex: "proxy_user_type",
+      width: 120,
+      render: (text, record, index) => <span>{parseInt(text)===4?"是":""}</span>
     }
   ];
 
@@ -194,6 +201,7 @@ export default class User extends Component {
         proxy_user.forEach(item => {
           if (element.id === item.id) {
             element.proxy_nick = item.proxy_pid;
+            element.proxy_user_type = item.proxy_user_type;
           }
         });
       });
@@ -202,7 +210,7 @@ export default class User extends Component {
         count: result.count
       });
     } else {
-      message.error(result.msg);
+      message.error(result.msg + "接口异常,未检索到数据");
     }
   };
   changeNickName = () => {
@@ -330,9 +338,26 @@ export default class User extends Component {
           <LinkButton onClick={() => this.resetPwd(record)} size="small">
             重置密码
           </LinkButton>
+          <Popconfirm
+            title="确定要设置为客户账号吗？"
+            onConfirm={() => this.setCustomerAccount(record)}
+            okText="确定"
+            cancelText="取消"
+          >
+            <LinkButton size="small">设置客户账号</LinkButton>
+          </Popconfirm>
         </div>
       )
     });
+  };
+  setCustomerAccount = async record => {
+    let id = record.id;
+    const res = await setCustomer(id);
+    if (res.status === 0) {
+      message.success(res.msg + "操作成功");
+    } else {
+      message.error(res.msg + "操作失败");
+    }
   };
   componentDidMount() {
     this.getUsers(1, 20);

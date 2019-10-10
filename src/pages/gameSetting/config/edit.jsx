@@ -55,6 +55,9 @@ const EditForm = props => {
             <CodeEditor conf_val={props.record.conf_val} />
           )
         )}
+        <span style={props.action === "add" ? { display: "none" } : {}}>
+          请注意首尾中括号【】为代码编辑器携带符号，实际参数不带首尾中括号,请勿修改删除【】
+        </span>
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">

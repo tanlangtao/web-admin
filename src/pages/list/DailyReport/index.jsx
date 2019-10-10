@@ -25,18 +25,18 @@ class DailyReport extends Component {
       isGameReportShow: false
     };
   }
-  getInitialData = async (page, limit) => {
+  getInitialData = async () => {
     const res = await packageList();
-    const result = await dailyReportInit(page, limit);
-    if (res.status === 0 && result.status === 0) {
+    // const result = await dailyReportInit(page, limit);
+    if (res.status === 0) {
       this.setState({
-        data: result.data,
+        // data: result.data,
         packageList: res.data
       });
     }
   };
   componentDidMount() {
-    this.getInitialData(1, 20);
+    this.getInitialData();
   }
   render() {
     const packageNode = this.state.packageList.map(item => {
@@ -223,6 +223,10 @@ class DailyReport extends Component {
     }
   ];
   onSearchData = async () => {
+    if (!this.startTime || !this.package_id) {
+      message.info("请选择时间日期和品牌");
+      return;
+    }
     const res = await dailyReport(
       1,
       20,
