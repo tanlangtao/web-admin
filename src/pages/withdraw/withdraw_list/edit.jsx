@@ -158,7 +158,7 @@ class EditForm extends React.Component {
       };
       const res = await orderWithDrawReview(reqData);
       if (res.status === 0) {
-        message.success("操作成功");
+        message.success(res.msg);
       } else {
         message.error("操作失败");
       }
