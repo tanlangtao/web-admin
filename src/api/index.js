@@ -500,6 +500,16 @@ export const changeUserBalance = value => {
     "POST"
   );
 };
+export const reviewTask = value => {
+  return ajax(
+    BASE + "/tasks/reviewTask",
+    {
+      ...value,
+      token
+    },
+    "POST"
+  );
+};
 //交易所-收付款管理
 export const allAccountList = (page, limit, value) => {
   return ajax(

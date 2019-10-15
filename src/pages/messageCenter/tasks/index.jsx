@@ -10,7 +10,7 @@ import {
   Button,
   Select
 } from "antd";
-import { tasksList, saveConf } from "../../../api/index";
+import { tasksList, saveConf, reviewTask } from "../../../api/index";
 import LinkButton from "../../../components/link-button";
 import WrappedEditForm from "./edit";
 import MyDatePicker from "../../../components/MyDatePicker";
@@ -74,11 +74,12 @@ class Tasks extends Component {
               type="primary"
               onClick={this.onSearch}
               icon="search"
+              size="normal"
             ></LinkButton>
           </div>
         }
         extra={
-          <LinkButton onClick={() => window.location.reload()}>
+          <LinkButton onClick={() => window.location.reload()} size="normal">
             <Icon type="reload" />
           </LinkButton>
         }
@@ -97,19 +98,27 @@ class Tasks extends Component {
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
-              this.setState({
-                page: page
-              });
-              this.getInitialData(page, pageSize);
+              this.setState(
+                {
+                  page: page
+                },
+                () => {
+                  this.onSearch();
+                }
+              );
             },
             onShowSizeChange: (current, size) => {
-              this.setState({
-                pageSize: size
-              });
-              this.getInitialData(current, size);
+              this.setState(
+                {
+                  pageSize: size
+                },
+                () => {
+                  this.onSearch();
+                }
+              );
             }
           }}
-          scroll={{ x: 1800 }}
+          scroll={{ x: 2000 }}
         />
         {this.state.isEditFormShow && (
           <Modal
@@ -151,13 +160,20 @@ class Tasks extends Component {
       title: "任务来源",
       dataIndex: "task_type",
       render: (text, record, index) => (
-        <span>{text === 0 ? "用户列表资金变动" : "代理配置列表资金变动"}</span>
+        <span>
+          {parseInt(text) === 0
+            ? "用户列表资金变动"
+            : parseInt(text) === 1
+            ? "代理配置列表资金变动"
+            : parseInt(text) === 2
+            ? "用户重置密码"
+            : ""}
+        </span>
       )
     },
     {
       title: "创建人昵称",
-      dataIndex: "operator_nick",
-      width: 150
+      dataIndex: "operator_nick"
     },
     {
       title: "复审人昵称",
@@ -180,10 +196,14 @@ class Tasks extends Component {
           case 0:
             res = (
               <div>
-                <LinkButton size="small" onClick={()=>this.review(record)}>
+                <LinkButton size="small" onClick={() => this.review(record)}>
                   复审
                 </LinkButton>
-                <LinkButton size="small" type="danger" onClick={()=>this.refuse(record)}>
+                <LinkButton
+                  size="small"
+                  type="danger"
+                  onClick={() => this.refuse(record)}
+                >
                   拒绝
                 </LinkButton>
               </div>
@@ -208,23 +228,56 @@ class Tasks extends Component {
   ];
   onSearch = async () => {
     let value = {
-      end_time: this.start_time || "",
       start_time: this.start_time || "",
-      status: this.status || "",
+      end_time: this.end_time || "",
+      // status: this.status || "",
       operator_nick: this.input.input.value || ""
     };
+    if (this.status) {
+      value.status = this.status;
+    }
     const res = await tasksList(this.state.page, this.state.pageSize, value);
     this.setState({ data: res.data, count: res.count });
   };
-  review=async (record)=>{
-   this.action="review"
-   this.editDataRecord=record
-   this.setState({ isEditFormShow: true });
-  }
-  refuse=async(record)=>{
-    this.action="refuse"
-    this.editDataRecord=record
-    this.setState({ isEditFormShow: true });
-  }
+  review = async record => {
+    if (record.task_type === 2) {
+      let value = {
+        id: record.id,
+        params: record.params,
+        status: 1
+      };
+      const res = await reviewTask(value);
+      if (res.status === 0) {
+        message.success("提交成功" + res.msg);
+        this.onSearch();
+      } else {
+        message.error("出错了：" + res.msg);
+      }
+    } else {
+      this.action = "review";
+      this.editDataRecord = record;
+      this.setState({ isEditFormShow: true });
+    }
+  };
+  refuse = async record => {
+    if (record.task_type === 2) {
+      let value = {
+        id: record.id,
+        params: record.params,
+        status: 2
+      };
+      const res = await reviewTask(value);
+      if (res.status === 0) {
+        message.success("提交成功" + res.msg);
+        this.onSearch();
+      } else {
+        message.error("出错了：" + res.msg);
+      }
+    } else {
+      this.action = "refuse";
+      this.editDataRecord = record;
+      this.setState({ isEditFormShow: true });
+    }
+  };
 }
 export default Tasks;
