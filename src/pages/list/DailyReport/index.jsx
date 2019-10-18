@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Card, Table, Modal, message, Icon, Select } from "antd";
 import LinkButton from "../../../components/link-button/index";
 import {
-  dailyReportInit,
   dailyReport,
   packageList,
   dateReport,

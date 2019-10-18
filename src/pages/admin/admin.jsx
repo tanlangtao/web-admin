@@ -202,7 +202,7 @@ export default class Admin extends Component {
                     </KeepAlive>
                   </Route>
                   <Route
-                    path="/charge/recharge_order"
+                    path="/artificialcharge/order"
                     exact
                     component={Recharge_order}
                   >

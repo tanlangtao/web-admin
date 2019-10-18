@@ -859,6 +859,16 @@ export const rechargeOrder = (
     "POST"
   );
 };
+export const cancelOrder = reqData => {
+  return ajax(
+    BASE + "/order/cancelOrder",
+    {
+      ...reqData,
+      token
+    },
+    "POST"
+  );
+};
 //充值-渠道配置
 export const getChannel = (page, limit) => {
   return ajax(

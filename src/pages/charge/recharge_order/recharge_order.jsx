@@ -1,8 +1,17 @@
 import React, { Component } from "react";
-import { Card, Table, Icon, Input, Select, Button } from "antd";
+import {
+  Card,
+  Table,
+  Icon,
+  Input,
+  Select,
+  Button,
+  Popconfirm,
+  message
+} from "antd";
 import { formateDate } from "../../../utils/dateUtils";
 import "moment/locale/zh-cn";
-import { rechargeOrder, downloadList } from "../../../api/index";
+import { rechargeOrder, downloadList, cancelOrder } from "../../../api/index";
 import LinkButton from "../../../components/link-button";
 import MyDatePicker from "../../../components/MyDatePicker";
 
@@ -72,6 +81,8 @@ class Recharge_order extends Component {
               >
                 <Select.Option value="order_id">订单id</Select.Option>
                 <Select.Option value="user_id">user_id</Select.Option>
+                <Select.Option value="package_nick">所属品牌</Select.Option>
+                <Select.Option value="proxy_pid">所属代理</Select.Option>
               </Select>
               &nbsp; &nbsp;
               <Input
@@ -87,14 +98,10 @@ class Recharge_order extends Component {
                 onSelect={value => (this.order_status = value)}
               >
                 <Select.Option value="">状态</Select.Option>
-                <Select.Option value="0">未成功</Select.Option>
-                <Select.Option value="1">已分配</Select.Option>
+                <Select.Option value="1">未支付</Select.Option>
                 <Select.Option value="4">已撤销</Select.Option>
+                <Select.Option value="5">已支付</Select.Option>
                 <Select.Option value="6">已完成</Select.Option>
-                <Select.Option value="7">初审通过</Select.Option>
-                <Select.Option value="8">初审拒绝</Select.Option>
-                <Select.Option value="9">复审通过</Select.Option>
-                <Select.Option value="10">复审拒绝</Select.Option>
               </Select>
               &nbsp; &nbsp;
               <LinkButton
@@ -102,6 +109,7 @@ class Recharge_order extends Component {
                   this.inputValue = this.input.input.value;
                   this.getUsers(1, this.state.pageSize);
                 }}
+                size="default"
               >
                 <Icon type="search" />
               </LinkButton>
@@ -151,7 +159,7 @@ class Recharge_order extends Component {
               } else return;
             }
           }}
-          scroll={{ x: 1500, y: "60vh" }}
+          scroll={{ x: 1700, y: "60vh" }}
         />
       </Card>
     );
@@ -195,7 +203,7 @@ class Recharge_order extends Component {
       sorter: (a, b) => a.arrival_amount - b.arrival_amount
     },
     {
-      title: "订单状态",
+      title: "状态",
       dataIndex: "status",
       width: 130,
       render: (text, record, index) => {
@@ -247,21 +255,56 @@ class Recharge_order extends Component {
     {
       title: "创建时间",
       dataIndex: "created_at",
-      width: 150,
+      width: 200,
       render: formateDate,
       sorter: (a, b) => a.created_at - b.created_at
     },
     {
       title: "到账时间",
       dataIndex: "arrival_at",
+      width: 200,
       render: (text, record, index) => {
         if (text === "0" || !text) {
           return "";
         } else return formateDate(text);
       },
       sorter: (a, b) => a.arrival_at - b.arrival_at
+    },
+    {
+      title: "操作",
+      dataIndex: "",
+      render: (text, record, index) => {
+        if (record.status == 1 || record.status == 5) {
+          return (
+            <Popconfirm
+              title="确定要删除吗?"
+              onConfirm={() => this.handleWithdraw(record)}
+              okText="确定"
+              cancelText="取消"
+            >
+              <LinkButton>协助玩家撤销</LinkButton>
+            </Popconfirm>
+          );
+        } else {
+          return;
+        }
+      }
     }
   ];
+  handleWithdraw = async record => {
+    let reqData = {
+      order_id: record.order_id,
+      user_id: record.user_id,
+      form_type: 2
+    };
+    const res = await cancelOrder(reqData);
+    if (res.status === 0) {
+      message.info(res.msg || "操作成功");
+      window.location.reload();
+    } else {
+      message.error(res.msg || "操作失败");
+    }
+  };
 }
 
 export default Recharge_order;
