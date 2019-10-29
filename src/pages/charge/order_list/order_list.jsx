@@ -192,7 +192,7 @@ class Order_list extends Component {
               } else return;
             }
           }}
-          scroll={{ x: 2000, y: "60vh" }}
+          scroll={{ x: 2200, y: "60vh" }}
         />
         <Modal
           title="玩家调单查询"
@@ -329,13 +329,13 @@ class Order_list extends Component {
     {
       title: "下单金额",
       dataIndex: "amount",
-      width: 100,
+      width: 150,
       sorter: (a, b) => a.amount - b.amount
     },
     {
       title: "到账金额",
       dataIndex: "arrival_amount",
-      width: 100,
+      width: 150,
       sorter: (a, b) => a.arrival_amount - b.arrival_amount
     },
     {

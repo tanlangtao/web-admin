@@ -319,14 +319,14 @@ class Withdraw_list extends Component {
     {
       title: "创建时间",
       dataIndex: "created_at",
-      width: 150,
+      width: 200,
       render: formateDate,
       sorter: (a, b) => a.created_at - b.created_at
     },
     {
       title: "到账时间",
       dataIndex: "arrival_at",
-      width: 150,
+      width: 200,
       render: (text, record, index) => {
         if (text === "0" || !text) {
           return "";

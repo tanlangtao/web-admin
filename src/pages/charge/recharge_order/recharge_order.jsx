@@ -178,7 +178,7 @@ class Recharge_order extends Component {
     {
       title: "昵称",
       dataIndex: "user_name",
-      width: 200
+      width: 150
     },
     {
       title: "代充ID",
@@ -205,7 +205,7 @@ class Recharge_order extends Component {
     {
       title: "状态",
       dataIndex: "status",
-      width: 130,
+      width: 150,
       render: (text, record, index) => {
         let word;
         switch (text) {
