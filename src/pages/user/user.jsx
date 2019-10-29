@@ -133,6 +133,12 @@ export default class User extends Component {
       width: 100
     },
     {
+      title: "注册IP",
+      dataIndex: "regin_ip",
+      key: "regin_ip",
+      width: 150
+    },
+    {
       title: "注册时间",
       dataIndex: "regin_time",
       render: formateDate,
@@ -391,6 +397,7 @@ export default class User extends Component {
           <Option value="role_name">账号</Option>
           <Option value="proxy_nick">所属代理</Option>
           <Option value="package_nick">所属品牌</Option>
+          <Option value="regin_ip">注册IP</Option>
         </Select>
         &nbsp; &nbsp;
         <Input
@@ -443,7 +450,7 @@ export default class User extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1900, y: "65vh" }}
+          scroll={{ x: 2050, y: "65vh" }}
         />
         <Modal
           title="修改昵称"
