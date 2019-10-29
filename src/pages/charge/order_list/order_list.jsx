@@ -43,10 +43,12 @@ class Order_list extends Component {
       this.inputKey,
       this.inputValue
     );
-    this.setState({
-      data: result.data,
-      count: parseInt(result.count)
-    });
+    if (result.data && result.count) {
+      this.setState({
+        data: result.data,
+        count: parseInt(result.count)
+      });
+    }
   };
   onSearchData = async () => {
     this.setState({ isQueryShow: true });

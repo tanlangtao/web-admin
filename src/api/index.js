@@ -476,6 +476,27 @@ export const saveConf = (value, action) => {
     "POST"
   );
 };
+//代理系统
+export const getProxyUserList = data => {
+  return ajax(
+    BASE + "/user/getProxyUserList",
+    {
+      ...data,
+      token
+    },
+    "POST"
+  );
+};
+export const changeProxyUserProxyPid = data => {
+  return ajax(
+    BASE + "/user/changeProxyUserProxyPid",
+    {
+      ...data,
+      token
+    },
+    "POST"
+  );
+};
 //消息中心-任务列表
 export const tasksList = (page, limit, value) => {
   return ajax(

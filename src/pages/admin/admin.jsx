@@ -29,6 +29,7 @@ import GiftVoucher from "../activity/giftVoucher";
 import GiftList from "../gift/giftList";
 import GiftSetting from "../gift/giftSetting";
 import AI from "../AI/robot";
+import ProxySetting from "../proxy/setting";
 // import Withdraw_list from "../withdraw/withdraw_list";
 
 import Daiti_list from "../withdraw/Daiti_list";
@@ -142,6 +143,11 @@ export default class Admin extends Component {
                     </KeepAlive>
                   </Route>
 
+                  <Route path="/proxy/setting" exact>
+                    <KeepAlive name="ProxySetting">
+                      <ProxySetting></ProxySetting>
+                    </KeepAlive>
+                  </Route>
                   <Route path="/messageCenter/tasks" exact>
                     <KeepAlive name="Tasks">
                       <Tasks></Tasks>

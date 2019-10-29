@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@antv/data-set": "^0.10.2",
-    "antd": "^3.22.2",
+    "antd": "^3.24.2",
     "axios": "^0.18.1",
     "babel-plugin-import": "^1.12.0",
     "codemirror": "^5.49.0",
@@ -13,8 +13,6 @@
     "dotenv-expand": "^5.1.0",
     "draft-js": "0.10.5",
     "draftjs-to-html": "^0.8.4",
-    "element-react": "^1.4.34",
-    "element-theme-default": "^1.4.13",
     "html-to-draftjs": "1.4.0",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",

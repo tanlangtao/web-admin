@@ -20,7 +20,7 @@ class Channel_list extends Component {
   }
   getUsers = async (page, limit) => {
     const result = await getChannelList(page, limit);
-    if (result.status === 0) {
+    if (result.status === 0 && result.data) {
       this.setState({
         data: result.data,
         count: result.count
@@ -51,7 +51,7 @@ class Channel_list extends Component {
       isEditDataShow: true
     });
   };
-  refreshPage=()=>{
+  refreshPage = () => {
     this.setState({
       data: [],
       count: 0,
@@ -61,7 +61,7 @@ class Channel_list extends Component {
       isEditDataShow: false
     });
     this.getUsers(1, 20);
-  }
+  };
   componentDidMount() {
     this.getUsers(1, 20);
   }
@@ -89,9 +89,7 @@ class Channel_list extends Component {
           </span>
         }
         extra={
-          <LinkButton
-          onClick={() => window.location.reload()}
-          >
+          <LinkButton onClick={() => window.location.reload()}>
             <Icon type="reload" />
           </LinkButton>
         }
@@ -106,7 +104,7 @@ class Channel_list extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal:(total, range) => `共${total}条`,
+            showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
