@@ -168,7 +168,7 @@ class Withdraw_list extends Component {
               } else return;
             }
           }}
-          scroll={{ x: 2600, y: "60vh" }}
+          scroll={{ x: 2800, y: "60vh" }}
         />
         <Modal
           title={
@@ -217,12 +217,12 @@ class Withdraw_list extends Component {
     {
       title: "订单ID",
       dataIndex: "order_id",
-      width: 300
+      width: 350
     },
     {
       title: "user_id",
       dataIndex: "user_id",
-      width: 100
+      width: 150
     },
     {
       title: "昵称",
@@ -242,7 +242,7 @@ class Withdraw_list extends Component {
     {
       title: "下单金额",
       dataIndex: "amount",
-      width: 100,
+      width: 150,
       sorter: (a, b) => a.amount - b.amount
     },
     {

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Card, Table, Modal, Icon, Input, Button, message } from "antd";
 import { getProxyUserList, changeProxyUserProxyPid } from "../../../api/index";
 import NextLevel from "./nextlevel";
+import BalanceChanged from "./BalanceChanged";
 import LinkButton from "../../../components/link-button";
 
 class ProxySetting extends Component {
@@ -14,13 +15,20 @@ class ProxySetting extends Component {
   }
   onSearchData = async (page, limit) => {
     // let reqdata = { page, limit, id: 232843783 };
-    let reqdata = { page, limit, id: this.input.input.value };
-    const res = await getProxyUserList(reqdata);
-    if (res.status === 0) {
-      this.setState({
-        data: res.data.proxy_user,
-        count: parseInt(res.count)
-      });
+    let id = this.input.input.value;
+    id = 232843783;
+    var reg = new RegExp("^[0-9]*$");
+    if (!id || !reg.test(id)) {
+      message.error("请输入有效id");
+    } else {
+      let reqdata = { page, limit, id: id };
+      const res = await getProxyUserList(reqdata);
+      if (res.status === 0) {
+        this.setState({
+          data: res.data.proxy_user,
+          count: parseInt(res.count)
+        });
+      }
     }
   };
   componentDidMount() {
@@ -88,6 +96,21 @@ class ProxySetting extends Component {
         >
           <NextLevel pid={this.pid} topDistance={20} />
         </Modal>
+        <Modal
+          title={`[代理:${this.proxyID}]资金变动`}
+          visible={this.state.isChangeBalanceShow}
+          onCancel={() => {
+            this.setState({ isChangeBalanceShow: false });
+          }}
+          footer={null}
+        >
+          <BalanceChanged
+            record={this.record}
+            cancel={() => {
+              this.setState({ isChangeBalanceShow: false });
+            }}
+          />
+        </Modal>
       </Card>
     );
   }
@@ -106,7 +129,20 @@ class ProxySetting extends Component {
     },
     {
       title: "代理余额[点击调整]",
-      dataIndex: "balance"
+      dataIndex: "balance",
+      onCell: (record, rowIndex) => {
+        return {
+          onClick: event => {
+            this.changeBalance(record);
+          }, // 点击行
+          onDoubleClick: event => {},
+          onContextMenu: event => {},
+          onMouseEnter: event => {
+            event.target.style.cursor = "pointer";
+          }, // 鼠标移入行
+          onMouseLeave: event => {}
+        };
+      }
     },
     {
       title: "操作",
@@ -157,6 +193,12 @@ class ProxySetting extends Component {
           message.error("操作失败" + res.msg);
         }
       }
+    });
+  };
+  changeBalance = record => {
+    this.record = record;
+    this.setState({
+      isChangeBalanceShow: true
     });
   };
 }

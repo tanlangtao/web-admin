@@ -11,7 +11,6 @@ import {
 } from "antd";
 import { addUser, editUser } from "../../../api";
 
-
 class AddDataForm extends Component {
   constructor(props) {
     super(props);
@@ -113,6 +112,7 @@ class AddDataForm extends Component {
               prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
               style={{ width: "60%" }}
               placeholder="将会成为您唯一的登入名"
+              readOnly={isEdit ? true : false}
             />
           )}
         </Form.Item>

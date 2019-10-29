@@ -30,7 +30,6 @@ import GiftList from "../gift/giftList";
 import GiftSetting from "../gift/giftSetting";
 import AI from "../AI/robot";
 import ProxySetting from "../proxy/setting";
-// import Withdraw_list from "../withdraw/withdraw_list";
 
 import Daiti_list from "../withdraw/Daiti_list";
 import Channel from "../withdraw/Channel";
@@ -235,7 +234,7 @@ export default class Admin extends Component {
                     </KeepAlive>
                   </Route>
                   <Route
-                    path="/withdraw/daiti_list"
+                    path="/artificialWithdraw/order"
                     exact
                     component={Daiti_list}
                   >

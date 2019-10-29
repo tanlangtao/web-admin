@@ -497,6 +497,16 @@ export const changeProxyUserProxyPid = data => {
     "POST"
   );
 };
+export const proxy_changeGold = data => {
+  return ajax(
+    BASE + "/user/changeGold",
+    {
+      ...data,
+      token
+    },
+    "POST"
+  );
+};
 //消息中心-任务列表
 export const tasksList = (page, limit, value) => {
   return ajax(

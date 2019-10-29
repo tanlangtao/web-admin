@@ -159,7 +159,7 @@ class Recharge_order extends Component {
               } else return;
             }
           }}
-          scroll={{ x: 1700, y: "60vh" }}
+          scroll={{ x: 2000, y: "60vh" }}
         />
       </Card>
     );
@@ -168,12 +168,12 @@ class Recharge_order extends Component {
     {
       title: "订单ID",
       dataIndex: "order_id",
-      width: 280
+      width: 350
     },
     {
       title: "user_id",
       dataIndex: "user_id",
-      width: 100
+      width: 150
     },
     {
       title: "昵称",
@@ -183,7 +183,7 @@ class Recharge_order extends Component {
     {
       title: "代充ID",
       dataIndex: "replace_id",
-      width: 100
+      width: 150
     },
     {
       title: "代充昵称",
@@ -193,13 +193,13 @@ class Recharge_order extends Component {
     {
       title: "下单金额",
       dataIndex: "amount",
-      width: 100,
+      width: 150,
       sorter: (a, b) => a.amount - b.amount
     },
     {
       title: "到账金额",
       dataIndex: "arrival_amount",
-      width: 100,
+      width: 150,
       sorter: (a, b) => a.arrival_amount - b.arrival_amount
     },
     {

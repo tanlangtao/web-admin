@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Card, Table, Modal } from "antd";
-import { getProxyUserList } from "../../../api/index";
+import { Card, Table, Modal, Input, message } from "antd";
+import { getProxyUserList, changeProxyUserProxyPid } from "../../../api/index";
 import LinkButton from "../../../components/link-button";
 import Myself from "./nextlevel.jsx";
+import BalanceChanged from "./BalanceChanged";
 
 class NextLevel extends Component {
   constructor(props) {
@@ -69,6 +70,21 @@ class NextLevel extends Component {
         >
           <Myself pid={this.pid} topDistance={this.props.topDistance + 40} />
         </Modal>
+        <Modal
+          title={`[代理:${this.proxyID}]资金变动`}
+          visible={this.state.isChangeBalanceShow}
+          onCancel={() => {
+            this.setState({ isChangeBalanceShow: false });
+          }}
+          footer={null}
+        >
+          <BalanceChanged
+            record={this.record}
+            cancel={() => {
+              this.setState({ isChangeBalanceShow: false });
+            }}
+          />
+        </Modal>
       </Card>
     );
   }
@@ -87,7 +103,20 @@ class NextLevel extends Component {
     },
     {
       title: "代理余额[点击调整]",
-      dataIndex: "balance"
+      dataIndex: "balance",
+      onCell: (record, rowIndex) => {
+        return {
+          onClick: event => {
+            this.changeBalance(record);
+          }, // 点击行
+          onDoubleClick: event => {},
+          onContextMenu: event => {},
+          onMouseEnter: event => {
+            event.target.style.cursor = "pointer";
+          }, // 鼠标移入行
+          onMouseLeave: event => {}
+        };
+      }
     },
     {
       title: "操作",
@@ -102,7 +131,11 @@ class NextLevel extends Component {
             下级
           </LinkButton>
           &nbsp;&nbsp;&nbsp;
-          <LinkButton type="primary" size="small">
+          <LinkButton
+            type="primary"
+            size="small"
+            onClick={() => this.changePid(record)}
+          >
             转移
           </LinkButton>
         </span>
@@ -114,6 +147,33 @@ class NextLevel extends Component {
       isAddDataShow: true
     });
     this.pid = record.id;
+  };
+  changePid = record => {
+    Modal.confirm({
+      title: "修改上级代理",
+      content: (
+        <Input
+          onBlur={e => this.setState({ new_proxy_user_id: e.target.value })}
+        ></Input>
+      ),
+      onOk: async () => {
+        const res = await changeProxyUserProxyPid({
+          change_id: record.id,
+          new_proxy_user_id: this.state.new_proxy_user_id
+        });
+        if (res.status === 0) {
+          message.success("操作成功" + res.msg);
+        } else {
+          message.error("操作失败" + res.msg);
+        }
+      }
+    });
+  };
+  changeBalance = record => {
+    this.record = record;
+    this.setState({
+      isChangeBalanceShow: true
+    });
   };
 }
 

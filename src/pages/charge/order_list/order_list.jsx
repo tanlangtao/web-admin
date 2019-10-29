@@ -192,7 +192,7 @@ class Order_list extends Component {
               } else return;
             }
           }}
-          scroll={{ x: 1900, y: "60vh" }}
+          scroll={{ x: 2000, y: "60vh" }}
         />
         <Modal
           title="玩家调单查询"
@@ -234,12 +234,12 @@ class Order_list extends Component {
     {
       title: "订单ID",
       dataIndex: "order_id",
-      width: 300
+      width: 350
     },
     {
       title: "user_id",
       dataIndex: "user_id",
-      width: 100
+      width: 150
     },
     {
       title: "昵称",
@@ -249,12 +249,12 @@ class Order_list extends Component {
     {
       title: "所属品牌",
       dataIndex: "package_nick",
-      width: 100
+      width: 150
     },
     {
       title: "所属代理",
       dataIndex: "proxy_user_id",
-      width: 100
+      width: 150
     },
     {
       title: "支付渠道",
@@ -341,7 +341,7 @@ class Order_list extends Component {
     {
       title: "订单状态",
       dataIndex: "status",
-      width: 130,
+      width: 150,
       render: (text, record, index) => {
         let word;
         switch (text) {
