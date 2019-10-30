@@ -1,33 +1,52 @@
 import React, { Component } from "react";
-import { Table, Card, Icon } from "antd";
+import { Table, Card, Icon, message } from "antd";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button/index";
-import { userDetail } from "../../api/index";
+import moment from "moment";
+import { userDetail, bindInfo } from "../../api/index";
 class GoldDetail extends Component {
   constructor(props) {
     super(props);
+    this.startTime = "";
+    this.endTime = "";
     this.state = {
-      data: []
+      data: [],
+      count: 0
     };
   }
+  getUsers = async (page, limit) => {
+    let isBindInfo = this.props.isBindInfo;
+    let id = this.props.recordID;
+    const res = !isBindInfo
+      ? await userDetail(page, limit, id)
+      : await bindInfo(page, limit, id);
+    if (res.status === 0) {
+      this.setState({
+        data: res.data,
+        count: res.count
+      });
+    }
+  };
   componentDidMount() {
-    this.setState({
-      data: this.props.GoldDetailRecord.data
-    });
+    this.getUsers(1, 20);
   }
-  search = async () => {
-    let goldDetails = {
-      start: this.startTime ? this.startTime : "",
-      end: this.endTime ? this.endTime : "",
+  onSearchData = async (page, limit) => {
+    if (!this.startTime || !this.package_id) {
+      message.error("请选择有效的时间日期");
+      return;
+    }
+    let reqData = {
+      start: this.startTime,
+      end: this.endTime,
       funds_type: 0
     };
-    const res = await userDetail(
-      1,
-      100,
-      this.props.GoldDetailRecord.id,
-      goldDetails
-    );
-    this.setState({ data: res.data });
+    let id = this.props.GoldDetailRecord.id;
+    const res = await userDetail(page, limit, id, reqData);
+    if (res.status === 0) {
+      this.setState({ data: res.data, count: res.count });
+    } else {
+      message.info("没有更多数据");
+    }
   };
   render() {
     // const { data } = this.props.GoldDetailRecord;
@@ -37,12 +56,17 @@ class GoldDetail extends Component {
         <span>
           <MyDatePicker
             handleValue={val => {
-              this.startTime = val[0];
-              this.endTime = val[1];
+              let diffDays = moment(val[1]).diff(moment(val[0]), "days");
+              if (diffDays > 1) {
+                message.error("请选择时间范围不大于1天");
+              } else {
+                this.startTime = val[0];
+                this.endTime = val[1];
+              }
             }}
           />
           &nbsp; &nbsp;
-          <LinkButton onClick={this.search} size="default">
+          <LinkButton onClick={() => this.onSearchData(1, 20)} size="default">
             <Icon type="search" />
           </LinkButton>
         </span>
@@ -52,10 +76,26 @@ class GoldDetail extends Component {
       <Card title={title}>
         <Table
           bordered
-          rowKey="_id"
+          size="small"
+          rowKey={(record, index) => `${index}`}
           dataSource={this.state.data}
           columns={this.initColumns()}
-          size="small"
+          pagination={{
+            defaultPageSize: 20,
+            showQuickJumper: true,
+            showTotal: (total, range) => `共${total}条`,
+            defaultCurrent: 1,
+            total: this.state.count,
+            onChange: (page, pageSize) => {
+              this.onSearchData(page, pageSize);
+            },
+            onShowSizeChange: (current, size) => {
+              this.setState({
+                pageSize: size
+              });
+              this.onSearchData(current, size);
+            }
+          }}
         />
       </Card>
     );

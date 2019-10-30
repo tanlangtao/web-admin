@@ -17,8 +17,6 @@ import {
   setGameUserNickName,
   changeGold,
   reqLoadGold,
-  userDetail,
-  bindInfo,
   saveUserBlack,
   createTask,
   setCustomer
@@ -281,18 +279,7 @@ export default class User extends Component {
       this.moreModal.destroy();
     }
     this.isBindInfo = isBindInfo;
-    this.GoldDetailRecord = {
-      data: [],
-      count: 0,
-      id: record.id
-    };
-    const res = !isBindInfo
-      ? await userDetail(1, 20, record.id)
-      : await bindInfo(1, 20, record.id);
-    if (res.status === 0) {
-      this.GoldDetailRecord.data = res.data;
-      this.GoldDetailRecord.count = res.count;
-    }
+    this.recordID = record.id;
     this.setState({ isGoldDetailShow: true });
   };
   saveUserBlack = async (record, isAdd) => {
@@ -431,7 +418,7 @@ export default class User extends Component {
       <Card title={title} extra={extra}>
         <Table
           bordered
-          rowKey="_id"
+          rowKey={(record, index) => `${index}`}
           dataSource={data}
           columns={this.initColumns()}
           size="small"
@@ -496,20 +483,22 @@ export default class User extends Component {
             goldRecord={this.goldRecord}
           />
         </Modal>
-        <Modal
-          title={this.isBindInfo ? "查看绑定信息" : "资金明细"}
-          visible={this.state.isGoldDetailShow}
-          onCancel={() => {
-            this.setState({ isGoldDetailShow: false });
-          }}
-          footer={null}
-          width="80%"
-        >
-          <WrappedComponent
-            GoldDetailRecord={this.GoldDetailRecord}
-            isBindInfo={this.isBindInfo}
-          />
-        </Modal>
+        {this.state.isGoldDetailShow && (
+          <Modal
+            title={this.isBindInfo ? "查看绑定信息" : "资金明细"}
+            visible={this.state.isGoldDetailShow}
+            onCancel={() => {
+              this.setState({ isGoldDetailShow: false });
+            }}
+            footer={null}
+            width="80%"
+          >
+            <WrappedComponent
+              recordID={this.recordID}
+              isBindInfo={this.isBindInfo}
+            />
+          </Modal>
+        )}
         <Modal
           title="重置密码"
           visible={this.state.isResetPwdShow}
