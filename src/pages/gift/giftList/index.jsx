@@ -16,46 +16,47 @@ import EditForm from "./editForm";
 class Withdraw_list extends Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
+    this.reqData = {
+      start_time: "",
+      end_time: "",
+      order_status: "",
+      type: 5
+    };
+    this.inputKey = "";
+    this.inputValue = "";
     this.state = {
       data: [],
       count: 0,
       pageSize: 20,
-      start_time: "",
-      end_time: "",
-      order_status: "",
-      type: 5,
-      filed: "",
-      inputParam: "",
-      user_id: "",
-      order_id: "",
       isBindInfoShow: false,
       isEditFormShow: false
     };
-    this.initColumns();
   }
-  getUsers = async (page, limit) => {
-    const result = await withDraw(page, limit, 1, this.state);
+  getUsers = async (page, pageSize, reqData) => {
+    const result = await withDraw(page, pageSize, reqData);
     this.setState({
       data: result.data,
       count: parseInt(result.count)
     });
   };
-  handleChange(event) {
-    this.setState({ inputParam: event.target.value });
-  }
-  onSearchData = async () => {
-    const result = await withDraw(1, 20, 1, this.state);
-    this.setState({
-      data: result.data,
-      count: parseInt(result.count)
-    });
+  onSearchData = (page, limit) => {
+    //处理要发送的数据
+    let reqData = {
+      flag: 1,
+      ...this.reqData
+    };
+    if (this.inputKey === "1" || this.inputKey === "2") {
+      reqData.time_type = this.inputKey;
+    } else if (this.inputKey) {
+      reqData[this.inputKey] = this.inputValue;
+    }
+    this.getUsers(page, limit, reqData);
   };
   download = () => {
     downloadWithdrawList(this.state);
   };
   componentDidMount() {
-    this.getUsers(1, 20);
+    this.getUsers(1, 20, { flag: 1 });
   }
   render() {
     return (
@@ -65,36 +66,33 @@ class Withdraw_list extends Component {
             <Select
               placeholder="请选择"
               style={{ width: 150 }}
-              onSelect={value => this.setState({ filed: value })}
+              onSelect={value => (this.inputKey = value)}
             >
               <Select.Option value="order_id">订单id</Select.Option>
               <Select.Option value="user_id">user_id</Select.Option>
               <Select.Option value="replace_id">被赠人ID</Select.Option>
-              <Select.Option value="create_time">创建时间</Select.Option>
-              <Select.Option value="arrival_time">到账时间</Select.Option>
+              <Select.Option value="1">创建时间</Select.Option>
+              <Select.Option value="2">到账时间</Select.Option>
             </Select>
             &nbsp; &nbsp;
             <Input
               type="text"
               placeholder="请输入关键字"
               style={{ width: 150 }}
-              value={this.state.inputParam}
-              onChange={this.handleChange}
+              onChange={e => (this.inputValue = e.target.value)}
             />
             &nbsp; &nbsp;
             <MyDatePicker
               handleValue={val => {
-                this.setState({
-                  start_time: val[0],
-                  end_time: val[1]
-                });
+                this.reqData.start_time = val[0];
+                this.reqData.end_time = val[1];
               }}
             />
             &nbsp; &nbsp;
             <Select
               defaultValue=""
               style={{ width: 150 }}
-              onSelect={value => this.setState({ order_status: value })}
+              onSelect={value => (this.reqData.order_status = value)}
             >
               <Select.Option value="">订单状态</Select.Option>
               <Select.Option value="1">待审核</Select.Option>
@@ -104,7 +102,7 @@ class Withdraw_list extends Component {
               <Select.Option value="5">已失败</Select.Option>
             </Select>
             &nbsp; &nbsp;
-            <LinkButton onClick={this.onSearchData} size="default">
+            <LinkButton onClick={() => this.onSearchData(1, 20)} size="default">
               <Icon type="search" />
             </LinkButton>
           </div>
@@ -136,20 +134,16 @@ class Withdraw_list extends Component {
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
-              if (page && pageSize) {
-                this.setState({
-                  pageSize: pageSize
-                });
-                this.getUsers(page, pageSize);
-              } else return;
+              this.onSearchData(page, pageSize);
             },
             onShowSizeChange: (current, size) => {
-              if (size) {
-                this.getUsers(current, size);
-              } else return;
+              this.setState({
+                pageSize: size
+              });
+              this.onSearchData(current, size);
             }
           }}
-          scroll={{ x: 2400, y: "60vh" }}
+          scroll={{ x: 2200, y: "60vh" }}
         />
         <Modal
           title={
@@ -300,7 +294,7 @@ class Withdraw_list extends Component {
     {
       title: "操作",
       dataIndex: "",
-      width: 200,
+      width: 100,
       render: record => (
         <span>
           <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>
@@ -313,7 +307,10 @@ class Withdraw_list extends Component {
       width: 100,
       render: record => (
         <span>
-          <LinkButton onClick={() => this.getDetail(record, "check")}>
+          <LinkButton
+            onClick={() => this.getDetail(record, "check")}
+            type="default"
+          >
             查看
           </LinkButton>
         </span>
@@ -329,9 +326,9 @@ class Withdraw_list extends Component {
             title={record.user_id + "用户备注"}
             trigger="click"
           >
-            <LinkButton>用户备注</LinkButton>
+            <LinkButton type="default">用户备注</LinkButton>
           </Popover>
-          <LinkButton onClick={() => this.getDetail(record, "operatorRemark")}>
+          <LinkButton onClick={() => this.getDetail(record, "operatorRemark")} type="default">
             运营备注
           </LinkButton>
         </span>
@@ -367,7 +364,7 @@ class Withdraw_list extends Component {
   };
   edit = record => {
     console.log(123);
-    
+
     this.editRecord = record;
     this.setState({ isEditFormShow: true });
   };

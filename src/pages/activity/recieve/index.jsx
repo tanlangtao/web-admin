@@ -43,7 +43,7 @@ class AccountList extends Component {
             &nbsp;&nbsp;&nbsp;
             <Input
               style={{ width: 150 }}
-              placeholder="请输入活动id"
+              placeholder="请输入user_id"
               ref={Input => {
                 this.input = Input;
               }}
@@ -148,12 +148,12 @@ class AccountList extends Component {
       render: formateDate
     }
   ];
-  check=(record)=>{
+  check = record => {
     Modal.info({
-      title:"领取详情",
-      content:record.receive_info
-    })
-  }
+      title: "领取详情",
+      content: record.receive_info
+    });
+  };
   onSearch = async () => {
     let value = {
       user_id: this.input.input.value,

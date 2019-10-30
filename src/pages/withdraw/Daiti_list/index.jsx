@@ -7,15 +7,12 @@ import {
   Icon,
   Input,
   Select,
-  ConfigProvider,
-  DatePicker,
   Popover
 } from "antd";
 import "moment/locale/zh-cn";
 import LinkButton from "../../../components/link-button/index";
 import { formateDate } from "../../../utils/dateUtils";
-import zh_CN from "antd/lib/locale-provider/zh_CN";
-import "moment/locale/zh-cn";
+import MyDatePicker from "../../../components/MyDatePicker";
 import {
   withDraw,
   downloadWithdrawList,
@@ -27,99 +24,85 @@ import {
 import WrappedComponent from "./details";
 import WrappedEdit from "./edit";
 
-const { RangePicker } = DatePicker;
 class Daiti extends Component {
   constructor(props) {
     super(props);
+    this.reqData = {
+      start_time: "",
+      end_time: "",
+      order_status: "",
+      type: 3
+    };
+    this.inputKey = "";
+    this.inputValue = "";
     this.state = {
       data: [],
       count: 0,
       pageSize: 20,
-      start_time: "",
-      end_time: "",
-      order_status: "",
-      type: 3,
-      filed: "",
-      user_id: "",
-      order_id: "",
       isBindInfoShow: false
     };
-    this.initColumns();
   }
-  getUsers = async (page, limit) => {
-    let data = { inputParam: "", ...this.state };
-    const result = await withDraw(page, limit, 1, data);
-    if (result.status === 0) {
-      this.setState({
-        data: result.data,
-        count: parseInt(result.count)
-      });
-    }
+  getUsers = async (page, pageSize, reqData) => {
+    const result = await withDraw(page, pageSize, reqData);
+    this.setState({
+      data: result.data,
+      count: parseInt(result.count)
+    });
   };
-  onSearchData = async () => {
-    let data = { inputParam: this.input.input.value, ...this.state };
-    console.log(data);
-
-    const result = await withDraw(1, 20, 1, data);
-    if (result.status === 0) {
-      this.setState({
-        data: result.data,
-        count: parseInt(result.count)
-      });
-    } else {
-      this.setState({
-        data: result.data,
-        count: parseInt(result.count)
-      });
-      message.error("请检查输入的关键词或网络");
+  onSearchData = (page, limit) => {
+    //处理要发送的数据
+    let reqData = {
+      flag: 1,
+      ...this.reqData
+    };
+    if (this.inputKey === "1" || this.inputKey === "2") {
+      reqData.time_type = this.inputKey;
+    } else if (this.inputKey) {
+      reqData[this.inputKey] = this.inputValue;
     }
+    this.getUsers(page, limit, reqData);
   };
   download = () => {
     downloadWithdrawList(this.state);
   };
   componentDidMount() {
-    this.getUsers(1, 20);
+    this.getUsers(1, 20, { flag: 1 });
   }
   render() {
     return (
       <Card
         title={
           <div>
-            <ConfigProvider locale={zh_CN}>
-              <RangePicker
-                // defaultValue={[moment().locale("zh-cn")]}
-                // showTime={{ format: "HH:mm" }}
-                format="YYYY-MM-DD"
-                placeholder={["开始日期", "结束日期"]}
-                onChange={this.dataPickerOnChange}
-              />
-            </ConfigProvider>
+            <MyDatePicker
+              handleValue={val => {
+                this.reqData.start_time = val[0];
+                this.reqData.end_time = val[1];
+              }}
+            />
             &nbsp; &nbsp;
             <Select
               placeholder="请选择"
               style={{ width: 150 }}
-              onSelect={value => this.setState({ filed: value })}
+              onSelect={value => (this.inputKey = value)}
             >
               <Select.Option value="order_id">订单id</Select.Option>
               <Select.Option value="user_id">user_id</Select.Option>
               <Select.Option value="replace_id">代提ID</Select.Option>
-              <Select.Option value="create_time">创建时间</Select.Option>
-              <Select.Option value="arrival_time">到账时间</Select.Option>
+              <Select.Option value="1">创建时间</Select.Option>
+              <Select.Option value="2">到账时间</Select.Option>
             </Select>
             &nbsp; &nbsp;
             <Input
               type="text"
               placeholder="请输入关键字"
               style={{ width: 150 }}
-              // value={this.state.inputParam}
-              // onChange={this.handleChange}
-              ref={Input => (this.input = Input)}
+              onChange={e => (this.inputValue = e.target.value)}
             />
             &nbsp; &nbsp;
             <Select
               defaultValue=""
               style={{ width: 150 }}
-              onSelect={value => this.setState({ order_status: value })}
+              onSelect={value => (this.reqData.order_status = value)}
             >
               <Select.Option value="">订单状态</Select.Option>
               <Select.Option value="1">待审核</Select.Option>
@@ -129,7 +112,7 @@ class Daiti extends Component {
               <Select.Option value="5">已失败</Select.Option>
             </Select>
             &nbsp; &nbsp;
-            <LinkButton onClick={this.onSearchData} size="default">
+            <LinkButton onClick={() => this.onSearchData(1, 20)} size="default">
               <Icon type="search" />
             </LinkButton>
           </div>
@@ -161,17 +144,13 @@ class Daiti extends Component {
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
-              if (page && pageSize) {
-                this.setState({
-                  pageSize: pageSize
-                });
-                this.getUsers(page, pageSize);
-              } else return;
+              this.onSearchData(page, pageSize);
             },
             onShowSizeChange: (current, size) => {
-              if (size) {
-                this.getUsers(current, size);
-              } else return;
+              this.setState({
+                pageSize: size
+              });
+              this.onSearchData(current, size);
             }
           }}
           scroll={{ x: 2600, y: "60vh" }}
@@ -307,7 +286,7 @@ class Daiti extends Component {
     {
       title: "操作",
       dataIndex: "",
-      width: 150,
+      width: 100,
       render: record => (
         <span>
           <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>
@@ -322,14 +301,14 @@ class Daiti extends Component {
     {
       title: "创建时间",
       dataIndex: "created_at",
-      width: 150,
+      width: 200,
       render: formateDate,
       sorter: (a, b) => a.created_at - b.created_at
     },
     {
       title: "到账时间",
       dataIndex: "arrival_at",
-      width: 150,
+      width: 200,
       render: (text, record, index) => {
         if (text === "0" || !text) {
           return "";
@@ -340,13 +319,12 @@ class Daiti extends Component {
     {
       title: "风控",
       dataIndex: "",
-      width: 180,
+      width: 100,
       render: record => (
         <span>
-          <LinkButton onClick={() => this.getDetail(record, "risk")}>
+          <LinkButton type="default" onClick={() => this.getDetail(record, "risk")}>
             风控
           </LinkButton>
-          <LinkButton>游戏数据</LinkButton>
         </span>
       )
     },
@@ -356,7 +334,7 @@ class Daiti extends Component {
       width: 100,
       render: record => (
         <span>
-          <LinkButton onClick={() => this.getDetail(record, "check")}>
+          <LinkButton onClick={() => this.getDetail(record, "check")} type="default">
             查看
           </LinkButton>
         </span>
@@ -372,23 +350,15 @@ class Daiti extends Component {
             title={record.user_id + "用户备注"}
             trigger="click"
           >
-            <LinkButton>用户备注</LinkButton>
+            <LinkButton type="default">用户备注</LinkButton>
           </Popover>
-          <LinkButton onClick={() => this.getDetail(record, "operatorRemark")}>
+          <LinkButton onClick={() => this.getDetail(record, "operatorRemark")} type="default">
             运营备注
           </LinkButton>
         </span>
       )
     }
   ];
-  dataPickerOnChange = (date, dateString) => {
-    let startTime = dateString[0] + " 00:00:00";
-    let endTime = dateString[1] + " 00:00:00";
-    this.setState({
-      start_time: startTime,
-      end_time: endTime
-    });
-  };
   getDetail = async (record, action) => {
     this.action = action;
     this.detailRecord = {

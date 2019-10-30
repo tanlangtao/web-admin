@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Card, Table, message, Icon, Input, Select, Modal, Button } from "antd";
 import { formateDate } from "../../../utils/dateUtils";
-import "moment/locale/zh-cn";
 import {
   reqOrder_list,
   downloadList,
@@ -14,47 +13,53 @@ import Diaodan from "./editData";
 class Order_list extends Component {
   constructor(props) {
     super(props);
+    this.reqData = {
+      start_time: "",
+      end_time: "",
+      order_status: "",
+      type: ""
+    };
+    this.inputKey = "";
+    this.inputValue = "";
     this.state = {
       data: [],
       count: 0,
       pageSize: 20,
-      start_time: "",
-      end_time: "",
-      order_status: "",
-      type: "",
-      user_id: "",
-      order_id: "",
       isQueryShow: false,
       isEditShow: false
     };
-    this.inputKey = "";
-    this.inputValue = "";
-    this.order_status = "";
-    this.type = "";
   }
-  getUsers = async (page, limit) => {
-    const result = await reqOrder_list(
-      page,
-      limit,
-      this.state.start_time,
-      this.state.end_time,
-      this.order_status,
-      this.type,
-      this.inputKey,
-      this.inputValue
-    );
-    if (result.data && result.count) {
+  getUsers = async (page, limit, reqData) => {
+    const result = await reqOrder_list(page, limit, reqData);
+    if (result.status === 0) {
       this.setState({
         data: result.data,
         count: parseInt(result.count)
       });
     }
   };
-  onSearchData = async () => {
+  PlayerLossOrderSearch = async () => {
     this.setState({ isQueryShow: true });
   };
+  onSearchData = (page, limit) => {
+    //处理要发送的数据
+    let reqData = {
+      ...this.reqData
+    };
+    if (this.inputKey === "1" || this.inputKey === "2") {
+      reqData.time_type = this.inputKey;
+    } else if (this.inputKey) {
+      reqData[this.inputKey] = this.inputValue;
+    }
+    this.getUsers(page, limit, reqData);
+  };
   download = () => {
-    downloadList(this.state);
+    let data = {
+      ...this.reqData,
+      inputParam: this.inputValue,
+      paramKey: this.inputKey
+    };
+    downloadList(data);
   };
   componentDidMount() {
     this.getUsers(1, 20);
@@ -80,22 +85,20 @@ class Order_list extends Component {
                 type="text"
                 placeholder="请输入关键字"
                 style={{ width: 150 }}
-                ref={Input => (this.input = Input)}
+                onChange={e => (this.inputValue = e.target.value)}
               />
               &nbsp; &nbsp;
               <MyDatePicker
                 handleValue={val => {
-                  this.setState({
-                    start_time: val[0],
-                    end_time: val[1]
-                  });
+                  this.reqData.start_time = val[0];
+                  this.reqData.end_time = val[1];
                 }}
               />
               &nbsp; &nbsp;
               <Select
                 defaultValue=""
                 style={{ width: 200 }}
-                onSelect={value => (this.order_status = value)}
+                onSelect={value => (this.reqData.order_status = value)}
               >
                 <Select.Option value="">订单状态</Select.Option>
                 <Select.Option value="0">全部</Select.Option>
@@ -113,7 +116,7 @@ class Order_list extends Component {
               <Select
                 defaultValue=""
                 style={{ width: 120 }}
-                onSelect={value => (this.type = value)}
+                onSelect={value => (this.reqData.type = value)}
               >
                 <Select.Option value="">订单类型</Select.Option>
                 <Select.Option value="0">全部</Select.Option>
@@ -128,10 +131,7 @@ class Order_list extends Component {
               </Select>
               &nbsp; &nbsp;
               <LinkButton
-                onClick={() => {
-                  this.inputValue = this.input.input.value;
-                  this.getUsers(1, this.state.pageSize);
-                }}
+                onClick={() => this.onSearchData(1, 20)}
                 size="default"
               >
                 <Icon type="search" />
@@ -139,7 +139,7 @@ class Order_list extends Component {
               &nbsp; &nbsp;
             </div>
             <div style={{ marginTop: 10 }}>
-              <LinkButton onClick={this.onSearchData} size="default">
+              <LinkButton onClick={this.PlayerLossOrderSearch} size="default">
                 <Icon type="search" />
                 玩家掉单查询
               </LinkButton>
@@ -179,20 +179,16 @@ class Order_list extends Component {
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
-              if (page && pageSize) {
-                this.setState({
-                  pageSize: pageSize
-                });
-                this.getUsers(page, pageSize);
-              } else return;
+              this.onSearchData(page, pageSize);
             },
             onShowSizeChange: (current, size) => {
-              if (size) {
-                this.getUsers(current, size);
-              } else return;
+              this.setState({
+                pageSize: size
+              });
+              this.onSearchData(current, size);
             }
           }}
-          scroll={{ x: 2200, y: "60vh" }}
+          scroll={{ x: 2000 }}
         />
         <Modal
           title="玩家调单查询"
@@ -234,32 +230,27 @@ class Order_list extends Component {
     {
       title: "订单ID",
       dataIndex: "order_id",
-      width: 350
+      width: 320
     },
     {
       title: "user_id",
-      dataIndex: "user_id",
-      width: 150
+      dataIndex: "user_id"
     },
     {
       title: "昵称",
-      dataIndex: "user_name",
-      width: 150
+      dataIndex: "user_name"
     },
     {
       title: "所属品牌",
-      dataIndex: "package_nick",
-      width: 150
+      dataIndex: "package_nick"
     },
     {
       title: "所属代理",
-      dataIndex: "proxy_user_id",
-      width: 150
+      dataIndex: "proxy_user_id"
     },
     {
       title: "支付渠道",
       dataIndex: "channel_type",
-      width: 100,
       render: (text, record, index) => {
         let word;
         switch (text) {
@@ -288,7 +279,6 @@ class Order_list extends Component {
     {
       title: "支付类型",
       dataIndex: "type",
-      width: 100,
       render: (text, record, index) => {
         let word;
         switch (text) {
@@ -329,19 +319,24 @@ class Order_list extends Component {
     {
       title: "下单金额",
       dataIndex: "amount",
-      width: 150,
-      sorter: (a, b) => a.amount - b.amount
+      sorter: (a, b) => a.amount - b.amount,
+      render: text => {
+        text = parseInt(text).toFixed(2);
+        return <span>{text}</span>;
+      }
     },
     {
       title: "到账金额",
       dataIndex: "arrival_amount",
-      width: 150,
-      sorter: (a, b) => a.arrival_amount - b.arrival_amount
+      sorter: (a, b) => a.arrival_amount - b.arrival_amount,
+      render: text => {
+        text = parseInt(text).toFixed(2);
+        return <span>{text}</span>;
+      }
     },
     {
       title: "订单状态",
       dataIndex: "status",
-      width: 150,
       render: (text, record, index) => {
         let word;
         switch (text) {
@@ -391,8 +386,8 @@ class Order_list extends Component {
     {
       title: "创建时间",
       dataIndex: "created_at",
-      width: 200,
       render: formateDate,
+      width: 200,
       sorter: (a, b) => a.created_at - b.created_at
     },
     {
@@ -409,7 +404,6 @@ class Order_list extends Component {
     {
       title: "操作",
       dataIndex: "",
-      width: 100,
       render: (text, record, index) => {
         if (record.status === "7") {
           return (

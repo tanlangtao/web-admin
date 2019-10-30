@@ -118,7 +118,7 @@ class Tasks extends Component {
               );
             }
           }}
-          scroll={{ x: 2000 }}
+          scroll={{ x: 1400 }}
         />
         {this.state.isEditFormShow && (
           <Modal
@@ -150,6 +150,7 @@ class Tasks extends Component {
     {
       title: "任务信息",
       dataIndex: "params",
+      width: 500,
       render: (text, record) => (
         <div style={{ wordWrap: "break-word", wordBreak: "break-all" }}>
           {text}
@@ -159,6 +160,7 @@ class Tasks extends Component {
     {
       title: "任务来源",
       dataIndex: "task_type",
+      width: 150,
       render: (text, record, index) => (
         <span>
           {parseInt(text) === 0
@@ -181,11 +183,13 @@ class Tasks extends Component {
     },
     {
       title: "创建时间",
-      dataIndex: "created_at"
+      dataIndex: "created_at",
+      width: 200
     },
     {
       title: "更新时间",
-      dataIndex: "updated_at"
+      dataIndex: "updated_at",
+      width: 200
     },
     {
       title: "状态",

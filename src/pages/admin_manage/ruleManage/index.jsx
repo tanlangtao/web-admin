@@ -100,7 +100,7 @@ class Rule extends Component {
               </Form.Item>
               <Form.Item>
                 <Button
-                 size='default' 
+                  size="default"
                   type="primary"
                   htmlType="submit"
                   className="login-form-button"
@@ -112,7 +112,7 @@ class Rule extends Component {
           </div>
         }
         extra={
-          <LinkButton onClick={() => window.location.reload()} size='default'>
+          <LinkButton onClick={() => window.location.reload()} size="default">
             <Icon type="reload" />
           </LinkButton>
         }
@@ -188,7 +188,8 @@ class Rule extends Component {
     },
     {
       title: "显示",
-      dataIndex: "status"
+      dataIndex: "status",
+      render: text => <span>{text === 1 ? "是" : "否"}</span>
     },
     {
       title: "菜单排序",

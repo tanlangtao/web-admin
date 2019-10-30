@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import { Card, Table, Modal, message, Input, Popconfirm } from "antd";
-import {
-  activityConfigList,
-  delActivityConfig
-} from "../../../api/index";
+import { activityConfigList, delActivityConfig } from "../../../api/index";
 import LinkButton from "../../../components/link-button";
 import MyDatePicker from "../../../components/MyDatePicker";
 import WrappedEditForm from "./editForm";
@@ -158,7 +155,7 @@ class AccountList extends Component {
     {
       title: "活动内容",
       dataIndex: "info",
-      width: 200
+      width: 600
     },
     {
       title: "排序",

@@ -703,23 +703,10 @@ export const activityList = (page, limit, value) => {
   );
 };
 //充值-充值订单
-export const reqOrder_list = (
-  page,
-  limit,
-  start_time,
-  end_time,
-  order_status,
-  type,
-  inputKey,
-  inputValue
-) => {
-  if (inputKey === "1" || inputKey === "2") {
-    inputValue = inputKey;
-    inputKey = "time_type";
-  }
+export const reqOrder_list = (page, limit, reqData) => {
   return ajax(
     BASE + "/order/recharge",
-    { start_time, end_time, order_status, type, token, [inputKey]: inputValue },
+    { page, limit, token, ...reqData },
     "POST"
   );
 };
@@ -937,52 +924,17 @@ export const editChannelInfo = (id, pay_code) => {
   );
 };
 //兑换-兑换订单&代提设置
-export const withDraw = (page, limit, flag, searchData) => {
-  if (searchData) {
-    let {
-      start_time,
-      end_time,
-      order_status,
-      type,
-      inputParam,
-      filed
-    } = searchData;
-    //处理输入关键字和选择关键字，组合成传输参数
-    let obj = {};
-    if (filed !== "create_time" && filed !== "arrival_time") {
-      obj[filed] = inputParam;
-    } else if (filed !== "create_time") {
-      obj.time_type = 1;
-    } else if (filed !== "arrival_time") {
-      obj.time_type = 2;
-    }
-    return ajax(
-      BASE + "/order/withDraw",
-      {
-        page,
-        limit,
-        token,
-        start_time,
-        end_time,
-        order_status,
-        type,
-        ...obj,
-        flag
-      },
-      "POST"
-    );
-  } else {
-    return ajax(
-      BASE + "/order/withDraw",
-      {
-        page,
-        limit,
-        token,
-        flag
-      },
-      "POST"
-    );
-  }
+export const withDraw = (page, limit, data) => {
+  return ajax(
+    BASE + "/order/withDraw",
+    {
+      page,
+      limit,
+      token,
+      ...data
+    },
+    "POST"
+  );
 };
 export const reviewInfo = (page, limit, id) => {
   return ajax(

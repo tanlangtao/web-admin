@@ -137,7 +137,7 @@ class Config extends Component {
     {
       title: "配置值",
       dataIndex: "conf_val",
-      width: 150
+      width: 600
     },
     {
       title: "更新时间",

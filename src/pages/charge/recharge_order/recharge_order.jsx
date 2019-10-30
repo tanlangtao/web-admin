@@ -124,11 +124,6 @@ class Recharge_order extends Component {
               onClick={() => window.location.reload()}
               icon="reload"
             />
-            <br />
-            <br />
-            <Button onClick={this.download} icon="download">
-              下载列表
-            </Button>
           </span>
         }
       >
@@ -146,20 +141,16 @@ class Recharge_order extends Component {
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
-              if (page && pageSize) {
-                this.setState({
-                  pageSize: pageSize
-                });
-                this.getUsers(page, pageSize);
-              } else return;
+              this.getUsers(page, pageSize);
             },
             onShowSizeChange: (current, size) => {
-              if (size) {
-                this.getUsers(current, size);
-              } else return;
+              this.setState({
+                pageSize: size
+              });
+              this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 2000, y: "60vh" }}
+          scroll={{ x: 1850, y: "60vh" }}
         />
       </Card>
     );
@@ -168,7 +159,7 @@ class Recharge_order extends Component {
     {
       title: "订单ID",
       dataIndex: "order_id",
-      width: 350
+      width: 320
     },
     {
       title: "user_id",

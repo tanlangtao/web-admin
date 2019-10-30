@@ -10,7 +10,6 @@ import {
   Popconfirm,
   Button
 } from "antd";
-
 import { formateDate } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-button/index";
 import {
@@ -57,14 +56,14 @@ export default class User extends Component {
       dataIndex: "id",
       key: "id",
       fixed: "left",
-      width: 150
+      width: 100
     },
     {
       title: "昵称",
       dataIndex: "game_nick",
       key: "game_nick",
       fixed: "left",
-      width: 150,
+      width: 100,
       onCell: (record, rowIndex) => {
         return {
           onClick: event => {
@@ -162,12 +161,13 @@ export default class User extends Component {
     {
       title: "操作",
       dataIndex: "",
+      width: 200,
       render: record => (
         <span>
-          <LinkButton onClick={() => this.getGoldDetail(record)} size="small">
+          <LinkButton onClick={() => this.getGoldDetail(record)} type="default">
             资金明细
           </LinkButton>
-          <LinkButton onClick={() => this.getMoreDetail(record)} size="small">
+          <LinkButton onClick={() => this.getMoreDetail(record)}>
             更多
           </LinkButton>
         </span>
@@ -178,7 +178,7 @@ export default class User extends Component {
       width: 100,
       render: record => (
         <span>
-          <LinkButton size="small" onClick={() => this.getLoadGold(record)}>
+          <LinkButton type="default" onClick={() => this.getLoadGold(record)}>
             查看
           </LinkButton>
         </span>
@@ -187,7 +187,6 @@ export default class User extends Component {
     {
       title: "是否为客服账号",
       dataIndex: "game_user_type",
-      width: 120,
       render: (text, record, index) => (
         <span>{parseInt(text) === 4 ? "是" : ""}</span>
       )
@@ -450,7 +449,7 @@ export default class User extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 2050, y: "65vh" }}
+          scroll={{ x: 2000, y: "65vh" }}
         />
         <Modal
           title="修改昵称"
@@ -504,7 +503,7 @@ export default class User extends Component {
             this.setState({ isGoldDetailShow: false });
           }}
           footer={null}
-          width="70%"
+          width="80%"
         >
           <WrappedComponent
             GoldDetailRecord={this.GoldDetailRecord}

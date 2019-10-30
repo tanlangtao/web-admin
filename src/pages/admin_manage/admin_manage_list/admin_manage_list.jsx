@@ -27,7 +27,7 @@ class Admin_manage_list extends Component {
   initColumns = () => [
     {
       title: "user_id",
-      dataIndex: "id",
+      dataIndex: "id"
     },
     {
       title: "用户名",
@@ -40,19 +40,19 @@ class Admin_manage_list extends Component {
     },
     {
       title: "角色",
-      dataIndex: "role_name",
+      dataIndex: "role_name"
     },
     {
       title: "授权品牌",
-      dataIndex: "group",
+      dataIndex: "group"
     },
     {
       title: "授权代理",
-      dataIndex: "proxy",
+      dataIndex: "proxy"
     },
     {
       title: "可使用金额",
-      dataIndex: "use_balance",
+      dataIndex: "use_balance"
     },
     {
       title: "创建时间",
@@ -86,7 +86,7 @@ class Admin_manage_list extends Component {
       render: (text, record, index) => (
         <span>
           <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>
-          <LinkButton onClick={() => this.resetAuthCode(record)}>
+          <LinkButton onClick={() => this.resetAuthCode(record)} type="default">
             AuthCode重置
           </LinkButton>
         </span>
@@ -111,10 +111,10 @@ class Admin_manage_list extends Component {
   onSearchData = async () => {
     const result = await searchAdminData(this.state.inputParam);
     // if (result.status === 0) {
-      this.setState({
-        data: result.data,
-        count: 1
-      });
+    this.setState({
+      data: result.data,
+      count: 1
+    });
     // }
   };
   addData = async () => {
@@ -175,18 +175,18 @@ class Admin_manage_list extends Component {
               onChange={this.handleChange}
             />
             &nbsp; &nbsp;
-            <LinkButton onClick={this.onSearchData} size='default'>
+            <LinkButton onClick={this.onSearchData} size="default">
               <Icon type="search" />
             </LinkButton>
             &nbsp; &nbsp;
-            <LinkButton onClick={this.addData} size='default'>
+            <LinkButton onClick={this.addData} size="default">
               <Icon type="user-add" />
               添加账户
             </LinkButton>
           </span>
         }
         extra={
-          <LinkButton onClick={() => window.location.reload()} size='default'>
+          <LinkButton onClick={() => window.location.reload()} size="default">
             <Icon type="reload" />
           </LinkButton>
         }
@@ -201,7 +201,7 @@ class Admin_manage_list extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal:(total, range) => `共${total}条`,
+            showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {

@@ -97,7 +97,7 @@ class DailyReport extends Component {
           dataSource={this.state.data}
           columns={this.initColumns()}
           size="small"
-          scroll={{ x: 2500 }}
+          scroll={{ x: 2700 }}
         />
         <Modal
           title="按日期查看"
@@ -326,7 +326,7 @@ class DailyReport extends Component {
     if (res.status === 0 && res.data) {
       //用户 (e.active_user_number = e.login_user_number - e.regin_user_number),
       if (res.data.user) {
-        res.data.user.map(e => ((e.date = e._id.create_time), delete e._id));
+        res.data.user.map(e => ((e.date = e._id.login_time), delete e._id));
       }
       //充提交易所
       if (res.data.order) {

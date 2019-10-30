@@ -90,7 +90,7 @@ class Bankcard_list extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal:(total, range) => `共${total}条`,
+            showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
@@ -209,7 +209,7 @@ class Bankcard_list extends Component {
             okText="删除"
             cancelText="取消"
           >
-            <LinkButton>删除</LinkButton>
+            <LinkButton type="danger">删除</LinkButton>
           </Popconfirm>
         </span>
       )

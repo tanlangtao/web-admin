@@ -71,7 +71,10 @@ class Diaodan extends Component {
         render: (text, record, index) => {
           if (text !== "6" && text !== "7" && text !== "9") {
             return (
-              <Button size='small' onClick={() => this.handleRecieveSubmit(record)}>
+              <Button
+                size="small"
+                onClick={() => this.handleRecieveSubmit(record)}
+              >
                 手动到账提交
               </Button>
             );
@@ -94,7 +97,7 @@ class Diaodan extends Component {
         data: res.data
       });
     } else {
-      message.error(res.msg);
+      message.error("未检索到数据");
     }
   };
   handleRecieveSubmit = async record => {

@@ -202,7 +202,7 @@ class EditForm extends React.Component {
     if (!this.remarkOperator) {
       message.error("请输入有效内容！");
     } else {
-      const res = await withDrawRemark(data.order_id, this.remarkUser, 2);
+      const res = await withDrawRemark(data.order_id, this.remarkOperator, 2);
       if (res.status === 0) {
         message.success(res.msg);
       } else {

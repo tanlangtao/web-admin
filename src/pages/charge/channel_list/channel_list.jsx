@@ -139,7 +139,7 @@ class Channel_list extends Component {
         </Modal>
         {this.state.isEditDataShow && (
           <Modal
-            title="编辑用户"
+            title="编辑"
             visible={this.state.isEditDataShow}
             // onOk={this.handleAddData}
             onCancel={() => {

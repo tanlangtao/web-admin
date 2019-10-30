@@ -88,7 +88,7 @@ class Customer_list extends Component {
           <span>
             <Input
               type="text"
-              placeholder="请输入支付名称"
+              placeholder="请输入代充账号"
               style={{ width: 150 }}
               ref={input => (this.input = input)}
             />
