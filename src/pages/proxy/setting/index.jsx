@@ -16,7 +16,7 @@ class ProxySetting extends Component {
   onSearchData = async (page, limit) => {
     // let reqdata = { page, limit, id: 232843783 };
     let id = this.input.input.value;
-    id = 232843783;
+    // id = 232843783;
     var reg = new RegExp("^[0-9]*$");
     if (!id || !reg.test(id)) {
       message.error("请输入有效id");
@@ -25,15 +25,15 @@ class ProxySetting extends Component {
       const res = await getProxyUserList(reqdata);
       if (res.status === 0) {
         this.setState({
-          data: res.data.proxy_user,
+          data: res.data,
           count: parseInt(res.count)
         });
       }
     }
   };
-  componentDidMount() {
-    this.onSearchData(1, 20);
-  }
+  // componentDidMount() {
+  //   this.onSearchData(1, 20);
+  // }
   render() {
     return (
       <Card
@@ -64,8 +64,7 @@ class ProxySetting extends Component {
           columns={this.initColumns()}
           size="small"
           pagination={{
-            defaultPageSize: 10,
-            showSizeChanger: true,
+            defaultPageSize: 20,
             showQuickJumper: true,
             showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
@@ -73,9 +72,6 @@ class ProxySetting extends Component {
             onChange: (page, pageSize) => {
               this.onSearchData(page, pageSize);
             },
-            onShowSizeChange: (current, size) => {
-              this.onSearchData(current, size);
-            }
           }}
         />
         <Modal
@@ -184,8 +180,8 @@ class ProxySetting extends Component {
       ),
       onOk: async () => {
         const res = await changeProxyUserProxyPid({
-          change_id: record.id,
-          new_proxy_user_id: this.state.new_proxy_user_id
+          id: record.id,
+          proxy_user_id: this.state.new_proxy_user_id
         });
         if (res.status === 0) {
           message.success("操作成功" + res.msg);

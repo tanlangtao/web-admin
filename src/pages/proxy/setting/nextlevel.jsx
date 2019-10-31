@@ -18,7 +18,7 @@ class NextLevel extends Component {
     const res = await getProxyUserList(reqdata);
     if (res.status === 0 && res.data) {
       this.setState({
-        data: res.data.proxy_user,
+        data: res.data,
         count: parseInt(res.count)
       });
     }
@@ -37,7 +37,6 @@ class NextLevel extends Component {
           size="small"
           pagination={{
             defaultPageSize: 10,
-            showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
@@ -45,9 +44,6 @@ class NextLevel extends Component {
             onChange: (page, pageSize) => {
               this.onSearchData(page, pageSize);
             },
-            onShowSizeChange: (current, size) => {
-              this.onSearchData(current, size);
-            }
           }}
         />
         <Modal
@@ -60,12 +56,6 @@ class NextLevel extends Component {
           footer={null}
           mask={false}
           maskClosable={false}
-          // maskStyle={{
-          //   backgroundColor: "#eee",
-          //   width: "100%",
-          //   height: "100%",
-          //   zIndex: 999
-          // }}
           width="60%"
         >
           <Myself pid={this.pid} topDistance={this.props.topDistance + 40} />
@@ -158,8 +148,8 @@ class NextLevel extends Component {
       ),
       onOk: async () => {
         const res = await changeProxyUserProxyPid({
-          change_id: record.id,
-          new_proxy_user_id: this.state.new_proxy_user_id
+          id: record.id,
+          proxy_user_id: this.state.new_proxy_user_id
         });
         if (res.status === 0) {
           message.success("操作成功" + res.msg);
