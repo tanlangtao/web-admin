@@ -241,7 +241,7 @@ export default class User extends Component {
       form.resetFields();
     });
   };
-  changeGold = () => {
+  onChangeGold = () => {
     this.setState({ loading: true });
     //这里直接复用了user-nick的模态框，所以取input的值时用value.name
     let form = this.refs.getFormValue;
@@ -438,51 +438,54 @@ export default class User extends Component {
           }}
           scroll={{ x: 2000, y: "65vh" }}
         />
-        <Modal
-          title="修改昵称"
-          visible={this.state.isNickShow}
-          onOk={this.changeNickName}
-          onCancel={() => {
-            this.setState({ isNickShow: false });
-          }}
-        >
-          <WrappedNormalLoginForm
-            ref="getFormValue"
-            val={this.game_nick}
-            isNickModal
-          />
-        </Modal>
-        <Modal
-          title="修改金额"
-          visible={this.state.isGoldShow}
-          // onOk={this.changeGold}
-          onCancel={() => {
-            this.setState({ isGoldShow: false });
-          }}
-          footer={[
-            <Button
-              key="back"
-              onClick={() => {
-                this.setState({ isGoldShow: false });
-              }}
-            >
-              取消
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={this.state.loading}
-              onClick={this.changeGold}
-            >
-              确定
-            </Button>
-          ]}
-        >
-          <WrappedNormalLoginForm
-            ref="getFormValue"
-            goldRecord={this.goldRecord}
-          />
-        </Modal>
+        {this.state.isNickShow && (
+          <Modal
+            title="修改昵称"
+            visible={this.state.isNickShow}
+            onOk={this.changeNickName}
+            onCancel={() => {
+              this.setState({ isNickShow: false });
+            }}
+          >
+            <WrappedNormalLoginForm
+              ref="getFormValue"
+              val={this.game_nick}
+              isNickModal
+            />
+          </Modal>
+        )}
+        {this.state.isGoldShow && (
+          <Modal
+            title="修改金额"
+            visible={this.state.isGoldShow}
+            onCancel={() => {
+              this.setState({ isGoldShow: false });
+            }}
+            footer={[
+              <Button
+                key="back"
+                onClick={() => {
+                  this.setState({ isGoldShow: false });
+                }}
+              >
+                取消
+              </Button>,
+              <Button
+                key="submit"
+                type="primary"
+                loading={this.state.loading}
+                onClick={this.onChangeGold}
+              >
+                确定
+              </Button>
+            ]}
+          >
+            <WrappedNormalLoginForm
+              ref="getFormValue"
+              goldRecord={this.goldRecord}
+            />
+          </Modal>
+        )}
         {this.state.isGoldDetailShow && (
           <Modal
             title={this.isBindInfo ? "查看绑定信息" : "资金明细"}

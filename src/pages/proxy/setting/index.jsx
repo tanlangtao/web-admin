@@ -71,7 +71,7 @@ class ProxySetting extends Component {
             total: this.state.count,
             onChange: (page, pageSize) => {
               this.onSearchData(page, pageSize);
-            },
+            }
           }}
         />
         <Modal
@@ -192,6 +192,7 @@ class ProxySetting extends Component {
     });
   };
   changeBalance = record => {
+    this.proxyID = record.id;
     this.record = record;
     this.setState({
       isChangeBalanceShow: true
