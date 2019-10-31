@@ -25,7 +25,7 @@ class ProxySetting extends Component {
       const res = await getProxyUserList(reqdata);
       if (res.status === 0) {
         this.setState({
-          data: res.data,
+          data: res.data.proxy_user,
           count: parseInt(res.count)
         });
       }

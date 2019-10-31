@@ -479,7 +479,7 @@ export const saveConf = (value, action) => {
 //代理系统
 export const getProxyUserList = data => {
   return ajax(
-    BASE + "/user/getProxyUser",
+    BASE + "/user/getProxyUserList",
     {
       ...data,
       token

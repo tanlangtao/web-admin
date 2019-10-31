@@ -18,7 +18,7 @@ class NextLevel extends Component {
     const res = await getProxyUserList(reqdata);
     if (res.status === 0 && res.data) {
       this.setState({
-        data: res.data,
+        data: res.data.proxy_user,
         count: parseInt(res.count)
       });
     }
