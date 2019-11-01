@@ -74,39 +74,43 @@ class ProxySetting extends Component {
             }
           }}
         />
-        <Modal
-          title={`[ID:${this.pid}]直属下级列表`}
-          visible={this.state.isAddDataShow}
-          style={{ top: 20 }}
-          onCancel={() => {
-            this.setState({ isAddDataShow: false });
-          }}
-          footer={null}
-          mask={false}
-          maskClosable={false}
-          // maskStyle={{
-          //   backgroundColor: "#eee",
-          //   color: "#ddd"
-          // }}
-          width="60%"
-        >
-          <NextLevel pid={this.pid} topDistance={20} />
-        </Modal>
-        <Modal
-          title={`[代理:${this.proxyID}]资金变动`}
-          visible={this.state.isChangeBalanceShow}
-          onCancel={() => {
-            this.setState({ isChangeBalanceShow: false });
-          }}
-          footer={null}
-        >
-          <BalanceChanged
-            record={this.record}
-            cancel={() => {
+        {this.state.isAddDataShow && (
+          <Modal
+            title={`[ID:${this.pid}]直属下级列表`}
+            visible={this.state.isAddDataShow}
+            style={{ top: 20 }}
+            onCancel={() => {
+              this.setState({ isAddDataShow: false });
+            }}
+            footer={null}
+            mask={false}
+            maskClosable={false}
+            // maskStyle={{
+            //   backgroundColor: "#eee",
+            //   color: "#ddd"
+            // }}
+            width="60%"
+          >
+            <NextLevel pid={this.pid} topDistance={20} />
+          </Modal>
+        )}
+        {this.state.isChangeBalanceShow && (
+          <Modal
+            title={`[代理:${this.proxyID}]资金变动`}
+            visible={this.state.isChangeBalanceShow}
+            onCancel={() => {
               this.setState({ isChangeBalanceShow: false });
             }}
-          />
-        </Modal>
+            footer={null}
+          >
+            <BalanceChanged
+              record={this.record}
+              cancel={() => {
+                this.setState({ isChangeBalanceShow: false });
+              }}
+            />
+          </Modal>
+        )}
       </Card>
     );
   }
@@ -184,9 +188,10 @@ class ProxySetting extends Component {
           proxy_user_id: this.state.new_proxy_user_id
         });
         if (res.status === 0) {
-          message.success("操作成功" + res.msg);
+          message.success(res.msg || "操作成功");
+          this.onSearchData(1, 20);
         } else {
-          message.error("操作失败" + res.msg);
+          message.error(res.msg || "操作失败");
         }
       }
     });

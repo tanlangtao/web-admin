@@ -1,13 +1,10 @@
 import React, { Component } from "react";
+import { Card, Table, Modal, message, Input, Button } from "antd";
 import {
-  Card,
-  Table,
-  Modal,
-  message,
-  Input,
-  Button,
-} from "antd";
-import { getChannel, getChannelInfo,editChannelInfo } from "../../../api/index";
+  getChannel,
+  getChannelInfo,
+  editChannelInfo
+} from "../../../api/index";
 
 class Recharge_channel extends Component {
   constructor(props) {
@@ -65,7 +62,7 @@ class Recharge_channel extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal:(total, range) => `共${total}条`,
+            showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
@@ -155,7 +152,8 @@ class Recharge_channel extends Component {
     if (expanded) {
       keys.push(record.id);
       this.setState({
-        expandedRowKeys: keys
+        expandedRowKeys: keys,
+        childData: []
       });
       const result = await getChannelInfo(record.id);
       if (result.status === 0) {
@@ -166,7 +164,7 @@ class Recharge_channel extends Component {
           childData: result.data
         });
       } else {
-        message.error("网络问题");
+        message.error(result.msg || "接口异常，获取失败");
         this.setState({
           childData: []
         });
@@ -186,12 +184,15 @@ class Recharge_channel extends Component {
     });
   };
   handleEditData = async () => {
-    const result = await editChannelInfo(this.state.recordId, this.state.inputParam);
+    const result = await editChannelInfo(
+      this.state.recordId,
+      this.state.inputParam
+    );
     if (result.status === 0) {
       message.success(result.msg);
       this.setState({
         isEditDataShow: false,
-        expandedRowKeys:[],
+        expandedRowKeys: []
       });
     } else {
       message.error("网络问题");

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Table, message, Input, Popconfirm, Modal } from "antd";
+import { Card, Table, message, Input, Modal } from "antd";
 import { activityList } from "../../../api/index";
 import LinkButton from "../../../components/link-button";
 import MyDatePicker from "../../../components/MyDatePicker";
