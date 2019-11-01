@@ -502,20 +502,22 @@ export default class User extends Component {
             />
           </Modal>
         )}
-        <Modal
-          title="重置密码"
-          visible={this.state.isResetPwdShow}
-          onOk={this.handleResetpwd}
-          onCancel={() => {
-            this.setState({ isResetPwdShow: false });
-          }}
-        >
-          <span>重置密码</span>
-          <Input
-            value={this.state.resetpwd}
-            onChange={e => this.setState({ resetpwd: e.target.value })}
-          />
-        </Modal>
+        {this.state.isResetPwdShow && (
+          <Modal
+            title="重置密码"
+            visible={this.state.isResetPwdShow}
+            onOk={this.handleResetpwd}
+            onCancel={() => {
+              this.setState({ isResetPwdShow: false });
+            }}
+          >
+            <span>重置密码</span>
+            <Input
+              value={this.state.resetpwd}
+              onChange={e => this.setState({ resetpwd: e.target.value })}
+            />
+          </Modal>
+        )}
       </Card>
     );
   }
