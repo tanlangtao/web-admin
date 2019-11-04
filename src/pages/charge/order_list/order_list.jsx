@@ -36,6 +36,11 @@ class Order_list extends Component {
         data: result.data,
         count: parseInt(result.count)
       });
+    } else {
+      this.setState({
+        data: result.data,
+        count: parseInt(result.count)
+      });
     }
   };
   PlayerLossOrderSearch = async () => {

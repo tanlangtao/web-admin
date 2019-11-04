@@ -108,11 +108,11 @@ class AddDataForm extends Component {
                 required: true
               }
             ],
-            initialValue: isEdit ? parseInt(editDataRecord.type) : 1
+            initialValue: isEdit ? parseInt(editDataRecord.is_slider) : 1
           })(
             <Radio.Group>
               <Radio value={1}>是</Radio>
-              <Radio value={0}>否</Radio>
+              <Radio value={2}>否</Radio>
             </Radio.Group>
           )}
         </Form.Item>

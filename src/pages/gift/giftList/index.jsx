@@ -56,7 +56,7 @@ class Withdraw_list extends Component {
     downloadWithdrawList(this.state);
   };
   componentDidMount() {
-    this.getUsers(1, 20, { flag: 1 });
+    this.getUsers(1, 20, { flag: 1, type: 5 });
   }
   render() {
     return (
@@ -328,21 +328,16 @@ class Withdraw_list extends Component {
           >
             <LinkButton type="default">用户备注</LinkButton>
           </Popover>
-          <LinkButton onClick={() => this.getDetail(record, "operatorRemark")} type="default">
+          <LinkButton
+            onClick={() => this.getDetail(record, "operatorRemark")}
+            type="default"
+          >
             运营备注
           </LinkButton>
         </span>
       )
     }
   ];
-  dataPickerOnChange = (date, dateString) => {
-    let startTime = dateString[0] + " 00:00:00";
-    let endTime = dateString[1] + " 00:00:00";
-    this.setState({
-      start_time: startTime,
-      end_time: endTime
-    });
-  };
   getDetail = async (record, action) => {
     this.action = action;
     this.detailRecord = {
@@ -363,8 +358,6 @@ class Withdraw_list extends Component {
     this.setState({ isDetailShow: true });
   };
   edit = record => {
-    console.log(123);
-
     this.editRecord = record;
     this.setState({ isEditFormShow: true });
   };

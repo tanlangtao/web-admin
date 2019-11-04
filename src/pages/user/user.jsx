@@ -381,7 +381,7 @@ export default class User extends Component {
           <Option value="game_nick">昵称</Option>
           <Option value="phone_number">手机号</Option>
           <Option value="role_name">账号</Option>
-          <Option value="proxy_nick">所属代理</Option>
+          <Option value="proxy_pid">所属代理</Option>
           <Option value="package_nick">所属品牌</Option>
           <Option value="regin_ip">注册IP</Option>
         </Select>

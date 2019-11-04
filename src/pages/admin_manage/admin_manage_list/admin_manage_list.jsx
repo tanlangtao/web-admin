@@ -113,7 +113,7 @@ class Admin_manage_list extends Component {
     // if (result.status === 0) {
     this.setState({
       data: result.data,
-      count: 1
+      count: result.count
     });
     // }
   };
