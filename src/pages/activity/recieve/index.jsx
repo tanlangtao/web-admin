@@ -23,7 +23,7 @@ class AccountList extends Component {
         count: parseInt(res.count)
       });
     } else {
-      message.error("接口异常,未检索到数据");
+      message.error("未检索到数据");
     }
   };
   componentDidMount() {
@@ -164,7 +164,7 @@ class AccountList extends Component {
     if (res.status === 0) {
       this.setState({ data: res.data, count: parseInt(res.count) });
     } else {
-      message.error("接口异常,未检索到数据");
+      message.error("未检索到数据");
     }
   };
 }

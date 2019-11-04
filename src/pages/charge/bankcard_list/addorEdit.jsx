@@ -83,7 +83,7 @@ class AddDataForm extends Component {
           })(
             <Radio.Group>
               <Radio value={1}>收款卡</Radio>
-              <Radio value={0}>出款卡</Radio>
+              <Radio value={2}>出款卡</Radio>
             </Radio.Group>
           )}
         </Form.Item>
@@ -140,12 +140,12 @@ class AddDataForm extends Component {
           ? await saveBankCard(value)
           : await saveBankCard(value, id);
         if (res.status === 0) {
-          message.success("提交成功:" + res.msg);
+          message.success(res.msg || "提交成功");
           this.props.refreshPage();
           this.props.cancel();
           this.props.form.resetFields();
         } else {
-          message.error("出错了：" + res.msg);
+          message.error("出错了" + res.msg);
         }
       } else {
         message.error("提交失败");

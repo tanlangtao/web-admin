@@ -215,7 +215,7 @@ export default class User extends Component {
         count: result.count
       });
     } else {
-      message.error(result.msg + "接口异常,未检索到数据");
+      message.error(result.msg || "未检索到数据");
     }
   };
   changeNickName = () => {

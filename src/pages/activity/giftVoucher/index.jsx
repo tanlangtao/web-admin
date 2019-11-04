@@ -24,7 +24,7 @@ class AccountList extends Component {
         count: parseInt(res.count)
       });
     } else {
-      message.error("接口异常,未检索到数据");
+      message.error("未检索到数据");
     }
   };
   componentDidMount() {

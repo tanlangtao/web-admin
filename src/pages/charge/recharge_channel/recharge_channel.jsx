@@ -162,7 +162,7 @@ class Recharge_channel extends Component {
           childData: result.data
         });
       } else {
-        message.error(result.msg || "接口异常，获取失败");
+        message.error(result.msg || "未检索到数据");
         this.setState({
           childData: []
         });
