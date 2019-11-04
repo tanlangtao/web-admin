@@ -724,10 +724,11 @@ export const orderReview = (user_id, order_id) => {
     "POST"
   );
 };
-export const orderReviewEdit = (user_id, order_id, type) => {
+export const orderReviewEdit = reqData => {
   return ajax(
     BASE + "/order/orderReview",
-    { user_id, order_id, status: 8, review_type: 2, token, type },
+    // { user_id, order_id, status: 8, review_type: 2, token, type },
+    { token, ...reqData },
     "POST"
   );
 };

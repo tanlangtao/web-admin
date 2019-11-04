@@ -28,26 +28,13 @@ class Notice_list extends Component {
   }
   getUsers = async (page, limit) => {
     const result = await getList(page, limit);
-    if (result.status === 0) {
+    if (result.data) {
       this.setState({
         data: result.data,
-        count: result.count
+        count: parseInt(result.count)
       });
-    } else {
-      message.error(result.msg || "没有更多数据");
     }
   };
-  // onSearchData = async () => {
-  //   const res = await getChannelList(1, 20, this.state.inputParam);
-  //   if (res.status === 0) {
-  //     this.setState({
-  //       data: res.data,
-  //       count: parseInt(res.count)
-  //     });
-  //   } else {
-  //     message.error("网络问题");
-  //   }
-  // };
   addData = () => {
     this.setState({
       isAddDataShow: true

@@ -20,7 +20,7 @@ class GoldDetail extends Component {
     const res = !isBindInfo
       ? await userDetail(page, limit, id)
       : await bindInfo(page, limit, id);
-    if (res.status === 0) {
+    if (res.data) {
       this.setState({
         data: res.data,
         count: res.count

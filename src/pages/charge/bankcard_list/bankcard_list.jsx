@@ -19,13 +19,11 @@ class Bankcard_list extends Component {
   }
   getUsers = async (page, limit) => {
     const result = await bankList(page, limit);
-    if (result.status === 0) {
+    if (result.data) {
       this.setState({
         data: result.data,
-        count: result.count
+        count: parseInt(result.count)
       });
-    } else {
-      message.error("网络问题:" + result.msg);
     }
   };
   addData = () => {

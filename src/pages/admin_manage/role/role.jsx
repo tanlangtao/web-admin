@@ -55,13 +55,11 @@ class Role extends Component {
   ];
   getUsers = async (page, limit) => {
     const result = await getRoleList(page, limit);
-    if (result.status === 0) {
+    if (result.data) {
       this.setState({
         data: result.data,
-        count: result.count
+        count: parseInt(result.count)
       });
-    } else {
-      message.error("网络问题");
     }
   };
   addData = async () => {
@@ -89,14 +87,14 @@ class Role extends Component {
       <Card
         title={
           <span>
-            <LinkButton onClick={this.addData} size='default'>
+            <LinkButton onClick={this.addData} size="default">
               <Icon type="user-add" />
               添加账户
             </LinkButton>
           </span>
         }
         extra={
-          <LinkButton onClick={() => window.location.reload()} size='default'>
+          <LinkButton onClick={() => window.location.reload()} size="default">
             <Icon type="reload" />
           </LinkButton>
         }
@@ -108,22 +106,15 @@ class Role extends Component {
           columns={this.initColumns()}
           pagination={{
             defaultPageSize: this.state.pageSize,
-            showSizeChanger: true,
             showQuickJumper: true,
-            showTotal:(total, range) => `共${total}条`,
+            showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
               this.getUsers(page, pageSize);
-              this.setState({
-                pageSize: pageSize
-              });
-            },
-            onShowSizeChange: (current, size) => {
-              this.getUsers(current, size);
             }
           }}
-            // scroll={{ x: 1500, y: 550 }}
+          // scroll={{ x: 1500, y: 550 }}
         />
         <Modal
           title="添加角色"

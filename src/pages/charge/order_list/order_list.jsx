@@ -31,12 +31,7 @@ class Order_list extends Component {
   }
   getUsers = async (page, limit, reqData) => {
     const result = await reqOrder_list(page, limit, reqData);
-    if (result.status === 0) {
-      this.setState({
-        data: result.data,
-        count: parseInt(result.count)
-      });
-    } else {
+    if (result.data) {
       this.setState({
         data: result.data,
         count: parseInt(result.count)
@@ -221,8 +216,11 @@ class Order_list extends Component {
             <div>金额：{this.state.editMount}</div>
             <br />
             <div>
-              手动到账复审：<Button type="primary">通过</Button>{" "}
-              <Button type="primary" onClick={this.editRefused}>
+              手动到账复审：
+              <Button type="primary" onClick={() => this.orderReview(1)}>
+                通过
+              </Button>
+              <Button type="primary" onClick={() => this.orderReview(0)}>
                 拒绝
               </Button>
             </div>
@@ -271,7 +269,11 @@ class Order_list extends Component {
           case "11":
             word = "古都";
             break;
-          case ["10", "13", "14", "15", "16"]:
+          case "10":
+          case "13":
+          case "14":
+          case "15":
+          case "16":
             word = "聚鑫";
             break;
           default:
@@ -436,20 +438,20 @@ class Order_list extends Component {
     this.order_id = record.order_id;
     this.editType = record.type;
   };
-  editRefused = async () => {
-    const res = await orderReviewEdit(
-      this.user_id,
-      this.order_id,
-      this.editType
-    );
+  orderReview = async action => {
+    let reqData = {
+      user_id: this.user_id,
+      order_id: this.order_id,
+      type: this.editType,
+      status: action === 1 ? 9 : 8,
+      review_type: 2
+    };
+    const res = await orderReviewEdit(reqData);
     if (res.status === 0) {
-      message.success(res.msg);
-      this.setState({
-        isEditShow: false
-      });
-      this.getUsers(1, this.pageSize);
+      message.success(res.msg || "操作成功");
+      window.location.reload();
     } else {
-      message.error(res.msg);
+      message.error(res.msg || "操作失败");
     }
   };
 }
