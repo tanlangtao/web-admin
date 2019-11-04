@@ -19,13 +19,11 @@ class Bankcard_list extends Component {
   }
   getUsers = async (page, limit) => {
     const result = await bankList(page, limit);
-    if (result.status === 0) {
+    if (result.data) {
       this.setState({
         data: result.data,
-        count: result.count
+        count: parseInt(result.count)
       });
-    } else {
-      message.error("网络问题:" + result.msg);
     }
   };
   addData = () => {
@@ -106,7 +104,7 @@ class Bankcard_list extends Component {
           scroll={{ x: 1000, y: "60vh" }}
         />
         <Modal
-          title="添加角色"
+          title="添加"
           visible={this.state.isAddDataShow}
           // onOk={this.handleAddData}
           onCancel={() => {
@@ -125,7 +123,7 @@ class Bankcard_list extends Component {
         </Modal>
         {this.state.isEditDataShow && (
           <Modal
-            title="编辑用户"
+            title="编辑"
             visible={this.state.isEditDataShow}
             // onOk={this.handleAddData}
             onCancel={() => {

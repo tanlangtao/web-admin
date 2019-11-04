@@ -28,26 +28,13 @@ class Notice_list extends Component {
   }
   getUsers = async (page, limit) => {
     const result = await getList(page, limit);
-    if (result.status === 0) {
+    if (result.data) {
       this.setState({
         data: result.data,
-        count: result.count
+        count: parseInt(result.count)
       });
-    } else {
-      message.error("网络问题");
     }
   };
-  // onSearchData = async () => {
-  //   const res = await getChannelList(1, 20, this.state.inputParam);
-  //   if (res.status === 0) {
-  //     this.setState({
-  //       data: res.data,
-  //       count: parseInt(res.count)
-  //     });
-  //   } else {
-  //     message.error("网络问题");
-  //   }
-  // };
   addData = () => {
     this.setState({
       isAddDataShow: true
@@ -87,11 +74,13 @@ class Notice_list extends Component {
       <Card
         title={
           <span>
-            <LinkButton onClick={this.addData} size='default'>添加</LinkButton>
+            <LinkButton onClick={this.addData} size="default">
+              添加
+            </LinkButton>
           </span>
         }
         extra={
-          <LinkButton onClick={() => window.location.reload()} size='default'>
+          <LinkButton onClick={() => window.location.reload()} size="default">
             <Icon type="reload" />
           </LinkButton>
         }
@@ -106,7 +95,7 @@ class Notice_list extends Component {
             defaultPageSize: this.state.pageSize,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal:(total, range) => `共${total}条`,
+            showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
@@ -119,7 +108,7 @@ class Notice_list extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 2000 }}
+          scroll={{ x: 1500 }}
         />
         <Modal
           title="新增公告"
@@ -167,7 +156,8 @@ class Notice_list extends Component {
   initColumns = () => [
     {
       title: "标题",
-      dataIndex: "title"
+      dataIndex: "title",
+      width: 150
     },
     {
       title: "品牌",
@@ -188,16 +178,17 @@ class Notice_list extends Component {
     {
       title: "是否跑马灯",
       dataIndex: "is_slider",
-      render: (text, record) => <span>{text === "1" ? "是" : "否"}</span>
+      render: (text, record) => <span>{text == 1 ? "是" : "否"}</span>
     },
     {
       title: "公告内容",
       dataIndex: "words",
+      width: 200,
       render: (text, record) => (
         <Popover content={text} trigger="click" overlayStyle={{ width: "30%" }}>
           <div
             style={{
-              width: "100px",
+              width: "170px",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
               overflow: "hidden"
@@ -222,21 +213,25 @@ class Notice_list extends Component {
     {
       title: "开始时间",
       dataIndex: "start_time",
-      render: formateDate
+      render: formateDate,
+      width: 200
     },
     {
       title: "截止时间",
       dataIndex: "end_time",
-      render: formateDate
+      render: formateDate,
+      width: 200
     },
     {
       title: "创建时间",
       dataIndex: "create_time",
-      render: formateDate
+      render: formateDate,
+      width: 200
     },
     {
       title: "操作",
       dataIndex: "",
+      width: 150,
       render: (text, record, index) => (
         <span>
           <Button type="primary" onClick={() => this.edit(record)} size="small">

@@ -17,7 +17,7 @@ import LinkButton from "../link-button";
 // import memoryUtils from "../../utils/memoryUtils";
 // import storageUtils from "../../utils/storageUtils";
 import { getAuthCode, editPass } from "../../api";
-import QRCode from "qrcode.react";
+// import QRCode from "qrcode.react";
 import "./index.less";
 const { TabPane } = Tabs;
 /*
@@ -277,7 +277,13 @@ class Header extends Component {
     if (res.status === 0) {
       Modal.info({
         title: "扫码获取验证码",
-        content: <QRCode value={res.data.qrurl}></QRCode>,
+        okText:"关闭",
+        content: (
+          //  <QRCode value={res.data.qrurl}></QRCode>
+          <div>
+            <img src={res.data.qrurl} alt="验证码" />
+          </div>
+        ),
         width: 300
       });
     } else {

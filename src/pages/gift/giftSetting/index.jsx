@@ -17,7 +17,7 @@ class Channel extends Component {
     if (res.status === 0) {
       this.resData = res.data;
     } else {
-      message.error(res.msg);
+      message.info(res.msg);
     }
   };
   componentDidMount() {

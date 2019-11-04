@@ -381,7 +381,7 @@ export default class User extends Component {
           <Option value="game_nick">昵称</Option>
           <Option value="phone_number">手机号</Option>
           <Option value="role_name">账号</Option>
-          <Option value="proxy_nick">所属代理</Option>
+          <Option value="proxy_pid">所属代理</Option>
           <Option value="package_nick">所属品牌</Option>
           <Option value="regin_ip">注册IP</Option>
         </Select>
@@ -502,20 +502,22 @@ export default class User extends Component {
             />
           </Modal>
         )}
-        <Modal
-          title="重置密码"
-          visible={this.state.isResetPwdShow}
-          onOk={this.handleResetpwd}
-          onCancel={() => {
-            this.setState({ isResetPwdShow: false });
-          }}
-        >
-          <span>重置密码</span>
-          <Input
-            value={this.state.resetpwd}
-            onChange={e => this.setState({ resetpwd: e.target.value })}
-          />
-        </Modal>
+        {this.state.isResetPwdShow && (
+          <Modal
+            title="重置密码"
+            visible={this.state.isResetPwdShow}
+            onOk={this.handleResetpwd}
+            onCancel={() => {
+              this.setState({ isResetPwdShow: false });
+            }}
+          >
+            <span>重置密码</span>
+            <Input
+              value={this.state.resetpwd}
+              onChange={e => this.setState({ resetpwd: e.target.value })}
+            />
+          </Modal>
+        )}
       </Card>
     );
   }

@@ -20,7 +20,7 @@ class GoldDetail extends Component {
     const res = !isBindInfo
       ? await userDetail(page, limit, id)
       : await bindInfo(page, limit, id);
-    if (res.status === 0) {
+    if (res.data) {
       this.setState({
         data: res.data,
         count: res.count
@@ -31,7 +31,7 @@ class GoldDetail extends Component {
     this.getUsers(1, 20);
   }
   onSearchData = async (page, limit) => {
-    if (!this.startTime || !this.package_id) {
+    if (!this.startTime || !this.endTime) {
       message.error("请选择有效的时间日期");
       return;
     }
@@ -40,12 +40,12 @@ class GoldDetail extends Component {
       end: this.endTime,
       funds_type: 0
     };
-    let id = this.props.GoldDetailRecord.id;
+    let id = this.props.recordID;
     const res = await userDetail(page, limit, id, reqData);
     if (res.status === 0) {
       this.setState({ data: res.data, count: res.count });
     } else {
-      message.info("没有更多数据");
+      message.info(res.msg || "没有数据");
     }
   };
   render() {

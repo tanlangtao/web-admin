@@ -44,10 +44,12 @@ class Daiti extends Component {
   }
   getUsers = async (page, pageSize, reqData) => {
     const result = await withDraw(page, pageSize, reqData);
-    this.setState({
-      data: result.data,
-      count: parseInt(result.count)
-    });
+    if (result.data) {
+      this.setState({
+        data: result.data,
+        count: parseInt(result.count)
+      });
+    }
   };
   onSearchData = (page, limit) => {
     //处理要发送的数据
@@ -66,7 +68,7 @@ class Daiti extends Component {
     downloadWithdrawList(this.state);
   };
   componentDidMount() {
-    this.getUsers(1, 20, { flag: 1 });
+    this.getUsers(1, 20, { flag: 1, type: 3 });
   }
   render() {
     return (
@@ -322,7 +324,10 @@ class Daiti extends Component {
       width: 100,
       render: record => (
         <span>
-          <LinkButton type="default" onClick={() => this.getDetail(record, "risk")}>
+          <LinkButton
+            type="default"
+            onClick={() => this.getDetail(record, "risk")}
+          >
             风控
           </LinkButton>
         </span>
@@ -334,7 +339,10 @@ class Daiti extends Component {
       width: 100,
       render: record => (
         <span>
-          <LinkButton onClick={() => this.getDetail(record, "check")} type="default">
+          <LinkButton
+            onClick={() => this.getDetail(record, "check")}
+            type="default"
+          >
             查看
           </LinkButton>
         </span>
@@ -352,7 +360,10 @@ class Daiti extends Component {
           >
             <LinkButton type="default">用户备注</LinkButton>
           </Popover>
-          <LinkButton onClick={() => this.getDetail(record, "operatorRemark")} type="default">
+          <LinkButton
+            onClick={() => this.getDetail(record, "operatorRemark")}
+            type="default"
+          >
             运营备注
           </LinkButton>
         </span>

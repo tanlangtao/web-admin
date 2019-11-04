@@ -96,13 +96,11 @@ class Admin_manage_list extends Component {
 
   getUsers = async (page, limit) => {
     const result = await reqAdminList(page, limit);
-    if (result.status === 0) {
+    if (result.data) {
       this.setState({
         data: result.data,
-        count: result.count
+        count: parseInt(result.count)
       });
-    } else {
-      message.error("网络问题");
     }
   };
   handleChange(event) {
@@ -113,7 +111,7 @@ class Admin_manage_list extends Component {
     // if (result.status === 0) {
     this.setState({
       data: result.data,
-      count: 1
+      count: result.count
     });
     // }
   };
@@ -199,16 +197,12 @@ class Admin_manage_list extends Component {
           size="small"
           pagination={{
             defaultPageSize: this.state.pageSize,
-            showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
               this.getUsers(page, pageSize);
-            },
-            onShowSizeChange: (current, size) => {
-              this.getUsers(current, size);
             }
           }}
         />
