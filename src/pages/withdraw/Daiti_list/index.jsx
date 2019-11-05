@@ -50,6 +50,12 @@ class Daiti extends Component {
         count: parseInt(result.count)
       });
     }
+    if (result.status === -1) {
+      this.setState({
+        data: [],
+        count: 0
+      });
+    }
   };
   onSearchData = (page, limit) => {
     //处理要发送的数据

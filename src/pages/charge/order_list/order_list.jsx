@@ -37,6 +37,12 @@ class Order_list extends Component {
         count: parseInt(result.count)
       });
     }
+    if (result.status === -1) {
+      this.setState({
+        data: [],
+        count: 0
+      });
+    }
   };
   PlayerLossOrderSearch = async () => {
     this.setState({ isQueryShow: true });
@@ -77,6 +83,7 @@ class Order_list extends Component {
               >
                 <Select.Option value="order_id">订单id</Select.Option>
                 <Select.Option value="user_id">user_id</Select.Option>
+                <Select.Option value="package_nick">所属品牌</Select.Option>
                 <Select.Option value="1">创建时间</Select.Option>
                 <Select.Option value="2">到账时间</Select.Option>
               </Select>

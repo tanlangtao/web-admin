@@ -44,10 +44,16 @@ class Withdraw_list extends Component {
   }
   getUsers = async (page, pageSize, reqData) => {
     const result = await withDraw(page, pageSize, reqData);
-    if (result.status === 0) {
+    if (result.data) {
       this.setState({
         data: result.data,
         count: parseInt(result.count)
+      });
+    }
+    if (result.status === -1) {
+      this.setState({
+        data: [],
+        count: 0
       });
     }
   };
@@ -65,7 +71,12 @@ class Withdraw_list extends Component {
     this.getUsers(page, limit, reqData);
   };
   download = () => {
-    downloadWithdrawList(this.state);
+    let data = {
+      ...this.reqData,
+      inputValue: this.inputValue,
+      inputKey: this.inputKey
+    };
+    downloadWithdrawList(data);
   };
   componentDidMount() {
     this.getUsers(1, 20, { flag: 3 });
@@ -132,12 +143,18 @@ class Withdraw_list extends Component {
           <span>
             <LinkButton
               style={{ float: "right" }}
-              onClick={() => {
-                window.location.reload();
-              }}
+              onClick={() => window.location.reload()}
               icon="reload"
               size="default"
             />
+            <br />
+            <br />
+            <LinkButton
+              size="default"
+              style={{ float: "right" }}
+              onClick={this.download}
+              icon="download"
+            ></LinkButton>
           </span>
         }
       >

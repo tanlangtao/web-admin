@@ -45,16 +45,32 @@ class Recharge_order extends Component {
       this.inputKey,
       this.inputValue
     );
-    this.setState({
-      data: result.data,
-      count: parseInt(result.count)
-    });
+    if (result.data) {
+      this.setState({
+        data: result.data,
+        count: parseInt(result.count)
+      });
+    }
+    if (result.status === -1) {
+      this.setState({
+        data: [],
+        count: 0
+      });
+    }
   };
   handleChange(event) {
     this.setState({ inputParam: event.target.value });
   }
   download = () => {
-    downloadList(this.state);
+    let data = {
+      start_time: this.state.start_time,
+      end_time: this.state.end_time,
+      order_status: this.order_status,
+      type: "14",
+      inputParam: this.inputValue,
+      paramKey: this.inputKey
+    };
+    downloadList(data);
   };
   componentDidMount() {
     this.getUsers(1, 20);
@@ -119,11 +135,20 @@ class Recharge_order extends Component {
         }
         extra={
           <span>
-            <Button
+            <LinkButton
               style={{ float: "right" }}
               onClick={() => window.location.reload()}
               icon="reload"
+              size="default"
             />
+            <br />
+            <br />
+            <LinkButton
+              size="default"
+              style={{ float: "right" }}
+              onClick={this.download}
+              icon="download"
+            ></LinkButton>
           </span>
         }
       >

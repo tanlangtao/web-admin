@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { Card, Table, Modal, Icon, Input, Button, message } from "antd";
-import { getProxyUserList, changeProxyUserProxyPid } from "../../../api/index";
+import {
+  getProxyUserList,
+  changeProxyUserProxyPid,
+  getProxyUser
+} from "../../../api/index";
 import NextLevel from "./nextlevel";
 import BalanceChanged from "./BalanceChanged";
 import LinkButton from "../../../components/link-button";
@@ -166,6 +170,17 @@ class ProxySetting extends Component {
           </Button>
         </span>
       )
+    },
+    {
+      title: "实时余额",
+      dataIndex: "",
+      render: (text, record, index) => (
+        <span>
+          <Button onClick={() => this.checkBalance(record)} size="small">
+            查看
+          </Button>
+        </span>
+      )
     }
   ];
   nextLevel = record => {
@@ -202,6 +217,24 @@ class ProxySetting extends Component {
     this.setState({
       isChangeBalanceShow: true
     });
+  };
+  checkBalance = async record => {
+    let reqData = {
+      page: 1,
+      limit: 10,
+      id: record.id
+    };
+    const res = await getProxyUser(reqData);
+    if (res.status === 0) {
+      Modal.success({
+        title: "实时余额",
+        content: `代理${record.id}实时余额是 : ${
+          res.data ? res.data[0].balance : "0.00"
+        }`
+      });
+    } else {
+      message.info(res.msg || "操作失败");
+    }
   };
 }
 

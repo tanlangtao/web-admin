@@ -35,7 +35,7 @@ class Channel_list extends Component {
         count: parseInt(res.count)
       });
     } else {
-      message.error("网络问题");
+      message.error(res.msg || "操作失败");
     }
   };
   addData = () => {

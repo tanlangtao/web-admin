@@ -507,6 +507,16 @@ export const proxy_changeGold = data => {
     "POST"
   );
 };
+export const getProxyUser = data => {
+  return ajax(
+    BASE + "/user/getProxyUser",
+    {
+      ...data,
+      token
+    },
+    "POST"
+  );
+};
 //消息中心-任务列表
 export const tasksList = (page, limit, value) => {
   return ajax(
@@ -768,11 +778,14 @@ export const downloadList = searchData => {
       case "order_id":
         url = url + "&order_id=" + inputParam;
         break;
-      case "create_time":
+      case "1":
         url = url + "&time_type=1";
         break;
-      case "arrival_time":
+      case "2":
         url = url + "&time_type=2";
+        break;
+      case "package_nick":
+        url = url + "&package_nick=" + inputParam;
         break;
       default:
         break;
@@ -969,16 +982,16 @@ export const downloadWithdrawList = searchData => {
     end_time,
     order_status,
     type,
-    inputParam,
-    filed
+    inputValue,
+    inputKey
   } = searchData;
   let params =
     "token=" +
     token +
     "&filed=" +
-    filed +
+    inputKey +
     "&keyword=" +
-    inputParam +
+    inputValue +
     "&start_time=" +
     start_time +
     "&end_time=" +
@@ -987,28 +1000,29 @@ export const downloadWithdrawList = searchData => {
     order_status +
     "&type=" +
     type;
-  let url = BASE + "/order/withDraw/?export=2&flag=2&" + params;
-  if (filed) {
-    switch (filed) {
+  let url = BASE + "/order/withDraw/?export=2&flag=3&" + params;
+  if (inputKey) {
+    switch (inputKey) {
       case "user_id":
-        url = url + "&user_id=" + inputParam;
+        url = url + "&user_id=" + inputValue;
         break;
       case "order_id":
-        url = url + "&order_id=" + inputParam;
+        url = url + "&order_id=" + inputValue;
         break;
-      case "create_time":
+      case "1":
         url = url + "&time_type=1";
         break;
-      case "arrival_time":
+      case "2":
         url = url + "&time_type=2";
         break;
       case "replace_id":
-        url = url + "&replace_id=" + inputParam;
+        url = url + "&replace_id=" + inputValue;
         break;
       default:
         break;
     }
   }
+  console.log(url);
   window.open(url);
 };
 export const withDrawRemark = (id, temarks, remark_type) => {
