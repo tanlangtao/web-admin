@@ -85,7 +85,7 @@ class EditForm extends React.Component {
               disabled={submitRadio}
               checked={submitRadioChecked}
             >
-              提交第三方
+              提交人工代提
             </Radio>
             <Radio
               value={2}
