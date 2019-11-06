@@ -61,7 +61,7 @@ export default class User extends Component {
       dataIndex: "game_nick",
       key: "game_nick",
       fixed: "left",
-      width: 100,
+      width: 120,
       onCell: (record, rowIndex) => {
         return {
           onClick: event => {
