@@ -333,7 +333,7 @@ export default class User extends Component {
             重置密码
           </LinkButton>
           <Popconfirm
-            title="确定要设置为客户账号吗？"
+            title="确定要设置为客服账号吗？"
             onConfirm={() => this.setCustomerAccount(record)}
             okText="确定"
             cancelText="取消"

@@ -8,6 +8,7 @@ import {
 import NextLevel from "./nextlevel";
 import BalanceChanged from "./BalanceChanged";
 import LinkButton from "../../../components/link-button";
+import { reverseNumber } from "../../../utils/commonFuntion";
 
 class ProxySetting extends Component {
   constructor(props) {
@@ -134,6 +135,9 @@ class ProxySetting extends Component {
     {
       title: "代理余额[点击调整]",
       dataIndex: "balance",
+      render: text => {
+        return <span>{reverseNumber(text)}</span>;
+      },
       onCell: (record, rowIndex) => {
         return {
           onClick: event => {
