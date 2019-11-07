@@ -208,7 +208,7 @@ export const editUser = (formValue, id) => {
     source: formValue.proxy ? formValue.proxy : [],
     ...obj,
     use_money: formValue.loadGold,
-    pass: formValue.password ? formValue.password : [],
+    pass: formValue.editPassword ? formValue.editPassword : [],
     token
   };
   return ajax(BASE + "/acl/editUser", newobj, "POST");
