@@ -1,9 +1,14 @@
 import React, { Component } from "react";
-import { Card, Table, Modal, Input, message } from "antd";
-import { getProxyUserList, changeProxyUserProxyPid } from "../../../api/index";
+import { Card, Table, Modal, Input, message, Button } from "antd";
+import {
+  getProxyUserList,
+  changeProxyUserProxyPid,
+  getProxyUser
+} from "../../../api/index";
 import LinkButton from "../../../components/link-button";
 import Myself from "./nextlevel.jsx";
 import BalanceChanged from "./BalanceChanged";
+import { reverseNumber,toNonExponential } from "../../../utils/commonFuntion";
 
 class NextLevel extends Component {
   constructor(props) {
@@ -94,6 +99,10 @@ class NextLevel extends Component {
     {
       title: "代理余额[点击调整]",
       dataIndex: "balance",
+      render: text => {
+        console.log("格式化之前的真值:", toNonExponential(text));
+        return <span>{reverseNumber(text)}</span>;
+      },
       onCell: (record, rowIndex) => {
         return {
           onClick: event => {
@@ -130,6 +139,17 @@ class NextLevel extends Component {
           </LinkButton>
         </span>
       )
+    },
+    {
+      title: "实时余额",
+      dataIndex: "",
+      render: (text, record, index) => (
+        <span>
+          <Button onClick={() => this.checkBalance(record)} size="small">
+            查看
+          </Button>
+        </span>
+      )
     }
   ];
   nextLevel = record => {
@@ -152,9 +172,10 @@ class NextLevel extends Component {
           proxy_user_id: this.state.new_proxy_user_id
         });
         if (res.status === 0) {
-          message.success("操作成功" + res.msg);
+          message.success(res.msg || "操作成功");
+          this.onSearchData(1, 20);
         } else {
-          message.error("操作失败" + res.msg);
+          message.error(res.msg || "操作失败");
         }
       }
     });
@@ -165,6 +186,24 @@ class NextLevel extends Component {
     this.setState({
       isChangeBalanceShow: true
     });
+  };
+  checkBalance = async record => {
+    let reqData = {
+      page: 1,
+      limit: 10,
+      id: record.id
+    };
+    const res = await getProxyUser(reqData);
+    if (res.status === 0) {
+      Modal.success({
+        title: "实时余额",
+        content: `代理${record.id}实时余额是 : ${
+          res.data ? res.data[0].balance : "0.00"
+        }`
+      });
+    } else {
+      message.info(res.msg || "操作失败");
+    }
   };
 }
 

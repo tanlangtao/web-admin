@@ -50,6 +50,12 @@ class Daiti extends Component {
         count: parseInt(result.count)
       });
     }
+    if (result.status === -1) {
+      this.setState({
+        data: [],
+        count: 0
+      });
+    }
   };
   onSearchData = (page, limit) => {
     //处理要发送的数据
@@ -155,7 +161,7 @@ class Daiti extends Component {
               this.onSearchData(current, size);
             }
           }}
-          scroll={{ x: 2600, y: "60vh" }}
+          scroll={{ x: 2600 }}
         />
         <Modal
           title={
@@ -202,49 +208,41 @@ class Daiti extends Component {
     {
       title: "订单ID",
       dataIndex: "order_id",
-      width: 300
+      width: 350
     },
     {
       title: "user_id",
-      dataIndex: "user_id",
-      width: 100
+      dataIndex: "user_id"
     },
     {
       title: "昵称",
-      dataIndex: "user_name",
-      width: 150
+      dataIndex: "user_name"
     },
     {
       title: "所属品牌",
-      dataIndex: "package_nick",
-      width: 100
+      dataIndex: "package_nick"
     },
     {
       title: "所属代理",
-      dataIndex: "proxy_user_id",
-      width: 100
+      dataIndex: "proxy_user_id"
     },
     {
       title: "下单金额",
       dataIndex: "amount",
-      width: 100,
       sorter: (a, b) => a.amount - b.amount
     },
     {
       title: "实际费率",
-      dataIndex: "platform_rate",
-      width: 100
+      dataIndex: "platform_rate"
     },
     {
       title: "到账金额",
       dataIndex: "arrival_amount",
-      width: 100,
       sorter: (a, b) => a.arrival_amount - b.arrival_amount
     },
     {
       title: "兑换方式",
-      dataIndex: "order_type",
-      width: 100
+      dataIndex: "order_type"
     },
     {
       title: "兑换账号",
@@ -253,13 +251,11 @@ class Daiti extends Component {
     },
     {
       title: "账号名称",
-      dataIndex: "pay_name",
-      width: 100
+      dataIndex: "pay_name"
     },
     {
       title: "状态",
       dataIndex: "status",
-      width: 100,
       render: (text, record, index) => {
         let word;
         switch (text) {
@@ -288,7 +284,6 @@ class Daiti extends Component {
     {
       title: "操作",
       dataIndex: "",
-      width: 100,
       render: record => (
         <span>
           <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>
@@ -297,8 +292,7 @@ class Daiti extends Component {
     },
     {
       title: "代提ID",
-      dataIndex: "replace_id",
-      width: 100
+      dataIndex: "replace_id"
     },
     {
       title: "创建时间",
@@ -321,7 +315,6 @@ class Daiti extends Component {
     {
       title: "风控",
       dataIndex: "",
-      width: 100,
       render: record => (
         <span>
           <LinkButton
@@ -336,7 +329,6 @@ class Daiti extends Component {
     {
       title: "审核详情",
       dataIndex: "",
-      width: 100,
       render: record => (
         <span>
           <LinkButton
@@ -351,6 +343,7 @@ class Daiti extends Component {
     {
       title: "备注内容",
       dataIndex: "",
+      width: 200,
       render: record => (
         <span>
           <Popover

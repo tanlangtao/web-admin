@@ -61,7 +61,7 @@ export default class User extends Component {
       dataIndex: "game_nick",
       key: "game_nick",
       fixed: "left",
-      width: 100,
+      width: 120,
       onCell: (record, rowIndex) => {
         return {
           onClick: event => {
@@ -333,7 +333,7 @@ export default class User extends Component {
             重置密码
           </LinkButton>
           <Popconfirm
-            title="确定要设置为客户账号吗？"
+            title="确定要设置为客服账号吗？"
             onConfirm={() => this.setCustomerAccount(record)}
             okText="确定"
             cancelText="取消"

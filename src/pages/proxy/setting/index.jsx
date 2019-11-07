@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import { Card, Table, Modal, Icon, Input, Button, message } from "antd";
-import { getProxyUserList, changeProxyUserProxyPid } from "../../../api/index";
+import {
+  getProxyUserList,
+  changeProxyUserProxyPid,
+  getProxyUser
+} from "../../../api/index";
 import NextLevel from "./nextlevel";
 import BalanceChanged from "./BalanceChanged";
 import LinkButton from "../../../components/link-button";
+import { reverseNumber, toNonExponential } from "../../../utils/commonFuntion";
 
 class ProxySetting extends Component {
   constructor(props) {
@@ -130,6 +135,10 @@ class ProxySetting extends Component {
     {
       title: "代理余额[点击调整]",
       dataIndex: "balance",
+      render: text => {
+        console.log("格式化之前的真值:", toNonExponential(text));
+        return <span>{reverseNumber(text)}</span>;
+      },
       onCell: (record, rowIndex) => {
         return {
           onClick: event => {
@@ -163,6 +172,17 @@ class ProxySetting extends Component {
             onClick={() => this.changePid(record)}
           >
             转移
+          </Button>
+        </span>
+      )
+    },
+    {
+      title: "实时余额",
+      dataIndex: "",
+      render: (text, record, index) => (
+        <span>
+          <Button onClick={() => this.checkBalance(record)} size="small">
+            查看
           </Button>
         </span>
       )
@@ -202,6 +222,24 @@ class ProxySetting extends Component {
     this.setState({
       isChangeBalanceShow: true
     });
+  };
+  checkBalance = async record => {
+    let reqData = {
+      page: 1,
+      limit: 10,
+      id: record.id
+    };
+    const res = await getProxyUser(reqData);
+    if (res.status === 0) {
+      Modal.success({
+        title: "实时余额",
+        content: `代理${record.id}实时余额是 : ${
+          res.data ? res.data[0].balance : "0.00"
+        }`
+      });
+    } else {
+      message.info(res.msg || "操作失败");
+    }
   };
 }
 

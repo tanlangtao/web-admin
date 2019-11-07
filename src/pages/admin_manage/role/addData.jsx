@@ -64,6 +64,7 @@ class AddDataForm extends Component {
           <br />
           <Tree
             checkable
+            checkStrictly
             defaultCheckedKeys={isEdit ? editDataRecord.rules.split(",") : []}
             expandedKeys={this.state.expandedKeys}
             selectedKeys={this.state.selectedKeys}
@@ -81,7 +82,7 @@ class AddDataForm extends Component {
           })(
             <Input.TextArea
               placeholder="请输入文字"
-              autosize={{ minRows: 2, maxRows: 6 }}
+              autoSize={{ minRows: 2, maxRows: 6 }}
             />
           )}
         </Form.Item>
@@ -100,7 +101,9 @@ class AddDataForm extends Component {
   getTreeNodes = menuList => {
     return menuList.map(item => {
       if (!item.children) {
-        return <TreeNode key={item.id} title={item.title.replace(/&nbsp;/g, "")} />;
+        return (
+          <TreeNode key={item.id} title={item.title.replace(/&nbsp;/g, "")} />
+        );
       } else {
         return (
           <TreeNode key={item.id} title={item.title.replace(/&nbsp;/g, "")}>
@@ -124,9 +127,9 @@ class AddDataForm extends Component {
     }
   };
   onCheck = (checkedKeys, info) => {
-    // console.log("onCheck", checkedKeys, info);
+    console.log(checkedKeys);
     this.setState({
-      checkedKeys: checkedKeys.map(Number)
+      checkedKeys: checkedKeys.checked.map(Number)
     });
   };
   onExpand = (expandedKeys, info) => {

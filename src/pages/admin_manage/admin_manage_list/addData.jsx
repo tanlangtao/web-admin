@@ -242,23 +242,6 @@ class AddDataForm extends Component {
           style={!isEdit ? { display: "none" } : {}}
         >
           {getFieldDecorator("editPassword", {
-            rules: [
-              {
-                whitespace: true
-              },
-              {
-                validator: (rule, value, callback) => {
-                  if (!value) {
-                    callback(); //如果还没填写，则不进行一致性验证
-                  }
-                  if (value === getFieldValue("password")) {
-                    callback();
-                  } else {
-                    callback("两次密码不一致");
-                  }
-                }
-              }
-            ]
           })(
             <Input
               type="password"
