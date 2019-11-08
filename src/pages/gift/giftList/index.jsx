@@ -143,7 +143,7 @@ class Withdraw_list extends Component {
               this.onSearchData(current, size);
             }
           }}
-          scroll={{ x: 2200, y: "60vh" }}
+          scroll={{ x: 2200 }}
         />
         <Modal
           title={

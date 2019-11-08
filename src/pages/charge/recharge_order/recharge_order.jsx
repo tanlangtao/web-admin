@@ -175,7 +175,7 @@ class Recharge_order extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1850, y: "60vh" }}
+          scroll={{ x: 1850 }}
         />
       </Card>
     );

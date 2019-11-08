@@ -338,7 +338,7 @@ export default class User extends Component {
             okText="确定"
             cancelText="取消"
           >
-            <LinkButton size="small">设置客户账号</LinkButton>
+            <LinkButton size="small">设置客服账号</LinkButton>
           </Popconfirm>
         </div>
       )
