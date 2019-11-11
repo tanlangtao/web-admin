@@ -6,6 +6,8 @@ REACT_APP_HOST=  ? (映射Admin服务地址)
 
 dev环境：REACT_APP_HOST=http://operation.0717996.com/admin
 测试环境：REACT_APP_HOST=http://react_web.539316.com/admin
+http://devadmin.539316.com/admin
+http://admin_web.539316.com/admin
 灰度环境：REACT_APP_HOST=http://preweb.539316.com/admin
 正式环境：REACT_APP_HOST=http://prdweb.539316.com
 

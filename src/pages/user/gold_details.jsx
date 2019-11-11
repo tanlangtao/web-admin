@@ -31,10 +31,7 @@ class GoldDetail extends Component {
     this.getUsers(1, 20);
   }
   onSearchData = async (page, limit) => {
-    if (!this.startTime || !this.endTime) {
-      message.error("请选择有效的时间日期");
-      return;
-    }
+    this.isOnSearch = true;
     let reqData = {
       start: this.startTime,
       end: this.endTime,
@@ -87,13 +84,11 @@ class GoldDetail extends Component {
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
-              this.onSearchData(page, pageSize);
-            },
-            onShowSizeChange: (current, size) => {
-              this.setState({
-                pageSize: size
-              });
-              this.onSearchData(current, size);
+              if (this.isOnSearch && this.startTime) {
+                this.onSearchData(page, pageSize);
+              } else {
+                this.getUsers(page, pageSize);
+              }
             }
           }}
         />
