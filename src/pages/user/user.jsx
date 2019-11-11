@@ -215,6 +215,10 @@ export default class User extends Component {
         count: result.count
       });
     } else {
+      this.setState({
+        data: [],
+        count: 0
+      });
       message.error(result.msg || "未检索到数据");
     }
   };
@@ -338,7 +342,7 @@ export default class User extends Component {
             okText="确定"
             cancelText="取消"
           >
-            <LinkButton size="small">设置客户账号</LinkButton>
+            <LinkButton size="small">设置客服账号</LinkButton>
           </Popconfirm>
         </div>
       )
@@ -456,7 +460,7 @@ export default class User extends Component {
         )}
         {this.state.isGoldShow && (
           <Modal
-            title="修改金额"
+            title={`[用户user_id:${this.goldRecord.id}]资金变动`}
             visible={this.state.isGoldShow}
             onCancel={() => {
               this.setState({ isGoldShow: false });
@@ -488,7 +492,11 @@ export default class User extends Component {
         )}
         {this.state.isGoldDetailShow && (
           <Modal
-            title={this.isBindInfo ? "查看绑定信息" : "资金明细"}
+            title={
+              this.isBindInfo
+                ? "查看绑定信息"
+                : `[用户user_id:${this.recordID}]资金明细`
+            }
             visible={this.state.isGoldDetailShow}
             onCancel={() => {
               this.setState({ isGoldDetailShow: false });

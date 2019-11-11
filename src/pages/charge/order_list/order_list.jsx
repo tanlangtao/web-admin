@@ -8,6 +8,7 @@ import {
 } from "../../../api/index";
 import LinkButton from "../../../components/link-button";
 import MyDatePicker from "../../../components/MyDatePicker";
+import { toDecimal } from "../../../utils/commonFuntion";
 import Diaodan from "./editData";
 
 class Order_list extends Component {
@@ -335,8 +336,7 @@ class Order_list extends Component {
       dataIndex: "amount",
       sorter: (a, b) => a.amount - b.amount,
       render: text => {
-        text = parseInt(text).toFixed(2);
-        return <span>{text}</span>;
+        return <span>{toDecimal(text)}</span>;
       }
     },
     {
@@ -344,8 +344,7 @@ class Order_list extends Component {
       dataIndex: "arrival_amount",
       sorter: (a, b) => a.arrival_amount - b.arrival_amount,
       render: text => {
-        text = parseInt(text).toFixed(2);
-        return <span>{text}</span>;
+        return <span>{toDecimal(text)}</span>;
       }
     },
     {
