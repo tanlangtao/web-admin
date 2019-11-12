@@ -8,7 +8,7 @@ import {
 import LinkButton from "../../../components/link-button";
 import Myself from "./nextlevel.jsx";
 import BalanceChanged from "./BalanceChanged";
-import { reverseNumber,toNonExponential } from "../../../utils/commonFuntion";
+import { reverseNumber, toNonExponential } from "../../../utils/commonFuntion";
 
 class NextLevel extends Component {
   constructor(props) {
@@ -51,20 +51,22 @@ class NextLevel extends Component {
             }
           }}
         />
-        <Modal
-          title={`[ID:${this.pid}]直属下级列表`}
-          visible={this.state.isAddDataShow}
-          style={{ top: this.props.topDistance + 40 }}
-          onCancel={() => {
-            this.setState({ isAddDataShow: false });
-          }}
-          footer={null}
-          mask={false}
-          maskClosable={false}
-          width="60%"
-        >
-          <Myself pid={this.pid} topDistance={this.props.topDistance + 40} />
-        </Modal>
+        {this.state.isAddDataShow && (
+          <Modal
+            title={`[ID:${this.pid}]直属下级列表`}
+            visible={this.state.isAddDataShow}
+            style={{ top: this.props.topDistance + 40 }}
+            onCancel={() => {
+              this.setState({ isAddDataShow: false });
+            }}
+            footer={null}
+            mask={false}
+            maskClosable={false}
+            width="60%"
+          >
+            <Myself pid={this.pid} topDistance={this.props.topDistance + 40} />
+          </Modal>
+        )}
         <Modal
           title={`[代理:${this.proxyID}]资金变动`}
           visible={this.state.isChangeBalanceShow}

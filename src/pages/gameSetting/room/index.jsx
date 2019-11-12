@@ -12,7 +12,7 @@ import {
   Form
 } from "antd";
 import { ruleList, addRule, ruleDel } from "../../../api/index";
-import LinkButton from '../../../components/link-button';
+import LinkButton from "../../../components/link-button";
 import WrappedEditForm from "./edit";
 
 class Rule extends Component {
@@ -137,23 +137,25 @@ class Rule extends Component {
             }
           }}
         />
-        <Modal
-          title="编辑"
-          visible={this.state.isEditFormShow}
-          onCancel={() => {
-            this.setState({ isEditFormShow: false });
-          }}
-          footer={null}
-        >
-          <WrappedEditForm
-            finished={() => {
-              this.getInitialData();
+        {this.state.isEditFormShow && (
+          <Modal
+            title="编辑"
+            visible={this.state.isEditFormShow}
+            onCancel={() => {
               this.setState({ isEditFormShow: false });
             }}
-            packageNode={packageNode}
-            data={this.editDataRecord}
-          />
-        </Modal>
+            footer={null}
+          >
+            <WrappedEditForm
+              finished={() => {
+                this.getInitialData();
+                this.setState({ isEditFormShow: false });
+              }}
+              packageNode={packageNode}
+              data={this.editDataRecord}
+            />
+          </Modal>
+        )}
       </Card>
     );
   }
