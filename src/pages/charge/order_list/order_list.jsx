@@ -209,31 +209,34 @@ class Order_list extends Component {
         >
           <Diaodan />
         </Modal>
-        <Modal
-          title="编辑"
-          visible={this.state.isEditShow}
-          onCancel={() => {
-            this.setState({ isEditShow: false });
-          }}
-          footer={null}
-          width="50%"
-        >
-          <div>
-            <div>用户ID：{this.state.editUser_id}</div>
-            <br />
-            <div>金额：{this.state.editMount}</div>
-            <br />
+        {this.state.isEditShow && (
+          <Modal
+            title="编辑"
+            visible={this.state.isEditShow}
+            onCancel={() => {
+              this.setState({ isEditShow: false });
+            }}
+            footer={null}
+            width="50%"
+          >
             <div>
-              手动到账复审：
-              <Button type="primary" onClick={() => this.orderReview(1)}>
-                通过
-              </Button>
-              <Button type="primary" onClick={() => this.orderReview(0)}>
-                拒绝
-              </Button>
+              <div>用户ID：{this.state.editUser_id}</div>
+              <br />
+              <div>金额：{this.state.editMount}</div>
+              <br />
+              <div>
+                手动到账复审：
+                <Button type="primary" onClick={() => this.orderReview(1)}>
+                  通过
+                </Button>
+                &nbsp;&nbsp;&nbsp;
+                <Button type="primary" onClick={() => this.orderReview(0)}>
+                  拒绝
+                </Button>
+              </div>
             </div>
-          </div>
-        </Modal>
+          </Modal>
+        )}
       </Card>
     );
   }

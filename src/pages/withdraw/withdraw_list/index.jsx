@@ -217,7 +217,7 @@ class Withdraw_list extends Component {
               editData={this.editData}
               onclose={() => {
                 this.setState({ isEditShow: false });
-                this.onSearchData();
+                this.onSearchData(1, 20);
                 // window.location.reload();
               }}
             />

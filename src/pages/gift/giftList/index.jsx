@@ -145,26 +145,28 @@ class Withdraw_list extends Component {
           }}
           scroll={{ x: 2200 }}
         />
-        <Modal
-          title={
-            this.action === "check"
-              ? "审核信息"
-              : this.action === "risk"
-              ? "资金明细"
-              : "运营备注"
-          }
-          visible={this.state.isDetailShow}
-          onCancel={() => {
-            this.setState({ isDetailShow: false });
-          }}
-          footer={null}
-          width="70%"
-        >
-          <WrappedComponent
-            detailRecord={this.detailRecord}
-            action={this.action}
-          />
-        </Modal>
+        {this.state.isDetailShow && (
+          <Modal
+            title={
+              this.action === "check"
+                ? "审核信息"
+                : this.action === "risk"
+                ? "资金明细"
+                : "运营备注"
+            }
+            visible={this.state.isDetailShow}
+            onCancel={() => {
+              this.setState({ isDetailShow: false });
+            }}
+            footer={null}
+            width="70%"
+          >
+            <WrappedComponent
+              detailRecord={this.detailRecord}
+              action={this.action}
+            />
+          </Modal>
+        )}
         {this.state.isEditFormShow && (
           <Modal
             title="编辑"
