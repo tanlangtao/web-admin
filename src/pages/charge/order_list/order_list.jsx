@@ -229,6 +229,7 @@ class Order_list extends Component {
                 <Button type="primary" onClick={() => this.orderReview(1)}>
                   通过
                 </Button>
+                &nbsp;&nbsp;&nbsp;
                 <Button type="primary" onClick={() => this.orderReview(0)}>
                   拒绝
                 </Button>
