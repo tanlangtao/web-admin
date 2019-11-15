@@ -67,13 +67,17 @@ class Channel extends Component {
           <Divider></Divider>
           <Form.Item label="提款银行卡">
             {getFieldDecorator("bankcard[is_close]", {
-              initialValue: data.length !== 0 && data.bankcard.is_close === 1 ? true : false,
+              initialValue:
+                data.length !== 0 && data.bankcard.is_close === 1
+                  ? true
+                  : false,
               valuePropName: "checked"
             })(<Switch checkedChildren="ON" unCheckedChildren="OFF" />)}
           </Form.Item>
           <Form.Item label="古都银行卡状态">
             {getFieldDecorator("bankcard[channel][2][is_close]", {
-              initialValue: data.length !== 0 && parseInt(data.bankcard.channel[0].is_close)
+              initialValue:
+                data.length !== 0 && parseInt(data.bankcard.channel[0].is_close)
             })(
               <Radio.Group>
                 <Radio value={1}>启用</Radio>
@@ -89,7 +93,8 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.bankcard.channel[0].channel_name
+              initialValue:
+                data.length !== 0 && data.bankcard.channel[0].channel_name
             })(<Input style={{ width: "30%" }} />)}
           </Form.Item>
           <Form.Item
@@ -105,7 +110,8 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.bankcard.channel[0].min_amount
+              initialValue:
+                data.length !== 0 && data.bankcard.channel[0].min_amount
             })(<Input style={{ width: "80%", marginRight: 5 }} />)}
             <span>-</span>
           </Form.Item>
@@ -120,7 +126,8 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.bankcard.channel[0].max_amount
+              initialValue:
+                data.length !== 0 && data.bankcard.channel[0].max_amount
             })(<Input style={{ width: "80%" }} />)}
           </Form.Item>
           <Form.Item label="渠道排序">
@@ -136,7 +143,8 @@ class Channel extends Component {
           </Form.Item>
           <Form.Item label="第三方代付状态">
             {getFieldDecorator("bankcard[channel][3][is_close]", {
-              initialValue: data.length !== 0 && parseInt(data.bankcard.channel[1].is_close)
+              initialValue:
+                data.length !== 0 && parseInt(data.bankcard.channel[1].is_close)
             })(
               <Radio.Group>
                 <Radio value={1}>启用</Radio>
@@ -152,7 +160,8 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.bankcard.channel[1].channel_name
+              initialValue:
+                data.length !== 0 && data.bankcard.channel[1].channel_name
             })(<Input style={{ width: "30%" }} />)}
           </Form.Item>
           <Form.Item
@@ -168,7 +177,8 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.bankcard.channel[1].min_amount
+              initialValue:
+                data.length !== 0 && data.bankcard.channel[1].min_amount
             })(<Input style={{ width: "80%", marginRight: 5 }} />)}
             <span>-</span>
           </Form.Item>
@@ -183,7 +193,8 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.bankcard.channel[1].max_amount
+              initialValue:
+                data.length !== 0 && data.bankcard.channel[1].max_amount
             })(<Input style={{ width: "80%" }} />)}
           </Form.Item>
           <Form.Item label="渠道排序">
@@ -199,7 +210,8 @@ class Channel extends Component {
           </Form.Item>
           <Form.Item label="onepay状态">
             {getFieldDecorator("bankcard[channel][7][is_close]", {
-              initialValue: data.length !== 0 && parseInt(data.bankcard.channel[2].is_close)
+              initialValue:
+                data.length !== 0 && parseInt(data.bankcard.channel[2].is_close)
             })(
               <Radio.Group>
                 <Radio value={1}>启用</Radio>
@@ -215,7 +227,8 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.bankcard.channel[2].channel_name
+              initialValue:
+                data.length !== 0 && data.bankcard.channel[2].channel_name
             })(<Input style={{ width: "30%" }} />)}
           </Form.Item>
           <Form.Item
@@ -231,7 +244,8 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.bankcard.channel[2].min_amount
+              initialValue:
+                data.length !== 0 && data.bankcard.channel[2].min_amount
             })(<Input style={{ width: "80%", marginRight: 5 }} />)}
             <span>-</span>
           </Form.Item>
@@ -246,7 +260,8 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.bankcard.channel[2].max_amount
+              initialValue:
+                data.length !== 0 && data.bankcard.channel[2].max_amount
             })(<Input style={{ width: "80%" }} />)}
           </Form.Item>
           <Form.Item label="渠道排序">
@@ -265,7 +280,9 @@ class Channel extends Component {
           <Form.Item label="人工兑换">
             {getFieldDecorator("artificial[is_close]", {
               initialValue:
-              data.length !== 0 && data.artificial.is_close === 1 ? true : false,
+                data.length !== 0 && data.artificial.is_close === 1
+                  ? true
+                  : false,
               valuePropName: "checked"
             })(<Switch checkedChildren="ON" unCheckedChildren="OFF" />)}
           </Form.Item>
@@ -341,6 +358,10 @@ class Channel extends Component {
       for (const key in value.artificial) {
         obj[`artificial[${key}]`] = value.artificial[key];
       }
+      obj["artificial[name]"] = this.state.data.artificial.name;
+      obj[
+        "artificial[withdraw_type]"
+      ] = this.state.data.artificial.withdraw_type;
       if (!err) {
         const res = await saveWithDrawChannel(id, name, obj);
         if (res.status === 0) {
