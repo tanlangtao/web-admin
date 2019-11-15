@@ -74,7 +74,7 @@ class Tasks extends Component {
               type="primary"
               onClick={this.onSearch}
               icon="search"
-              size="normal"
+              size="default"
             ></LinkButton>
           </div>
         }
