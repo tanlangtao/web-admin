@@ -355,6 +355,11 @@ class Channel extends Component {
 
       obj["bankcard[is_close]"] = value.bankcard.is_close ? "on" : "off";
       obj["alipay[is_close]"] = value.alipay.is_close ? "on" : "off";
+      if (value.artificial.is_close === true) {
+        value.artificial.is_close = "on";
+      } else {
+        value.artificial.is_close = "off";
+      }
       for (const key in value.artificial) {
         obj[`artificial[${key}]`] = value.artificial[key];
       }
