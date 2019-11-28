@@ -42,12 +42,16 @@ class NextLevel extends Component {
           size="small"
           pagination={{
             defaultPageSize: 10,
+            showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
               this.onSearchData(page, pageSize);
+            },
+            onShowSizeChange: (current, size) => {
+              this.onSearchData(current, size);
             }
           }}
         />

@@ -33,7 +33,7 @@ class Daiti extends Component {
       order_status: "",
       type: 3
     };
-    this.inputKey = "";
+    this.inputKey = "user_id";
     this.inputValue = "";
     this.state = {
       data: [],
@@ -71,7 +71,13 @@ class Daiti extends Component {
     this.getUsers(page, limit, reqData);
   };
   download = () => {
-    downloadWithdrawList(this.state);
+    let data = {
+      flag: 1,
+      ...this.reqData,
+      inputValue: this.inputValue,
+      inputKey: this.inputKey
+    };
+    downloadWithdrawList(data);
   };
   componentDidMount() {
     this.getUsers(1, 20, { flag: 1, type: 3 });
@@ -92,6 +98,7 @@ class Daiti extends Component {
               placeholder="请选择"
               style={{ width: 150 }}
               onSelect={value => (this.inputKey = value)}
+              defaultValue="user_id"
             >
               <Select.Option value="order_id">订单id</Select.Option>
               <Select.Option value="user_id">user_id</Select.Option>
@@ -135,6 +142,14 @@ class Daiti extends Component {
               icon="reload"
               size="default"
             />
+            <br />
+            <br />
+            <LinkButton
+              size="default"
+              style={{ float: "right" }}
+              onClick={this.download}
+              icon="download"
+            ></LinkButton>
           </span>
         }
       >

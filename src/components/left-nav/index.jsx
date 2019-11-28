@@ -48,69 +48,69 @@ class LeftNav extends Component {
     return menuList.reduce((pre, item) => {
       // 向pre添加<Menu.Item>
       // if (item.key) {
-        //按需渲染侧边栏，必须已经在后台-权限管理中设置了路由key才能渲染
-        if (!item.children) {
-          pre.push(
-            <Menu.Item
-              key={item.key}
-              onClick={() => {
-                this.props.onClick(item);
-                this.openMenu = item.key;
-              }}
-            >
-              <Link to={item.key}>
-                {/* <Icon type={item.icon} /> */}
-                <span>{item.title}</span>
-              </Link>
-            </Menu.Item>
-          );
-        } else {
-          // 查找一个与当前请求路径匹配的子Item
-          const cItem = item.children.find(
-            currentValue => path.indexOf(currentValue.key) === 0
-          );
-          // 如果存在, 说明当前item的子列表需要打开
-          if (cItem) {
-            this.openKey = item.key;
-            // this.setState({ openKey: item.key });
-          }
-          pre.push(
-            <SubMenu
-              key={item.key}
-              title={
-                <span>
-                  <span>{item.title}</span>
-                </span>
-              }
-              onClick={() => {
-                this.openMenu = item.key;
-                // console.log(this.openMenu);
-              }}
-            >
-              {item.children.reduce((cpre, ele) => {
-                cpre.push(
-                  <Menu.Item
-                    key={ele.key}
-                    onClick={() => {
-                      this.props.onClick(ele);
-                    }}
-                  >
-                    <Link to={ele.key}>
-                      <span>{ele.title}</span>
-                    </Link>
-                  </Menu.Item>
-                );
-                return cpre;
-              }, [])}
-            </SubMenu>
-          );
+      //按需渲染侧边栏，必须已经在后台-权限管理中设置了路由key才能渲染
+      if (!item.children) {
+        pre.push(
+          <Menu.Item
+            key={item.key}
+            onClick={() => {
+              this.props.onClick(item);
+              this.openMenu = item.key;
+            }}
+          >
+            <Link to={item.key}>
+              {/* <Icon type={item.icon} /> */}
+              <span>{item.title}</span>
+            </Link>
+          </Menu.Item>
+        );
+      } else {
+        // 查找一个与当前请求路径匹配的子Item
+        const cItem = item.children.find(
+          currentValue => path.indexOf(currentValue.key) === 0
+        );
+        // 如果存在, 说明当前item的子列表需要打开
+        if (cItem) {
+          this.openKey = item.key;
+          // this.setState({ openKey: item.key });
         }
+        pre.push(
+          <SubMenu
+            key={item.key}
+            title={
+              <span>
+                <span>{item.title}</span>
+              </span>
+            }
+            onClick={() => {
+              this.openMenu = item.key;
+              // console.log(this.openMenu);
+            }}
+          >
+            {item.children.reduce((cpre, ele) => {
+              cpre.push(
+                <Menu.Item
+                  key={ele.key}
+                  onClick={() => {
+                    this.props.onClick(ele);
+                  }}
+                >
+                  <Link to={ele.key}>
+                    <span>{ele.title}</span>
+                  </Link>
+                </Menu.Item>
+              );
+              return cpre;
+            }, [])}
+          </SubMenu>
+        );
+      }
       // }
       return pre;
     }, []);
   };
   componentDidMount() {
-    this.setState({openKey:this.openKey})
+    this.setState({ openKey: this.openKey });
   }
   render() {
     const menuList = JSON.parse(localStorage.getItem("menuList"));
@@ -122,13 +122,21 @@ class LeftNav extends Component {
 
     return (
       <div className="left-nav">
-        <Link
-          to="/"
+        {/* <Link
+          to="/home"
           className="left-nav-header"
           style={{ justifyContent: "center" }}
+          // onClick={() => window.location.reload()}
         >
           <h1>QGame后台管理</h1>
-        </Link>
+        </Link> */}
+        <div
+          className="left-nav-header"
+          onClick={() => (window.location.href = "/")}
+        >
+          <h1>QGame后台管理</h1>
+        </div>
+
         <Menu
           mode="inline"
           theme="dark"

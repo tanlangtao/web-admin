@@ -32,7 +32,7 @@ class Withdraw_list extends Component {
       order_status: "",
       type: ""
     };
-    this.inputKey = "";
+    this.inputKey = "user_id";
     this.inputValue = "";
     this.state = {
       data: [],
@@ -72,6 +72,7 @@ class Withdraw_list extends Component {
   };
   download = () => {
     let data = {
+      flag: 3,
       ...this.reqData,
       inputValue: this.inputValue,
       inputKey: this.inputKey
@@ -90,6 +91,7 @@ class Withdraw_list extends Component {
               placeholder="请选择"
               style={{ width: 150 }}
               onSelect={value => (this.inputKey = value)}
+              defaultValue="user_id"
             >
               <Select.Option value="order_id">订单id</Select.Option>
               <Select.Option value="user_id">user_id</Select.Option>

@@ -5,7 +5,6 @@ import {
   Icon,
   Input,
   Select,
-  Button,
   Popconfirm,
   message
 } from "antd";
@@ -31,7 +30,7 @@ class Recharge_order extends Component {
       user_id: "",
       order_id: ""
     };
-    this.inputKey = "";
+    this.inputKey = "user_id";
     this.inputValue = "";
     this.order_status = "";
   }
@@ -94,6 +93,7 @@ class Recharge_order extends Component {
                 placeholder="请选择"
                 style={{ width: 120 }}
                 onSelect={value => (this.inputKey = value)}
+                defaultValue="user_id"
               >
                 <Select.Option value="order_id">订单id</Select.Option>
                 <Select.Option value="user_id">user_id</Select.Option>

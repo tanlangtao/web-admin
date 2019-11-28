@@ -983,10 +983,13 @@ export const downloadWithdrawList = searchData => {
     order_status,
     type,
     inputValue,
-    inputKey
+    inputKey,
+    flag
   } = searchData;
   let params =
-    "token=" +
+    "flag=" +
+    flag +
+    "&token=" +
     token +
     "&filed=" +
     inputKey +
@@ -1000,7 +1003,7 @@ export const downloadWithdrawList = searchData => {
     order_status +
     "&type=" +
     type;
-  let url = BASE + "/order/withDraw/?export=2&flag=3&" + params;
+  let url = BASE + "/order/withDraw/?export=2&" + params;
   if (inputKey) {
     switch (inputKey) {
       case "user_id":

@@ -20,7 +20,7 @@ class Order_list extends Component {
       order_status: "",
       type: ""
     };
-    this.inputKey = "";
+    this.inputKey = "user_id";
     this.inputValue = "";
     this.state = {
       data: [],
@@ -80,6 +80,7 @@ class Order_list extends Component {
               <Select
                 placeholder="请选择"
                 style={{ width: 120 }}
+                defaultValue="user_id"
                 onSelect={value => (this.inputKey = value)}
               >
                 <Select.Option value="order_id">订单id</Select.Option>

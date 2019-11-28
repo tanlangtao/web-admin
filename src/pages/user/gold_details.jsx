@@ -79,6 +79,7 @@ class GoldDetail extends Component {
           columns={this.initColumns()}
           pagination={{
             defaultPageSize: 20,
+            showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
@@ -88,6 +89,13 @@ class GoldDetail extends Component {
                 this.onSearchData(page, pageSize);
               } else {
                 this.getUsers(page, pageSize);
+              }
+            },
+            onShowSizeChange: (current, size) => {
+              if (this.isOnSearch && this.startTime) {
+                this.onSearchData(current, size);
+              } else {
+                this.getUsers(current, size);
               }
             }
           }}
