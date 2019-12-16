@@ -136,7 +136,6 @@ class LeftNav extends Component {
         >
           <h1>QGame后台管理</h1>
         </div>
-
         <Menu
           mode="inline"
           theme="dark"

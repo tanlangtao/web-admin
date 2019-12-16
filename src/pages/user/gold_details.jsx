@@ -81,6 +81,7 @@ class GoldDetail extends Component {
             defaultPageSize: 20,
             showSizeChanger: true,
             showQuickJumper: true,
+            pageSizeOptions: ["10", "20", "30", "50"],
             showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
