@@ -25,8 +25,6 @@ class EditForm extends React.Component {
       case 1:
         orderStatusShow = true;
         confirmButtonShow = true;
-        successRadio = true;
-        failRadio = true;
         break;
       case 2:
         orderStatusShow = true;
@@ -150,16 +148,16 @@ class EditForm extends React.Component {
     } else {
       let reqData = {
         order_id: data.order_id,
-        review_status: this.orderStatus,
-        user_id: data.user_id,
+        review_status: parseInt(this.orderStatus),
+        user_id: parseInt(data.user_id),
         review_type: 1,
         is_pass: 1
       };
       const res = await orderWithDrawReview(reqData);
       if (res.status === 0) {
-        message.success("操作成功");
+        message.success(res.msg);
       } else {
-        message.error("操作失败");
+        message.error(res.msg || "操作失败");
       }
       this.props.onclose();
     }
@@ -168,8 +166,8 @@ class EditForm extends React.Component {
     const data = this.props.editData;
     let reqData = {
       order_id: data.order_id,
-      review_status: data.review_status,
-      user_id: data.user_id,
+      review_status: parseInt(data.review_status),
+      user_id: parseInt(data.user_id),
       review_type: 2,
       is_pass: is_pass
     };
@@ -177,7 +175,7 @@ class EditForm extends React.Component {
     if (res.status === 0) {
       message.info(res.msg);
     } else {
-      message.error("操作失败");
+      message.error(res.msg || "操作失败");
     }
     this.props.onclose();
   };
@@ -201,7 +199,7 @@ class EditForm extends React.Component {
     if (!this.remarkOperator) {
       message.error("请输入有效内容！");
     } else {
-      const res = await withDrawRemark(data.order_id, this.remarkUser, 2);
+      const res = await withDrawRemark(data.order_id, this.remarkOperator, 2);
       if (res.status === 0) {
         message.success(res.msg);
       } else {

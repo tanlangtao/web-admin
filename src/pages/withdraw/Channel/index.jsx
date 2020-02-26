@@ -25,9 +25,11 @@ class Channel extends Component {
       get_val: 1
     };
     const res = await getConfigList(reqData);
-    if (res.status === 0 && res.data) {
-      this.initialData = res.data;
-      this.setState({ data: JSON.parse(res.data.conf_val) });
+    if (res.status === 0) {
+      this.initialData = res.data && res.data.list;
+      if (res.data.list && res.data.list.conf_val) {
+        this.setState({ data: JSON.parse(res.data.list.conf_val) });
+      }
     } else {
       message.error(res.msg);
     }
@@ -94,7 +96,7 @@ class Channel extends Component {
                 }
               ],
               initialValue:
-                data.length !== 0 && data.bankcard.channel[0].channel_name
+                data.length === 0 ? "" : data.bankcard.channel[0].channel_name
             })(<Input style={{ width: "30%" }} />)}
           </Form.Item>
           <Form.Item
@@ -111,7 +113,7 @@ class Channel extends Component {
                 }
               ],
               initialValue:
-                data.length !== 0 && data.bankcard.channel[0].min_amount
+              data.length === 0 ? "" : data.bankcard.channel[0].min_amount
             })(<Input style={{ width: "80%", marginRight: 5 }} />)}
             <span>-</span>
           </Form.Item>
@@ -127,7 +129,7 @@ class Channel extends Component {
                 }
               ],
               initialValue:
-                data.length !== 0 && data.bankcard.channel[0].max_amount
+              data.length === 0 ? "" : data.bankcard.channel[0].max_amount
             })(<Input style={{ width: "80%" }} />)}
           </Form.Item>
           <Form.Item label="渠道排序">
@@ -138,7 +140,7 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.bankcard.channel[0].sort
+              initialValue:data.length === 0 ? "" : data.bankcard.channel[0].sort
             })(<Input style={{ width: "30%" }} />)}
           </Form.Item>
           <Form.Item label="第三方代付状态">
@@ -161,7 +163,7 @@ class Channel extends Component {
                 }
               ],
               initialValue:
-                data.length !== 0 && data.bankcard.channel[1].channel_name
+              data.length === 0 ? "" : data.bankcard.channel[1].channel_name
             })(<Input style={{ width: "30%" }} />)}
           </Form.Item>
           <Form.Item
@@ -178,7 +180,7 @@ class Channel extends Component {
                 }
               ],
               initialValue:
-                data.length !== 0 && data.bankcard.channel[1].min_amount
+              data.length === 0 ? "" : data.bankcard.channel[1].min_amount
             })(<Input style={{ width: "80%", marginRight: 5 }} />)}
             <span>-</span>
           </Form.Item>
@@ -194,7 +196,7 @@ class Channel extends Component {
                 }
               ],
               initialValue:
-                data.length !== 0 && data.bankcard.channel[1].max_amount
+              data.length === 0 ? "" : data.bankcard.channel[1].max_amount
             })(<Input style={{ width: "80%" }} />)}
           </Form.Item>
           <Form.Item label="渠道排序">
@@ -205,7 +207,7 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.bankcard.channel[1].sort
+              initialValue: data.length === 0 ? "" : data.bankcard.channel[1].sort
             })(<Input style={{ width: "30%" }} />)}
           </Form.Item>
           <Form.Item label="onepay状态">
@@ -228,7 +230,7 @@ class Channel extends Component {
                 }
               ],
               initialValue:
-                data.length !== 0 && data.bankcard.channel[2].channel_name
+              data.length === 0 ? "" : data.bankcard.channel[2].channel_name
             })(<Input style={{ width: "30%" }} />)}
           </Form.Item>
           <Form.Item
@@ -245,7 +247,7 @@ class Channel extends Component {
                 }
               ],
               initialValue:
-                data.length !== 0 && data.bankcard.channel[2].min_amount
+              data.length === 0 ? "" : data.bankcard.channel[2].min_amount
             })(<Input style={{ width: "80%", marginRight: 5 }} />)}
             <span>-</span>
           </Form.Item>
@@ -261,7 +263,7 @@ class Channel extends Component {
                 }
               ],
               initialValue:
-                data.length !== 0 && data.bankcard.channel[2].max_amount
+              data.length === 0 ? "" : data.bankcard.channel[2].max_amount
             })(<Input style={{ width: "80%" }} />)}
           </Form.Item>
           <Form.Item label="渠道排序">
@@ -272,7 +274,7 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.bankcard.channel[2].sort
+              initialValue: data.length === 0 ? "" : data.bankcard.channel[2].sort
             })(<Input style={{ width: "30%" }} />)}
           </Form.Item>
 
@@ -299,7 +301,7 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.artificial.min_amount
+              initialValue: data.length === 0 ? "" : data.artificial.min_amount
             })(<Input style={{ width: "80%", marginRight: 5 }} />)}
             <span>-</span>
           </Form.Item>
@@ -314,7 +316,7 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.artificial.max_amount
+              initialValue: data.length === 0 ? "" : data.artificial.max_amount
             })(<Input style={{ width: "80%" }} />)}
           </Form.Item>
           <Form.Item label="费率">
@@ -325,7 +327,7 @@ class Channel extends Component {
                   message: "该项不能为空"
                 }
               ],
-              initialValue: data.length !== 0 && data.artificial.rate
+              initialValue: data.length === 0 ? "" : data.artificial.rate
             })(<Input style={{ width: "30%" }} />)}
           </Form.Item>
 

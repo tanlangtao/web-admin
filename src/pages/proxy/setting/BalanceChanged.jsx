@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Button, message, Select, Radio } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { proxy_changeGold } from "../../../api/index";
 
 const EditForm = props => {
@@ -11,12 +11,14 @@ const EditForm = props => {
       if (!err) {
         let obj = {
           task_type: 1,
-          "params[user_id]": record.id,
-          "params[amount]": value.amount,
-          "params[reason]": value.reason,
-          "params[user_name]": record.id,
-          "params[proxy_user_id]": record.proxy_pid,
-          "params[package_id]": record.package_id
+          params: {
+            user_id: record.id,
+            amount: parseFloat(value.amount),
+            reason: value.reason,
+            user_name: record.proxy_nick,
+            proxy_user_id: record.proxy_pid,
+            package_id: record.package_id
+          }
         };
         console.log("proxy_changeGold:--------------------", obj);
         const res = await proxy_changeGold(obj);

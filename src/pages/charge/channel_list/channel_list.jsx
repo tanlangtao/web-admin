@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Card, Table, Modal, message, Icon, Input } from "antd";
+import { Card, Icon, Input, message, Modal, Table } from "antd";
 import LinkButton from "../../../components/link-button/index";
-import { getChannelList, getRuleList } from "../../../api/index";
+import { getChannelList } from "../../../api/index";
 import WrappedAddDataForm from "./addorEdit";
 import { formateDate } from "../../../utils/dateUtils";
 
@@ -20,10 +20,16 @@ class Channel_list extends Component {
   }
   getUsers = async (page, limit) => {
     const result = await getChannelList(page, limit);
-    if (result.data) {
+    if (result.status === 0) {
       this.setState({
-        data: result.data,
-        count: parseInt(result.count)
+        data: result.data && result.data.list,
+        count: result.data && result.data.count
+      });
+    }
+    if (result.status === -1) {
+      this.setState({
+        data: [],
+        count: 0
       });
     }
   };
@@ -31,8 +37,8 @@ class Channel_list extends Component {
     const res = await getChannelList(1, 20, this.state.inputParam);
     if (res.status === 0) {
       this.setState({
-        data: res.data,
-        count: parseInt(res.count)
+        data: res.data && res.data.list,
+        count: parseInt(res.data && res.data.count)
       });
     } else {
       message.error(res.msg || "操作失败");
@@ -76,11 +82,11 @@ class Channel_list extends Component {
               onChange={e => this.setState({ inputParam: e.target.value })}
             />
             &nbsp; &nbsp;
-            <LinkButton onClick={this.onSearchData}>
+            <LinkButton onClick={this.onSearchData} size="default">
               <Icon type="search" />
             </LinkButton>
             &nbsp; &nbsp;
-            <LinkButton onClick={this.addData}>
+            <LinkButton onClick={this.addData} size="default">
               <Icon type="user-add" />
               添加
             </LinkButton>
@@ -115,10 +121,10 @@ class Channel_list extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1900}}
+          scroll={{ x: 1900 }}
         />
         <Modal
-          title="添加角色"
+          title="添加支付方式"
           visible={this.state.isAddDataShow}
           // onOk={this.handleAddData}
           onCancel={() => {
@@ -231,6 +237,18 @@ class Channel_list extends Component {
             break;
           case "17":
             word = "转账银行卡";
+            break;
+          case "18":
+            word = "im支付宝代充";
+            break;
+          case "19":
+            word = "im微信代充";
+            break;
+          case "20":
+            word = "im网银代充";
+            break;
+          case "21":
+            word = "im银联扫码代充";
             break;
           default:
             word = "";

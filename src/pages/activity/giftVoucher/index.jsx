@@ -20,8 +20,8 @@ class AccountList extends Component {
     const res = await giftVoucherList(page, limit);
     if (res.status === 0) {
       this.setState({
-        data: res.data,
-        count: parseInt(res.count)
+        data: res.data && res.data&&res.data.list,
+        count: parseInt(res.data&&res.data.count)
       });
     } else {
       message.error("未检索到数据");

@@ -47,7 +47,7 @@ class NormalLoginForm extends Component {
           })(
             <Input.TextArea
               placeholder="请输入文字"
-              autosize={{ minRows: 2, maxRows: 6 }}
+              autoSize={{ minRows: 2, maxRows: 6 }}
             />
           )}
         </FormItem>

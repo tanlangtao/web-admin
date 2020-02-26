@@ -29,8 +29,8 @@ class Withdraw_list extends Component {
     this.reqData = {
       start_time: "",
       end_time: "",
-      order_status: "",
-      type: ""
+      order_status: null,
+      type: null
     };
     this.inputKey = "user_id";
     this.inputValue = "";
@@ -44,10 +44,10 @@ class Withdraw_list extends Component {
   }
   getUsers = async (page, pageSize, reqData) => {
     const result = await withDraw(page, pageSize, reqData);
-    if (result.data) {
+    if (result.status === 0) {
       this.setState({
-        data: result.data,
-        count: parseInt(result.count)
+        data: result.data && result.data.list,
+        count: parseInt(result.data && result.data.count)
       });
     }
     if (result.status === -1) {
@@ -66,7 +66,11 @@ class Withdraw_list extends Component {
     if (this.inputKey === "1" || this.inputKey === "2") {
       reqData.time_type = this.inputKey;
     } else if (this.inputKey) {
-      reqData[this.inputKey] = this.inputValue;
+      if (this.inputKey === "user_id") {
+        reqData[this.inputKey] = this.inputValue;
+      } else {
+        reqData[this.inputKey] = this.inputValue;
+      }
     }
     this.getUsers(page, limit, reqData);
   };
@@ -95,6 +99,7 @@ class Withdraw_list extends Component {
             >
               <Select.Option value="order_id">订单id</Select.Option>
               <Select.Option value="user_id">user_id</Select.Option>
+              <Select.Option value="package_nick">所属品牌</Select.Option>
               <Select.Option value="1">创建时间</Select.Option>
               <Select.Option value="2">到账时间</Select.Option>
             </Select>
@@ -190,8 +195,8 @@ class Withdraw_list extends Component {
             this.action === "check"
               ? "审核信息"
               : this.action === "risk"
-              ? "资金明细"
-              : "运营备注"
+                ? "资金明细"
+                : "运营备注"
           }
           visible={this.state.isDetailShow}
           onCancel={() => {
@@ -270,7 +275,37 @@ class Withdraw_list extends Component {
     },
     {
       title: "兑换方式",
-      dataIndex: "order_type"
+      dataIndex: "order_type",
+      render: (text, record, index) => {
+        let word;
+        switch (text) {
+          case "1":
+            word = "alipay";
+            break;
+          case "2":
+            word = "gudubank";
+            break;
+          case "3":
+            word = "bank";
+            break;
+          case "4":
+            word = "人工兑换";
+            break;
+          case "5":
+            word = "人工代充";
+            break;
+          case "6":
+            word = "赠送";
+            break;
+          case "7":
+            word = "onepaybank";
+            break;
+          default:
+            word = "";
+            break;
+        }
+        return <span>{word}</span>;
+      }
     },
     {
       title: "状态",
@@ -402,11 +437,15 @@ class Withdraw_list extends Component {
       action === "risk"
         ? await userDetail(1, 20, record.user_id)
         : action === "check"
-        ? await reviewInfo(1, 20, record.order_id)
-        : await remarkInfo(1, 20, record.order_id);
-    if (res.status === 0) {
-      this.detailRecord.data = res.data;
-      this.detailRecord.count = res.count;
+          ? await reviewInfo(1, 20, record.order_id)
+          : await remarkInfo(1, 20, record.order_id);
+    if (action === "risk" && res.data) {
+      this.detailRecord.data = res.data.account_change;
+      this.detailRecord.count = res.data.count;
+    }
+    if (res.data && action !== "risk") {
+      this.detailRecord.data = res.data.list;
+      this.detailRecord.count = res.data.count;
     }
     this.setState({ isDetailShow: true });
   };
@@ -417,7 +456,7 @@ class Withdraw_list extends Component {
     };
     const res = await auditOrder(reqData);
     if (res.status === 0) {
-      this.editData = res.data[0];
+      this.editData = res.data && res.data.list[0];
       this.setState({ isEditShow: true });
     } else {
       message.error("操作失败");

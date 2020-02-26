@@ -8,8 +8,6 @@ import App from './App'
 import storageUtils from './utils/storageUtils'
 import memoryUtils from './utils/memoryUtils'
 
-
-
 import { Router } from "react-router";
 import { createBrowserHistory } from "history";
 import {Modal} from 'antd';

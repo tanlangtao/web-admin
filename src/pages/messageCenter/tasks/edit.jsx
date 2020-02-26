@@ -10,18 +10,18 @@ const EditForm = props => {
     event.preventDefault();
     props.form.validateFields(async (err, value) => {
       if (!err) {
-        let obj = {
-          "data[id]": record.id,
-          "data[params]": record.params,
-          "data[status]": 2
+        let obj ={
+          "id":record.id,
+          "params": params,
+          "status": 2
         };
         if (props.action === "review") {
-          obj["data[pay_reason]"] = value.reason;
-          obj["data[status]"] = 1;
+          obj["pay_reason"] = value.reason;
+          obj["status"] = 1;
         }
         const res = await changeUserBalance(obj);
         if (res.status === 0) {
-          message.success("提交成功" + res.msg);
+          message.success("提交成功：" + res.msg);
           props.finished();
           props.form.resetFields();
         } else {
@@ -46,7 +46,7 @@ const EditForm = props => {
         >
           {getFieldDecorator("reason", {
             initialValue: params.reason
-          })(<Input.TextArea autosize={{ minRows: 5, maxRows: 10 }} />)}
+          })(<Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />)}
         </Form.Item>
 
         <Form.Item>

@@ -1,14 +1,5 @@
 import React, { Component } from "react";
-import {
-  Card,
-  Table,
-  Modal,
-  message,
-  Icon,
-  Button,
-  Popover,
-  Popconfirm
-} from "antd";
+import { Card, Table, Modal, message, Icon, Button, Popover, Popconfirm } from "antd";
 import LinkButton from "../../../components/link-button/index";
 import { getList, delNotice } from "../../../api/index";
 import WrappedAddDataForm from "./addorEdit";
@@ -29,9 +20,10 @@ class Notice_list extends Component {
   getUsers = async (page, limit) => {
     const result = await getList(page, limit);
     if (result.data) {
+      let newData = JSON.parse(result.data)
       this.setState({
-        data: result.data,
-        count: parseInt(result.count)
+        data: newData,
+        count: parseInt(result.data && result.data.count)
       });
     }
   };
@@ -47,7 +39,7 @@ class Notice_list extends Component {
     });
   };
   onDelete = async record => {
-    let res = await delNotice(record._id.$oid);
+    let res = await delNotice(record._id);
     if (res.status === 0) {
       message.success("删除成功");
       this.refreshPage();
@@ -87,7 +79,7 @@ class Notice_list extends Component {
       >
         <Table
           bordered
-          rowKey={record => record._id.$oid}
+          rowKey={(record, index) => `${index}`}
           dataSource={this.state.data}
           columns={this.initColumns()}
           size="small"
@@ -178,6 +170,7 @@ class Notice_list extends Component {
     {
       title: "是否跑马灯",
       dataIndex: "is_slider",
+      // eslint-disable-next-line
       render: (text, record) => <span>{text == 1 ? "是" : "否"}</span>
     },
     {
@@ -200,13 +193,13 @@ class Notice_list extends Component {
       ),
       onCell: (record, rowIndex) => {
         return {
-          onClick: event => {}, // 点击行
-          onDoubleClick: event => {},
-          onContextMenu: event => {},
+          onClick: event => { }, // 点击行
+          onDoubleClick: event => { },
+          onContextMenu: event => { },
           onMouseEnter: event => {
             event.target.style.cursor = "pointer";
           }, // 鼠标移入行
-          onMouseLeave: event => {}
+          onMouseLeave: event => { }
         };
       }
     },

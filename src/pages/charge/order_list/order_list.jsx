@@ -18,7 +18,7 @@ class Order_list extends Component {
       start_time: "",
       end_time: "",
       order_status: "",
-      type: ""
+      type: null
     };
     this.inputKey = "user_id";
     this.inputValue = "";
@@ -32,10 +32,10 @@ class Order_list extends Component {
   }
   getUsers = async (page, limit, reqData) => {
     const result = await reqOrder_list(page, limit, reqData);
-    if (result.data) {
+    if (result.status === 0) {
       this.setState({
-        data: result.data,
-        count: parseInt(result.count)
+        data: result.data && result.data.list,
+        count: result.data && result.data.count
       });
     }
     if (result.status === -1) {
@@ -137,6 +137,10 @@ class Order_list extends Component {
                 <Select.Option value="7">银联支付</Select.Option>
                 <Select.Option value="8">网银支付</Select.Option>
                 <Select.Option value="9">快捷支付</Select.Option>
+                <Select.Option value="18">imalipay</Select.Option>
+                <Select.Option value="19">imwechat</Select.Option>
+                <Select.Option value="20">imbank</Select.Option>
+                <Select.Option value="21">imunionpay</Select.Option>
               </Select>
               &nbsp; &nbsp;
               <LinkButton
@@ -200,7 +204,7 @@ class Order_list extends Component {
           scroll={{ x: 2000 }}
         />
         <Modal
-          title="玩家调单查询"
+          title="玩家掉单查询"
           visible={this.state.isQueryShow}
           onCancel={() => {
             this.setState({ isQueryShow: false });
@@ -327,6 +331,18 @@ class Order_list extends Component {
             break;
           case "9":
             word = "快捷支付";
+            break;
+          case "18":
+            word = "imalipay";
+            break;
+          case "19":
+            word = "imwechat";
+            break;
+          case "20":
+            word = "imbank";
+            break;
+          case "21":
+            word = "imunionpay";
             break;
           default:
             word = "";

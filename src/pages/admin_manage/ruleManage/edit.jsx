@@ -59,7 +59,7 @@ const EditForm = props => {
         )}
       </Form.Item>
       <Form.Item label="路由key">
-        {getFieldDecorator("key", { initialValue: data.router_key })(
+        {getFieldDecorator("router_key", { initialValue: data.router_key })(
           <Input style={{ width: "60%" }} placeholder="路由key" />
         )}
       </Form.Item>

@@ -24,7 +24,7 @@ class MoreDetail extends Component {
           dataSource={data}
           columns={this.initColumns()}
           size="small"
-          scroll={{ x: 2000 }}
+          scroll={{ x: 2500 }}
           // footer={this.footerData}
         />
         <Modal
@@ -50,7 +50,7 @@ class MoreDetail extends Component {
         },
         {
           title: "新增用户",
-          dataIndex: "regin_user_number"
+          dataIndex: "regin_user_number",
         },
         {
           title: "活跃用户",
@@ -135,19 +135,21 @@ class MoreDetail extends Component {
       return tableHeader;
     }
   };
-  footerData = page => {
-    console.log(page);
-    return (
-      <tr>
-        <td>合计</td>
-        <td style={{ width: 80 }}>regin_user_number</td>
-        <td>regin_user_number</td>
-        <td>regin_user_number</td>
-        <td>regin_user_number</td>
-        <td>regin_user_number</td>
-      </tr>
-    );
-  };
+  // footerData = page => {
+  //   console.log(page);
+  //   return (
+  //     <Table
+  //       rowKey={(record, index) => `${index}`}
+  //       bordered
+  //       pagination={false}
+  //       columns={this.initColumns()}
+  //       dataSource={page}
+  //       showHeader={false}
+  //       size="small"
+  //       scroll={{ x: 2500 }}
+  //     ></Table>
+  //   );
+  // };
   getGameReport = async record => {
     const res = await oneDayGameReport(
       1,

@@ -35,8 +35,8 @@ class Tasks extends Component {
     const res = await sellGoldApplyList(page, limit);
     if (res.status === 0) {
       this.setState({
-        data: res.data,
-        count: res.count
+        data: res.data&&res.data.list,
+        count: parseInt(res.data&&res.data.count)
       });
     } else {
       message.error(res.msg);

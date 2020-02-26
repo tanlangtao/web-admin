@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Table, Modal, message, Icon, Input, Select } from "antd";
+import { Card, Table, Modal, Icon, Input, Select } from "antd";
 import { sellGoldOrderList } from "../../../api/index";
 import LinkButton from "../../../components/link-button";
 import WrappedEditForm from "./edit";
@@ -20,8 +20,8 @@ class Tasks extends Component {
     const res = await sellGoldOrderList(page, limit);
     if (res.status === 0) {
       this.setState({
-        data: res.data,
-        count: res.count
+        data: res.data&&res.data.list,
+        count: parseInt(res.data&&res.data.count)
       });
     } 
   };

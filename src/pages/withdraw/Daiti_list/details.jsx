@@ -10,7 +10,6 @@ class GoldDetail extends Component {
   render() {
     const { data } = this.props.detailRecord;
     console.log(data);
-
     return (
       <Table
         bordered
@@ -47,21 +46,39 @@ class GoldDetail extends Component {
 
         {
           title: "余额(变动前)",
-          dataIndex: "total_balance"
+          dataIndex: "total_balance",
+          render: (text, record) => {
+            if (record) {
+              return <div>{(record.balance + record.banker_balance).toFixed(6)}</div>
+            } else {
+              return <div />
+            }
+          }
         },
         {
           title: "变动金额",
           dataIndex: "final_pay",
-
-          sorter: (a, b) => a.total_balance - b.total_balance
+          render: (text, record) => {
+						return <span>{text.toFixed(6)}</span>;
+					}
         },
         {
           title: "税收",
-          dataIndex: "tax"
+          dataIndex: "tax",
+          render: (text, record) => {
+            return <span>{record.final_pay > 0 ? text.toFixed(6) : ""}</span>
+          }
         },
         {
           title: "余额(变动后)",
-          dataIndex: "total_final_balance"
+          dataIndex: "total_final_balance",
+          render: (text, record) => {
+            if (record) {
+              return <div>{(record.final_banker_balance + record.final_balance).toFixed(6)}</div>
+            } else {
+              return <div />
+            }
+          }
         },
         {
           title: "备注",
@@ -69,7 +86,8 @@ class GoldDetail extends Component {
         },
         {
           title: "创建时间",
-          dataIndex: "create_time"
+          dataIndex: "create_time",
+          render: formateDate,
         }
       ];
     } else {

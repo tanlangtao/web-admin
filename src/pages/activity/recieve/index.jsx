@@ -19,8 +19,8 @@ class AccountList extends Component {
     const res = await activityList(page, limit);
     if (res.status === 0) {
       this.setState({
-        data: res.data,
-        count: parseInt(res.count)
+        data: res.data && res.data.list,
+        count: parseInt(res.data && res.data.count)
       });
     } else {
       message.error("未检索到数据");
@@ -54,10 +54,6 @@ class AccountList extends Component {
               icon="search"
               size="default"
             ></LinkButton>
-            &nbsp;&nbsp;&nbsp;
-            <LinkButton onClick={this.add} size="default">
-              添加
-            </LinkButton>
           </div>
         }
         extra={
@@ -149,9 +145,15 @@ class AccountList extends Component {
     }
   ];
   check = record => {
+    let obj = JSON.parse(record.receive_info)
+    for (const key in obj) {
+      if (obj[key].hasOwnProperty("time")) {
+        obj[key].time = formateDate(obj[key].time)
+      }
+    }
     Modal.info({
       title: "领取详情",
-      content: record.receive_info
+      content: JSON.stringify(obj)
     });
   };
   onSearch = async () => {
@@ -162,7 +164,10 @@ class AccountList extends Component {
     };
     const res = await activityList(this.state.page, this.state.pageSize, value);
     if (res.status === 0) {
-      this.setState({ data: res.data, count: parseInt(res.count) });
+      this.setState({
+        data: res.data && res.data.list,
+        count: parseInt(res.data && res.data.count)
+      });
     } else {
       message.error("未检索到数据");
     }

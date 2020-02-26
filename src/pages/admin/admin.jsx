@@ -1,23 +1,22 @@
 import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { createHashHistory } from "history";
-import { reqUsers } from "../../api/index";
 import { Layout } from "antd";
 
 import LeftNav from "../../components/left-nav";
 import Header from "../../components/header";
 import Home from "../home/home";
 import User from "../user/user";
-import Admin_manage_list from "../admin_manage/admin_manage_list/admin_manage_list";
+import AdminManageList from "../admin_manage/admin_manage_list/admin_manage_list";
 import Role from "../admin_manage/role/role";
-import Order_list from "../charge/order_list/order_list";
-import Channel_list from "../charge/channel_list/channel_list";
-import Bankcard_list from "../charge/bankcard_list/bankcard_list";
-import Recharge_order from "../charge/recharge_order/recharge_order";
-import Recharge_channel from "../charge/recharge_channel/recharge_channel";
+import OrderList from "../charge/order_list/order_list";
+import ChannelList from "../charge/channel_list/channel_list";
+import BankcardList from "../charge/bankcard_list/bankcard_list";
+import RechargeOrder from "../charge/recharge_order/recharge_order";
+import RechargeChannel from "../charge/recharge_channel/recharge_channel";
 import NoticeList from "../customer_service/notice_list";
-import Customer_list from "../customer_service/customer_list";
-import Withdraw_list from "../withdraw/withdraw_list";
+import CustomerList from "../customer_service/customer_list";
+import WithdrawList from "../withdraw/withdraw_list";
 import WrappedConfig from "../gameSetting/config";
 import Tasks from "../messageCenter/tasks";
 import AccountList from "../trade/accountList";
@@ -30,12 +29,13 @@ import GiftList from "../gift/giftList";
 import GiftSetting from "../gift/giftSetting";
 import AI from "../AI/robot";
 import ProxySetting from "../proxy/setting";
-
-import Daiti_list from "../withdraw/Daiti_list";
+import DaitiList from "../withdraw/Daiti_list";
 import Channel from "../withdraw/Channel";
 import NotFound from "../not-found/not-found";
 import DailyReport from "../list/DailyReport";
 import RuleManage from "../admin_manage/ruleManage";
+import FishConfig from "../gameSetting/fishConfig";
+
 import { Provider, KeepAlive } from "react-keep-alive";
 const { Sider, Content } = Layout;
 
@@ -59,19 +59,19 @@ export default class Admin extends Component {
       return <Redirect to="/login" />;
     }
     //如果内存中存储的token超过24小时，需要验证token，如果已经延期更新时间戳，如果未延期，更新token
-    const timeStamp = new Date().getTime();
-    const tokenTimeStamp = localStorage.tokenTimeStamp;
-    let time = timeStamp - tokenTimeStamp;
-    if (time > 24 * 3600 * 1000) {
-      const res = reqUsers(1, 20);
-      if (res.status !== 0) {
-        localStorage.removeItem("menuList");
-        localStorage.removeItem("token");
-        localStorage.removeItem("name");
-        localStorage.removeItem("tokenTimeStamp");
-        return <Redirect to="/login" />;
-      }
-    }
+    // const timeStamp = new Date().getTime();
+    // const tokenTimeStamp = localStorage.tokenTimeStamp;
+    // let time = timeStamp - tokenTimeStamp;
+    // if (time > 24 * 3600 * 1000) {
+    //   const res = reqUsers(1, 20);
+    //   if (res.status !== 0) {
+    //     localStorage.removeItem("menuList");
+    //     localStorage.removeItem("token");
+    //     localStorage.removeItem("name");
+    //     localStorage.removeItem("tokenTimeStamp");
+    //     return <Redirect to="/login" />;
+    //   }
+    // }
     return (
       <Layout style={{ minHeight: "100%" }}>
         <Sider>
@@ -104,19 +104,19 @@ export default class Admin extends Component {
                   <Route
                     path="/customer_service/customer_list"
                     exact
-                    component={Customer_list}
+                    component={CustomerList}
                   >
-                    <KeepAlive name="Customer_list">
-                      <Customer_list></Customer_list>
+                    <KeepAlive name="CustomerList">
+                      <CustomerList></CustomerList>
                     </KeepAlive>
                   </Route>
                   <Route
                     path="/admin_manage/list"
                     exact
-                    component={Admin_manage_list}
+                    component={AdminManageList}
                   >
-                    <KeepAlive name="Admin_manage_list">
-                      <Admin_manage_list></Admin_manage_list>
+                    <KeepAlive name="AdminManageList">
+                      <AdminManageList></AdminManageList>
                     </KeepAlive>
                   </Route>
                   <Route path="/admin_manage/rule" exact component={RuleManage}>
@@ -142,11 +142,18 @@ export default class Admin extends Component {
                     </KeepAlive>
                   </Route>
 
+                  <Route path="/gameSetting/setBuYuConfig" exact>
+                    <KeepAlive name="FishConfig">
+                      <FishConfig></FishConfig>
+                    </KeepAlive>
+                  </Route>
+
                   <Route path="/proxy/setting" exact>
                     <KeepAlive name="ProxySetting">
                       <ProxySetting></ProxySetting>
                     </KeepAlive>
                   </Route>
+
                   <Route path="/messageCenter/tasks" exact>
                     <KeepAlive name="Tasks">
                       <Tasks></Tasks>
@@ -183,63 +190,63 @@ export default class Admin extends Component {
                       <GiftVoucher />
                     </KeepAlive>
                   </Route>
-                  <Route path="/charge/order_list" exact component={Order_list}>
-                    <KeepAlive name="Order_list">
-                      <Order_list></Order_list>
+                  <Route path="/charge/order_list" exact component={OrderList}>
+                    <KeepAlive name="OrderList">
+                      <OrderList></OrderList>
                     </KeepAlive>
                   </Route>
                   <Route
                     path="/charge/channel-list"
                     exact
-                    component={Channel_list}
+                    component={ChannelList}
                   >
-                    <KeepAlive name="Channel_list">
-                      <Channel_list></Channel_list>
+                    <KeepAlive name="ChannelList">
+                      <ChannelList></ChannelList>
                     </KeepAlive>
                   </Route>
                   <Route
                     path="/charge/bankcard-list"
                     exact
-                    component={Bankcard_list}
+                    component={BankcardList}
                   >
-                    <KeepAlive name="Bankcard_list">
-                      <Bankcard_list></Bankcard_list>
+                    <KeepAlive name="BankcardList">
+                      <BankcardList></BankcardList>
                     </KeepAlive>
                   </Route>
                   <Route
                     path="/artificialcharge/order"
                     exact
-                    component={Recharge_order}
+                    component={RechargeOrder}
                   >
-                    <KeepAlive name="Recharge_order">
-                      <Recharge_order></Recharge_order>
+                    <KeepAlive name="RechargeOrder">
+                      <RechargeOrder></RechargeOrder>
                     </KeepAlive>
                   </Route>
                   <Route
                     path="/charge/recharge_channel"
                     exact
-                    component={Recharge_channel}
+                    component={RechargeChannel}
                   >
-                    <KeepAlive name="Recharge_channel">
-                      <Recharge_channel></Recharge_channel>
+                    <KeepAlive name="RechargeChannel">
+                      <RechargeChannel></RechargeChannel>
                     </KeepAlive>
                   </Route>
                   <Route
                     path="/withdraw/withdraw_list"
                     exact
-                    component={Withdraw_list}
+                    component={WithdrawList}
                   >
-                    <KeepAlive name="Withdraw_list">
-                      <Withdraw_list></Withdraw_list>
+                    <KeepAlive name="WithdrawList">
+                      <WithdrawList></WithdrawList>
                     </KeepAlive>
                   </Route>
                   <Route
                     path="/artificialWithdraw/order"
                     exact
-                    component={Daiti_list}
+                    component={DaitiList}
                   >
-                    <KeepAlive name="Daiti_list">
-                      <Daiti_list />
+                    <KeepAlive name="DaitiList">
+                      <DaitiList />
                     </KeepAlive>
                   </Route>
                   <Route path="/withdraw/channel" exact>

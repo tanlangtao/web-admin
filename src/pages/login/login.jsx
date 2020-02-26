@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Icon, Input, Button, Modal, message } from "antd";
 import "./login.less";
-import { reqLogin, reqAuthCode, navList, setToken } from "../../api";
+import { reqLogin, reqAuthCode, navList, setToken, raceURL } from "../../api";
 
 const Item = Form.Item;
 
@@ -28,6 +28,7 @@ class Login extends Component {
       // setTimeout(() => this.props.history.replace("/"), 300);
     }
   };
+  //点击登录按钮
   handleSubmit = event => {
     // 阻止事件的默认行为
     event.preventDefault();
@@ -45,7 +46,7 @@ class Login extends Component {
           message.success("登陆成功");
           localStorage.token = result.data.token;
           localStorage.name = result.data.name;
-          localStorage.tokenTimeStamp = new Date().getTime();
+          // localStorage.tokenTimeStamp = new Date().getTime();
           setToken();
           this.getMenuList();
         } else {
@@ -53,12 +54,11 @@ class Login extends Component {
           // 提示错误信息
           message.error(result.msg);
         }
-      } else {
-        console.log("检验失败!");
       }
     });
   };
 
+  //点击获取验证码
   handleClick = () => {
     this.props.form.validateFields(async (err, values) => {
       // 检验成功
@@ -66,7 +66,6 @@ class Login extends Component {
         // 请求登陆
         const { username, password } = values;
         const result = await reqAuthCode(username, password);
-        // console.log("请求成功", result);
         if (result.status === 0 && result.data) {
           // 登陆成功
           Modal.info({
@@ -82,8 +81,6 @@ class Login extends Component {
           // 提示错误信息
           message.error(result.msg);
         }
-      } else {
-        console.log("检验失败!");
       }
     });
 
@@ -91,34 +88,25 @@ class Login extends Component {
     // const form = this.props.form
     // // 获取表单项的输入数据
     // const values = form.getFieldsValue()
-    // console.log('handleSubmit()', values)
   };
-  /*
-  对密码进行自定义验证
-  */
-  /*
-   用户名/密码的的合法性要求
-     1). 必须输入
-     2). 必须大于等于4位
-     3). 必须小于等于12位
-     4). 必须是英文、数字或下划线组成
-    */
   validatePwd = (rule, value, callback) => {
-    console.log("validatePwd()", rule, value);
     if (!value) {
       callback("密码必须输入");
     } else if (value.length < 4) {
       callback("密码长度不能小于4位");
     } else if (value.length > 12) {
       callback("密码长度不能大于12位");
-    } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
-      callback("密码必须是英文、数字或下划线组成");
+      // } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+      //   callback("密码必须是英文、数字或下划线组成");
     } else {
       callback(); // 验证通过
     }
     // callback('xxxx') // 验证失败, 并指定提示的文本
   };
-
+  componentDidMount() {
+    //发送空请求确定BASE地址
+    raceURL()
+  }
   render() {
     // 如果用户已经登陆, 自动跳转到管理界面
     const token = localStorage.token;

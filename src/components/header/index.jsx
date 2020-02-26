@@ -111,7 +111,7 @@ class Header extends Component {
         localStorage.removeItem("menuList");
         localStorage.removeItem("token");
         localStorage.removeItem("name");
-        localStorage.removeItem("tokenTimeStamp");
+        localStorage.removeItem("BASE");
         // 跳转到login
         this.props.history.replace("/login");
       }

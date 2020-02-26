@@ -5,13 +5,13 @@ import { CodeEditor } from "../../../components/myComponents";
 const EditForm = props => {
   const { getFieldDecorator } = props.form;
   const record = props.record;
-  let getValueFromEvent = e => {
-    console.log("Upload event:", e);
+  // let getValueFromEvent = e => {
+  //   console.log("Upload event:", e);
     // if (Array.isArray(e)) {
     //   return e;
     // }
     // return e && e.fileList;
-  };
+  // };
   let handleEditSubmit = event => {
     event.preventDefault();
     props.form.validateFields(async (err, value) => {
@@ -47,7 +47,8 @@ const EditForm = props => {
       </Form.Item>
       <Form.Item label="配置Val">
         {getFieldDecorator("conf_val", {
-          rules: [{ required: true, message: "请输入配置Val" }]
+          rules: [{ required: true, message: "请输入配置Val" }],
+          initialValue: props.action === "add" ? "" : props.record.conf_val
         })(
           props.action === "add" ? (
             <Input style={{ width: "50%" }} />

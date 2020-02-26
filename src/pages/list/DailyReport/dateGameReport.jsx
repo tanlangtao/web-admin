@@ -22,7 +22,9 @@ const DateGameReport = props => {
     {
       title: "玩家总流水",
       dataIndex: "statement_total",
-      width: 150
+      width: 150,
+      defaultSortOrder:"descend",
+      sorter: (a, b) => a.statement_total - b.statement_total,
     },
     {
       title: "盈亏比",

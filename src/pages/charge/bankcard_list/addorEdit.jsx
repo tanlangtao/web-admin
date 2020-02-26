@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Icon, Input, Button, message, Radio, Select } from "antd";
+import { Form, Input, Button, message, Radio } from "antd";
 import { saveBankCard } from "../../../api";
 
 class AddDataForm extends Component {
@@ -138,7 +138,7 @@ class AddDataForm extends Component {
       if (!err) {
         const res = !this.props.isEdit
           ? await saveBankCard(value)
-          : await saveBankCard(value, id);
+          : await saveBankCard(value,parseInt(id));
         if (res.status === 0) {
           message.success(res.msg || "提交成功");
           this.props.refreshPage();

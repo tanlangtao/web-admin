@@ -3,13 +3,7 @@ import { Card, Table, Modal, message, Icon, Input } from "antd";
 import "moment/locale/zh-cn";
 import WrappedAddDataForm from "./addData";
 import LinkButton from "../../../components/link-button/index";
-import {
-  reqAdminList,
-  searchAdminData,
-  roleList,
-  packageList,
-  resetAuthCode
-} from "../../../api/index";
+import { reqAdminList, searchAdminData, roleList, packageList, resetAuthCode } from "../../../api/index";
 
 class Admin_manage_list extends Component {
   constructor(props) {
@@ -44,7 +38,20 @@ class Admin_manage_list extends Component {
     },
     {
       title: "授权品牌",
-      dataIndex: "group"
+      dataIndex: "group",
+      render: (text, record) => {
+        let groups = text.split(',')
+        let newData = []
+        for (let i = 0; i < groups.length; i++) {
+          const element = parseInt(groups[i])
+          this.packageList.forEach(item => {
+            if (item.value === element) {
+              newData.push(item.label)
+            }
+          })
+        }
+        return <div>{newData.join(',')}</div>
+      }
     },
     {
       title: "授权代理",
@@ -59,7 +66,7 @@ class Admin_manage_list extends Component {
       dataIndex: "created_at",
       render: (text, record) => (
         <div style={{ wordWrap: "break-word", wordBreak: "break-all" }}>
-          {text}
+          {text.replace("T", " ").replace("+08:00", " ")}
         </div>
       )
     },
@@ -68,7 +75,7 @@ class Admin_manage_list extends Component {
       dataIndex: "updated_at",
       render: (text, record) => (
         <div style={{ wordWrap: "break-word", wordBreak: "break-all" }}>
-          {text}
+          {text.replace("T", " ").replace("+08:00", " ")}
         </div>
       )
     },
@@ -96,10 +103,16 @@ class Admin_manage_list extends Component {
 
   getUsers = async (page, limit) => {
     const result = await reqAdminList(page, limit);
+    const res = await packageList();
+    if (res.status === 0) {
+      this.packageList = res.data.list.map(item => {
+        return { label: item.name, value: item.id };
+      });
+    }
     if (result.data) {
       this.setState({
-        data: result.data,
-        count: parseInt(result.count)
+        data: result.data && result.data && result.data.list,
+        count: parseInt(result.data && result.data.count)
       });
     }
   };
@@ -108,21 +121,15 @@ class Admin_manage_list extends Component {
   }
   onSearchData = async () => {
     const result = await searchAdminData(this.state.inputParam);
-    // if (result.status === 0) {
     this.setState({
-      data: result.data,
-      count: result.count
+      data: result.data && result.data && result.data.list,
+      count: parseInt(result.data && result.data.count)
     });
-    // }
   };
   addData = async () => {
     const res = await roleList();
-    const result = await packageList();
-    if (res.status === 0 && result.status === 0) {
-      this.optionList = res.data;
-      this.packageList = result.data.map(item => {
-        return { label: item.name, value: item.id };
-      });
+    if (res.status === 0) {
+      this.optionList = res.data.list;
       this.setState({
         isAddDataShow: true
       });
@@ -134,8 +141,8 @@ class Admin_manage_list extends Component {
     const res = await roleList();
     const result = await packageList();
     if (res.status === 0 && result.status === 0) {
-      this.optionList = res.data;
-      this.packageList = result.data.map(item => {
+      this.optionList = res.data.list;
+      this.packageList = result.data.list.map(item => {
         return { label: item.name, value: item.id };
       });
       this.setState({
@@ -198,11 +205,18 @@ class Admin_manage_list extends Component {
           pagination={{
             defaultPageSize: this.state.pageSize,
             showQuickJumper: true,
+            showSizeChanger: true,
             showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
             onChange: (page, pageSize) => {
               this.getUsers(page, pageSize);
+            },
+            onShowSizeChange: (current, size) => {
+              this.setState({
+                pageSize: size
+              });
+              this.getUsers(1, 20);
             }
           }}
         />

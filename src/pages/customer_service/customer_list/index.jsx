@@ -30,17 +30,17 @@ class Customer_list extends Component {
     const result = await customerList(page, limit);
     if (result.data) {
       this.setState({
-        data: result.data,
-        count: parseInt(result.count)
+        data: JSON.parse(result.data.list),
+        count: parseInt(result.data && result.data.count)
       });
     }
   };
   onSearchData = async () => {
     const res = await customerList(1, 20, this.input.input.value);
-    if (res.status === 0) {
+    if (res.data) {
       this.setState({
-        data: res.data,
-        count: parseInt(res.count)
+        data: JSON.parse(res.data.list),
+        count: parseInt(res.data && res.data.count)
       });
     }
   };

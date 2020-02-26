@@ -22,7 +22,7 @@ class Withdraw_list extends Component {
     const result = await getAIList(page, limit, 5);
     this.setState({
       data: result.data.game_user,
-      count: parseInt(result.count)
+      count: parseInt(result.data&&result.data.count)
     });
   };
   onSearchData = async () => {

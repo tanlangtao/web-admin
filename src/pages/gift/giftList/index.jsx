@@ -19,11 +19,11 @@ class Withdraw_list extends Component {
     this.reqData = {
       start_time: "",
       end_time: "",
-      order_status: "",
-      type: 5
+      order_status: null,
+      type: "5"
     };
-    this.inputKey = "";
-    this.inputValue = "";
+    this.inputKey = "user_id";
+    this.inputValue = null;
     this.state = {
       data: [],
       count: 0,
@@ -35,8 +35,8 @@ class Withdraw_list extends Component {
   getUsers = async (page, pageSize, reqData) => {
     const result = await withDraw(page, pageSize, reqData);
     this.setState({
-      data: result.data,
-      count: parseInt(result.count)
+      data: result.data && result.data.list,
+      count: parseInt(result.data && result.data.count)
     });
   };
   onSearchData = (page, limit) => {
@@ -56,7 +56,7 @@ class Withdraw_list extends Component {
     downloadWithdrawList(this.state);
   };
   componentDidMount() {
-    this.getUsers(1, 20, { flag: 1, type: 5 });
+    this.getUsers(1, 20, { flag: 1, type: "5" });
   }
   render() {
     return (
@@ -66,6 +66,7 @@ class Withdraw_list extends Component {
             <Select
               placeholder="请选择"
               style={{ width: 150 }}
+              defaultValue="user_id"
               onSelect={value => (this.inputKey = value)}
             >
               <Select.Option value="order_id">订单id</Select.Option>
@@ -151,8 +152,8 @@ class Withdraw_list extends Component {
               this.action === "check"
                 ? "审核信息"
                 : this.action === "risk"
-                ? "资金明细"
-                : "运营备注"
+                  ? "资金明细"
+                  : "运营备注"
             }
             visible={this.state.isDetailShow}
             onCancel={() => {
@@ -351,8 +352,8 @@ class Withdraw_list extends Component {
       action === "risk"
         ? await userDetail(1, 20, record.user_id)
         : action === "check"
-        ? await reviewInfo(1, 20, record.order_id)
-        : await remarkInfo(1, 20, record.order_id);
+          ? await reviewInfo(1, 20, record.order_id)
+          : await remarkInfo(1, 20, record.order_id);
     if (res.status === 0) {
       this.detailRecord.data = res.data;
       this.detailRecord.count = res.count;

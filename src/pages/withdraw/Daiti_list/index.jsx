@@ -30,11 +30,11 @@ class Daiti extends Component {
     this.reqData = {
       start_time: "",
       end_time: "",
-      order_status: "",
-      type: 3
+      order_status: null,
+      type: "3"
     };
     this.inputKey = "user_id";
-    this.inputValue = "";
+    this.inputValue = null;
     this.state = {
       data: [],
       count: 0,
@@ -44,10 +44,10 @@ class Daiti extends Component {
   }
   getUsers = async (page, pageSize, reqData) => {
     const result = await withDraw(page, pageSize, reqData);
-    if (result.data) {
+    if (result.status === 0) {
       this.setState({
-        data: result.data,
-        count: parseInt(result.count)
+        data: result.data && result.data.list,
+        count: parseInt(result.data && result.data.count)
       });
     }
     if (result.status === -1) {
@@ -63,9 +63,7 @@ class Daiti extends Component {
       flag: 1,
       ...this.reqData
     };
-    if (this.inputKey === "1" || this.inputKey === "2") {
-      reqData.time_type = this.inputKey;
-    } else if (this.inputKey) {
+    if (this.inputKey) {
       reqData[this.inputKey] = this.inputValue;
     }
     this.getUsers(page, limit, reqData);
@@ -80,7 +78,7 @@ class Daiti extends Component {
     downloadWithdrawList(data);
   };
   componentDidMount() {
-    this.getUsers(1, 20, { flag: 1, type: 3 });
+    this.getUsers(1, 20, { flag: 1, type: "3" });
   }
   render() {
     return (
@@ -103,6 +101,7 @@ class Daiti extends Component {
               <Select.Option value="order_id">订单id</Select.Option>
               <Select.Option value="user_id">user_id</Select.Option>
               <Select.Option value="replace_id">代提ID</Select.Option>
+              <Select.Option value="package_nick">所属品牌</Select.Option>
               <Select.Option value="1">创建时间</Select.Option>
               <Select.Option value="2">到账时间</Select.Option>
             </Select>
@@ -184,8 +183,8 @@ class Daiti extends Component {
               this.action === "check"
                 ? "审核信息"
                 : this.action === "risk"
-                ? "资金明细"
-                : "运营备注"
+                  ? "资金明细"
+                  : "运营备注"
             }
             visible={this.state.isDetailShow}
             onCancel={() => {
@@ -392,26 +391,30 @@ class Daiti extends Component {
       action === "risk"
         ? await userDetail(1, 20, record.user_id)
         : action === "check"
-        ? await reviewInfo(1, 20, record.order_id)
-        : await remarkInfo(1, 20, record.order_id);
-    if (res.status === 0) {
-      this.detailRecord.data = res.data;
-      this.detailRecord.count = res.count;
+          ? await reviewInfo(1, 20, record.order_id)
+          : await remarkInfo(1, 20, record.order_id);
+    if ( action === "risk" && res.data) {
+      this.detailRecord.data = res.data.account_change;
+      this.detailRecord.count = res.data.count;
+    }
+    if (res.data && action !== "risk") {
+      this.detailRecord.data = res.data.list;
+      this.detailRecord.count = res.data.count;
     }
     this.setState({ isDetailShow: true });
   };
   edit = async record => {
     let reqData = {
       flag: 1,
-      type: 3,
+      type: "3",
       order_id: record.order_id
     };
     const res = await auditOrder(reqData);
-    if (res.status === 0) {
-      this.editData = res.data[0];
+    if (res.status === 0 && res.data && res.data.list) {
+      this.editData = res.data && res.data.list[0];
       this.setState({ isEditShow: true });
     } else {
-      message.error("操作失败");
+      message.error(res.msg || "操作失败");
     }
   };
 }

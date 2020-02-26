@@ -6,11 +6,9 @@ import {
   message,
   Icon,
   Input,
-  Popconfirm,
-  Button,
   Select
 } from "antd";
-import { tasksList, saveConf, reviewTask } from "../../../api/index";
+import { tasksList, reviewTask } from "../../../api/index";
 import LinkButton from "../../../components/link-button";
 import WrappedEditForm from "./edit";
 import MyDatePicker from "../../../components/MyDatePicker";
@@ -30,8 +28,8 @@ class Tasks extends Component {
     const res = await tasksList(page, limit);
     if (res.status === 0) {
       this.setState({
-        data: res.data,
-        count: res.count
+        data: res.data && res.data.list,
+        count: parseInt(res.data && res.data.count)
       });
     } else {
       message.error(res.msg);
@@ -79,7 +77,7 @@ class Tasks extends Component {
           </div>
         }
         extra={
-          <LinkButton onClick={() => window.location.reload()} size="normal">
+          <LinkButton onClick={() => window.location.reload()} size="default">
             <Icon type="reload" />
           </LinkButton>
         }
@@ -118,7 +116,7 @@ class Tasks extends Component {
               );
             }
           }}
-          scroll={{ x: 1400 }}
+          scroll={{ x: 1700 }}
         />
         {this.state.isEditFormShow && (
           <Modal
@@ -166,10 +164,12 @@ class Tasks extends Component {
           {parseInt(text) === 0
             ? "用户列表资金变动"
             : parseInt(text) === 1
-            ? "代理配置列表资金变动"
-            : parseInt(text) === 2
-            ? "用户重置密码"
-            : ""}
+              ? "代理配置列表资金变动"
+              : parseInt(text) === 2
+                ? "用户重置密码"
+                  : parseInt(text) === 3
+                    ? "解绑用户绑定账户"
+                : ""}
         </span>
       )
     },
@@ -184,12 +184,22 @@ class Tasks extends Component {
     {
       title: "创建时间",
       dataIndex: "created_at",
-      width: 200
+      width: 200,
+      render: (text, record) => (
+        <div style={{ wordWrap: "break-word", wordBreak: "break-all" }}>
+          {text.replace("T", " ").replace("+08:00", " ")}
+        </div>
+      )
     },
     {
       title: "更新时间",
       dataIndex: "updated_at",
-      width: 200
+      width: 200,
+      render: (text, record) => (
+        <div style={{ wordWrap: "break-word", wordBreak: "break-all" }}>
+          {text.replace("T", " ").replace("+08:00", " ")}
+        </div>
+      )
     },
     {
       title: "状态",
@@ -203,6 +213,7 @@ class Tasks extends Component {
                 <LinkButton size="small" onClick={() => this.review(record)}>
                   复审
                 </LinkButton>
+                &nbsp;&nbsp;
                 <LinkButton
                   size="small"
                   type="danger"
@@ -241,10 +252,10 @@ class Tasks extends Component {
       value.status = this.status;
     }
     const res = await tasksList(this.state.page, this.state.pageSize, value);
-    this.setState({ data: res.data, count: res.count });
+    this.setState({ data: res.data.list, count: res.data.count });
   };
   review = async record => {
-    if (record.task_type === 2) {
+    if (record.task_type === 2|| record.task_type === 3) {
       let value = {
         id: record.id,
         params: record.params,
@@ -264,7 +275,7 @@ class Tasks extends Component {
     }
   };
   refuse = async record => {
-    if (record.task_type === 2) {
+    if (record.task_type === 2 || record.task_type === 3) {
       let value = {
         id: record.id,
         params: record.params,

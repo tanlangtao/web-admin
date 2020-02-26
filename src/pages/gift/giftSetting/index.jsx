@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { Card, message, Input, Button, Form, Radio, Select } from "antd";
+import { Card, message, Input, Button, Form, Radio } from "antd";
 import { getConfigList, setGiftConfig } from "../../../api/index";
 
 class Channel extends Component {
@@ -15,7 +15,7 @@ class Channel extends Component {
     };
     const res = await getConfigList(reqData);
     if (res.status === 0) {
-      this.resData = res.data;
+      this.resData = res.data&&res.data.list;
     } else {
       message.info(res.msg);
     }
@@ -51,8 +51,8 @@ class Channel extends Component {
               //   <Select.Option value="lucy">Lucy</Select.Option>
               // </Select>
               <Radio.Group>
-                <Radio value={1}>博臣娱乐</Radio>
-                <Radio value={0}>机器人首领</Radio>
+                <Radio value={1}>特斯特娱乐</Radio>
+                <Radio value={2}>德比游戏</Radio>
               </Radio.Group>
             )}
           </Form.Item>

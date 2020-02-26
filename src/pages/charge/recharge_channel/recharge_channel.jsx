@@ -23,10 +23,16 @@ class Recharge_channel extends Component {
   }
   getUsers = async (page, limit) => {
     const result = await getChannel(page, limit);
-    if (result.data) {
+    if (result.status === 0) {
       this.setState({
-        data: result.data,
-        count: parseInt(result.count)
+        data: result.data && result.data.list,
+        count: result.data && result.data.count
+      });
+    }
+    if (result.status === -1) {
+      this.setState({
+        data: [],
+        count: 0
       });
     }
   };
@@ -155,11 +161,11 @@ class Recharge_channel extends Component {
       });
       const result = await getChannelInfo(record.id);
       if (result.status === 0) {
-        result.data.forEach((element, index) => {
+        result.data&&result.data.list.forEach((element, index) => {
           element.key = index;
         });
         this.setState({
-          childData: result.data
+          childData: result.data&&result.data.list
         });
       } else {
         message.error(result.msg || "未检索到数据");

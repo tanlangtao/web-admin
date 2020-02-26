@@ -13,51 +13,62 @@ import axios from "axios";
 import { message } from "antd";
 
 //设置axios为form-data
-
 export default function ajax(url, data = {}, type = "GET") {
-  // axios.interceptors.request.use((config) => {
-  //   if (['/user/login', '/user/register'].indexOf(config.url) === -1) {
-  //     const token = localStorage.getItem('token')
-  //     if (token) {
-  //       config.headers.Authorization = token
-  //     }
-  //   }
-  //   return config
-  // })
-  return new Promise((resolve, reject) => {
-    let promise;
-    // 1. 执行异步ajax请求
-    if (type === "GET") {
-      // 发GET请求
-      promise = axios.get(url, {
-        // 配置对象
-        params: data // 指定请求参数
-      });
-    } else {
-      // 发POST请求
-      axios.defaults.headers.post["Content-Type"] =
-        "application/x-www-form-urlencoded";
-      axios.defaults.transformRequest = [
-        function(data) {
-          let ret = "";
-          for (let it in data) {
-            ret +=
-              encodeURIComponent(it) + "=" + encodeURIComponent(data[it]) + "&";
-          }
-          return ret;
+    axios.interceptors.request.use(
+        config => {
+            const token = localStorage.token;
+            if (token) {
+                // 判断是否存在token，如果存在的话，则每个http header都加上token
+                config.headers["Authorization"] = token;
+                // console.log("interceptors config=", config);
+            }
+            return config;
+        },
+        error => {
+            return Promise.reject(error);
         }
-      ];
-      promise = axios.post(url, data);
-    }
-    // 2. 如果成功了, 调用resolve(value)
-    promise
-      .then(response => {
-        resolve(response.data);
-        // 3. 如果失败了, 不调用reject(reason), 而是提示异常信息
-      })
-      .catch(error => {
-        // reject(error)
-        message.error("请求出错了: " + error.message);
-      });
-  });
+    );
+    return new Promise((resolve, reject) => {
+        let promise;
+        // 1. 执行异步ajax请求
+        if (type === "GET") {
+            promise = axios.get(url, {
+                params: data // 指定请求参数
+            });
+        } else {
+            // 发POST请求
+            axios.defaults.headers.post["Content-Type"] = "application/json";
+            // axios.defaults.transformRequest = [
+            //   function(data) {
+            //     let ret = "";
+            //     for (let it in data) {
+            //       ret +=
+            //         encodeURIComponent(it) + "=" + encodeURIComponent(data[it]) + "&";
+            //     }
+            //     return ret;
+            //   }
+            // ];
+            promise = axios.post(url, data);
+        }
+        // 2. 如果成功了, 调用resolve(value)
+        promise.then(response => {
+            resolve(response.data);
+        })
+            // 3. 如果失败了, 不调用reject(reason), 而是提示异常信息
+            .catch(error => {
+                // reject(error)
+                if (error.response && error.response.status === 401) {
+                    message.info("token过期，请重新登录")
+                    localStorage.removeItem("menuList");
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("name");
+                    localStorage.removeItem("BASE");
+                }
+                message.error(
+                    (error.response && error.response.data.msg) ||
+                    "请求出错了: " + error.message
+                );
+            });
+
+    });
 }

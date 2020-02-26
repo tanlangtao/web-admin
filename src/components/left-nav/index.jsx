@@ -45,7 +45,7 @@ class LeftNav extends Component {
   getMenuNodes = menuList => {
     // 得到当前请求的路由路径
     const path = this.props.location.pathname;
-    return menuList.reduce((pre, item) => {
+    return menuList && menuList.reduce((pre, item) => {
       // 向pre添加<Menu.Item>
       // if (item.key) {
       //按需渲染侧边栏，必须已经在后台-权限管理中设置了路由key才能渲染

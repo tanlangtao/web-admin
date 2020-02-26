@@ -5,12 +5,10 @@ import {
   Button,
   Radio,
   Checkbox,
-  DatePicker,
-  message
+  message,
+  InputNumber
 } from "antd";
-import { packageList, saveCustomerService} from "../../../api";
-import moment from "moment";
-import { formateDate } from "../../../utils/dateUtils";
+import { packageList, saveCustomerService } from "../../../api";
 class AddDataForm extends Component {
   constructor(props) {
     super(props);
@@ -23,9 +21,9 @@ class AddDataForm extends Component {
   }
   getPackageList = async () => {
     let res = await packageList();
-    if (res.status === 0) {
+    if (res.status === 0 && res.data) {
       let arr = [];
-      res.data.forEach(element => {
+      res.data.list.forEach(element => {
         arr.push({ label: element.name, value: element.id });
       });
       this.setState({
@@ -109,7 +107,7 @@ class AddDataForm extends Component {
           {getFieldDecorator("sort", {
             rules: [{ required: true }],
             initialValue: isEdit && editDataRecord.sort
-          })(<Input style={{ width: "60%" }} />)}
+          })(<InputNumber style={{ width: "60%" }} />)}
         </Form.Item>
         <Form.Item>
           <Button
@@ -130,11 +128,12 @@ class AddDataForm extends Component {
         ? this.props.editDataRecord.user_id
         : "";
       if (!err) {
-        value.package_ids.forEach(item => {
-          let str = "group[" + item + "]";
-          value[str] = item;
-        });
-        delete value.package_ids;
+        // value.package_ids.forEach(item => {
+        //   let str = "group[" + item + "]";
+        //   value[str] = item;
+        // });
+        // delete value.package_ids;
+        value.package_ids = value.package_ids.join(',');
         const res = !this.props.isEdit
           ? await saveCustomerService(value, "add")
           : await saveCustomerService(value, "edit", id);

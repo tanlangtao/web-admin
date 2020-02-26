@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-import {
-  Card,
-  Table,
-  Icon,
-  Input,
-  Select,
-  Popconfirm,
-  message
-} from "antd";
+import { Card, Table, Icon, Input, Select, Popconfirm, message } from "antd";
 import { formateDate } from "../../../utils/dateUtils";
 import "moment/locale/zh-cn";
 import { rechargeOrder, downloadList, cancelOrder } from "../../../api/index";
@@ -31,8 +23,8 @@ class Recharge_order extends Component {
       order_id: ""
     };
     this.inputKey = "user_id";
-    this.inputValue = "";
-    this.order_status = "";
+    this.inputValue = null;
+    this.order_status = null;
   }
   getUsers = async (page, limit) => {
     const result = await rechargeOrder(
@@ -44,10 +36,10 @@ class Recharge_order extends Component {
       this.inputKey,
       this.inputValue
     );
-    if (result.data) {
+    if (result.status === 0) {
       this.setState({
-        data: result.data,
-        count: parseInt(result.count)
+        data: result.data && result.data.list,
+        count: result.data && result.data.count
       });
     }
     if (result.status === -1) {
@@ -197,6 +189,11 @@ class Recharge_order extends Component {
       width: 150
     },
     {
+        title: "所属品牌",
+        dataIndex: "package_nick",
+        width: 150
+    },
+    {
       title: "代充ID",
       dataIndex: "replace_id",
       width: 150
@@ -290,6 +287,7 @@ class Recharge_order extends Component {
       title: "操作",
       dataIndex: "",
       render: (text, record, index) => {
+        // eslint-disable-next-line
         if (record.status == 1 || record.status == 5) {
           return (
             <Popconfirm

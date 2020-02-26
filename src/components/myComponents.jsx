@@ -38,6 +38,7 @@ export class CodeEditor extends Component {
   }
   render() {
     const conf_val = JSON.stringify([JSON.parse(this.props.conf_val)], null, 2);
+    console.log(conf_val);
     //使用默认传过来的onChange事件
     const { onChange } = this.props;
     return (

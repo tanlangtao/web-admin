@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Table, Modal, message, Icon, Input, Popconfirm } from "antd";
+import { Card, Table, Modal, message, Icon, Popconfirm } from "antd";
 import LinkButton from "../../../components/link-button/index";
 import { bankList, deleteBankCard } from "../../../api/index";
 import WrappedAddDataForm from "./addorEdit";
@@ -19,10 +19,16 @@ class Bankcard_list extends Component {
   }
   getUsers = async (page, limit) => {
     const result = await bankList(page, limit);
-    if (result.data) {
+    if (result.status === 0) {
       this.setState({
-        data: result.data,
-        count: parseInt(result.count)
+        data: result.data && result.data.list,
+        count: result.data && result.data.count
+      });
+    }
+    if (result.status === -1) {
+      this.setState({
+        data: [],
+        count: 0
       });
     }
   };
@@ -39,7 +45,7 @@ class Bankcard_list extends Component {
     });
   };
   delete = async record => {
-    const result = await deleteBankCard(record.id);
+    const result = await deleteBankCard(parseInt(record.id));
     if (result.status === 0) {
       message.success(result.msg);
       this.refreshPage(1, 20);
@@ -101,7 +107,7 @@ class Bankcard_list extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1000}}
+          scroll={{ x: 1000 }}
         />
         <Modal
           title="添加"

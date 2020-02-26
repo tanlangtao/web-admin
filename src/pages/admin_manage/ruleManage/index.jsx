@@ -28,8 +28,8 @@ class Rule extends Component {
     const res = await ruleList();
     if (res.status === 0) {
       this.setState({
-        data: res.data,
-        count: res.count
+        data: res.data && res.data.list,
+        count: res.data && res.data.count
       });
     } else {
       message.error(res.msg);
@@ -55,10 +55,10 @@ class Rule extends Component {
               <Form.Item>
                 {getFieldDecorator("pid", {
                   rules: [{ required: true, message: "请选择权限" }],
-                  initialValue: "0"
+                  initialValue: 0
                 })(
                   <Select style={{ width: 200 }}>
-                    <Select.Option value="0">一级权限</Select.Option>
+                    <Select.Option value={0}>一级权限</Select.Option>
                     {packageNode}
                   </Select>
                 )}
@@ -69,29 +69,34 @@ class Rule extends Component {
                 })(<Input style={{ width: 120 }} placeholder="菜单名" />)}
               </Form.Item>
               <Form.Item>
-                {getFieldDecorator("module", {})(
-                  <Input style={{ width: 120 }} placeholder="模块名" />
-                )}
+                {getFieldDecorator(
+                  "module",
+                  {}
+                )(<Input style={{ width: 120 }} placeholder="模块名" />)}
               </Form.Item>
               <Form.Item>
-                {getFieldDecorator("action", {})(
-                  <Input style={{ width: 120 }} placeholder="方法名" />
-                )}
+                {getFieldDecorator(
+                  "action",
+                  {}
+                )(<Input style={{ width: 120 }} placeholder="方法名" />)}
               </Form.Item>
               <Form.Item>
-                {getFieldDecorator("href", {})(
-                  <Input style={{ width: 120 }} placeholder="模板路径" />
-                )}
+                {getFieldDecorator(
+                  "href",
+                  {}
+                )(<Input style={{ width: 120 }} placeholder="模板路径" />)}
               </Form.Item>
               <Form.Item>
-                {getFieldDecorator("key", {})(
-                  <Input style={{ width: 120 }} placeholder="路由key" />
-                )}
+                {getFieldDecorator(
+                  "router_key",
+                  {}
+                )(<Input style={{ width: 120 }} placeholder="路由key" />)}
               </Form.Item>
               <Form.Item>
-                {getFieldDecorator("icon", {})(
-                  <Input style={{ width: 120 }} placeholder="icon样式" />
-                )}
+                {getFieldDecorator(
+                  "icon",
+                  {}
+                )(<Input style={{ width: 120 }} placeholder="icon样式" />)}
               </Form.Item>
               <Form.Item>
                 {getFieldDecorator("sort", {
@@ -129,13 +134,13 @@ class Rule extends Component {
             showQuickJumper: true,
             showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
-            total: this.state.count,
-            onChange: (page, pageSize) => {
-              this.getInitialData(page, pageSize);
-            },
-            onShowSizeChange: (current, size) => {
-              this.getInitialData(current, size);
-            }
+            total: this.state.count
+            // onChange: (page, pageSize) => {
+            //   this.getInitialData(page, pageSize);
+            // },
+            // onShowSizeChange: (current, size) => {
+            //   this.getInitialData(current, size);
+            // }
           }}
         />
         <Modal
@@ -227,6 +232,7 @@ class Rule extends Component {
             value[key] = "";
           }
         }
+        value.sort = +value.sort;
         const res = await addRule(value);
         if (res.status === 0) {
           message.success("提交成功");

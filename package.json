@@ -16,6 +16,7 @@
     "html-to-draftjs": "1.4.0",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
+    "p-any": "^2.1.0",
     "prop-types": "^15.7.2",
     "qrcode.react": "^0.9.3",
     "react": "^16.9.0",
@@ -28,7 +29,7 @@
     "react-keep-alive": "^2.4.1",
     "react-redux": "^7.1.0",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^3.4.0",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
     "store": "^2.0.12"
@@ -36,11 +37,17 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
+    "build:pre": "dotenv -e .env.pre react-app-rewired build",
+    "build:dev": "dotenv -e .env.dev react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "airbnb",
+      "plugin:prettier/recommended"
+    ]
   },
   "browserslist": {
     "production": [
@@ -59,7 +66,9 @@
   "directories": {
     "test": "test"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "dotenv-cli": "^3.1.0"
+  },
   "repository": {
     "type": "git",
     "url": "http://git.0717996.com/roland/admin-web.git"
@@ -67,6 +76,5 @@
   "keywords": [
     "admin-web"
   ],
-  "author": "roland",
   "license": "ISC"
 }

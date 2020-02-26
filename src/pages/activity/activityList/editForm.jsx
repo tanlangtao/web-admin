@@ -42,8 +42,8 @@ const EditForm = props => {
             initialValue: action === "add" ? "" : record.package_id
           })(
             <Select style={{ width: "40%" }}>
-              <Select.Option value="1">博臣娱乐</Select.Option>
-              <Select.Option value="2">机器人首领</Select.Option>
+              <Select.Option value="1">特斯特娱乐</Select.Option>
+              <Select.Option value="2">德比游戏</Select.Option>
             </Select>
           )}
         </Form.Item>

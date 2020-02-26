@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, Button, message, Select, Radio } from "antd";
+import {  Button, message, Radio } from "antd";
 import { withDrawReview } from "../../../api/index";
 class EditForm extends Component {
   constructor(props) {

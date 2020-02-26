@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Icon, Input, Button, message, Radio, Select } from "antd";
+import { Form, Input, Button, message, Radio, Select } from "antd";
 import { addChannel, editPayChannel } from "../../../api";
 
 class AddDataForm extends Component {
@@ -50,12 +50,16 @@ class AddDataForm extends Component {
               {
                 required: true,
                 message: "该项不能为空"
+              },
+              {
+                pattern: /^[0-9]+$/,
+                message: "必须是数字"
               }
             ],
             initialValue: isEdit ? editDataRecord.channel_id : ""
           })(<Input style={{ width: "60%" }} />)}
         </Form.Item>
-        <Form.Item label="支付名称">
+        <Form.Item label="渠道昵称">
           {getFieldDecorator("nick_name", {
             rules: [
               {
@@ -96,6 +100,10 @@ class AddDataForm extends Component {
               <Select.Option value="1">网银支付</Select.Option>
               <Select.Option value="13">银联扫码</Select.Option>
               <Select.Option value="17">转账银行卡</Select.Option>
+              <Select.Option value="18">im支付宝代充</Select.Option>
+              <Select.Option value="19">im微信代充</Select.Option>
+              <Select.Option value="20">im网银代充</Select.Option>
+              <Select.Option value="21">im银联扫码代充</Select.Option>
             </Select>
           )}
         </Form.Item>
@@ -105,6 +113,10 @@ class AddDataForm extends Component {
               {
                 required: true,
                 message: "该项不能为空"
+              },
+              {
+                pattern: /^[0-9]+$/,
+                message: "必须是数字"
               }
             ],
             initialValue: isEdit ? editDataRecord.min_amount : ""
@@ -116,6 +128,10 @@ class AddDataForm extends Component {
               {
                 required: true,
                 message: "该项不能为空"
+              },
+              {
+                pattern: /^[0-9]+$/,
+                message: "必须是数字"
               }
             ],
             initialValue: isEdit ? editDataRecord.max_amount : ""
@@ -125,9 +141,8 @@ class AddDataForm extends Component {
           {getFieldDecorator("span_amount", {
             rules: [
               {
-                required: true,
-                whitespace: true,
-                message: "请输入有效数字"
+                pattern: /^[0-9,]+$/,
+                message: "必须是数字组合，面值之间用英文逗号隔开"
               }
             ],
             initialValue: isEdit && editDataRecord.span_amount
@@ -140,6 +155,10 @@ class AddDataForm extends Component {
                 required: true,
                 whitespace: true,
                 message: "请输入有效数字"
+              },
+              {
+                pattern: /^[0-9]+$/,
+                message: "请输入有效数字"
               }
             ],
             initialValue: isEdit && editDataRecord.seed
@@ -151,6 +170,10 @@ class AddDataForm extends Component {
               {
                 required: true,
                 message: "该项不能为空"
+              },
+              {
+                pattern: /^\d+(\.\d+)?$/,
+                message: "请输入有效数字"
               }
             ],
             initialValue: isEdit && editDataRecord.rate
@@ -158,6 +181,12 @@ class AddDataForm extends Component {
         </Form.Item>
         <Form.Item label="显示排序">
           {getFieldDecorator("sort", {
+            rules: [
+              {
+                pattern: /^[0-9]+$/,
+                message: "请输入有效数字"
+              }
+            ],
             initialValue: isEdit ? editDataRecord.sort : "0"
           })(<Input style={{ width: "60%" }} />)}
         </Form.Item>
@@ -179,9 +208,11 @@ class AddDataForm extends Component {
     this.props.form.validateFields(async (err, value) => {
       let id = this.props.editDataRecord ? this.props.editDataRecord.id : "";
       if (!err) {
+        value.pay_type = parseInt(value.pay_type);
+        value.channel_id = parseInt(value.channel_id);
         const res = !this.props.isEdit
           ? await addChannel(value)
-          : await editPayChannel(value,id);
+          : await editPayChannel(value, parseInt(id));
         if (res.status === 0) {
           message.success("提交成功");
           this.props.refreshPage();

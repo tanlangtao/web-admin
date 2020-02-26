@@ -25,7 +25,7 @@ export default function MyDatePicker(props) {
             moment()
               .startOf("day")
               .subtract(1, "weeks"),
-            moment()
+            moment().startOf("day")
           ]
         }}
         showTime={{

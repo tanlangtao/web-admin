@@ -22,9 +22,9 @@ class AddDataForm extends Component {
   }
   getPackageList = async () => {
     let res = await packageList();
-    if (res.status === 0) {
+    if (res.status === 0 && res.data) {
       let arr = [];
-      res.data.forEach(element => {
+      res.data.list.forEach(element => {
         arr.push({ label: element.name, value: element.id });
       });
       this.setState({
@@ -75,7 +75,7 @@ class AddDataForm extends Component {
           })(<Input style={{ width: "60%" }} />)}
         </Form.Item>
         <Form.Item label="品牌">
-          {getFieldDecorator("packageList", {
+          {getFieldDecorator("package_ids", {
             rules: [{ required: true, message: "请选择品牌!" }],
             initialValue: isEdit && editDataRecord.package_ids
           })(
@@ -128,7 +128,7 @@ class AddDataForm extends Component {
             initialValue: isEdit ? editDataRecord.words : ""
           })(
             <Input.TextArea
-              autosize={{ minRows: 2, maxRows: 6 }}
+              autoSize={{ minRows: 2, maxRows: 6 }}
               style={{ width: "60%" }}
             />
           )}
@@ -170,16 +170,13 @@ class AddDataForm extends Component {
     this.props.form.validateFields(async (err, value) => {
       console.log(value);
       let id = this.props.editDataRecord
-        ? this.props.editDataRecord._id.$oid
+        ? this.props.editDataRecord._id
         : "";
       if (!err) {
-        value.packageList.forEach(item => {
-          let str = "group[" + item + "]";
-          value[str] = item;
-        });
+        value.package_ids = value.package_ids.join(',');
+        value.sort = + value.sort
         value.start_time = value.start_time.format("YYYY-MM-DD HH:mm:ss");
         value.end_time = value.end_time.format("YYYY-MM-DD HH:mm:ss");
-        delete value.packageList;
         const res = !this.props.isEdit
           ? await addNotice(value)
           : await updateNotice(value, id);

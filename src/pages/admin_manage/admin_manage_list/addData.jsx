@@ -1,13 +1,6 @@
 import React, { Component } from "react";
 import {
-  Form,
-  Icon,
-  Input,
-  Radio,
-  Select,
-  Checkbox,
-  Button,
-  message
+  Form, Icon, Input, Radio, Select, Checkbox, Button, message, InputNumber
 } from "antd";
 import { addUser, editUser } from "../../../api";
 
@@ -22,7 +15,6 @@ class AddDataForm extends Component {
     };
   }
   checkboxOnChange = checkedList => {
-    // console.log(checkedList);
     this.setState({
       checkedList,
       indeterminate:
@@ -80,6 +72,8 @@ class AddDataForm extends Component {
   render() {
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const { editDataRecord, isEdit } = this.props;
+    console.log("this.props.optionList", this.props.optionList);
+
     const Option = this.props.optionList.map(item => (
       <Select.Option value={item.id} key={item.id}>
         {item.name}
@@ -100,11 +94,7 @@ class AddDataForm extends Component {
                 message: "登录名必须输入"
               },
               { min: 3, message: "用户名至少3位" },
-              { max: 10, message: "用户名最多10位" },
-              {
-                pattern: /^[a-zA-Z0-9_]+$/,
-                message: "用户名必须是英文、数字或下划线组成"
-              }
+              { max: 10, message: "用户名最多10位" }
             ],
             initialValue: isEdit ? editDataRecord.name : ""
           })(
@@ -175,8 +165,7 @@ class AddDataForm extends Component {
             rules: [
               {
                 required: true,
-                whitespace: true,
-                message: "请输入有效数字"
+                message: "不能为空"
               },
               {
                 pattern: /^\d+(\.\d+)?$/,
@@ -184,7 +173,7 @@ class AddDataForm extends Component {
               }
             ],
             initialValue: isEdit && editDataRecord.use_balance
-          })(<Input style={{ width: "60%" }} placeholder="请输入数字" />)}
+          })(<InputNumber style={{ width: "60%" }} placeholder="请输入数字" />)}
         </Form.Item>
         <Form.Item label="密码" style={isEdit ? { display: "none" } : {}}>
           {getFieldDecorator("password", {
@@ -241,8 +230,9 @@ class AddDataForm extends Component {
           label="密码(选填)"
           style={!isEdit ? { display: "none" } : {}}
         >
-          {getFieldDecorator("editPassword", {
-          })(
+          {getFieldDecorator(
+            "editPassword",
+          )(
             <Input
               type="password"
               style={{ width: "60%" }}

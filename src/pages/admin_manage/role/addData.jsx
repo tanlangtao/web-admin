@@ -142,6 +142,7 @@ class AddDataForm extends Component {
       if (!err) {
         let { name, desc } = value;
         let rules = this.state.checkedKeys;
+        rules = rules.join(",");
         let id = this.props.editDataRecord ? this.props.editDataRecord.id : "";
         const res = !this.props.isEdit
           ? await addRole(name, rules, desc)

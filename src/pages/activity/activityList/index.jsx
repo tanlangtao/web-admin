@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Card, Table, Modal, message, Input, Popconfirm } from "antd";
+import { Card, Table, Modal, message, Popconfirm } from "antd";
 import { activityConfigList, delActivityConfig } from "../../../api/index";
 import LinkButton from "../../../components/link-button";
-import MyDatePicker from "../../../components/MyDatePicker";
 import WrappedEditForm from "./editForm";
 import { formateDate } from "../../../utils/dateUtils";
 
@@ -21,8 +20,8 @@ class AccountList extends Component {
     const res = await activityConfigList(page, limit);
     if (res.status === 0) {
       this.setState({
-        data: res.data,
-        count: parseInt(res.count)
+        data: res.data && res.data&&res.data.list,
+        count: parseInt(res.data&&res.data.count)
       });
     } else {
       message.error(res.msg);
@@ -36,7 +35,7 @@ class AccountList extends Component {
       <Card
         title={
           <div>
-            <MyDatePicker
+             {/* <MyDatePicker
               handleValue={val => {
                 this.setState({
                   start_time: val[0],
@@ -52,13 +51,13 @@ class AccountList extends Component {
                 this.input = Input;
               }}
             />
-            &nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp; 
             <LinkButton
               onClick={this.onSearch}
               icon="search"
               size="default"
             ></LinkButton>
-            &nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp; */}
             <LinkButton onClick={this.add} size="default">
               添加
             </LinkButton>

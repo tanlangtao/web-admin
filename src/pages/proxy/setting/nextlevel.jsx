@@ -24,7 +24,7 @@ class NextLevel extends Component {
     if (res.status === 0 && res.data) {
       this.setState({
         data: res.data.proxy_user,
-        count: parseInt(res.count)
+        count: parseInt(res.data.count)
       });
     }
   };
@@ -115,12 +115,12 @@ class NextLevel extends Component {
           onClick: event => {
             this.changeBalance(record);
           }, // 点击行
-          onDoubleClick: event => {},
-          onContextMenu: event => {},
+          onDoubleClick: event => { },
+          onContextMenu: event => { },
           onMouseEnter: event => {
             event.target.style.cursor = "pointer";
           }, // 鼠标移入行
-          onMouseLeave: event => {}
+          onMouseLeave: event => { }
         };
       }
     },
@@ -205,8 +205,8 @@ class NextLevel extends Component {
       Modal.success({
         title: "实时余额",
         content: `代理${record.id}实时余额是 : ${
-          res.data ? res.data[0].balance : "0.00"
-        }`
+          res.data ? res.data.balance : "0.00"
+          }`
       });
     } else {
       message.info(res.msg || "操作失败");

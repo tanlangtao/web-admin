@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Card, Table, Modal, message, Icon, Input } from "antd";
+import { Card, Table, Modal, Icon } from "antd";
 import WrappedAddDataForm from "./addData";
 import LinkButton from "../../../components/link-button/index";
-import { getRoleList, getRuleList } from "../../../api/index";
+import { getRoleList } from "../../../api/index";
 
 class Role extends Component {
   constructor(props) {
@@ -57,8 +57,8 @@ class Role extends Component {
     const result = await getRoleList(page, limit);
     if (result.data) {
       this.setState({
-        data: result.data,
-        count: parseInt(result.count)
+        data: result.data&&result.data.list,
+        count: parseInt(result.data&&result.data.count)
       });
     }
   };

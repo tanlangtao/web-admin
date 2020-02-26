@@ -94,7 +94,7 @@ class Diaodan extends Component {
     );
     if (res.status === 0) {
       this.setState({
-        data: res.data
+        data: res.data&&res.data.list
       });
     } else {
       message.error("未检索到数据");
