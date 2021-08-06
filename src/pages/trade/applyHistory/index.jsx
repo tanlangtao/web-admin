@@ -39,7 +39,7 @@ class Tasks extends Component {
         count: parseInt(res.data&&res.data.count)
       });
     } else {
-      message.error(res.msg);
+      message.info(res.msg);
     }
   };
   componentDidMount() {
@@ -51,7 +51,7 @@ class Tasks extends Component {
         title={
           <div>
             <MyDatePicker
-              handleValue={val => {
+              handleValue={(data,val) => {
                 this.start_time = val[0];
                 this.end_time = val[1];
               }}
@@ -387,7 +387,7 @@ class Tasks extends Component {
     if (res.status === 0) {
       message.success(res.msg);
     } else {
-      message.error(res.msg);
+      message.info(res.msg);
     }
   };
   checkDetail = async (record, action) => {

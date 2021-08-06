@@ -62,11 +62,6 @@ class AddDataForm extends Component {
                 required: true,
                 message: "该项不能为空"
               },
-              {
-                min: 15,
-                max: 20,
-                message: "请输入15-20位正确卡号"
-              }
             ],
             initialValue: isEdit ? editDataRecord.card_num : ""
           })(<Input style={{ width: "60%" }} />)}
@@ -145,10 +140,10 @@ class AddDataForm extends Component {
           this.props.cancel();
           this.props.form.resetFields();
         } else {
-          message.error("出错了" + res.msg);
+          message.info("出错了" + res.msg);
         }
       } else {
-        message.error("提交失败");
+        message.info("提交失败");
       }
     });
   };

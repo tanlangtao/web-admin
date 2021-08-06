@@ -127,7 +127,7 @@ class Withdraw_list extends Component {
   };
   changeGold = async () => {
     if (!this.selectedRows || !this.selectedRows[0]) {
-      message.error("user_id为空，请至少选择1位user_id");
+      message.info("user_id为空，请至少选择1位user_id");
     } else {
       console.log(this.selectedRows);
       Modal.confirm({
@@ -139,12 +139,12 @@ class Withdraw_list extends Component {
           let { minGold, maxGold } = this.state;
           if (minGold && maxGold) {
             if (minGold > maxGold) {
-              message.error("请确认最大值大于最小值");
+              message.info("请确认最大值大于最小值");
             } else {
               this.handleOk(minGold, maxGold);
             }
           } else {
-            message.error("请输入有效值");
+            message.info("请输入有效值");
           }
         },
         content: (
@@ -201,7 +201,7 @@ class Withdraw_list extends Component {
       }
       this.getUsers(1, 20);
     } else {
-      message.error("user_id为空，请至少选择1位user_id");
+      message.info("user_id为空，请至少选择1位user_id");
     }
   };
 }

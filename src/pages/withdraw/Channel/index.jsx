@@ -31,7 +31,7 @@ class Channel extends Component {
         this.setState({ data: JSON.parse(res.data.list.conf_val) });
       }
     } else {
-      message.error(res.msg);
+      message.info(res.msg);
     }
   };
   componentDidMount() {
@@ -376,10 +376,10 @@ class Channel extends Component {
           console.log(res);
           this.getUsers();
         } else {
-          message.error("出错了：" + res.msg);
+          message.info("出错了：" + res.msg);
         }
       } else {
-        message.error("提交失败");
+        message.info("提交失败");
       }
     });
   };

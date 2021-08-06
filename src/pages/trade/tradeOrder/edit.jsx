@@ -25,7 +25,7 @@ const EditForm = props => {
           props.finished();
           props.form.resetFields();
         } else {
-          message.error("出错了：" + res.msg);
+          message.info("出错了：" + res.msg);
         }
       }
     });

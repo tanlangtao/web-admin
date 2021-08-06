@@ -1,0 +1,107 @@
+/*! minireset.css v0.0.4 | MIT License | github.com/jgthms/minireset.css */
+html,
+body,
+p,
+ol,
+ul,
+li,
+dl,
+dt,
+dd,
+blockquote,
+figure,
+fieldset,
+legend,
+textarea,
+pre,
+iframe,
+hr {
+  margin: 0;
+  padding: 0;
+  font-weight: 600
+}
+
+
+
+ul {
+  list-style: none;
+}
+
+button,
+input,
+select,
+textarea {
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+img,
+embed,
+iframe,
+object,
+video {
+  height: auto;
+  max-width: 100%;
+}
+
+audio {
+  max-width: 100%;
+}
+
+iframe {
+  border: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td,
+th {
+  padding: 0;
+  text-align: left;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+.ant-card-head-title{
+  white-space: normal !important;
+}
+
+/* json编辑器样式 */
+.json-editor{
+  height: 100%;
+  position: relative;
+}
+.json-editor >>> .ReactCodeMirror {
+  height: auto;
+  min-height: 300px;
+}
+.json-editor >>> .CodeMirror-scroll{
+  min-height: 300px;
+}
+.json-editor >>> .cm-s-rubyblue span.cm-string {
+  color: #F08047;
+}
+span.cm-string {
+  font-weight: normal!important;
+}
+pre.CodeMirror-line{
+  line-height: 25px!important;
+  font-weight: normal!important;
+}

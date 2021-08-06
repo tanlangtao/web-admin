@@ -32,7 +32,7 @@ class Rule extends Component {
         count: parseInt(res.data&&res.data.count)
       });
     } else {
-      message.error(res.msg);
+      message.info(res.msg);
     }
   };
   componentDidMount() {
@@ -233,7 +233,7 @@ class Rule extends Component {
           this.getInitialData();
           this.props.form.resetFields();
         } else {
-          message.error("出错了：" + res.msg);
+          message.info("出错了：" + res.msg);
         }
       }
     });
@@ -244,7 +244,7 @@ class Rule extends Component {
       message.success("删除成功");
       this.getInitialData();
     } else {
-      message.error("出错了：" + res.msg);
+      message.info("出错了：" + res.msg);
     }
   };
   edit = async record => {

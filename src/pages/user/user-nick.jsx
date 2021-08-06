@@ -30,7 +30,7 @@ class NormalLoginForm extends Component {
               {
                 required: !isNickModal,
                 whitespace: true,
-                pattern: /^\d+(\.\d+)?$/,
+                pattern: /^-?\d+(\.\d+)?$/,
                 message: "必须为数字，减少时金额为负"
               }
             ],

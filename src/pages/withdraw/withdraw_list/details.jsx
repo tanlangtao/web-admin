@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import { Table } from 'antd';
-import { formateDate } from '../../../utils/dateUtils';
-
+import React, { Component } from "react";
+import { Table } from "antd";
+import { formateDate } from "../../../utils/dateUtils";
 class GoldDetail extends Component {
 	constructor(props) {
 		super(props);
@@ -20,88 +19,62 @@ class GoldDetail extends Component {
 		);
 	}
 	initColumns = () => {
-		if (this.props.action === 'check') {
+		if (this.props.action === "check") {
 			return [
 				{
-					title: '审核人',
-					dataIndex: 'review_name'
+					title: "审核人",
+					dataIndex: "review_name"
 				},
 				{
-					title: '审核时间',
-					dataIndex: 'review_at',
-					render: formateDate
-				}
-			];
-		} else if (this.props.action === 'risk') {
-			return [
-				{
-					title: 'user_id',
-					dataIndex: 'id'
-				},
-				{
-					title: '产生来源',
-					dataIndex: 'pay_account_name'
-				},
-
-				{
-					title: '余额(变动前)',
-					dataIndex: 'total_balance',
-					render: (text, record) => {
-						if (record) {
-							return <div>{(record.balance + record.banker_balance).toFixed(6)}</div>;
-						} else {
-							return <div />;
+					title: "审核操作",
+					dataIndex: "status",
+					render:(text)=>{
+						let word;
+						switch (text) {
+							case 2:
+								word = "发起初审";
+								break;
+							case 3:
+								word = "(提交第三方)复审通过";
+								break;
+							case 4:
+								word = "(已成功)复审通过";
+								break;
+							case 5:
+								word = "(已失败)复审通过";
+								break;
+							case 6:
+								word = "复审拒绝";
+								break;
+							case 7 :
+								word = "认领订单"
+								break;	
+							default:
+								word = "";
+								break;
 						}
+						return word;
 					}
 				},
 				{
-					title: '变动金额',
-					dataIndex: 'final_pay',
-					render: (text, record) => {
-						return <span>{text.toFixed(6)}</span>;
-					}
-				},
-				{
-					title: '税收',
-					dataIndex: 'tax',
-					render: (text, record) => {
-						return <span>{record.final_pay > 0 ? text.toFixed(6) : ''}</span>;
-					}
-				},
-				{
-					title: '余额(变动后)',
-					dataIndex: 'total_final_balance',
-					render: (text, record) => {
-						if (record) {
-							return <div>{(record.final_banker_balance + record.final_balance).toFixed(6)}</div>;
-						} else {
-							return <div />;
-						}
-					}
-				},
-				{
-					title: '备注',
-					dataIndex: 'pay_reason'
-				},
-				{
-					title: '创建时间',
-					dataIndex: 'create_time',
+					title: "审核时间",
+					dataIndex: "review_at",
 					render: formateDate
 				}
 			];
 		} else {
 			return [
 				{
-					title: '备注人',
-					dataIndex: 'remark_name'
+					title: "备注人",
+					dataIndex: "remark_name"
 				},
 				{
-					title: '内容',
-					dataIndex: 'content'
+					title: "内容",
+					dataIndex: "content"
 				},
 				{
-					title: '备注时间',
-					dataIndex: 'created_at',
+					title: "备注时间",
+					dataIndex: "created_at",
 					render: formateDate
 				}
 			];

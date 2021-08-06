@@ -84,7 +84,7 @@ class Withdraw_list extends Component {
             />
             &nbsp; &nbsp;
             <MyDatePicker
-              handleValue={val => {
+              handleValue={(data,val) => {
                 this.reqData.start_time = val[0];
                 this.reqData.end_time = val[1];
               }}

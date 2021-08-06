@@ -46,10 +46,6 @@ class Channel extends Component {
         >
           <Form.Item label="品牌">
             {getFieldDecorator("package_id", {})(
-              // <Select defaultValue="请选择">
-              //   <Select.Option value="jack">Jack</Select.Option>
-              //   <Select.Option value="lucy">Lucy</Select.Option>
-              // </Select>
               <Radio.Group>
                 <Radio value={1}>特斯特娱乐</Radio>
                 <Radio value={2}>德比游戏</Radio>
@@ -156,10 +152,10 @@ class Channel extends Component {
           message.success("提交成功:" + res.msg);
           this.getUsers();
         } else {
-          message.error("出错了：" + res.msg);
+          message.info("出错了：" + res.msg);
         }
       } else {
-        message.error("提交失败");
+        message.info("提交失败");
       }
     });
   };

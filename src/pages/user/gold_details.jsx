@@ -3,8 +3,16 @@ import { Table, Card, Icon, message, Modal } from "antd";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button/index";
 import moment from "moment";
-import { userDetail, bindInfo, downloadGoldList, resetAlipayOrBankcard } from "../../api/index";
+import {
+	userDetail,
+	bindInfo,
+	resetAlipayOrBankcard,
+	GoldDetailorRiskControlSUMdata,
+} from "../../api/index";
 import { formateDate } from "../../utils/dateUtils";
+import ExportJsonExcel from "js-export-excel";
+import GoldDetailorRiskControl from "../../components/golddetailorRiskcontrol";
+
 class GoldDetail extends Component {
 	constructor(props) {
 		super(props);
@@ -12,119 +20,183 @@ class GoldDetail extends Component {
 		this.endTime = "";
 		this.state = {
 			data: [],
-			count: 0
+			count: 0,
+			sumData: null,
+			current: 1,
+			printData: []
 		};
 	}
 	getUsers = async (page, limit) => {
 		let isBindInfo = this.props.isBindInfo;
 		let id = this.props.recordID;
-		const res = !isBindInfo ? await userDetail(page, limit, id) : await bindInfo(page, limit, id);
+		const res = !isBindInfo
+			? await userDetail(page, limit, id) 
+			: await bindInfo(page, limit, id);
 		if (!isBindInfo && res.data.account_change) {
 			this.setState({
 				data: res.data.account_change,
-				count: res.data.count
+				count: res.data.count,
 			});
 		}
 		if (isBindInfo && res.data) {
 			let data = JSON.parse(res.data);
 			console.log(data);
-			this.bindInfo = data;
 			let newData = [];
-			if (data.length === 1) {
-				if (data[0].type === "2") {
-					newData = [
-						{
-							...JSON.parse(data[0].info),
-							created_at0: formateDate(data[0].created_at)
-						}
-					];
+			data.forEach((ele, i) => {
+				if (ele.type === "2") {
+					newData.push({
+						...data[i],
+						...JSON.parse(data[i].info),
+						alipay_created_at: formateDate(data[i].created_at),
+					});
 				}
-				if (data[0].type === "3") {
-					newData = [
-						{
-							...JSON.parse(data[0].info),
-							created_at1: formateDate(data[0].created_at)
-						}
-					];
+				if (ele.type === "3") {
+					newData.push({
+						...data[i],
+						...JSON.parse(data[i].info),
+						bankcard_created_at: formateDate(data[i].created_at),
+					});
 				}
-			}
-			if (data.length === 2) {
-				if (data[0].type === "2") {
-					newData = [
-						{
-							...JSON.parse(data[0].info),
-							...JSON.parse(data[1].info),
-							created_at0: formateDate(data[0].created_at),
-							created_at1: formateDate(data[1].created_at)
-						}
-					];
+				if (ele.type === "4") {
+					newData.push({
+						...data[i],
+						...JSON.parse(data[i].info),
+					});
 				}
-				if (data[0].type === "3") {
-					newData = [
-						{
-							...JSON.parse(data[0].info),
-							...JSON.parse(data[1].info),
-							created_at0: formateDate(data[1].created_at),
-							created_at1: formateDate(data[0].created_at)
-						}
-					];
-				}
-			}
+			});
 			console.log("newData:", newData);
 			this.setState({
 				data: newData,
-				count: 1
 			});
+		}
+
+		//资金明细总计部分的数据
+		if (!isBindInfo) {
+			// let start = moment().subtract(7, "day").format("YYYY-MM-DD HH:mm:ss")
+			// let end = moment().format("YYYY-MM-DD HH:mm:ss")
+			const result = await GoldDetailorRiskControlSUMdata(id);
+			if (result.status === 0) {
+				this.setState({ sumData: result.data });
+			}
 		}
 	};
 	componentDidMount() {
-		this.getUsers(1, 20);
+		this.getUsers(1, 50);
 	}
 	onSearchData = async (page, limit) => {
 		this.isOnSearch = true;
 		let reqData = {
 			start: this.startTime,
 			end: this.endTime,
-			funds_type: 0
+			funds_type: 0,
 		};
 		let id = this.props.recordID;
 		const res = await userDetail(page, limit, id, reqData);
-		if (res.data && res.data.account_change) {
+		if (res.data) {
 			this.setState({
-				data: res.data.account_change,
-				count: res.data.count
+				data: res.data.account_change || [],
+				count: res.data.count,
 			});
 		} else {
-			message.info("没有数据");
+			message.info(JSON.stringify(res));
+			this.isOnSearch = false;
 		}
 	};
-	download = () => {
-		let reqdata = {
-			start_time: this.startTime,
-			end_time: this.endTime,
-			id: this.props.recordID
-		};
-		downloadGoldList(reqdata);
+	onSearchSumData = async () => {
+		const result = await GoldDetailorRiskControlSUMdata(
+			this.props.recordID,
+			this.startTime,
+			this.endTime,
+		);
+		if (result.status === 0) {
+			this.setState({ sumData: result.data });
+		} else {
+			message.info("搜索流水总数据失败");
+		}
 	};
+
+	download = async () => {
+		let reqdata = {
+			start: this.startTime,
+			end: this.endTime,
+			funds_type: 0,
+		};
+		let id = this.props.recordID;
+		const res = await userDetail(1, 10000, id, reqdata);
+		if (res.data) {
+			this.setState({
+				printData: res.data.account_change || [],
+			});
+		} else {
+			message.info(JSON.stringify(res));
+		}
+
+		var option = {};
+		let dataTable = [];
+		this.state.printData &&
+			this.state.printData.forEach((ele) => {
+				let obj = {
+					user_id: ele.id,
+					产生来源: ele.pay_account_name,
+					'余额(变动前)': ele.balance + ele.banker_balance,
+					变动金额: ele.final_pay,
+					税收:  ele.final_pay > 0 ? ele.tax.toFixed(6) :"" ,
+					'余额(变动后)': ele.final_banker_balance + ele.final_balance,
+					备注: ele.pay_reason,
+					创建时间: formateDate(ele.create_time),
+					有效投注: ele.bet_money,
+				};
+				dataTable.push(obj);
+			});
+		let current = moment().format('YYYYMMDDHHmm')
+		option.fileName = `资金明细${current}`;
+		option.datas = [
+			{
+				sheetData: dataTable,
+				sheetName: "sheet",
+				sheetHeader: ["user_id", "产生来源", "余额(变动前)", "变动金额", "税收", "余额(变动后)", "备注", "创建时间", "有效投注"],
+			},
+		];
+
+		var toExcel = new ExportJsonExcel(option); //new
+		toExcel.saveExcel();
+
+	};
+
 	render() {
 		// const { data } = this.props.GoldDetailRecord;
 		let title;
+		let { data, count, current, sumData } = this.state;
 		if (!this.props.isBindInfo) {
 			title = (
 				<span>
 					<MyDatePicker
-						handleValue={(val) => {
+						handleValue={(data, val) => {
 							let diffDays = moment(val[1]).diff(moment(val[0]), "days");
+							let start, end;
 							if (diffDays > 31) {
-								message.error("请选择时间范围不大于31天");
+								message.info("请选择时间范围不大于31天");
+							} else if (data && data.length !== 0) {
+								start = moment(data[0].valueOf()).format("YYYY-MM-DD HH:mm:ss");
+								end = moment(data[1].valueOf() - 1).format("YYYY-MM-DD HH:mm:ss");
+								console.log(start, end);
+								this.startTime = start;
+								this.endTime = end;
 							} else {
-								this.startTime = val[0];
-								this.endTime = val[1];
+								this.startTime = "";
+								this.endTime = "";
 							}
 						}}
 					/>
 					&nbsp; &nbsp;
-					<LinkButton onClick={() => this.onSearchData(1, 20)} size="default">
+					<LinkButton
+						onClick={() => {
+							this.onSearchData(1, 50);
+							this.onSearchSumData();
+							this.setState({ current: 1 });
+						}}
+						size="default"
+					>
 						<Icon type="search" />
 					</LinkButton>
 				</span>
@@ -135,221 +207,201 @@ class GoldDetail extends Component {
 				title={title}
 				extra={
 					!this.props.isBindInfo ? (
-						<LinkButton size="default" style={{ float: "right" }} onClick={this.download} icon="download" />
+						<LinkButton
+							size="default"
+							style={{ float: "right" }}
+							onClick={this.download}
+							icon="download"
+						/>
 					) : (
 						""
 					)
 				}
 			>
-				<Table
-					bordered
-					size="small"
-					rowKey={(record, index) => `${index}`}
-					dataSource={this.state.data}
-					columns={this.initColumns()}
-					pagination={{
-						defaultPageSize: 20,
-						showSizeChanger: true,
-						showQuickJumper: true,
-						pageSizeOptions: [ "10", "20", "30", "50" ],
-						showTotal: (total, range) => `共${total}条`,
-						defaultCurrent: 1,
-						total: this.state.count,
-						onChange: (page, pageSize) => {
+				{this.props.isBindInfo && (
+					<Table
+						bordered
+						size="small"
+						rowKey={(record, index) => `${index}`}
+						dataSource={this.state.data}
+						columns={this.initColumns()}
+						scroll={{ x: "max-content" }}
+					/>
+				)}
+				{!this.props.isBindInfo && (
+					<GoldDetailorRiskControl
+						goldDetailData={{ data, count, current, sumData }}
+						tableOnchange={(page, pageSize) => {
+							this.setState({ current: page });
 							if (this.isOnSearch && this.startTime) {
 								this.onSearchData(page, pageSize);
 							} else {
 								this.getUsers(page, pageSize);
 							}
-						},
-						onShowSizeChange: (current, size) => {
-							if (this.isOnSearch && this.startTime) {
-								this.onSearchData(current, size);
-							} else {
-								this.getUsers(current, size);
-							}
-						}
-					}}
-				/>
+						}}
+					// tableOnShowSizeChange={(current, size) => {
+					// 	if (this.isOnSearch && this.startTime) {
+					// 		this.onSearchData(current, size);
+					// 	} else {
+					// 		this.getUsers(current, size);
+					// 	}
+					// }}
+					/>
+				)}
 			</Card>
 		);
 	}
 	initColumns = () => {
-		if (this.props.isBindInfo) {
-			return [
-				{
-					title: "支付宝账号",
-					dataIndex: "account_card",
-					render: (text, record) => {
-						if (text) {
-							return (
-								<div>
-									{text[0] + text[1] + "*******" + text[text.length - 2] + text[text.length - 1]}
-								</div>
-							);
-						} else {
-							return <div />;
-						}
+		return [
+			{
+				title: "支付宝账号",
+				dataIndex: "account_card",
+				render: (text, record) => {
+					if (text) {
+						return (
+							<div>
+								{text[0] +
+									text[1] +
+									"*******" +
+									text[text.length - 2] +
+									text[text.length - 1]}
+							</div>
+						);
+					} else {
+						return <div />;
 					}
 				},
-				{
-					title: "绑定支付宝时间",
-					dataIndex: "created_at0"
-				},
-
-				{
-					title: "开户人姓名",
-					dataIndex: "card_name",
-					render: (text, record) => {
-						if (text) {
-							return <div>{text[0] + "**"}</div>;
-						} else {
-							return <div />;
-						}
+			},
+			{
+				title: "绑定支付宝时间",
+				dataIndex: "alipay_created_at",
+			},
+			{
+				title: "USDT钱包地址",
+				dataIndex: "wallet_addr",
+				width: 120,
+				render: (text, record) => (
+					<div style={{ wordWrap: "break-word", wordBreak: "break-word" }}>{text}</div>
+				),
+			},
+			{
+				title: "USDT协议",
+				dataIndex: "protocol",
+			},
+			{
+				title: "开户人姓名",
+				dataIndex: "card_name",
+				render: (text, record) => {
+					if (text) {
+						return <div>{text[0] + "**"}</div>;
+					} else {
+						return <div />;
 					}
 				},
-				{
-					title: "银行名称",
-					dataIndex: "bank_name"
-				},
-				{
-					title: "银行卡号",
-					dataIndex: "card_num",
-					render: (text, record) => {
-						if (text) {
-							return (
-								<div>
-									{text[0] +
-										text[1] +
-										text[2] +
-										"*******" +
-										text[text.length - 4] +
-										text[text.length - 3] +
-										text[text.length - 2] +
-										text[text.length - 1]}
-								</div>
-							);
-						} else {
-							return <div />;
-						}
+			},
+			{
+				title: "银行名称",
+				dataIndex: "bank_name",
+			},
+			{
+				title: "银行卡号",
+				dataIndex: "card_num",
+				render: (text, record) => {
+					if (text) {
+						return (
+							<div>
+								{text[0] +
+									text[1] +
+									text[2] +
+									"*******" +
+									text[text.length - 4] +
+									text[text.length - 3] +
+									text[text.length - 2] +
+									text[text.length - 1]}
+							</div>
+						);
+					} else {
+						return <div />;
 					}
 				},
-				{
-					title: "绑定银行卡时间",
-					dataIndex: "created_at1"
+			},
+			{
+				title: "绑定银行卡时间",
+				dataIndex: "bankcard_created_at",
+			},
+			{
+				title: "是否灰名单",
+				dataIndex: "is_gray",
+			},
+			{
+				title: "灰名单备注",
+				dataIndex: "black_remark",
+			},
+			{
+				title: "开户省",
+				dataIndex: "info",
+				key: "info1",
+				render: text => {
+					console.log(JSON.parse(text));
+					return JSON.parse(text)?.bank_province;
 				},
-				{
-					title: "是否灰名单",
-					dataIndex: "is_gray"
+			},
+			{
+				title: "开户市",
+				dataIndex: "info",
+				key: "info2",
+				render: text => {
+					console.log(JSON.parse(text));
+					return JSON.parse(text)?.bank_city;
 				},
-				{
-					title: "灰名单备注",
-					dataIndex: "black_remark"
-				},
-				{
-					title: "备注人",
-					dataIndex: "remark_name"
-				},
-				{
-					title: "备注时间",
-					dataIndex: "remark_at"
-				},
-				{
-					title: "操作",
-					dataIndex: "option",
-					render: (record) => (
-						<span>
-							<LinkButton type="default" onClick={() => this.reset(record, 2)}>
-								解绑支付宝
-							</LinkButton>
-							<LinkButton type="default" onClick={() => this.reset(record, 3)}>
-								解绑银行卡
-							</LinkButton>
-						</span>
-					)
-				}
-			];
-		} else {
-			return [
-				{
-					title: "user_id",
-					dataIndex: "id"
-				},
-				{
-					title: "产生来源",
-					dataIndex: "pay_account_name"
-				},
-
-				{
-					title: "余额(变动前)",
-					dataIndex: "total_balance",
-					render: (text, record) => {
-						if (record) {
-							return <div>{(record.balance + record.banker_balance).toFixed(6)}</div>;
-						} else {
-							return <div />;
-						}
-					}
-				},
-				{
-					title: "变动金额",
-					dataIndex: "final_pay",
-					render: (text, record) => {
-						return <span>{text.toFixed(6)}</span>;
-					}
-				},
-				{
-					title: "税收",
-					dataIndex: "tax",
-					render: (text, record) => {
-						return <span>{record.final_pay > 0 ? text.toFixed(6) : ""}</span>;
-					}
-				},
-				{
-					title: "余额(变动后)",
-					dataIndex: "total_final_balance",
-					render: (text, record) => {
-						if (record) {
-							return <div>{(record.final_banker_balance + record.final_balance).toFixed(6)}</div>;
-						} else {
-							return <div />;
-						}
-					}
-				},
-				{
-					title: "备注",
-					dataIndex: "pay_reason"
-				},
-				{
-					title: "创建时间",
-					dataIndex: "create_time",
-					render: formateDate
-				}
-			];
-		}
+			},
+			{
+				title: "备注人",
+				dataIndex: "remark_name",
+			},
+			{
+				title: "备注时间",
+				dataIndex: "remark_at",
+			},
+			{
+				title: "操作",
+				dataIndex: "option",
+				render: (text, record) => (
+					<span>
+						<LinkButton type="default" onClick={() => this.reset(record, "2")}>
+							解绑支付宝
+						</LinkButton>
+						<LinkButton type="default" onClick={() => this.reset(record, "3")}>
+							解绑银行卡
+						</LinkButton>
+						<LinkButton type="default" onClick={() => this.reset(record, "4")}>
+							解绑USDT
+						</LinkButton>
+					</span>
+				),
+			},
+		];
 	};
 	reset = (record, type) => {
-		let account_id, id;
-		this.bindInfo.forEach((element) => {
-			if (parseInt(element.type) === type) {
-				account_id = parseInt(element.id);
-				id = parseInt(element.user_id);
-				Modal.confirm({
-					title: "信息",
-					content: "确定要解绑吗?",
-					async onOk() {
-						const res = await resetAlipayOrBankcard(account_id, type, id);
-						if (res.status === 0) {
-							message.success(res.msg);
-						} else {
-							message.error(res.msg);
-						}
+		if (record.type !== type) {
+			message.info("没有绑定信息");
+		} else {
+			let id = parseInt(record.id);
+			let type = parseInt(record.type);
+			let user_id = parseInt(record.user_id);
+			Modal.confirm({
+				title: "信息",
+				content: "确定要解绑吗?",
+				async onOk() {
+					const res = await resetAlipayOrBankcard(id, type, user_id);
+					if (res.status === 0) {
+						message.success(res.msg);
+					} else {
+						message.info(res.msg);
 					}
-				});
-			} else {
-				message.info("用户没有绑定信息！");
-			}
-		});
+				},
+			});
+		}
 	};
 }
 

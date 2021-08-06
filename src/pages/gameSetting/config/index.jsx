@@ -33,7 +33,7 @@ class Config extends Component {
 				count: parseInt(res.data && res.data.count)
 			});
 		} else {
-			message.error(res.msg);
+			message.info(res.msg);
 		}
 	};
 	componentDidMount() {
@@ -146,7 +146,7 @@ class Config extends Component {
 		},
 		{
 			title: "更新时间",
-			dataIndex: "created_at",
+			dataIndex: "updated_at",
 			render: formateDate
 		},
 		{
@@ -188,7 +188,7 @@ class Config extends Component {
 			message.success("删除成功:" + res.msg);
 			this.getInitialData(this.state.page, this.state.pageSize);
 		} else {
-			message.error("出错了：" + res.msg);
+			message.info("出错了：" + res.msg);
 		}
 	};
 	onAdd = async () => {

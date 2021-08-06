@@ -23,7 +23,7 @@ class AccountList extends Component {
         count: parseInt(res.data&&res.data.count)
       });
     } else {
-      message.error(res.msg);
+      message.info(res.msg);
     }
   };
   componentDidMount() {
@@ -180,14 +180,14 @@ class AccountList extends Component {
     if (res.status === 0) {
       message.success(res.msg);
     } else {
-      message.error(res.msg);
+      message.info(res.msg);
     }
   };
   checkAccount = async record => {
     const res = await accountList(record.user_id);
     this.editDataRecord = res.data;
     if (res.status !== 0) {
-      message.error(res.msg);
+      message.info(res.msg);
     }
     this.setState({ isEditFormShow: true });
   };

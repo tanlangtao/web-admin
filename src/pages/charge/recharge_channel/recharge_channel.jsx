@@ -168,7 +168,7 @@ class Recharge_channel extends Component {
           childData: result.data&&result.data.list
         });
       } else {
-        message.error(result.msg || "未检索到数据");
+        message.info(result.msg || "未检索到数据");
         this.setState({
           childData: []
         });
@@ -199,7 +199,7 @@ class Recharge_channel extends Component {
         expandedRowKeys: []
       });
     } else {
-      message.error("网络问题");
+      message.info("网络问题");
     }
   };
 }

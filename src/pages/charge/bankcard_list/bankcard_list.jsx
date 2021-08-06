@@ -50,7 +50,7 @@ class Bankcard_list extends Component {
       message.success(result.msg);
       this.refreshPage(1, 20);
     } else {
-      message.error("网络问题:" + result.msg);
+      message.info("网络问题:" + result.msg);
     }
   };
   refreshPage = () => {
@@ -107,7 +107,7 @@ class Bankcard_list extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1000 }}
+          scroll={{ x: "max-content" }}
         />
         <Modal
           title="添加"
@@ -156,12 +156,10 @@ class Bankcard_list extends Component {
     {
       title: "ID",
       dataIndex: "id",
-      width: 50
     },
     {
       title: "卡使用类型",
       dataIndex: "type",
-      width: 100,
       render: (text, record, index) => (
         <span>{text === "1" ? "收款卡" : "出款卡"}</span>
       )
@@ -169,12 +167,10 @@ class Bankcard_list extends Component {
     {
       title: "银行卡号",
       dataIndex: "card_num",
-      width: 200
     },
     {
       title: "开户人姓名",
       dataIndex: "card_name",
-      width: 100,
       render: (text, record) => (
         <div style={{ wordWrap: "break-word", wordBreak: "break-all" }}>
           {text}
@@ -184,12 +180,10 @@ class Bankcard_list extends Component {
     {
       title: "银行名称",
       dataIndex: "bank_name",
-      width: 100
     },
     {
       title: "状态",
       dataIndex: "status",
-      width: 100,
       render: (text, record, index) => (
         <span>{text === "1" ? "空闲" : text === "2" ? "使用中" : "停用"}</span>
       )
@@ -197,13 +191,11 @@ class Bankcard_list extends Component {
     {
       title: "修改时间",
       dataIndex: "updated_at",
-      width: 200,
       render: formateDate
     },
     {
       title: "操作",
       dataIndex: "",
-      width: 150,
       render: (text, record, index) => (
         <span>
           <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>

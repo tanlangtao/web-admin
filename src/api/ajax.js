@@ -13,62 +13,80 @@ import axios from "axios";
 import { message } from "antd";
 
 //设置axios为form-data
-export default function ajax(url, data = {}, type = "GET") {
-    axios.interceptors.request.use(
-        config => {
+export default function ajax(
+    url,
+    data = {},
+    type = "GET",
+    { content_type_is_formdata = false, timeout, needAuth = true } = {},
+) {
+    const instance = axios.create();
+    instance.interceptors.request.use(
+        (config) => {
             const token = localStorage.token;
-            if (token) {
+            if (token && needAuth) {
                 // 判断是否存在token，如果存在的话，则每个http header都加上token
                 config.headers["Authorization"] = token;
                 // console.log("interceptors config=", config);
             }
             return config;
         },
-        error => {
+        (error) => {
             return Promise.reject(error);
-        }
+        },
     );
     return new Promise((resolve, reject) => {
         let promise;
         // 1. 执行异步ajax请求
+        //设置超时时间
+        if (timeout) {
+            instance.defaults.timeout = timeout;
+        }
         if (type === "GET") {
-            promise = axios.get(url, {
-                params: data // 指定请求参数
+            promise = instance.get(url, {
+                params: data, // 指定请求参数
             });
         } else {
-            // 发POST请求
-            axios.defaults.headers.post["Content-Type"] = "application/json";
-            // axios.defaults.transformRequest = [
-            //   function(data) {
-            //     let ret = "";
-            //     for (let it in data) {
-            //       ret +=
-            //         encodeURIComponent(it) + "=" + encodeURIComponent(data[it]) + "&";
-            //     }
-            //     return ret;
-            //   }
-            // ];
-            promise = axios.post(url, data);
+            if (!content_type_is_formdata) {
+                instance.defaults.headers.post["Content-Type"] = "application/json";
+                instance.defaults.transformRequest = [];
+            } else {
+                instance.defaults.headers.post["Content-Type"] =
+                    "application/x-www-form-urlencoded";
+                instance.defaults.transformRequest = [
+                    function (data) {
+                        let ret = "";
+                        for (let it in data) {
+                            ret +=
+                                encodeURIComponent(it) + "=" + encodeURIComponent(data[it]) + "&";
+                        }
+                        return ret;
+                    },
+                ];
+            }
+            promise = instance.post(url, data);
         }
         // 2. 如果成功了, 调用resolve(value)
-        promise.then(response => {
-            resolve(response.data);
-        })
+        promise
+            .then((response) => {
+                resolve(response.data);
+            })
             // 3. 如果失败了, 不调用reject(reason), 而是提示异常信息
-            .catch(error => {
-                // reject(error)
+            .catch((error) => {
+                //由于一些接口需要捕获异常后进行一些操作,所以reject(error)
+                reject(error);
                 if (error.response && error.response.status === 401) {
-                    message.info("token过期，请重新登录")
-                    localStorage.removeItem("menuList");
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("name");
-                    localStorage.removeItem("BASE");
+                    message.info("token过期，请退出重新登录");
+                    // localStorage.clear();
+                    // window.location.href = "/";
                 }
-                message.error(
-                    (error.response && error.response.data.msg) ||
-                    "请求出错了: " + error.message
-                );
+                if (error.message.includes("timeout")) {
+                    message.info("服务响应超时");
+                } else {
+                    message.info(
+                        (error.response && error.response.data.msg) ||
+                            "请求出错了: " + error.message,
+                    );
+                }
             });
-
     });
 }

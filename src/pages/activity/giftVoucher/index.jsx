@@ -24,7 +24,7 @@ class AccountList extends Component {
         count: parseInt(res.data&&res.data.count)
       });
     } else {
-      message.error("未检索到数据");
+      message.info("未检索到数据");
     }
   };
   componentDidMount() {
@@ -36,13 +36,15 @@ class AccountList extends Component {
         title={
           <div>
             <MyDatePicker
-              handleValue={val => {
-                this.setState({
-                  start_time: val[0],
-                  end_time: val[1]
-                });
-              }}
-            />
+					handleValue={(data, dateString) => {
+						this.setState({
+							start_time: dateString[0],
+							end_time: dateString[1],
+							MyDatePickerValue:data
+						});
+					}}
+					value={this.state.MyDatePickerValue}
+				/>
             &nbsp;&nbsp;&nbsp;
             <Input
               style={{ width: 150 }}
@@ -212,7 +214,7 @@ class AccountList extends Component {
     if (res.status === 0) {
       message.success(res.msg);
     } else {
-      message.error(res.msg);
+      message.info(res.msg);
     }
     this.getInitialData(1, 20);
   };

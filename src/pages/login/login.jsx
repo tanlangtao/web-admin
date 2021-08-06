@@ -16,7 +16,7 @@ class Login extends Component {
       let { data } = result;
       data.forEach(element => {
         if (element.children) {
-          element.children.forEach(item => {
+            element.children.forEach(item => {
             item.title = item.title.slice(24);
           });
         }
@@ -24,8 +24,11 @@ class Login extends Component {
       localStorage.menuList = JSON.stringify(data);
       // 跳转到管理界面 (不需要再回退回到登陆)
       this.props.history.replace("/");
-
       // setTimeout(() => this.props.history.replace("/"), 300);
+    } else {
+      // 登陆失败
+      // 提示错误信息
+      message.info(result.msg);
     }
   };
   //点击登录按钮
@@ -52,7 +55,7 @@ class Login extends Component {
         } else {
           // 登陆失败
           // 提示错误信息
-          message.error(result.msg);
+          message.info(result.msg);
         }
       }
     });
@@ -79,7 +82,7 @@ class Login extends Component {
         } else {
           // 登陆失败
           // 提示错误信息
-          message.error(result.msg);
+          message.info(result.msg);
         }
       }
     });
@@ -193,7 +196,11 @@ class Login extends Component {
             </Form.Item>
             <span style={{ marginTop: 5 }} onClick={this.handleClick}>
               首次登录，手机下载Google Authenticator
-              安装，点击此处扫码获取验证码
+              安装，
+              <Button type="link" onClick={this.authCode}>
+                 点击此处
+              </Button>
+              扫码获取验证码
             </span>
             <Form.Item>
               <Button

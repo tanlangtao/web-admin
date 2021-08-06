@@ -94,7 +94,7 @@ class Diaodan extends Component {
         data: res.data
       });
     } else {
-      message.error(res.msg);
+      message.info(res.msg);
     }
   };
   handleRecieveSubmit = async record => {
@@ -103,7 +103,7 @@ class Diaodan extends Component {
     if (res.status === 0) {
       message.success(res.msg);
     } else {
-      message.error(res.msg);
+      message.info(res.msg);
     }
     this.handleClick();
   };

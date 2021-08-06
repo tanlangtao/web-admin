@@ -34,7 +34,7 @@ class Tasks extends Component {
         title={
           <div>
             <MyDatePicker
-              handleValue={val => {
+              handleValue={(data,val) => {
                 this.start_time = val[0];
                 this.end_time = val[1];
               }}

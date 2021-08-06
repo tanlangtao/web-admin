@@ -44,7 +44,7 @@ class Notice_list extends Component {
       message.success("删除成功");
       this.refreshPage();
     } else {
-      message.error("出错了：" + res.msg);
+      message.info("出错了：" + res.msg);
     }
   };
   refreshPage = () => {
@@ -100,7 +100,7 @@ class Notice_list extends Component {
               this.getUsers(current, size);
             }
           }}
-          scroll={{ x: 1500 }}
+          scroll={{ x: "max-content"}}
         />
         <Modal
           title="新增公告"
@@ -149,7 +149,6 @@ class Notice_list extends Component {
     {
       title: "标题",
       dataIndex: "title",
-      width: 150
     },
     {
       title: "品牌",
@@ -176,7 +175,6 @@ class Notice_list extends Component {
     {
       title: "公告内容",
       dataIndex: "words",
-      width: 200,
       render: (text, record) => (
         <Popover content={text} trigger="click" overlayStyle={{ width: "30%" }}>
           <div
@@ -207,24 +205,20 @@ class Notice_list extends Component {
       title: "开始时间",
       dataIndex: "start_time",
       render: formateDate,
-      width: 200
     },
     {
       title: "截止时间",
       dataIndex: "end_time",
       render: formateDate,
-      width: 200
     },
     {
       title: "创建时间",
       dataIndex: "create_time",
       render: formateDate,
-      width: 200
     },
     {
       title: "操作",
       dataIndex: "",
-      width: 150,
       render: (text, record, index) => (
         <span>
           <Button type="primary" onClick={() => this.edit(record)} size="small">

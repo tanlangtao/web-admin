@@ -54,10 +54,10 @@ class AddDataForm extends Component {
           this.props.cancel();
           this.props.form.resetFields();
         } else {
-          message.error("出错了：" + res.msg);
+          message.info("出错了：" + res.msg);
         }
       } else {
-        message.error("提交失败");
+        message.info("提交失败");
       }
     });
   };
@@ -125,6 +125,7 @@ class AddDataForm extends Component {
               {Option}
             </Select>
           )}
+          <div><b>注意 : 只接受最高管理者与空白权限</b></div>
         </Form.Item>
         <Form.Item label="授权品牌">
           <Checkbox
@@ -141,6 +142,7 @@ class AddDataForm extends Component {
               options={this.props.packageList}
               // value={this.state.checkedList}
               onChange={checkedList => this.checkboxOnChange(checkedList)}
+              style={{ width: "60%" }}
             />
           )}
         </Form.Item>
@@ -193,8 +195,8 @@ class AddDataForm extends Component {
           })(
             <Input
               type="password"
-              style={{ width: "60%" }}
-              placeholder="6到16个字符"
+              style={{ width: "60%",fontSize:"7px" }}
+              placeholder="6到16个字符，密码强度规则为数字+英文大小写"
             />
           )}
         </Form.Item>
@@ -221,8 +223,8 @@ class AddDataForm extends Component {
           })(
             <Input
               type="password"
-              style={{ width: "60%" }}
-              placeholder="6到16个字符"
+              style={{ width: "60%",fontSize:"7px" }}
+              placeholder="6到16个字符，密码强度规则为数字+英文大小写"
             />
           )}
         </Form.Item>
@@ -235,8 +237,8 @@ class AddDataForm extends Component {
           )(
             <Input
               type="password"
-              style={{ width: "60%" }}
-              placeholder="6到16个字符，重置密码时使用"
+              style={{ width: "80%",fontSize:"1px" }}
+              placeholder="6到16个字符，密码强度规则为数字+英文大小写，重置密码时使用"
             />
           )}
         </Form.Item>

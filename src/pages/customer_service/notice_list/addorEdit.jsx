@@ -81,8 +81,8 @@ class AddDataForm extends Component {
           })(
             <Checkbox.Group
               options={this.state.options}
-              // defaultValue={editDataRecord.package_ids}
               onChange={checkedList => this.checkboxOnChange(checkedList)}
+              style={{ width: "60%" }}
             />
           )}
         </Form.Item>
@@ -186,10 +186,10 @@ class AddDataForm extends Component {
           this.props.cancel();
           this.props.form.resetFields();
         } else {
-          message.error("出错了：" + res.msg);
+          message.info("出错了：" + res.msg);
         }
       } else {
-        message.error("提交失败");
+        message.info("提交失败");
       }
     });
   };

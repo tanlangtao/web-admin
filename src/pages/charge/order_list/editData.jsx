@@ -97,7 +97,7 @@ class Diaodan extends Component {
         data: res.data&&res.data.list
       });
     } else {
-      message.error("未检索到数据");
+      message.info("未检索到数据");
     }
   };
   handleRecieveSubmit = async record => {
@@ -106,7 +106,7 @@ class Diaodan extends Component {
     if (res.status === 0) {
       message.success(res.msg);
     } else {
-      message.error(res.msg);
+      message.info(res.msg);
     }
     this.handleClick();
   };

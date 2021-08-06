@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { Card, Table, Modal, message, Icon, Input } from "antd";
 import "moment/locale/zh-cn";
 import WrappedAddDataForm from "./addData";
+import WrappedEditRulesForm from "./editUserRules";
+
 import LinkButton from "../../../components/link-button/index";
-import { reqAdminList, searchAdminData, roleList, packageList, resetAuthCode } from "../../../api/index";
+import {reqAdminList, searchAdminData, roleList, packageList, resetAuthCode} from "../../../api/index";
 
 class Admin_manage_list extends Component {
   constructor(props) {
@@ -14,7 +16,8 @@ class Admin_manage_list extends Component {
       count: 0,
       pageSize: 20,
       isAddDataShow: false,
-      isEditDataShow: false
+      isEditDataShow: false,
+      isEditRuleShow: false,
     };
     this.initColumns();
   }
@@ -32,10 +35,10 @@ class Admin_manage_list extends Component {
         </div>
       )
     },
-    {
+    /*{
       title: "角色",
       dataIndex: "role_name"
-    },
+    },*/
     {
       title: "授权品牌",
       dataIndex: "group",
@@ -53,10 +56,10 @@ class Admin_manage_list extends Component {
         return <div>{newData.join(',')}</div>
       }
     },
-    {
+    /*{
       title: "授权代理",
       dataIndex: "proxy"
-    },
+    },*/
     {
       title: "可使用金额",
       dataIndex: "use_balance"
@@ -93,6 +96,7 @@ class Admin_manage_list extends Component {
       render: (text, record, index) => (
         <span>
           <LinkButton onClick={() => this.edit(record)}>编辑</LinkButton>
+          <LinkButton onClick={() => this.editUserRule(record)}>权限</LinkButton>
           <LinkButton onClick={() => this.resetAuthCode(record)} type="default">
             AuthCode重置
           </LinkButton>
@@ -100,7 +104,6 @@ class Admin_manage_list extends Component {
       )
     }
   ];
-
   getUsers = async (page, limit) => {
     const result = await reqAdminList(page, limit);
     const res = await packageList();
@@ -149,6 +152,13 @@ class Admin_manage_list extends Component {
         isEditDataShow: true
       });
     }
+  };
+  editUserRule = async record => {
+    // console.log(record);
+    this.editDataRecord = record;
+    this.setState({
+        isEditRuleShow: true
+    });
   };
   resetAuthCode = record => {
     Modal.confirm({
@@ -263,6 +273,28 @@ class Admin_manage_list extends Component {
               refreshPage={() => this.getUsers(1, 20)}
             />
           </Modal>
+        )}
+        {this.state.isEditRuleShow && (
+            <Modal
+                title="编辑权限"
+                visible={this.state.isEditRuleShow}
+                // onOk={this.handleAddData}
+                onCancel={() => {
+                  this.setState({ isEditRuleShow: false });
+                }}
+                footer={null}
+            >
+              <WrappedEditRulesForm
+                  isEdit="true"
+                  editDataRecord={this.editDataRecord}
+                  cancel={() =>
+                      this.setState({
+                        isEditRuleShow: false
+                      })
+                  }
+                  refreshPage={() => this.getUsers(1, 20)}
+              />
+            </Modal>
         )}
       </Card>
     );

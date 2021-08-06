@@ -25,6 +25,7 @@ class EditForm extends React.Component {
       case 1:
         orderStatusShow = true;
         confirmButtonShow = true;
+        successRadio = true;
         break;
       case 2:
         orderStatusShow = true;
@@ -144,7 +145,7 @@ class EditForm extends React.Component {
   sumbitOrderStatus = async () => {
     const data = this.props.editData;
     if (!this.orderStatus) {
-      message.error("请选择订单状态！");
+      message.info("请选择订单状态！");
     } else {
       let reqData = {
         order_id: data.order_id,
@@ -157,7 +158,7 @@ class EditForm extends React.Component {
       if (res.status === 0) {
         message.success(res.msg);
       } else {
-        message.error(res.msg || "操作失败");
+        message.info(res.msg || "操作失败");
       }
       this.props.onclose();
     }
@@ -175,7 +176,7 @@ class EditForm extends React.Component {
     if (res.status === 0) {
       message.info(res.msg);
     } else {
-      message.error(res.msg || "操作失败");
+      message.info(res.msg || "操作失败");
     }
     this.props.onclose();
   };
@@ -183,13 +184,13 @@ class EditForm extends React.Component {
     console.log(this.remarkUser);
     const data = this.props.editData;
     if (!this.remarkUser) {
-      message.error("请输入有效内容！");
+      message.info("请输入有效内容！");
     } else {
       const res = await withDrawRemark(data.order_id, this.remarkUser, 1);
       if (res.status === 0) {
         message.success(res.msg);
       } else {
-        message.error(res.msg);
+        message.info(res.msg);
       }
     }
   };
@@ -197,13 +198,13 @@ class EditForm extends React.Component {
     console.log(this.remarkOperator);
     const data = this.props.editData;
     if (!this.remarkOperator) {
-      message.error("请输入有效内容！");
+      message.info("请输入有效内容！");
     } else {
       const res = await withDrawRemark(data.order_id, this.remarkOperator, 2);
       if (res.status === 0) {
         message.success(res.msg);
       } else {
-        message.error(res.msg);
+        message.info(res.msg);
       }
     }
   };

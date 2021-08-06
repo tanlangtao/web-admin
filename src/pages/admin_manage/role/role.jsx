@@ -18,7 +18,7 @@ class Role extends Component {
   }
   initColumns = () => [
     {
-      title: "user_id",
+      title: "id",
       dataIndex: "id",
       width: 80
     },
