@@ -573,7 +573,7 @@ export const saveConf = (value, action) => {
 	);
 };
 export const getprofitpool = str => {
-	return ajax(BASE + str, {}, "GET");
+	return ajax( process.env.REACT_APP_GAME_HOST + str, {}, "GET", { needAuth: false });
 };
 //更新盈余池 -> go-admin -> 控制角色权限
 export const uptprofitpool = (str, formdata) => {
@@ -582,13 +582,13 @@ export const uptprofitpool = (str, formdata) => {
         content_type_is_formdata: true,
     });*/
 	return ajax(
-		BASE + str,
+		process.env.REACT_APP_GAME_HOST + str,
 		{
-			// url: process.env.REACT_APP_GAME_HOST + str,
 			...formdata,
 		},
 		"POST",
 		{
+			needAuth: false,
 			content_type_is_formdata: true,
 		},
 	);
@@ -1645,15 +1645,16 @@ export const GoldDetailorRiskControlSUMdata = (id, start, end) => {
 };
 //B2B
 export const getb2bconfig = (skip, limit) => {
-	return ajax(BASE + `/b2b/api/platform/list?skip=${skip - 1}&limit=${limit}`, {}, "GET");
+	return ajax( process.env.REACT_APP_B2B_HOST + `/b2b/api/platform/list`, {skip: `${skip - 1}`, limit: limit, token: 982083}, "GET", { needAuth: false });
 };
 export const postb2bconfig = (reqData, action) => {
-	return ajax(BASE + `/b2b/api/platform/${action}`, { ...reqData, token: 982083 }, "POST", {
+	return ajax( process.env.REACT_APP_B2B_HOST + `/b2b/api/platform/${action}`, { ...reqData, token: 982083 }, "POST", {
+		needAuth: false,
 		content_type_is_formdata: true,
 	});
 };
 export const getb2bregister = (skip, limit) => {
-	return ajax(BASE + `/b2b/api/register_recode/list?skip=${skip - 1}&limit=${limit}`, {}, "GET");
+	return ajax( process.env.REACT_APP_B2B_HOST + `/b2b/api/register_recode/list`, { skip: `${skip - 1}`, limit: limit, token: 982083}, "GET", { needAuth: false });
 };
 
 //真人视讯，彩票派彩游戏数据

@@ -6,7 +6,7 @@ export default () => {
 		<iframe
 			title="sbiframe"
 			src="http://aposvr.com/#/login"
-			id="agiframe"
+			id="sbiframe"
 			scrolling="no"
 			allowtransparency="true"
 			style={{ height: "100%", width: "100%" }}

@@ -147,6 +147,10 @@ export default () => {
     };
     const proxySearch = async (value) => {
         let { start_time, end_time } = initstate;
+        if (!value) {
+            message.info("请输入ID");
+            return;
+        }
         if (!start_time || !end_time) {
             message.info("请选择时间范围");
             return;

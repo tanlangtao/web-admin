@@ -3,9 +3,9 @@ import React from "react";
 export default () => {
 	return (
 		<iframe
-			title="agiframe"
+			title="cyiframe"
 			src="http://opration.msqp72.com/"
-			id="agiframe"
+			id="cyiframe"
 			scrolling="no"
 			allowtransparency="true"
 			style={{ height: "100%", width: "100%" }}
