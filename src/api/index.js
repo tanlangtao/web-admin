@@ -213,7 +213,7 @@ export const setgameuserstatus = (id, status) => {
 
 //资金明细
 export const reqGameData = str => {
-	return ajax(BASE + str, {}, "GET");
+	return ajax(process.env.REACT_APP_GAME_HOST + str, {}, "GET",  { needAuth: false });
 };
 //资金明细-多福多财
 export const reqDuofuduocaiGameData = str => {

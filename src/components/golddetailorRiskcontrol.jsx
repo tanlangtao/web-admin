@@ -173,7 +173,7 @@ async function check_game_data(record) {
 		newstr = `/duofuduocai/api/getGamePlayerData?game_id=${record.pay_account_id}&round_id=${round_id}`;
 		res = await reqDuofuduocaiGameData(newstr);
 	} else {
-		newstr = `/game${str}/getGameData?game_id=${record.pay_account_id}&id=${id}&round_id=${round_id}`;
+		newstr = `${str}/getGameData?game_id=${record.pay_account_id}&id=${id}&round_id=${round_id}`;
 		res = await reqGameData(newstr);
 	}
 	if (res.code === 0) {
