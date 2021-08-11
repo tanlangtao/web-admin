@@ -47,7 +47,7 @@ export default async record => {
 	let reactnode;
 	const res = await getriskcontrol({ user_id, order_id, end_time: created_at, status });
 	const userStatistics =await GoldDetailorRiskControlSUMdata(user_id)
-	// const userLink =await getProxyUserLink(user_id)
+	const userLink =await getProxyUserLink(user_id)
 	if (res.status === 0 && res.data) {
 		try {
 			let riskData = [],
@@ -88,7 +88,7 @@ export default async record => {
 						size="small"
 						pagination={false}
 					/>
-					{/* <div>当前玩家代理链详情:{userLink.msg ? userLink.msg.join('>>'):"-"}</div> */}
+					<div>当前玩家代理链详情:{userLink.msg ? userLink.msg.join('>>'):"-"}</div>
 					<div>历史总充值:{userStatistics.data ? reverseNumber(userStatistics.data.total_payment_arrival_amount):"-"}</div>
 					<div>历史总兑换:{userStatistics.data ? reverseNumber(userStatistics.data.total_with_draw_amount) : "-"}</div>
 					<div>充值兑换差:{userStatistics.data ? reverseNumber(userStatistics.data.total_payment_arrival_amount - userStatistics.data.total_with_draw_amount) :"-"}</div>

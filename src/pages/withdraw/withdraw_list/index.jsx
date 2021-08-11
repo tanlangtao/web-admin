@@ -5,7 +5,6 @@ import LinkButton from "../../../components/link-button/index";
 import riskcontrolfn from "../../../components/riskcontrol";
 import moment from "moment";
 import { formateDate } from "../../../utils/dateUtils";
-import { jsonTest } from "../../../utils/commonFuntion";
 import MyDatePicker from "../../../components/MyDatePicker";
 import { withDraw, downloadWithdrawList, reviewInfo, remarkInfo, auditOrder, orderWithDrawReview, withdrawClaim } from "../../../api";
 import WrappedComponent from "./details";
@@ -44,43 +43,20 @@ class Withdraw_list extends Component {
 	}
 	getUsers = async (page, pageSize, reqData) => {
 		const res1 = await withDraw(page, pageSize, reqData);
-		const res2 = await withdrawClaim();
 		//取得訂單列表
-		if (res1.status === 0) {
+		if (res1.status === 0 && res1.data) {
 			let data1 = res1.data && res1.data.list
 			let count = parseInt(res1.data && res1.data.count)
-			//取得認領列表
-			if (res2.status === 0) {
-				let data2 = res2.data
-				//合併兩個列表
-				data1.forEach((ele, index) => {
-					if (data2.hasOwnProperty(ele.order_id)) {
-						// ele.claim_user = data2[ele.order_id]
-						if (jsonTest(data2[ele.order_id])) {
-							ele.claim_user = JSON.parse(data2[ele.order_id]).claim_name
-						} else {
-							ele.claim_user = data2[ele.order_id]
-						}
-
-					}
-				})
-				const newData = data1.sort((a, b) => {
-					if (a.claim_user === this.currentLogin && a.status < 3) { return -1 }
-					else { return 0 }
-				})
-				this.setState({
-					data: newData,
-					count: count,
-				})
-			} else {
-				message.info(res2.status || "请求认领清单失败");
-				this.setState({
-					data: data1,
-					count: count,
-				})
-			}
+			const newData = data1.sort((a, b) => {
+				if (a.claim_name === this.currentLogin && a.status < 3) { return -1 }
+				else { return 0 }
+			})
+			this.setState({
+				data: newData,
+				count: count,
+			})
 		}
-		if (res1.status === -1) {
+		if (res1.status === -1 || !res1.data) {
 			message.info(JSON.stringify(res1?.msg) || "操作失败");
 			this.setState({
 				data: [],
@@ -335,21 +311,27 @@ class Withdraw_list extends Component {
 				let word;
 				switch (text) {
 					case "1":
+					case 1:
 						word = "待审核";
 						break;
 					case "2":
+					case 2:
 						word = "处理中";
 						break;
 					case "3":
+					case 3:
 						word = "已提交";
 						break;
 					case "4":
+					case 4:
 						word = "已成功";
 						break;
 					case "5":
+					case 5:
 						word = "已失败";
 						break;
 					case "6":
+					case 6:
 						word = "复审拒绝";
 						break;
 					default:
@@ -408,7 +390,9 @@ class Withdraw_list extends Component {
 						<Icon type="exclamation-circle-o" style={{ color: "#faad14", fontSize: "14px", marginLeft: "3px" }} />
 					</Tooltip>
 				</div>,
-			dataIndex: "claim_user",
+			// dataIndex: "claim_user",
+			dataIndex: "claim_name",
+			
 			render: (text, record, index) => {
 				const diffDays = moment().diff(moment.unix(record.created_at), "days")
 				if (diffDays < 31 && record.status == 1) {
@@ -464,30 +448,39 @@ class Withdraw_list extends Component {
 				let word;
 				switch (text) {
 					case "1":
+					case 1:
 						word = "alipay";
 						break;
 					case "2":
+					case 2:
 						word = "gudubank";
 						break;
 					case "3":
+					case 3:
 						word = "bank";
 						break;
 					case "4":
+					case 4:
 						word = "人工兑换";
 						break;
 					case "5":
+					case 5:
 						word = "人工代充";
 						break;
 					case "6":
+					case 6:
 						word = "赠送";
 						break;
 					case "7":
+					case 7:
 						word = "onepaybank";
 						break;
 					case "8":
+					case 8:
 						word = "聚鑫代付";
 						break;
 					case "9":
+					case 9:
 						word = "聚鑫usdt";
 						break;
 					default:
@@ -555,17 +548,19 @@ class Withdraw_list extends Component {
 			action === "check"
 				? await reviewInfo(1, 20, record.order_id)
 				: await remarkInfo(1, 20, record.order_id);
-		const res2 = await withdrawClaim();
 		if (res.data && res.data.list) {
 			this.detailRecord.data = res.data.list;
 			this.detailRecord.count = res.data.count;
 		}
-		if (res2.data.hasOwnProperty(record.order_id)) {
-			let data2 = jsonTest(res2.data[record.order_id]) ? JSON.parse(res2.data[record.order_id]) : res2.data[record.order_id]
-			let jsonData = jsonTest(res2.data[record.order_id]) ?
-				{ review_name: data2.claim_name, status:7, review_at: data2.claim_time }
-				: { review_name: res2.data[record.order_id], status: 7, review_at: "" }
-			this.detailRecord.data.unshift(jsonData)
+		if(this.state.data.filter(data => {
+			return data.order_id === record.order_id
+		}).some(data => {return data.claim_time !== 0})){
+			let claimData = this.state.data.filter(data => {
+				return data.order_id === record.order_id
+			}).map(data =>  {
+				return {review_name:data.claim_name ,status :7 ,review_at:data.claim_time }
+			})
+			this.detailRecord.data.unshift(claimData[0])	
 		}
 		this.setState({ isDetailShow: true });
 	};

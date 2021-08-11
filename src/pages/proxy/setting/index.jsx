@@ -35,7 +35,7 @@ class ProxySetting extends Component {
 		} else {
 			this.fetchData(page, limit, id);
 			this.fetchData2(id);
-			// this.fetchData3(id);
+			this.fetchData3(id);
 		}
 	};
 	fetchData = async (page, limit, id) => {
@@ -193,10 +193,10 @@ class ProxySetting extends Component {
 			title: "下级人数",
 			dataIndex: "direct_number",
 		},
-		// {
-		// 	title: "玩家代理链详情",
-		// 	dataIndex: "userlink",
-		// },
+		{
+			title: "玩家代理链详情",
+			dataIndex: "userlink",
+		},
 		{
 			title: "代理余额[点击调整]",
 			dataIndex: "balance",

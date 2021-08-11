@@ -10,7 +10,6 @@ class GoldDetail extends Component {
   }
   render() {
     const { data } = this.props.detailRecord;
-    console.log(data);
     if (this.props.action === "risk") {
       return <GoldDetailorRiskControl detailRecord={data} />
     } else {
