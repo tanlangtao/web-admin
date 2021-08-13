@@ -28,13 +28,13 @@ export const ChangeRoomStatus = () => {
 				<div>
 					<div>
 						game_id: 彩源龙虎斗 5b1f3a3cb76a591e7f251733 <br />
-						room_id： 房间ID， 01为河内分分彩，02为奇趣分分彩,03为加拿大30秒 <br />
+						room_id： 房间ID， 01为河内分分彩，02为奇趣分分彩,03为加拿大30秒,04为河内五分彩 <br />
 						room_status： 0为关闭，1为开启 <br />
 						返回字段说明： "RoomNumber": "01", //房間ID
 						<br />
 						"Status": 1, //房間狀態
 						<br />
-						"Type": "hn60", //彩源類型 hn60=河内分分彩， ptxffc=奇趣分分彩 ，　jnd30s= 加拿大30秒
+						"Type": "hn60", //彩源類型 hn60=河内分分彩， ptxffc=奇趣分分彩， jnd30s= 加拿大30秒， hn300=河内五分彩
 						<br />
 					</div>
 					<br />
@@ -204,7 +204,7 @@ export const RoomLimitRangeBet = () => {
 							<br />
 							game_id: 彩源龙虎斗 5b1f3a3cb76a591e7f251733
 							<br />
-							room_id： 房间ID， 01为河内分分彩，02为奇趣分分彩,03为加拿大30秒<br />
+							room_id： 房间ID， 01为河内分分彩，02为奇趣分分彩，03为加拿大30秒，04为河内五分彩<br />
 							max_bet : 最大可下注区间(设0 无限制)
 							<br />
 							min_bet : 最小可下注区间(设0 无限制)
@@ -250,7 +250,7 @@ export const RoomLimitRangeBet = () => {
 							<br />
 							game_id: 彩源龙虎斗 5b1f3a3cb76a591e7f251733
 							<br />
-							room_id： 房间ID， 01为河内分分彩，02为奇趣分分彩,03为加拿大30秒
+							room_id： 房间ID， 01为河内分分彩，02为奇趣分分彩，03为加拿大30秒，04为河内五分彩
 							<br />
 						</div>
 						<Input

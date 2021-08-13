@@ -390,9 +390,7 @@ class Withdraw_list extends Component {
 						<Icon type="exclamation-circle-o" style={{ color: "#faad14", fontSize: "14px", marginLeft: "3px" }} />
 					</Tooltip>
 				</div>,
-			// dataIndex: "claim_user",
-			dataIndex: "claim_name",
-			
+			dataIndex: "claim_name",			
 			render: (text, record, index) => {
 				const diffDays = moment().diff(moment.unix(record.created_at), "days")
 				if (diffDays < 31 && record.status == 1) {
@@ -408,7 +406,7 @@ class Withdraw_list extends Component {
 				}
 			},
 			onCell: (record, rowIndex) => {
-				if (record.claim_user == this.currentLogin) return { style: { color: '#f5222d' } }
+				if (record.claim_name == this.currentLogin) return { style: { color: '#f5222d' } }
 			}
 		},
 		{
