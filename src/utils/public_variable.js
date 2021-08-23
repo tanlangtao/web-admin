@@ -31,7 +31,7 @@ export const gameRouter = {
 	// "5b1f3a3cb76a591e7f251729": { path: "/castcraft/api", name: "城堡争霸" }, 
 
     // 以下四款遊戲開發中，尚未確認接口路徑
-	// "5b1f3a3cb76a451e7f0622": { path: null, name: "发财推币机" },
+	"5b1f3a3cb76a451e7f0622": { path: "/fctbj/api", name: "发财推币机" },
 	// "5b1f3a3cb76a591e7f251728": { path: null, name: "云谷寻宝" },
 	"5b1f3a3cb76a59n210407n738": { path: "/xwby/api", name: "疯狂漩涡" },
 	// "5c6a62be56209ac117d446aa": { path: null, name: "聚宝盆捕鱼" },
@@ -50,4 +50,5 @@ export const thirdPartyGameRouter = {
 	"5b1f3a3cb76a451e7f251739": { path: "/jdb/api", name: "JDB游戏" },
 	"5b1f3a3cb76a591e7f251737": { path: "/pt/api", name: "PT游戏" },
 	"5b1f3a3cb76a451e210629": { path: "/pg2/api", name: "PG2游戏" },
+	"5b1f3a3cb76a451e210726": { path: "/zhibo/api", name: "直播平台" },
 }

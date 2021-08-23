@@ -213,7 +213,7 @@ export const setgameuserstatus = (id, status) => {
 
 //资金明细
 export const reqGameData = str => {
-	return ajax(process.env.REACT_APP_GAME_HOST + str, {}, "GET",  { needAuth: false });
+	return ajax(BASE + str, {}, "GET");
 };
 //资金明细-多福多财
 export const reqDuofuduocaiGameData = str => {
@@ -573,22 +573,22 @@ export const saveConf = (value, action) => {
 	);
 };
 export const getprofitpool = str => {
-	return ajax( process.env.REACT_APP_GAME_HOST + str, {}, "GET", { needAuth: false });
+	return ajax(BASE + str, {}, "GET");
 };
 //更新盈余池 -> go-admin -> 控制角色权限
 export const uptprofitpool = (str, formdata) => {
 	/*return ajax(process.env.REACT_APP_GAME_HOST + str, formdata, "POST", {
-        needAuth: false,
-        content_type_is_formdata: true,
-    });*/
+		needAuth: false,
+		content_type_is_formdata: true,
+	});*/
 	return ajax(
-		process.env.REACT_APP_GAME_HOST + str,
+		BASE + str,
 		{
+			// url: process.env.REACT_APP_GAME_HOST + str,
 			...formdata,
 		},
 		"POST",
 		{
-			needAuth: false,
 			content_type_is_formdata: true,
 		},
 	);
@@ -604,7 +604,7 @@ export const setBuYuConfig = reqData => {
 	let { RoomIndex, PlaceType, Level, Difficult, ChouFang } = reqData;
 	return ajax(
 		BASE +
-			`/config/setBuYuConfig?RoomIndex=${RoomIndex}&PlaceType=${PlaceType}&Level=${Level}&Difficult=${Difficult}&ChouFang=${ChouFang}`,
+		`/config/setBuYuConfig?RoomIndex=${RoomIndex}&PlaceType=${PlaceType}&Level=${Level}&Difficult=${Difficult}&ChouFang=${ChouFang}`,
 		{},
 		"GET",
 	);
@@ -612,10 +612,9 @@ export const setBuYuConfig = reqData => {
 //cylhd开启与关闭游戏房间
 export const changeRoomStatus = ({ game_id, room_id, room_status, subgame }) => {
 	return ajax(
-		`${process.env.REACT_APP_GAME_HOST}${
-			subgame !== "cycdx" 
-			    ? "/cylhd/api/changeRoomStatus" 
-			    : "/caidaxiao/api/changeRoomStatus"
+		`${process.env.REACT_APP_GAME_HOST}${subgame !== "cycdx"
+			? "/cylhd/api/changeRoomStatus"
+			: "/caidaxiao/api/changeRoomStatus"
 		}`,
 		{ game_id, room_id, room_status },
 		"GET",
@@ -625,10 +624,9 @@ export const changeRoomStatus = ({ game_id, room_id, room_status, subgame }) => 
 //cylhd&cycdx玩家限红设定与查询
 export const getUserLimitRangeRecord = ({ game_id, user_id, subgame }) => {
 	return ajax(
-		`${process.env.REACT_APP_GAME_HOST}${
-			subgame !== "cycdx"
-				? "/cylhd/api/getUserLimitRangeRecord"
-				: "/caidaxiao/api/getUserLimitBet"
+		`${process.env.REACT_APP_GAME_HOST}${subgame !== "cycdx"
+			? "/cylhd/api/getUserLimitRangeRecord"
+			: "/caidaxiao/api/getUserLimitBet"
 		}`,
 		{ game_id, user_id },
 		"GET",
@@ -637,10 +635,9 @@ export const getUserLimitRangeRecord = ({ game_id, user_id, subgame }) => {
 };
 export const setUserLimitRangeBet = ({ game_id, user_id, max_bet, min_bet, subgame }) => {
 	return ajax(
-		`${process.env.REACT_APP_GAME_HOST}${
-			subgame !== "cycdx"
-				? "/cylhd/api/setUserLimitRangeBet"
-				: "/caidaxiao/api/setUserLimitBet"
+		`${process.env.REACT_APP_GAME_HOST}${subgame !== "cycdx"
+			? "/cylhd/api/setUserLimitRangeBet"
+			: "/caidaxiao/api/setUserLimitBet"
 		}`,
 		{ game_id, user_id, max_bet, min_bet },
 		"POST",
@@ -650,10 +647,9 @@ export const setUserLimitRangeBet = ({ game_id, user_id, max_bet, min_bet, subga
 //cylhd&cycdx房间限红设定与查询
 export const getRoomLimitRangeRecord = ({ game_id, room_id, subgame }) => {
 	return ajax(
-		`${process.env.REACT_APP_GAME_HOST}${
-			subgame !== "cycdx"
-				? "/cylhd/api/getRoomLimitBet"
-				: "/caidaxiao/api/getRoomLimitBet"
+		`${process.env.REACT_APP_GAME_HOST}${subgame !== "cycdx"
+			? "/cylhd/api/getRoomLimitBet"
+			: "/caidaxiao/api/getRoomLimitBet"
 		}`,
 		{ game_id, room_id },
 		"POST",
@@ -662,10 +658,9 @@ export const getRoomLimitRangeRecord = ({ game_id, room_id, subgame }) => {
 };
 export const setRoomLimitBet = ({ game_id, room_id, max_bet, min_bet, subgame }) => {
 	return ajax(
-		`${process.env.REACT_APP_GAME_HOST}${
-			subgame !== "cycdx"
-				? "/cylhd/api/setRoomLimitBet"
-				: "/caidaxiao/api/setRoomLimitBet"
+		`${process.env.REACT_APP_GAME_HOST}${subgame !== "cycdx"
+			? "/cylhd/api/setRoomLimitBet"
+			: "/caidaxiao/api/setRoomLimitBet"
 		}`,
 		{ game_id, room_id, max_bet, min_bet },
 		"POST",
@@ -690,7 +685,7 @@ export const getTableScore = serverId => {
 		{ needAuth: false },
 	);
 };
-export const setchouFangThirdAlg = ({serverId, tid, num}) => {
+export const setchouFangThirdAlg = ({ serverId, tid, num }) => {
 	return ajax(
 		process.env.REACT_APP_GAME_HOST + "/xwby/api/chouFangThirdAlg",
 		{ serverName: "smxw", serverId, tid, num },
@@ -698,7 +693,7 @@ export const setchouFangThirdAlg = ({serverId, tid, num}) => {
 		{ needAuth: false },
 	);
 };
-export const updateThirdAlg = ({serverId, tid, diff, level, place}) => {
+export const updateThirdAlg = ({ serverId, tid, diff, level, place }) => {
 	return ajax(
 		process.env.REACT_APP_GAME_HOST + "/xwby/api/updateThirdAlg",
 		{ serverName: "smxw", serverId, tid, diff, level, place },
@@ -761,11 +756,20 @@ export const getProxy = (id, start_time, end_time) => {
 export const getProxyChild = (id, start_time, end_time) => {
 	return ajax(
 		BASE +
-			`/Operation/Api/GetChildrenIncome?id=${id}&start_time=${start_time}&end_time=${end_time}`,
+		`/Operation/Api/GetChildrenIncome?id=${id}&start_time=${start_time}&end_time=${end_time}`,
 		{},
 		"GET",
 	);
 };
+//查询代理连的充提数据
+export const getProxyLinkPayLeaderboard = (id, start_time, end_time) => {
+	return ajax(
+		BASE + `/Operation/Api/GetProxyLinkPayLeaderboard`,
+		{ id, start_time, end_time },
+		"GET",
+	)
+}
+
 export const getDeficitDividend = reqData => {
 	return ajax(
 		BASE + `/Operation/Api/GetDeficitDividend`,
@@ -791,7 +795,7 @@ export const getPaymentDividendInfo = reqData => {
 export const getProxyUserMoneyFlow = reqData => {
 	return ajax(
 		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetGameUserInductions",
-		{ platform_key: 123456, game_tags: `[1,5]`, ...reqData },
+		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
 	);
@@ -861,7 +865,7 @@ export const getIPconfig = () => {
 export const getIPlist = (page, limit, ip) => {
 	return ajax(
 		BASE +
-			`/Operation/Api/getBlackList?page=${page}&limit=${limit}&platform_key=654321&ip=${ip}`,
+		`/Operation/Api/getBlackList?page=${page}&limit=${limit}&platform_key=654321&ip=${ip}`,
 		{},
 		"GET",
 		{
@@ -888,7 +892,7 @@ export const setLimit = (field, value) => {
 export const getwhiteIPlist = (page, limit, ip) => {
 	return ajax(
 		BASE +
-			`/Operation/Api/GetWhiteList?page=${page}&limit=${limit}&platform_key=654321&ip=${ip}`,
+		`/Operation/Api/GetWhiteList?page=${page}&limit=${limit}&platform_key=654321&ip=${ip}`,
 		{},
 		"GET",
 		{
@@ -1124,8 +1128,8 @@ export const applyReimburse = (user_id, activity_id, package_id = null, is_old =
 			? `${BASE}/api/activity/applyReimburse`
 			: `${BASE}/api/activity/oldUserApplyReimburse`,
 		!is_old
-		 ? { user_id, activity_id, package_id, token: "e40f01afbb1b9ae3dd6747ced5bca532" }
-		 : { user_id, activity_id, token: "e40f01afbb1b9ae3dd6747ced5bca532" },
+			? { user_id, activity_id, package_id, token: "e40f01afbb1b9ae3dd6747ced5bca532" }
+			: { user_id, activity_id, token: "e40f01afbb1b9ae3dd6747ced5bca532" },
 		"POST",
 		{ content_type_is_formdata: true },
 	);
@@ -1645,23 +1649,22 @@ export const GoldDetailorRiskControlSUMdata = (id, start, end) => {
 };
 //B2B
 export const getb2bconfig = (skip, limit) => {
-	return ajax( process.env.REACT_APP_B2B_HOST + `/b2b/api/platform/list`, {skip: `${skip - 1}`, limit: limit, token: 982083}, "GET", { needAuth: false });
+	return ajax(BASE + `/b2b/api/platform/list?skip=${skip - 1}&limit=${limit}`, {}, "GET");
 };
 export const postb2bconfig = (reqData, action) => {
-	return ajax( process.env.REACT_APP_B2B_HOST + `/b2b/api/platform/${action}`, { ...reqData, token: 982083 }, "POST", {
-		needAuth: false,
+	return ajax(BASE + `/b2b/api/platform/${action}`, { ...reqData, token: 982083 }, "POST", {
 		content_type_is_formdata: true,
 	});
 };
 export const getb2bregister = (skip, limit) => {
-	return ajax( process.env.REACT_APP_B2B_HOST + `/b2b/api/register_recode/list`, { skip: `${skip - 1}`, limit: limit, token: 982083}, "GET", { needAuth: false });
+	return ajax(BASE + `/b2b/api/register_recode/list?skip=${skip - 1}&limit=${limit}`, {}, "GET");
 };
 
 //真人视讯，彩票派彩游戏数据
 export const getZRSXdata = (page, limit, start_time, end_time, gametype) => {
 	return ajax(
 		BASE +
-			`/ag/gameRoundsRes?start_time=${start_time}&page=${page}&gametype=${gametype}&end_time=${end_time}&limit=${limit}`,
+		`/ag/gameRoundsRes?start_time=${start_time}&page=${page}&gametype=${gametype}&end_time=${end_time}&limit=${limit}`,
 		{},
 		"GET",
 	);
@@ -1669,7 +1672,7 @@ export const getZRSXdata = (page, limit, start_time, end_time, gametype) => {
 export const getAGdata = (page, limit, start_time, end_time, gametype) => {
 	return ajax(
 		BASE +
-			`/ag/OrdersRes?start_time=${start_time}&page=${page}&gametype=${gametype}&end_time=${end_time}&limit=${limit}`,
+		`/ag/OrdersRes?start_time=${start_time}&page=${page}&gametype=${gametype}&end_time=${end_time}&limit=${limit}`,
 		{},
 		"GET",
 	);
@@ -1677,7 +1680,7 @@ export const getAGdata = (page, limit, start_time, end_time, gametype) => {
 export const getPCCP_project = (page, start_time, end_time, filter_string) => {
 	return ajax(
 		BASE +
-			`/apcaipiao/projectList?start_time=${start_time}&page=${page}&end_time=${end_time}${filter_string}`,
+		`/apcaipiao/projectList?start_time=${start_time}&page=${page}&end_time=${end_time}${filter_string}`,
 		{},
 		"GET",
 	);
@@ -1685,7 +1688,7 @@ export const getPCCP_project = (page, start_time, end_time, filter_string) => {
 export const getPCCP_fundList = (page, start_time, end_time, type) => {
 	return ajax(
 		BASE +
-			`/apcaipiao/fundList?start_time=${start_time}&page=${page}&end_time=${end_time}&type=${type}`,
+		`/apcaipiao/fundList?start_time=${start_time}&page=${page}&end_time=${end_time}&type=${type}`,
 		{},
 		"GET",
 	);
@@ -1704,3 +1707,40 @@ export const post_moneyfloat_detail = values => {
 export const getTotalMoneyFlow = reqData => {
 	return ajax(BASE + `/api/backend/getTotalMoneyFlow`, reqData, "GET");
 };
+
+//直播
+//获取直播子游戏清单
+export const getZhiboGameList = () => {
+	return ajax(
+		process.env.REACT_APP_GAME_HOST + `/zhibo/api/getGameList`,
+		{ game_id: '5b1f3a3cb76a451e210726' },
+		"GET",
+		{ needAuth: false, content_type_is_formdata: true },
+	)
+}
+//获取打赏明细
+export const getDonateList = (page, limit, reqData) => {
+	return ajax(
+		process.env.REACT_APP_GAME_HOST + `/zhibo/api/getRewardDetail`,
+		{
+			game_id: '5b1f3a3cb76a451e210726',
+			page,
+			limit,
+			...reqData
+		},
+		"GET",
+		{ needAuth: false, content_type_is_formdata: true },
+	)
+}
+//获取子游戏打赏详情
+export const getLiveData = (reqData) => {
+	return ajax(
+		process.env.REACT_APP_GAME_HOST + `/zhibo/api/getRewardSummary`,
+		{
+			game_id: '5b1f3a3cb76a451e210726',
+			...reqData
+		},
+		"GET",
+		{ needAuth: false, content_type_is_formdata: true },
+	)
+}

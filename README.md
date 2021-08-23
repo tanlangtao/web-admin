@@ -17,7 +17,7 @@ dev环境：REACT_APP_HOST=http://operation.0717996.com
   },
 
   .env.pre:REACT_APP_HOST=http://admin.lymrmfyp.com
-  .env.production:REACT_APP_HOST=https://Admin.miamirra.com,https://Admin.md193.club,https://Admin.naerl.club,https://Admin.nbifs.club,https://Admin.ocsif.club,https://Admin.orets.club,https://Admin.osttp.club,https://Admin.qpola.club
+  .env.production:REACT_APP_HOST=https://admin.whjfxly66.com,https://admin.0posi.club,https://admin.whjfxly88.com,https://admin.hcxch.club,https://admin.ahdmzx.com,https://admin.hfbgszx.com,https://admin.sdyz86.com,https://admin.shuyahome.com,https://admin.biblv.club
   
 3.nginx 路径 绑定 admin-web/build/index.html
 

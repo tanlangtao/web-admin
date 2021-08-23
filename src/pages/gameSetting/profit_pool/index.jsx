@@ -29,6 +29,7 @@ let thirdparty_gameRouter = {
 	"569a62be7ff123m117d446aa": { name: "派彩" },
 	"5b1f3a3cb76a591e7f25173": { name: "真人视讯" },
 	"5b1f3a3cb76a591e7f251726": { name: "彩源棋牌" },
+	"5b1f3a3cb76a451e210726": { name: "直播平台" },
 };
 const Profit_pool = props => {
 	const { getFieldDecorator } = props.form;
@@ -84,7 +85,7 @@ const Profit_pool = props => {
 			message.info("请选择子游戏");
 			return;
 		}
-		let reqStr = `${new_gameRouter[game_id].path}/getSurplusOne?game_id=${game_id}`;
+		let reqStr = `/game${new_gameRouter[game_id].path}/getSurplusOne?game_id=${game_id}`;
 		const res = await getprofitpool(reqStr);
 		if (res.code === 0 && res.data) {
 			message.success(res.msg || "查询成功");
@@ -120,7 +121,7 @@ const Profit_pool = props => {
 		props.form.validateFields(async (err, value) => {
 			if (!err) {
 				let newvalue = _.omitBy(value, _.isNil);
-				let reqStr = `${new_gameRouter[game_id].path}/uptSurplusConf`;
+				let reqStr = `/game${new_gameRouter[game_id].path}/uptSurplusConf`;
 				let formdata = { game_id, ...newvalue };
 				// go-admin 检查可更新的权限
 				const res = await uptprofitpool(reqStr, formdata);

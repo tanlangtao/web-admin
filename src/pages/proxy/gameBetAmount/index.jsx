@@ -13,10 +13,8 @@ let initstate = {
 let gameNameMap = {
     ...gameRouter,
     ...thirdPartyGameRouter,
-    // 以下四款遊戲尚未取得api接口，無法用於用戶資金明細、盈餘池查詢、玩家遊戲數據，僅在此組件作為遊戲名稱map
-    "5b1f3a3cb76a451e7f0622": { path: null, name: "发财推币机" },
+    // 以下二款遊戲尚未取得api，無法用於用戶資金明細、盈餘池查詢、玩家遊戲數據，僅在此組件作為遊戲名稱map
     "5b1f3a3cb76a591e7f251728": { path: null, name: "云谷寻宝" },
-    "5b1f3a3cb76a59n210407n738": { path: null, name: "疯狂漩涡" },
     "5c6a62be56209ac117d446aa": { path: null, name: "聚宝盆捕鱼" },
 }
 

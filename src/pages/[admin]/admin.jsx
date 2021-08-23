@@ -79,7 +79,7 @@ import {
 	ApplyHandleHeNeiPay,
 	GetApplyHeNei,
 } from "../activity/promotion";
-import { ChangeRoomStatus, UserLimitRangeBet,RoomLimitRangeBet } from "../gameSetting/subGameSetting/cylhd";
+import { ChangeRoomStatus, UserLimitRangeBet, RoomLimitRangeBet } from "../gameSetting/subGameSetting/cylhd";
 import { CycdxChangeRoomStatus, CycdxUserLimitRangeBet, CycdxRoomLimitRangeBet } from "../gameSetting/subGameSetting/cycdx";
 import { XWBYcomponent1, XWBYcomponent2, XWBYcomponent3, XWBYcomponent4 } from "../gameSetting/subGameSetting/xwby"
 import ProxyUserGold from "../proxy/baseDividend/UserGold"
@@ -90,6 +90,8 @@ import ProxyGameBetData from "../proxy/gameBetData"
 import ProxyGameBetAmount from "../proxy/gameBetAmount"
 import ProxyLoseProfitDevidend from "../proxy/lose_profit_devidend"
 import GetProxyGetGlobal from "../proxy/baseDividend/GetProxyGetGlobal"
+import DonateList from '../liveStream/donateList'
+import LiveReport from '../liveStream/liveReport'
 
 const { Sider, Content } = Layout;
 
@@ -550,17 +552,17 @@ export default class Admin extends Component {
 									</Route>
 									<Route path="/proxy/baseDividend/getBaseDividend" exact>
 										<KeepAlive name="GetBaseDividend">
-											<GetBaseDividend/>
+											<GetBaseDividend />
 										</KeepAlive>
-									</Route>								
+									</Route>
 									<Route path="/proxy/baseDividend/getBaseDividendRule" exact>
 										<KeepAlive name="GetBaseDividendRule">
-											<GetBaseDividendRule/>
+											<GetBaseDividendRule />
 										</KeepAlive>
 									</Route>
 									<Route path="/proxy/baseDividend/getGlobal" exact>
 										<KeepAlive name="GetProxyGetGlobal">
-											<GetProxyGetGlobal/>
+											<GetProxyGetGlobal />
 										</KeepAlive>
 									</Route>
 									<Route path="/messageCenter/tasks" exact>
@@ -746,6 +748,21 @@ export default class Admin extends Component {
 									<Route path="/gameData/ZRSX" exact>
 										<KeepAlive name="ZRSX">
 											<ZRSX />
+										</KeepAlive>
+									</Route>
+									<Route path="/live/donate_list" exact>
+										<KeepAlive name="DonateList">
+											<DonateList />
+										</KeepAlive>
+									</Route>
+									<Route path="/live/streamer_report" exact>
+										<KeepAlive name="streamerReport">
+											<LiveReport type="streamer" />
+										</KeepAlive>
+									</Route>
+									<Route path="/live/user_report" exact>
+										<KeepAlive name="userReport">
+											<LiveReport type="user" />
 										</KeepAlive>
 									</Route>
 									<Route path="/gameData/PCCP" exact />

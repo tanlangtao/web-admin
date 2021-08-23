@@ -10,6 +10,7 @@ let initstate = {
     end_time: null,
     proxy_pid: '',
     proxy_id: '',
+    game_tags: ''
 };
 
 export default () => {
@@ -50,7 +51,7 @@ export default () => {
 
     //搜寻代理个人玩家流水
     const proxySearch = async () => {
-        const { start_time, end_time, proxy_pid, proxy_id } = ref.current
+        const { start_time, end_time, proxy_pid, proxy_id ,game_tags } = ref.current
         if (!proxy_id) {
 			message.info("请输入玩家ID");
 			return;
@@ -63,11 +64,16 @@ export default () => {
 			message.info("请选择时间范围");
 			return;
 		}
+        if (!game_tags) {
+			message.info("请选择游戏类型");
+			return;
+		}
         let reqData = {
             start_time: Math.floor(start_time / 1000),
             end_time: Math.floor(end_time / 1000),
             account_name: proxy_pid,
             ids: `[${proxy_id}]`,
+            game_tags: `[${game_tags}]`
         }
         const res = await getProxyUserMoneyFlow(reqData)
         if (res.code === 200) {
@@ -105,11 +111,19 @@ export default () => {
                         }}
                     />
                     &nbsp; &nbsp;
-
+                    <Input
+                        style={{ width: 200 }}
+                        placeholder="游戏类型"
+                    onChange={e => {
+                        ref.current.game_tags = e.target.value
+                    }}
+                    />
+                     &nbsp; &nbsp;
                     <LinkButton onClick={() => proxySearch()} size="default">
                         <Icon type="search" />
                     </LinkButton>
-
+                    &nbsp; &nbsp;
+                    <text style={{color: "red"}} >**game_tags: 渠道组为6,12 输入 1 , 渠道组为8,9,10输入 1,5</text>
                 </div>
             }
         >
