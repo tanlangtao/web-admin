@@ -123,7 +123,7 @@ export default () => {
                         <Icon type="search" />
                     </LinkButton>
                     &nbsp; &nbsp;
-                    <text style={{color: "red"}} >**game_tags: 渠道组为6,12 输入 1 , 渠道组为8,9,10输入 1,5</text>
+                    <span style={{color: "#dc143c"}} >**game_tags: 渠道组为6,12 输入 1 , 渠道组为8,9,10输入 1,5</span>
                 </div>
             }
         >

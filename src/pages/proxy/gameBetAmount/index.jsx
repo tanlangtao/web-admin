@@ -39,25 +39,19 @@ export default () => {
         },
         {
             title: "玩家总输",
-            dataIndex: "bet_money",
-            render: (text, record) => {
-                return record.lose_total ? reverseNumber(record.lose_total) : 0
-                
-            },
-            
+            dataIndex: "lose_total",
+            render: reverseNumber,
         },
         {
             title: "玩家总赢",
-            dataIndex: "bet_money",
-            render: (text, record) => {
-                return record.win_total ? reverseNumber(record.win_total) : 0
-            },
+            dataIndex: "win_total",
+            render: reverseNumber,
         },
         {
             title: "输赢差",
-            dataIndex: "bet_money",
+            dataIndex: "",
             render: (text, record) => {
-                return record.win_total||record.lose_total ? reverseNumber(record.win_total +record.lose_total)  : ""
+                return reverseNumber(record.win_total + record.lose_total)
             },
         },
     ]

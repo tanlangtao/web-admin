@@ -100,8 +100,7 @@ export default () => {
         const res = await getPaymentDividendInfo(reqData)
         if (res.code === 200) {
             message.success(res.status)
-            console.log(res)
-            setData(res.msg[`${start_time}:${end_time}`] || [])
+            setData(res.msg && res.msg[`${start_time}:${end_time}`] || [])
         } else {
             message.info(res.status || JSON.stringify(res))
         }

@@ -221,7 +221,7 @@ export const reqDuofuduocaiGameData = str => {
 };
 //用户列表-查看ip
 export const getipdetail = ip => {
-	return ajax(`http://ip-api.com/json/${ip}?lang=zh-CN`, {}, "GET", { needAuth: false });
+	return ajax(`https://ipwhois.app/json/${ip}?lang=zh-CN`, {}, "GET", { needAuth: false });
 };
 
 //用户列表-查看手机号归属地
@@ -786,10 +786,12 @@ export const getPaymentDividend = reqData => {
 };
 export const getPaymentDividendInfo = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + `/operation/api/GetPaymentDividendInfo`,
-		{ platform_key: 654321, game_tag: 0, ...reqData },
+		// process.env.REACT_APP_CENTER_HOST + `/operation/api/GetPaymentDividendInfo`,
+		// { platform_key: 654321, game_tag: 0, ...reqData },
+		BASE + `/Operation/Api/GetPaymentDividendInfo`,
+		{ game_tag: 0, ...reqData },
 		"GET",
-		{ needAuth: false },
+		// { needAuth: false },
 	);
 };
 export const getProxyUserMoneyFlow = reqData => {

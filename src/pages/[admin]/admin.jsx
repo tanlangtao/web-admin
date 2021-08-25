@@ -54,13 +54,13 @@ import Profitpoolsetting from "../gameSetting/profit_pool";
 import B2bConfig from "../b2b/config";
 import B2bRegister from "../b2b/register";
 import ZRSX from "../gameData/ZRSX";
-import PCCP from "../gameData/PCCP";
+// import PCCP from "../gameData/PCCP";
 import Agadmin from "../gameData/ag-admin";
-import Sbadmin from "../gameData/sb-admin";
-import Cyadmin from "../gameData/cy-admin";
-import Cqgame from "../gameData/cqgame";
-import { PTadmin } from "../gameData/otherAdmins";
-import PGgame from "../gameData/pggame";
+// import Sbadmin from "../gameData/sb-admin";
+// import Cyadmin from "../gameData/cy-admin";
+// import Cqgame from "../gameData/cqgame";
+// import { PTadmin } from "../gameData/otherAdmins";
+// import PGgame from "../gameData/pggame";
 import MoneyFloatDetail from "../customer_service/moneyfloat_detail";
 import BankCardCheck from "../user/bank_check";
 import { Provider, KeepAlive } from "react-keep-alive";
@@ -162,7 +162,7 @@ export default class Admin extends Component {
 								}}
 							>
 								{/* 不卸载agadmin组件,只是在路由切换的时候隐藏,注意这里Route的位置,不能放在switch中,参考https://blog.csdn.net/weixin_33713350/article/details/91367938 */}
-								<Route
+								{/* <Route
 									path="/gameData/Agadmin"
 									exact
 									children={props => {
@@ -322,7 +322,7 @@ export default class Admin extends Component {
 											</div>
 										) : null;
 									}}
-								/>
+								/> */}
 								<Switch>
 									<Redirect from="/" exact to="/home" />
 									<Route path="/home" exact component={Home} />
@@ -765,13 +765,14 @@ export default class Admin extends Component {
 											<LiveReport type="user" />
 										</KeepAlive>
 									</Route>
-									<Route path="/gameData/PCCP" exact />
+									{/* 改成點擊菜單另開新分頁 */}
+									{/* <Route path="/gameData/PCCP" exact />
 									<Route path="/gameData/Agadmin" exact />
 									<Route path="/gameData/Sbadmin" exact />
 									<Route path="/gameData/Cyadmin" exact />
 									<Route path="/gameData/Cqgame" exact />
 									<Route path="/gameData/PTadmin" exact />
-									<Route path="/gameData/pggame" exact />
+									<Route path="/gameData/pggame" exact /> */}
 									<Route component={NotFound} />
 								</Switch>
 							</div>

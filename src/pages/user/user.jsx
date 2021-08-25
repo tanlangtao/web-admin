@@ -279,10 +279,12 @@ export default class User extends Component {
 		let newdata = this.state.data;
 		let ip = record[type];
 		const res = await getipdetail(ip);
-		if (res.status === "success") {
+		// if (res.status === "success") {
+		if (res.success === true) {
 			newdata.forEach(element => {
 				if (record.id === element.id) {
-					element[`${type}_area`] = `${res.country}.${res.regionName}`;
+					// element[`${type}_area`] = `${res.country}.${res.regionName}`;
+					element[`${type}_area`] = `${res.country}.${res.region}`;
 					this.setState({ data: newdata, loading: false });
 				}
 			});
