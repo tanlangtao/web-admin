@@ -246,7 +246,10 @@ class EditForm extends React.Component {
                     if (res.status === 0) {
                         message.success(res.msg);
                     } else {
-                        message.info(res.msg || "操作失败");
+                        Modal.warning({
+                            okText: "确定",
+                            content:( res.msg || "操作失败" )
+                        })
                     }
                     this.props.onclose();
                 },
@@ -256,7 +259,10 @@ class EditForm extends React.Component {
             if (res.status === 0) {
                 message.success(res.msg);
             } else {
-                message.info(res.msg || "操作失败");
+                Modal.warning({
+                    okText: "确定",
+                    content:( res.msg || "操作失败" )
+                })
             }
             this.props.onclose();
         }
@@ -276,7 +282,10 @@ class EditForm extends React.Component {
             if (res.status === 0) {
                 message.info(res.msg);
             } else {
-                message.info(res.msg || "操作失败");
+                Modal.warning({
+                    okText: "确定",
+                    content:( res.msg || "操作失败" )
+                })
             }
             this.props.onclose();
         } catch (err) {
