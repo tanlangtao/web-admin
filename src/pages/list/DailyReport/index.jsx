@@ -117,6 +117,10 @@ class DailyReport extends Component {
 					size="small"
 					scroll={{ x: "max-content" }}
 					loading={this.state.isLoading}
+					pagination={{
+						defaultPageSize: 20,
+						defaultCurrent: 1,
+					}}
 				/>
 				{this.state.isDateReportShow && (
 					<Modal
