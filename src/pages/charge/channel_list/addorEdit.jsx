@@ -164,12 +164,7 @@ class AddDataForm extends Component {
                     {getFieldDecorator("rate", {
                         rules: [
                             {
-                                required: true,
-                                message: "该项不能为空",
-                            },
-                            {
-                                pattern: /^\d+(\.\d+)?$/,
-                                message: "请输入有效数字",
+                                required: false,
                             },
                         ],
                         initialValue: isEdit && editDataRecord.rate,
