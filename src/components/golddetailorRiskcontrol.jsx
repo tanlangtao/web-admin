@@ -5,7 +5,7 @@ import { find } from "lodash-es";
 
 import { reqGameData, reqDuofuduocaiGameData } from "../api";
 import { formateDate } from "../utils/dateUtils";
-import { reverseNumber, reverseDecimal } from "../utils/commonFuntion";
+import { reverseNumber, reverseDecimal, reversePercent } from "../utils/commonFuntion";
 import LinkButton from "./link-button";
 import { gameRouter } from "../utils/public_variable";
 import "../css/gamedata.css";
@@ -22,7 +22,7 @@ export default function GoldDetailorRiskControl({
 	// console.log('goldDetailData', goldDetailData);
 	const { data, count, current, sumData } = goldDetailData;
 	if (sumData) {
-		var { total_payment_arrival_amount, total_with_draw_amount, all_statement_total ,all_bet_total} = sumData;
+		var { total_payment_arrival_amount, total_with_draw_amount, all_statement_total, all_bet_total } = sumData;
 	}
 	let paginationConfig = {
 		defaultPageSize: 50,
@@ -60,7 +60,7 @@ export default function GoldDetailorRiskControl({
 				size="small"
 				pagination={paginationConfig}
 				scroll={{ x: "max-content" }}
-				// footer={footerData}
+			// footer={footerData}
 			/>
 		</div>
 	);
@@ -433,12 +433,12 @@ async function check_game_data(record) {
 								{data.roomLevel === 1
 									? "体验房"
 									: data.roomLevel === 2
-									? "初级场"
-									: data.roomLevel === 3
-									? "中级场"
-									: data.roomLevel === 4
-									? "高级场"
-									: "-"}
+										? "初级场"
+										: data.roomLevel === 3
+											? "中级场"
+											: data.roomLevel === 4
+												? "高级场"
+												: "-"}
 							</Descriptions.Item>
 						</Descriptions>
 					);
@@ -1123,12 +1123,12 @@ async function check_game_data(record) {
 								{data.room_type === 1
 									? "体验场"
 									: data.room_type === 2
-									? "初级场"
-									: data.room_type === 3
-									? "中级场"
-									: data.room_type === 4
-									? "高级场"
-									: data.room_type}
+										? "初级场"
+										: data.room_type === 3
+											? "中级场"
+											: data.room_type === 4
+												? "高级场"
+												: data.room_type}
 							</Descriptions.Item>
 							<Descriptions.Item label="底牌">
 								{reverse_ddz(data.bottom_card)}
@@ -1503,8 +1503,7 @@ async function check_game_data(record) {
 										>
 											<Table
 												title={() =>
-													`总番数${
-														data.settlement?.fang_info?.fang_total || ""
+													`总番数${data.settlement?.fang_info?.fang_total || ""
 													}`
 												}
 												bordered
@@ -1831,9 +1830,8 @@ async function check_game_data(record) {
 								<Descriptions.Item label="当局投注资讯">
 									{(data.betinfo || []).map((ele, i) => {
 										return (
-											<div key={i}>{`区域${index_shaibao[ele.BetIndex]} : ${
-												ele.Total_gold
-											}`}</div>
+											<div key={i}>{`区域${index_shaibao[ele.BetIndex]} : ${ele.Total_gold
+												}`}</div>
 										);
 									})}
 								</Descriptions.Item>
@@ -2351,8 +2349,8 @@ async function check_game_data(record) {
 									{data.room_name === "01"
 										? "河内分分彩"
 										: data.room_name === "02"
-										? "奇趣分分彩"
-										: ""}
+											? "奇趣分分彩"
+											: ""}
 								</Descriptions.Item>
 								<Descriptions.Item label="开奖期数">
 									{data.issue_id}
@@ -2435,8 +2433,8 @@ async function check_game_data(record) {
 									{data.room_id === "1"
 										? "河内分分彩"
 										: data.room_id === "2"
-										? "奇趣分分彩"
-										: ""}
+											? "奇趣分分彩"
+											: ""}
 								</Descriptions.Item>
 								<Descriptions.Item label="结算号码">
 									{data.card.resultNum}
@@ -2445,8 +2443,8 @@ async function check_game_data(record) {
 									{data.card.bigSmall === 1
 										? "小"
 										: data.card.bigSmall === 2
-										? "大"
-										: ""}
+											? "大"
+											: ""}
 								</Descriptions.Item>
 								<Descriptions.Item label="玩家下注">
 									注池 大:{data.bet_info.BigDownBet}
@@ -2468,7 +2466,70 @@ async function check_game_data(record) {
 						</>
 					);
 					break;
+				case "5b1f3a3cb76a451e7f0622": //发财推币机	
+					reactnode = (
+						<div>
+							<Table
+								bordered
+								rowKey={(record, index) => `${index}`}
+								dataSource={res.data.list}
+								columns={[
+									{
+										title: "起始时间",
+										dataIndex: "start_time",
+										render: formateDate,
+									},
+									{
+										title: "结束时间",
+										dataIndex: "end_time",
+										render: formateDate,
+									},
+									{
+										title: "用户id",
+										dataIndex: "player_id",
+									},
+									{
+										title: "round_id",
+										dataIndex: "round_id"
+									},
+									{
+										title: "房间id",
+										dataIndex: "room_id"
+									},
+									{
+										title: "税率",
+										dataIndex: "tax_rate",
+										render: reversePercent,
+									},
+									{
+										title: "下注金额",
+										dataIndex: "bet_info",
+									},
+									{
+										title: "倍率",
+										dataIndex: "game_reward",
+										render: (text, record) => {
+											return record["game_reward"] ? record["game_reward"].Rate : 1
+										}
+									},
+									{
+										title: "结算金额",
+										dataIndex: "settlement_funds",
+									},
 
+									{
+										title: "玩家余额",
+										dataIndex: "spare_cash",
+										render :reverseNumber
+									},
+
+								]}
+								size="small"
+								pagination={false}
+							/>
+						</div>
+					);
+					break;
 				default:
 					reactnode = <div>{JSON.stringify(res.data)}</div>;
 					break;

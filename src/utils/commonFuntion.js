@@ -75,6 +75,12 @@ export function reverseDecimal(num) {
     return Math.round(num * 10000) / 10000;
 }
 
+export function reversePercent(num) {
+    if (num === 0) return 0;
+    if (!num) return;
+    if (isNaN(num)) return 0;
+    return (num * 100) +"%";
+}
 
 // 判定是否為JSON 
 export function jsonTest(str) {
