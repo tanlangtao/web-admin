@@ -802,6 +802,14 @@ export const getProxyUserMoneyFlow = reqData => {
 		{ needAuth: false },
 	);
 };
+export const getGameUserInductionsSortByGameTag = reqData => {
+	return ajax(
+		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetGameUserInductionsSortByGameTag",
+		{ platform_key: 123456, ...reqData },
+		"GET",
+		{ needAuth: false },
+	);
+};
 export const getProxyUserLinkBet = reqData => {
 	return ajax(
 		process.env.REACT_APP_CENTER_HOST + "/operation/api/GetProxyUserLinkBet",

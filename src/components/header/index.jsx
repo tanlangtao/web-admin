@@ -151,6 +151,9 @@ class Header extends Component {
 			if (path.includes("baseDividend") && path.includes("details")) {
 				title = "获取保底分红发放详情";
 			}
+			if (path.includes("baseDividend") && path.includes("getUserSortByGameTag")) {
+				title = "按游戏类型查询玩家业绩";
+			}
 			if (path.includes("gameBetData")) {
 				title = "查询代理链有效投注数据";
 			}
