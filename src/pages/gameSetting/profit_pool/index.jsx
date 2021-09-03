@@ -23,6 +23,7 @@ let new_gameRouter = {
 	"5b1f3a3cb76a451e7f251739": { path: "/jdb/api", name: "JDB" },
 	"5b1f3a3cb1005251736": { path: "/pg/api", name: "PG" },
 	"5b1f3a3cb76a451e210629": { path: "/pg2/api", name: "PG2" },
+	"5b1f3a3cb76a451e210821": { path: "/mg/api", name: "MG" },
 };
 let thirdparty_gameRouter = {
 	"5b1f3a3cb76a591e7f25179": { name: "沙巴体育" },
