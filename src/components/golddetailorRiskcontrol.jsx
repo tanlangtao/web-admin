@@ -2530,6 +2530,56 @@ async function check_game_data(record) {
 						</div>
 					);
 					break;
+					case "5b1f3a3cb76a451e210820": //上庄分分彩	
+					reactnode = (
+						<>
+							<Descriptions
+								title={`玩家ID:${data.player_id}`}
+								bordered
+								size="small"
+								column={2}
+							>
+								<Descriptions.Item label="开奖号码">
+									{data.lottery}
+								</Descriptions.Item>
+								<Descriptions.Item label="税率">{data.tax_rate}</Descriptions.Item>
+								<Descriptions.Item label="彩源名称">
+									{data.room_id === "1"
+										? "河内分分彩"
+										: data.room_id === "2"
+											? "奇趣分分彩"
+											: ""}
+								</Descriptions.Item>
+								<Descriptions.Item label="结算号码">
+									{data.card.resultNum}
+								</Descriptions.Item>
+								<Descriptions.Item label="中奖区域">
+									{data.card.bigSmall === 1
+										? "小"
+										: data.card.bigSmall === 2
+											? "大"
+											: ""}
+								</Descriptions.Item>
+								<Descriptions.Item label="玩家下注">
+									注池 大:{data.bet_info.BigDownBet}
+									<br />
+									注池 小:{data.bet_info.SmallDownBet}
+									<br />
+									注池 豹子:{data.bet_info.LeopardDownBet}
+								</Descriptions.Item>
+								<Descriptions.Item label="玩家本局结算金币">
+									{reverseDecimal(data.settlement_funds)}
+								</Descriptions.Item>
+								<Descriptions.Item label="玩家本局剩余金额">
+									{reverseDecimal(data.spare_cash)}
+								</Descriptions.Item>
+								<Descriptions.Item label="开奖奖期">
+									{data.periods_num}
+								</Descriptions.Item>
+							</Descriptions>
+						</>
+					);
+					break;
 				default:
 					reactnode = <div>{JSON.stringify(res.data)}</div>;
 					break;
