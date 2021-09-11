@@ -794,6 +794,25 @@ export const getPaymentDividendInfo = reqData => {
 		// { needAuth: false },
 	);
 };
+// 查询玩家分红数据总额
+export const getPaymentInfo = reqData => {
+	return ajax(
+		process.env.REACT_APP_CENTER_HOST  + `/proxy/proxy/GetPaymentInfo`,
+		{ platform_key: 123456, ...reqData },
+		"GET",
+		// { needAuth: false },
+	);
+};
+
+// 查询玩家分红数据详情
+export const getPaymentInfoDetail = reqData => {
+	return ajax(
+		process.env.REACT_APP_CENTER_HOST  + `/proxy/proxy/GetPaymentInfoDetail`,
+		{ platform_key: 123456, ...reqData },
+		"GET",
+		// { needAuth: false },
+	);
+};
 export const getProxyUserMoneyFlow = reqData => {
 	return ajax(
 		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetGameUserInductions",

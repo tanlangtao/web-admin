@@ -172,7 +172,12 @@ class Header extends Component {
 			if (path.includes("baseDividend") && path.includes("getBaseDividend")) {
 				title = "查询渠道配置信息";
 			}			
-
+			if (path.includes("getPaymentInfo") && path.includes("details")) {
+				title = "查询玩家分红数据总额";
+			}	
+			if (path.includes("getPaymentInfoDetail") && path.includes("details")) {
+				title = "查询玩家分红数据详情";
+			}	
 			data.activeKey = "2";
 			data.panes.push({
 				title: title,

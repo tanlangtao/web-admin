@@ -90,6 +90,9 @@ import GetBaseDividend from "../proxy/baseDividend/GetBaseDividend"
 import ProxyGameBetData from "../proxy/gameBetData"
 import ProxyGameBetAmount from "../proxy/gameBetAmount"
 import ProxyLoseProfitDevidend from "../proxy/lose_profit_devidend"
+import GetPaymentInfoDetail from "../proxy/getPaymentInfoDetail"
+import GetPaymentInfo from "../proxy/getPaymentInfo"
+
 import GetProxyGetGlobal from "../proxy/baseDividend/GetProxyGetGlobal"
 import DonateList from '../liveStream/donateList'
 import LiveReport from '../liveStream/liveReport'
@@ -529,6 +532,16 @@ export default class Admin extends Component {
 									<Route path="/proxy/lose_profit_devidend/details" exact>
 										<KeepAlive name="ProxyLoseProfitDevidend">
 											<ProxyLoseProfitDevidend />
+										</KeepAlive>
+									</Route>
+									<Route path="/proxy/getPaymentInfoDetail/details" exact>
+										<KeepAlive name="getPaymentInfoDetail">
+											<GetPaymentInfoDetail />
+										</KeepAlive>
+									</Route>
+									<Route path="/proxy/getPaymentInfo/details" exact>
+										<KeepAlive name="getPaymentInfo">
+											<GetPaymentInfo />
 										</KeepAlive>
 									</Route>
 									<Route path="/proxy/baseDividend/userGold" exact>
