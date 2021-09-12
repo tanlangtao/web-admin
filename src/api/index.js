@@ -800,7 +800,7 @@ export const getPaymentInfo = reqData => {
 		process.env.REACT_APP_CENTER_HOST  + `/proxy/proxy/GetPaymentInfo`,
 		{ platform_key: 123456, ...reqData },
 		"GET",
-		// { needAuth: false },
+		{ needAuth: false },
 	);
 };
 
@@ -810,7 +810,7 @@ export const getPaymentInfoDetail = reqData => {
 		process.env.REACT_APP_CENTER_HOST  + `/proxy/proxy/GetPaymentInfoDetail`,
 		{ platform_key: 123456, ...reqData },
 		"GET",
-		// { needAuth: false },
+		{ needAuth: false },
 	);
 };
 export const getProxyUserMoneyFlow = reqData => {
