@@ -2520,7 +2520,7 @@ async function check_game_data(record) {
 									{
 										title: "玩家余额",
 										dataIndex: "spare_cash",
-										render :reverseNumber
+										render: reverseNumber
 									},
 
 								]}
@@ -2530,7 +2530,7 @@ async function check_game_data(record) {
 						</div>
 					);
 					break;
-					case "5b1f3a3cb76a451e210820": //上庄分分彩	
+				case "5b1f3a3cb76a451e210820": //上庄分分彩	
 					reactnode = (
 						<>
 							<Descriptions
@@ -2545,25 +2545,34 @@ async function check_game_data(record) {
 								<Descriptions.Item label="税率">{data.tax_rate}</Descriptions.Item>
 								<Descriptions.Item label="彩源名称">
 									{data.room_id === "1"
-										? "河内分分彩"
-										: data.room_id === "2"
-											? "奇趣分分彩"
-											: ""}
+										? "奇趣分分"
+										: ""}
 								</Descriptions.Item>
 								<Descriptions.Item label="结算号码">
-									{data.card.resultNum}
+									{data.card.result.luckyNum}
 								</Descriptions.Item>
-								<Descriptions.Item label="中奖区域">
-									{data.card.bigSmall === 1
-										? "小"
-										: data.card.bigSmall === 2
-											? "大"
-											: ""}
+								<Descriptions.Item label="中奖区域">				
+									{data.isBanker && (data.card.result.cardType[0] === 1 && data.card.result.cardType[1] === 3
+										? "小单" : data.card.result.cardType[0] === 1 && data.card.result.cardType[1] === 4 ?
+											"小双" : data.card.result.cardType[0] === 2 && data.card.result.cardType[1] === 3 ?
+												"大单" : data.card.result.cardType[0] === 2 && data.card.result.cardType[1] === 4 ?
+													"大双" : "豹子")
+									}
+									{!data.isBanker && (data.card.result.cardType[0] === 1 && data.card.result.cardType[1] === 3
+										? "庄小单" : data.card.result.cardType[0] === 1 && data.card.result.cardType[1] === 4 ?
+											"庄小双" : data.card.result.cardType[0] === 2 && data.card.result.cardType[1] === 3 ?
+												"庄大单" : data.card.result.cardType[0] === 2 && data.card.result.cardType[1] === 4 ?
+													"庄大双" : "庄豹子")
+									}
 								</Descriptions.Item>
 								<Descriptions.Item label="玩家下注">
 									注池 大:{data.bet_info.BigDownBet}
 									<br />
 									注池 小:{data.bet_info.SmallDownBet}
+									<br />
+									注池 单:{data.bet_info.SingleDownBet}
+									<br />
+									注池 双:{data.bet_info.DoubleDownBet}
 									<br />
 									注池 豹子:{data.bet_info.LeopardDownBet}
 								</Descriptions.Item>
