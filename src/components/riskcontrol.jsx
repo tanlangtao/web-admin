@@ -2,7 +2,7 @@ import React from "react";
 
 import { Table, Modal, message } from "antd";
 import _ from "lodash-es";
-import { getriskcontrol,GoldDetailorRiskControlSUMdata ,getProxyUserLink} from "../api";
+import { getriskcontrol, GoldDetailorRiskControlSUMdata, getProxyUserLink } from "../api";
 import { reverseNumber } from "../utils/commonFuntion";
 
 const columns = [
@@ -46,8 +46,8 @@ export default async record => {
 	const { user_id, order_id, created_at, status } = record;
 	let reactnode;
 	const res = await getriskcontrol({ user_id, order_id, end_time: created_at, status });
-	const userStatistics =await GoldDetailorRiskControlSUMdata(user_id)
-	const userLink =await getProxyUserLink(user_id)
+	const userStatistics = await GoldDetailorRiskControlSUMdata(user_id)
+	const userLink = await getProxyUserLink(user_id)
 	if (res.status === 0 && res.data) {
 		try {
 			let riskData = [],
@@ -88,10 +88,10 @@ export default async record => {
 						size="small"
 						pagination={false}
 					/>
-					<div>当前玩家代理链详情:{userLink.msg ? userLink.msg.join('>>'):"-"}</div>
-					<div>历史总充值:{userStatistics.data ? reverseNumber(userStatistics.data.total_payment_arrival_amount):"-"}</div>
+					<div>当前玩家代理链详情:{userLink.msg ? userLink.msg.join('>>') : "-"}</div>
+					<div>历史总充值:{userStatistics.data ? reverseNumber(userStatistics.data.total_payment_arrival_amount) : "-"}</div>
 					<div>历史总兑换:{userStatistics.data ? reverseNumber(userStatistics.data.total_with_draw_amount) : "-"}</div>
-					<div>充值兑换差:{userStatistics.data ? reverseNumber(userStatistics.data.total_payment_arrival_amount - userStatistics.data.total_with_draw_amount) :"-"}</div>
+					<div>充值兑换差:{userStatistics.data ? reverseNumber(userStatistics.data.total_payment_arrival_amount - userStatistics.data.total_with_draw_amount) : "-"}</div>
 					<div>总流水:{reverseNumber(sumgold)}</div>
 					<div>
 						充值流水比:
@@ -223,11 +223,11 @@ export default async record => {
 						{res.data["活动余额清空"] ? res.data["活动余额清空"].totalgold : "-"}
 					</div>
 					<div>
-					新用户首存活动余额清空：
+						新用户首存活动余额清空：
 						{res.data["新用户首存活动余额清空"] ? res.data["新用户首存活动余额清空"].totalgold : "-"}
 					</div>
 					<div>
-					老用户首存活动余额清空
+						老用户首存活动余额清空
 						{res.data["老用户首存活动余额清空"] ? res.data["老用户首存活动余额清空"].totalgold : "-"}
 					</div>
 					<div>
@@ -259,6 +259,10 @@ export default async record => {
 					<div>
 						捕鱼通关豪礼领取增加金币：
 						{res.data["捕鱼通关豪礼领取增加金币"] ? res.data["捕鱼通关豪礼领取增加金币"].totalgold : "-"}
+					</div>
+					<div>
+						豪礼流水活动发放奖金:
+						{res.data["豪礼流水活动发放奖金"] ? res.data["豪礼流水活动发放奖金"].totalgold : "-"}
 					</div>
 					{/* <div>
 					每周佣金奖励领取增加金币：
