@@ -796,7 +796,6 @@ export const getPaymentDividendInfo = reqData => {
 };
 // 查询玩家分红数据总额
 export const getPaymentInfo = reqData => {
-	 console.log("test")
 	return ajax(
 		process.env.REACT_APP_CENTER_HOST  + `/proxy/proxy/GetPaymentInfo`,
 		{ platform_key: 123456, ...reqData },
