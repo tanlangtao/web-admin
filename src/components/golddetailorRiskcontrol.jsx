@@ -2552,13 +2552,13 @@ async function check_game_data(record) {
 									{data.card.result.luckyNum}
 								</Descriptions.Item>
 								<Descriptions.Item label="中奖区域">				
-									{data.isBanker && (data.card.result.cardType[0] === 1 && data.card.result.cardType[1] === 3
+									{!data.isBanker && (data.card.result.cardType[0] === 1 && data.card.result.cardType[1] === 3
 										? "小单" : data.card.result.cardType[0] === 1 && data.card.result.cardType[1] === 4 ?
 											"小双" : data.card.result.cardType[0] === 2 && data.card.result.cardType[1] === 3 ?
 												"大单" : data.card.result.cardType[0] === 2 && data.card.result.cardType[1] === 4 ?
 													"大双" : "豹子")
 									}
-									{!data.isBanker && (data.card.result.cardType[0] === 1 && data.card.result.cardType[1] === 3
+									{data.isBanker && (data.card.result.cardType[0] === 1 && data.card.result.cardType[1] === 3
 										? "庄小单" : data.card.result.cardType[0] === 1 && data.card.result.cardType[1] === 4 ?
 											"庄小双" : data.card.result.cardType[0] === 2 && data.card.result.cardType[1] === 3 ?
 												"庄大单" : data.card.result.cardType[0] === 2 && data.card.result.cardType[1] === 4 ?
