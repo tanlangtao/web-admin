@@ -260,7 +260,7 @@ class LeftNav extends Component {
         </Link> */}
 				<div className="left-nav-header" onClick={() => (window.location.href = "/")}>
 					<h1>QGame后台管理</h1>
-					<h1>V:1.0.0</h1>
+					<h1>V:1.0.1</h1>
 				</div>
 				<Menu
 					mode="inline"
