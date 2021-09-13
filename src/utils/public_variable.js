@@ -53,4 +53,5 @@ export const thirdPartyGameRouter = {
 	"5b1f3a3cb76a451e210629": { path: "/pg2/api", name: "PG2游戏" },
 	"5b1f3a3cb76a451e210726": { path: "/zhibo/api", name: "直播平台" },
 	"5b1f3a3cb76a451e210821": { path: "/mg/api", name: "MG游戏" },
+	"5b1f3a3cb76a451e210822": { path: "/qt/api", name: "QT游戏" },
 }
