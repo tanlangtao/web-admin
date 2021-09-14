@@ -264,6 +264,10 @@ export default async record => {
 						豪礼流水活动发放奖金:
 						{res.data["豪礼流水活动发放奖金"] ? res.data["豪礼流水活动发放奖金"].totalgold : "-"}
 					</div>
+					<div>
+						昨日赢金榜增加金币:
+						{res.data["昨日赢金榜增加金币"] ? res.data["昨日赢金榜增加金币"].totalgold : "-"}
+					</div>
 					{/* <div>
 					每周佣金奖励领取增加金币：
                         {res.data["每周佣金奖励领取增加金币"]
