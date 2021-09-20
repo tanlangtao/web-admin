@@ -444,6 +444,7 @@ async function check_game_data(record) {
 					);
 					break;
 				case "5b1f3a3cb76a591e7f251719":
+				case "5b1f3a3cb76a451e210919":
 					//红黑大战:
 					//房间ID: room_id开奖信息:card_result红方：readcard黑方：blackcard下注信息：down_bet_info红方：reddownbet黑方：blackdownbet幸运一击：luckdownbet
 					//房间ID：1， 开奖信息（红：梅2，梅5，红A，黑：梅A，方Q，红8），下注信息（红：50，黑0，幸运一击：0）
@@ -476,6 +477,7 @@ async function check_game_data(record) {
 					);
 					break;
 				case "5b1f3a3cb76a591e7f251716":
+				case "5b1f3a3cb76a451e210918":
 					// 1:  "Benz-40X",2: "BMW-30X",3: "Audi-20X",4: "VW-10X",5: "Benz-5X",6: "BMW-5X",7: "Audi-5X",8: "VW-5X",
 					const reverse_bcbm = num => {
 						let result;
@@ -1841,6 +1843,7 @@ async function check_game_data(record) {
 					break;
 
 				case "5b1f3a3cb76a591e7f25176":
+				case "5b1f3a3cb76a451e210920":
 					// 德州扑克
 					// {
 					//     "code":0,
@@ -2551,7 +2554,7 @@ async function check_game_data(record) {
 								<Descriptions.Item label="结算号码">
 									{data.card.result.luckyNum}
 								</Descriptions.Item>
-								<Descriptions.Item label="中奖区域">				
+								<Descriptions.Item label="中奖区域">
 									{!data.isBanker && (data.card.result.cardType[0] === 1 && data.card.result.cardType[1] === 3
 										? "小单" : data.card.result.cardType[0] === 1 && data.card.result.cardType[1] === 4 ?
 											"小双" : data.card.result.cardType[0] === 2 && data.card.result.cardType[1] === 3 ?

@@ -194,6 +194,7 @@ class Channel_list extends Component {
         {
             title: "玩家承担的费率%",
             dataIndex: "rate",
+            width: "50%"
         },
         {
             title: "固定面值",
