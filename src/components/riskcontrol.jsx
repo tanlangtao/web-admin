@@ -272,7 +272,10 @@ export default async record => {
 						新增有效代理排行榜增加金币:
 						{res.data["新增有效代理排行榜增加金币"] ? res.data["新增有效代理排行榜增加金币"].totalgold : "-"}
 					</div>
-					
+					<div>
+						每日免费礼金增加金币:
+						{res.data["每日免费礼金增加金币"] ? res.data["每日免费礼金增加金币"].totalgold : "-"}
+					</div>
 					{/* <div>
 					每周佣金奖励领取增加金币：
                         {res.data["每周佣金奖励领取增加金币"]
