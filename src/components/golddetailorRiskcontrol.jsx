@@ -184,6 +184,7 @@ async function check_game_data(record) {
 		try {
 			switch (pay_account_id) {
 				case "5b1f3a3cb76a591e7f251732": //梭哈
+				case "5b1f3a3cb76a451e210914": //梭哈2
 					reactnode = (
 						<>
 							<Descriptions title="梭哈游戏数据" bordered size="small" column={1}>
@@ -373,6 +374,7 @@ async function check_game_data(record) {
 					);
 					break;
 				case "5b1f3a3cb76a591e7f251721":
+				case "5b1f3a3cb76a451e210926":
 					// 房间ID: room_id;
 					// 开奖信息:card 庄:village_card 闲:idle_card
 					//下注信息:betinfo 庄: VillageGold闲：IdleGold和：PeaceGold 庄对：VillageDoubleGold 闲对：IdleDoubleGold
@@ -541,7 +543,9 @@ async function check_game_data(record) {
 					);
 					break;
 				case "5b1f3a3cb76a591e7f251718":
-					// 百人牛牛:
+				// 百人牛牛:
+				case "5b1f3a3cb76a451e210916":
+					// 百人牛牛2:
 					//10-7新的百人牛牛数据结构,接口文档来自wendy
 					// 百人牛牛
 					const reverse_brnn = pokers => {
@@ -702,6 +706,7 @@ async function check_game_data(record) {
 					);
 					break;
 				case "5b1f3a3cb76a591e7f251717":
+				case "5b1f3a3cb76a451e210910":
 					// 龙虎斗:
 					// 房间ID: room_id
 					// 开奖信息：card
@@ -862,6 +867,7 @@ async function check_game_data(record) {
 					);
 					break;
 				case "5c6a62be7ff587m117d446aa":
+				case "5b1f3a3cb76a451e210913":
 					//红包乱斗：
 					// 房间ID：RoomID
 					// 雷号: Bomb
@@ -894,6 +900,7 @@ async function check_game_data(record) {
 					);
 					break;
 				case "5b1f3a3cb76a591e7f251720":
+				case "5b1f3a3cb76a451e210911":
 					// 二八杠:
 					// 庄家信息：Dealer（庄家，如果有人坐庄，是玩家ID.如果无人庄座，标明“System”）
 					// 开奖信息:card
@@ -1024,6 +1031,7 @@ async function check_game_data(record) {
 					}
 					break;
 				case "5b1f3a3cb76a591e7f251711":
+				case "5b1f3a3cb76a451e210917":
 					// 斗地主
 					// 房间ID：room_id
 					// 房间类型：room_type （ 1=体验场， 2=初级场，3=中级场，4=高级场）
@@ -1168,6 +1176,7 @@ async function check_game_data(record) {
 					);
 					break;
 				case "5b1f3a3cb76a591e7f251715":
+				case "5b1f3a3cb76a451e210912":
 					//炸金花
 					let columns = [
 						{
@@ -1255,6 +1264,7 @@ async function check_game_data(record) {
 					);
 					break;
 				case "5b1f3a3cb76a591e7f25171":
+				case "5b1f3a3cb76a451e210922":
 					//十三水
 					let columns3 = [
 						{
@@ -1772,6 +1782,7 @@ async function check_game_data(record) {
 					);
 					break;
 				case "5b1f3a3cb76a591e7f251724":
+				case "5b1f3a3cb76a451e210921":
 					// 骰宝
 					let index_shaibao = {
 						1: "单骰1",
@@ -2037,7 +2048,9 @@ async function check_game_data(record) {
 					break;
 
 				case "5b1f3a3cb76a591e7f251725":
-					//狮子王国
+				//狮子王国
+				case "5b1f3a3cb76a451e210915":
+					//狮子王国2
 					// let obj = {
 					//     code: 0,
 					//     data: {
