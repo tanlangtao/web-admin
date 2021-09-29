@@ -100,7 +100,8 @@ class AddDataForm extends Component {
                             <Select.Option value="19">im微信代充</Select.Option>
                             <Select.Option value="20">im网银代充</Select.Option>
                             <Select.Option value="21">im银联扫码代充</Select.Option>
-                            <Select.Option value="23">USDT</Select.Option>
+                            <Select.Option value="23">usdt erc20</Select.Option>
+                            <Select.Option value="24">usdt trc20</Select.Option>
                         </Select>,
                     )}
                 </Form.Item>

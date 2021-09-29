@@ -211,7 +211,8 @@ class Order_list extends Component {
 								<Select.Option value="20">imbank</Select.Option>
 								<Select.Option value="21">imunionpay</Select.Option>
 								<Select.Option value="22">支付宝转卡</Select.Option>
-								<Select.Option value="23">USDT</Select.Option>
+								<Select.Option value="23">usdt erc20</Select.Option>
+								<Select.Option value="24">usdt trc20</Select.Option>
 							</Select>
 							&nbsp; &nbsp;
 							<LinkButton onClick={() => this.onSearchData(1, 20)} size="default">
@@ -416,7 +417,10 @@ class Order_list extends Component {
 						word = "支付宝转卡";
 						break;
 					case "23":
-						word = "USDT";
+						word = "usdt erc20";
+						break;
+					case "24":
+						word = "usdt trc20";
 						break;
 					default:
 						word = "";

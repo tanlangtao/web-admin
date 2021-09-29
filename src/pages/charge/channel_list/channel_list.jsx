@@ -243,7 +243,10 @@ class Channel_list extends Component {
                         word = "im银联扫码代充";
                         break;
                     case "23":
-                        word = "USDT";
+                        word = "usdt erc20";
+                        break;
+                    case "24":
+                        word = "usdt trc20"
                         break;
                     default:
                         word = "";
