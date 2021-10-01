@@ -48,7 +48,7 @@ export const gameRouter = {
 	// "5b1f3a3cb76a591e7f251729": { path: "/castcraft/api", name: "城堡争霸" }, 
 
     // 以下二款遊戲開發中，尚未確認接口路徑
-	// "5b1f3a3cb76a591e7f251728": { path: null, name: "云谷寻宝" },
+	"5b1f3a3cb76a591e7f251728": { path: "/ygxb/api", name: "云谷寻宝" },
 	// "5c6a62be56209ac117d446aa": { path: null, name: "聚宝盆捕鱼" },
 };
 
