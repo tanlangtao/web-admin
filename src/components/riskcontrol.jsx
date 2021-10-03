@@ -45,11 +45,14 @@ const columns = [
 export default async record => {
 	const { user_id, order_id, created_at, status } = record;
 	let reactnode;
-	const res = await getriskcontrol({ user_id, order_id, end_time: created_at, status });
+	  message.loading('此过程预计需要20s,请不要关闭页面耐心等待，正在统计中.....',20);
+	const res = await getriskcontrol({ user_id, order_id, end_time: created_at, status });	
 	const userStatistics = await GoldDetailorRiskControlSUMdata(user_id)
 	const userLink = await getProxyUserLink(user_id)
 	if (res.status === 0 && res.data) {
 		try {
+			message.destroy()
+			 message.info(res.msg)
 			let riskData = [],
 				// extraData = [],
 				sumround = 0,
@@ -300,6 +303,188 @@ export default async record => {
 		} catch (error) {
 			console.log(error);
 		}
+		Modal.info({
+			title: "风控",
+			okText: "关闭",
+			content: reactnode,
+			width: "50%",
+		});
+	} else if (userStatistics.status === 0 && userStatistics.data) {
+		message.destroy()
+		message.info(res.msg)
+		reactnode = (
+			<React.Fragment>
+				<Table
+					bordered
+					rowKey={(record, index) => `${index}`}
+					// dataSource={riskData}
+					columns={columns}
+					size="small"
+					pagination={false}
+				/>
+				<div>当前玩家代理链详情:{userLink.msg ? userLink.msg.join('>>') : "-"}</div>
+				<div>历史总充值:{userStatistics.data ? reverseNumber(userStatistics.data.total_payment_arrival_amount) : "-"}</div>
+				<div>历史总兑换:{userStatistics.data ? reverseNumber(userStatistics.data.total_with_draw_amount) : "-"}</div>
+				<div>充值兑换差:{userStatistics.data ? reverseNumber(userStatistics.data.total_payment_arrival_amount - userStatistics.data.total_with_draw_amount) : "-"}</div>
+				<div>总流水:"-"</div>
+				<div>
+					充值流水比:
+					"-"
+				</div>
+				<div>有效投注:{userStatistics.data ? reverseNumber(userStatistics.data.all_bet_total) : "-"}</div>
+				<br />
+				<div>总充值:{"-"}</div>
+				<div>人工充值订单增加金币:{"-"}</div>
+				<div>人工充值订单补单增加金币:{"-"}</div>
+				<div>银行卡充值增加金币:{"-"}</div>
+				<div>银行卡充值订单补单增加金币:{"-"}</div>
+				<div>渠道充值增加金币:{"-"}</div>
+				<div>渠道充值订单补单增加金币:{"-"}</div>
+				<div>
+					不同名笔数:
+					{"-"}
+				</div>
+				<div>
+					不同名金额:
+					{"-"}
+
+				</div>
+				<div>
+					同名笔数:
+					{"-"}
+				</div>
+				<div>
+					同名金额:
+					{"-"}
+				</div>
+				<br />
+				<div>提现：</div>
+				<div>
+					提现扣减金币:
+					{"-"}
+				</div>
+				<div>
+					提现拒绝增加金币:
+					{"-"}
+				</div>
+				<div>
+					代理提现：					{"-"}
+				</div>
+				<br />
+				<div>
+					每日任务 :
+					{"-"}
+				</div>
+				<div>
+					流水闯关 :
+					{"-"}
+				</div>
+				<div>
+					USDT存款赠金增加金币 :
+					{"-"}
+				</div>
+				<div>
+					开业注册送增加金币 :
+					{"-"}
+				</div>
+				<div>
+					首充赠金增加金币 :
+					{"-"}
+				</div>
+				<div>
+					每日任务增加金币：
+					{"-"}
+				</div>
+				<div>
+					积分抽奖增加金币：
+					{"-"}
+				</div>
+				<div>
+					红包雨增加金币：
+					{"-"}
+				</div>
+				<div>
+					老用户包赔增加金币：
+					{"-"}
+				</div>
+				<div>
+					新用户包赔增加金币：
+					{"-"}
+				</div>
+				<div>
+					老用户当日充值赠金增加金币：
+					{"-"}
+				</div>
+				<div>
+					活动余额清空：
+					{"-"}
+				</div>
+				<div>
+					新用户首存活动余额清空：
+					{"-"}
+				</div>
+				<div>
+					老用户首存活动余额清空
+					{"-"}
+				</div>
+				<div>
+					HNFFC包赔增加金币：
+					{"-"}
+				</div>
+				<div>
+					PTXFFC包赔增加金币:
+					{"-"}
+
+				</div>
+				<div>
+					奇趣连赢活动10增加金币：
+					{"-"}
+				</div>
+				<div>
+					河内连赢活动10增加金币：
+					{"-"}
+				</div>
+				<div>
+					日业绩活动领取增加金币：
+					{"-"}
+				</div>
+				<div>
+					百万扶持奖励领取增加金币：
+					{"-"}
+				</div>
+				<div>
+					捕鱼通关豪礼领取增加金币：
+					{"-"}
+				</div>
+				<div>
+					豪礼流水活动发放奖金:
+					{"-"}
+				</div>
+				<div>
+					昨日赢金榜增加金币:
+					{"-"}
+				</div>
+				<div>
+					新增有效代理排行榜增加金币:
+					{"-"}
+				</div>
+				<div>
+					每日免费礼金增加金币:
+					{"-"}
+				</div>
+
+				<br />
+				<div>
+					后台增加：{" "}
+					{"-"}
+
+				</div>
+				<div>
+					后台减少：
+					{"-"}
+				</div>
+			</React.Fragment>
+		);
 		Modal.info({
 			title: "风控",
 			okText: "关闭",
