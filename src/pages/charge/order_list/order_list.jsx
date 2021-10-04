@@ -6,11 +6,13 @@ import {
 	downloadList,
 	orderReviewEdit,
 	getSubOrderRemark,
+	reqPay_account,
+	reqPay_accountereadonly,
 } from "../../../api/index";
 import LinkButton from "../../../components/link-button";
 import MyDatePicker from "../../../components/MyDatePicker";
 import { toDecimal } from "../../../utils/commonFuntion";
-import { switchChannelType,switchType,switchStatus } from "../../../utils/switchType";
+import { switchChannelType, switchType, switchStatus } from "../../../utils/switchType";
 import Diaodan from "./editData";
 import moment from "moment";
 import ExportJsonExcel from "js-export-excel";
@@ -32,7 +34,8 @@ class Order_list extends Component {
 			pageSize: 20,
 			isQueryShow: false,
 			isEditShow: false,
-			printData:[],
+			printData: [],
+			isAccountShow: false,
 		};
 	}
 	getUsers = async (page, limit, reqData) => {
@@ -74,27 +77,27 @@ class Order_list extends Component {
 	// 	};
 	// 	downloadList(data);
 	// };
-	
+
 	download = async () => {
-		let data = { 
+		let data = {
 			...this.reqData,
 			inputParam: this.inputValue,
 			paramKey: this.inputKey,
 		};
 		console.log(data)
-		const res = await reqOrder_list(1, 10000,  data);
-		if(res.data) {
+		const res = await reqOrder_list(1, 10000, data);
+		if (res.data) {
 			this.setState({
-				printData:res.data.list || []
+				printData: res.data.list || []
 			})
-		}else {
+		} else {
 			this.setState({
 				printData: []
 			})
 			message.info(JSON.stringify(res))
 		}
-		console.log("downloadres",res)
-		
+		console.log("downloadres", res)
+
 		var option = {};
 		let dataTable = [];
 		this.state.printData &&
@@ -105,15 +108,15 @@ class Order_list extends Component {
 					昵称: ele.user_name,
 					所属品牌: ele.package_nick,
 					所属代理: ele.proxy_user_id,
-					支付渠道: switchChannelType(ele.channel_type,ele.replace_id),
+					支付渠道: switchChannelType(ele.channel_type, ele.replace_id),
 					支付类型: switchType(ele.type),
 					下单金额: toDecimal(ele.amount),
 					到账金额: toDecimal(ele.arrival_amount),
 					订单状态: switchStatus(ele.status),
-					支付姓名显示:ele.pay_name ,
-					订单IP:ele.order_ip ,
-					创建时间:formateDate(ele.created_at),
-					到账时间:formateDate(ele.arrival_at),
+					支付姓名显示: ele.pay_name,
+					订单IP: ele.order_ip,
+					创建时间: formateDate(ele.created_at),
+					到账时间: formateDate(ele.arrival_at),
 				};
 				dataTable.push(obj);
 			});
@@ -123,14 +126,14 @@ class Order_list extends Component {
 			{
 				sheetData: dataTable,
 				sheetName: "sheet",
-				sheetHeader: ["订单ID", "user_id", "昵称", "所属品牌", "所属代理", "支付渠道", "支付类型", "下单金额", "到账金额","订单状态","支付姓名显示","订单IP","创建时间","到账时间"],
+				sheetHeader: ["订单ID", "user_id", "昵称", "所属品牌", "所属代理", "支付渠道", "支付类型", "下单金额", "到账金额", "订单状态", "支付姓名显示", "订单IP", "创建时间", "到账时间"],
 			},
 		];
 
 		var toExcel = new ExportJsonExcel(option); //new
 		toExcel.saveExcel();
 	};
-	
+
 
 	componentDidMount() {
 		this.getUsers(1, 20);
@@ -311,6 +314,54 @@ class Order_list extends Component {
 						</div>
 					</Modal>
 				)}
+				{this.state.isAccountShow && (
+					<Modal
+						title="退款訊息"
+						visible={this.state.isAccountShow}
+						onCancel={() => {
+							this.setState({ isAccountShow: false });
+						}}
+						footer={null}
+						width="25%"
+						footer={[
+							<Button
+								key="back"
+								onClick={() => {
+									this.setState({ isAccountShow: false });
+								}}
+							>
+								取消
+							</Button>,
+							<Button
+								key="submit"
+								type="primary"
+								onClick={(this.state.pay_name.length !== 0 && /^\d{16,19}$/.test(this.state.pay_account)) ? this.sendChangepayAccountReadOnly : this.sendChangepayAccount}
+							>
+								确定
+							</Button>,
+						]}
+					>
+						<div>
+							<div>收款姓名: &nbsp;{this.state.pay_name}
+								<Input style={{ width: 150 }} maxLength={19} defaultValue={this.state.pay_name} disabled={this.state.pay_name.length !== 0 ? true : false}
+									onBlur={(e) => {
+										this.pay_name = e.target.value
+									}} />
+							</div>
+							<br />
+							<div>收款账号: &nbsp;{this.state.pay_account}
+								<Input style={{ width: 150 }} maxLength={19} defaultValue={this.state.pay_account} disabled={/^\d{16,19}$/.test(this.state.pay_account) ? true : false}
+									onBlur={(e) => {
+										this.pay_account = e.target.value
+									}} />
+							</div>
+							<br />
+							<div>退款金额:{this.state.editMount}</div>
+						</div>
+
+					</Modal>
+				)
+				}
 			</Card>
 		);
 	}
@@ -493,9 +544,9 @@ class Order_list extends Component {
 				}
 				return <span>{word}</span>;
 			},
-		},{
+		}, {
 			title: "支付姓名显示",
-			dataIndex: "pay_name",			
+			dataIndex: "pay_name",
 		},
 		{
 			title: "订单IP",
@@ -527,8 +578,12 @@ class Order_list extends Component {
 							编辑
 						</LinkButton>
 					);
-				} else {
-					return;
+				} else if (record.status === "3") {
+					return (
+						<LinkButton size="small" onClick={() => this.changepayAccount(record)}>
+							发起退款
+						</LinkButton >
+					)
 				}
 			},
 		},
@@ -578,6 +633,53 @@ class Order_list extends Component {
 			message.info(res.msg || "操作失败");
 		}
 	};
+
+	changepayAccount = record => {
+		this.setState({
+			isAccountShow: true,
+			pay_name: record.pay_name,
+			pay_account: record.pay_account,
+			editMount: record.amount,
+		})
+		this.pay_name = record.pay_name;
+		this.pay_account = record.pay_account;
+		this.order_id = record.order_id
+	}
+
+	sendChangepayAccount = async () => {
+		if (this.pay_name.length === 0) {
+			message.info("请填入收款姓名");
+			return;
+		} else if (!(/^\d{16,19}$/.test(this.pay_account))) {
+			message.info("收款账号不得为空，且只能由16-19位数字组成");
+			return;
+		} else {
+			let reqData = {
+				name: this.pay_name,
+				order_id: this.order_id,
+				account: this.pay_account,
+			};
+			const res = await reqPay_account(reqData);
+			if (res.status === 0) {
+				message.success(res.msg || "操作成功");
+				window.location.reload();
+			} else {
+				message.info(res.msg || "操作失败");
+			}
+		}
+	}
+	sendChangepayAccountReadOnly = async () => {
+		let reqData = {
+			order_id: this.order_id,
+		};
+		const res = await reqPay_accountereadonly(reqData);
+		if (res.status === 0) {
+			message.success(res.msg || "操作成功");
+			window.location.reload();
+		} else {
+			message.info(res.msg || "操作失败");
+		}
+	}
 	getSubOrderInfo = async (record, i, type) => {
 		this.setState({ loading: true });
 		//console.log(record, i, type);
@@ -598,7 +700,7 @@ class Order_list extends Component {
 			//console.log(this.state.data);
 		}
 	};
-	
+
 }
 
 export default Order_list;

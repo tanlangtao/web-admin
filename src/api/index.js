@@ -1228,6 +1228,20 @@ export const getApplyHeNei = user_id => {
 export const reqOrder_list = (page, limit, reqData) => {
 	return ajax(BASE + "/order/recharge", { page, limit, ...reqData }, "POST");
 };
+//修改充值姓名
+export const reqPay_account = ( reqData) => {
+	return ajax(BASE + "/refund/request ", { ...reqData }, "POST" ,{
+		content_type_is_formdata: true,
+	});
+};
+
+//修改充值姓名只能閱讀
+export const reqPay_accountereadonly = ( reqData) => {
+	return ajax(BASE + "/api/payment/refund", { ...reqData ,token: "e40f01afbb1b9ae3dd6747ced5bca532"}, "POST", {
+		content_type_is_formdata: true,
+	});
+};
+
 export const reqLostOrder_list = (page, limit, user_id, order_id) => {
 	return ajax(BASE + "/order/recharge", { page, limit, order_id, user_id }, "POST");
 };
