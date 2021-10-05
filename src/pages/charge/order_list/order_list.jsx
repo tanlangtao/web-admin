@@ -410,6 +410,7 @@ class Order_list extends Component {
 					case "15":
 					case "16":
 					case "18":
+					case "19":
 						word = "聚鑫";
 						break;
 					default:
