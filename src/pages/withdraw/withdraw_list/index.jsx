@@ -194,7 +194,8 @@ class Withdraw_list extends Component {
 							<Select.Option value="3">bank</Select.Option>
 							<Select.Option value="7">onepaybank</Select.Option>
 							<Select.Option value="8">聚鑫代付</Select.Option>
-							<Select.Option value="9">聚鑫usdt</Select.Option>
+							<Select.Option value="9">聚鑫ERC20</Select.Option>
+							<Select.Option value="10">聚鑫TRC20</Select.Option>
 						</Select>
 						&nbsp; &nbsp;
 						<LinkButton
@@ -390,7 +391,7 @@ class Withdraw_list extends Component {
 						<Icon type="exclamation-circle-o" style={{ color: "#faad14", fontSize: "14px", marginLeft: "3px" }} />
 					</Tooltip>
 				</div>,
-			dataIndex: "claim_name",			
+			dataIndex: "claim_name",
 			render: (text, record, index) => {
 				const diffDays = moment().diff(moment.unix(record.created_at), "days")
 				if (diffDays < 31 && record.status == 1) {
@@ -479,8 +480,13 @@ class Withdraw_list extends Component {
 						break;
 					case "9":
 					case 9:
-						word = "聚鑫usdt";
+						word = "聚鑫ERC20";
 						break;
+					case "10":
+					case 10:
+						word = "聚鑫TRC20";
+						break;
+
 					default:
 						word = "";
 						break;
@@ -550,15 +556,15 @@ class Withdraw_list extends Component {
 			this.detailRecord.data = res.data.list;
 			this.detailRecord.count = res.data.count;
 		}
-		if(this.state.data.filter(data => {
+		if (this.state.data.filter(data => {
 			return data.order_id === record.order_id
-		}).some(data => {return data.claim_time !== 0})){
+		}).some(data => { return data.claim_time !== 0 })) {
 			let claimData = this.state.data.filter(data => {
 				return data.order_id === record.order_id
-			}).map(data =>  {
-				return {review_name:data.claim_name ,status :7 ,review_at:data.claim_time }
+			}).map(data => {
+				return { review_name: data.claim_name, status: 7, review_at: data.claim_time }
 			})
-			this.detailRecord.data.unshift(claimData[0])	
+			this.detailRecord.data.unshift(claimData[0])
 		}
 		this.setState({ isDetailShow: true });
 	};

@@ -184,6 +184,7 @@ class Order_list extends Component {
 								<Select.Option value="">订单状态</Select.Option>
 								<Select.Option value="0">全部</Select.Option>
 								<Select.Option value="1">未支付</Select.Option>
+								<Select.Option value="3">已分配</Select.Option>
 								<Select.Option value="4">已撤销</Select.Option>
 								<Select.Option value="5">已支付</Select.Option>
 								<Select.Option value="6">已完成</Select.Option>
