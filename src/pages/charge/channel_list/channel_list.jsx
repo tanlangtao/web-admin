@@ -263,6 +263,10 @@ class Channel_list extends Component {
             },
         },
         {
+            title: "授权品牌",
+            dataIndex: "package_ids",
+        },
+        {
             title: "显示顺序",
             dataIndex: "sort",
         },

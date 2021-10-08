@@ -171,6 +171,16 @@ class AddDataForm extends Component {
                         initialValue: isEdit && editDataRecord.rate,
                     })(<Input style={{ width: "60%" }} />)}
                 </Form.Item>
+                <Form.Item label="授权品牌">
+                    {getFieldDecorator("package_ids", {
+                        rules: [
+                            {
+                                required: false,
+                            },
+                        ],
+                        initialValue: isEdit ? editDataRecord.package_ids : "",
+                    })(<Input style={{ width: "60%" }} />)}
+                </Form.Item>
                 <Form.Item label="显示排序">
                     {getFieldDecorator("sort", {
                         rules: [

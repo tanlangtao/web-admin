@@ -63,6 +63,12 @@ class GoldDetail extends Component {
 						...JSON.parse(data[i].info),
 					});
 				}
+				if (ele.type === "5") {
+					newData.push({
+						...data[i],
+						...JSON.parse(data[i].info),
+					});
+				}
 			});
 			console.log("newData:", newData);
 			this.setState({
@@ -377,7 +383,7 @@ class GoldDetail extends Component {
 						<LinkButton type="default" onClick={() => this.reset(record, "4")}>
 							解绑USDT
 						</LinkButton>
-					</span>
+					</span>	
 				),
 			},
 		];
