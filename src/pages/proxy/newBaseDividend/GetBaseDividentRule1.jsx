@@ -67,7 +67,7 @@ export default () => {
     const res = await GetBaseDividendRule1(reqData)
     if (res.code === 200) {
       message.success(res.status)
-      setData([res.msg] || [])
+      setData(res.msg ? [res.msg] : [])
     } else {
       message.info(res.status || JSON.stringify(res))
       setData([])

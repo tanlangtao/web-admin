@@ -34,7 +34,7 @@ export default () => {
         const res = await GetBaseDividendRule(reqData)
         if (res.code === 200) {
             message.success(res.status)
-            setData([res.msg]|| [])
+            setData(res.msg ? [res.msg] : [])
         } else {
             message.info(res.status || JSON.stringify(res))
             setData([])
@@ -54,7 +54,7 @@ export default () => {
                 </div>
             }
         >
-          <Table
+            <Table
                 bordered
                 rowKey={(record, index) => `${index}`}
                 dataSource={data}
