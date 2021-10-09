@@ -855,6 +855,15 @@ export const GetBaseDividendRule = reqData => {
 		{ needAuth: false },
 	);
 };
+//查询保底分成规则1
+export const GetBaseDividendRule1 = reqData => {
+	return ajax(
+		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetBaseDividendRule1",
+		{ platform_key: 123456, ...reqData },
+		"GET",
+		{ needAuth: false },
+	);
+};
 //查询保底分成渠道
 export const GetBaseDividend = reqData => {
 	return ajax(

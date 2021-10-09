@@ -37,19 +37,14 @@ export default () => {
                 switch (text) {
                     case 1:
                         return "棋牌类型"
-                        break
                     case 2:
                         return "彩票类型"
-                        break
                     case 3:
                         return "体育类型"
-                        break
                     case 4:
                         return "视讯类型"
-                        break
                     case 5:
                         return "电子类型"
-                        break
                     default:
                         return
                 }

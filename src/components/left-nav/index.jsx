@@ -173,6 +173,7 @@ class LeftNav extends Component {
 								switch (ele.title) {
 									case "子游戏设定":
 									case "无限代保底分红":
+									case "无限代保底分红1":
 									case "亏损分红充提差":
 									case "提现手续费5级分红":
 										cpre.push(getMoreMenuNodes(ele));
@@ -193,42 +194,6 @@ class LeftNav extends Component {
 								}
 								return cpre;
 							}, [])}
-
-							{/* {item.children.reduce((cpre, ele) => {
-								//只有"子游戏设定"栏(id=229)需要三级导航栏,由于menulist的特殊性,故不对所有submenu递归
-								//需要三级导航栏 2021-6-28"无限代保底分红"栏(id=254) 2021-7-4"亏损分红充提差"(id=257)
-								switch (ele.title) {
-									case "子游戏设定":
-									case "无限代保底分红":
-									case "亏损分红充提差":
-										cpre.push(getMoreMenuNodes(ele));
-										break
-										case "PT后台":
-									cpre.push(
-										//不在後台操作，瀏覽器打開新分頁訪問三方後台
-										<Menu.Item key={ele.key}>
-											<a href={ele.key} target="_blank">
-												<span>{ele.title}</span>
-											</a>
-										</Menu.Item>,
-									);
-										break
-									default:
-										cpre.push(
-											<Menu.Item
-												key={ele.key}
-												onClick={() => {
-													this.props.onClick(ele);
-												}}
-											>
-												<Link to={ele.key}>
-													<span>{ele.title}</span>
-												</Link>
-											</Menu.Item>,
-										);
-								}
-								return cpre;
-							}, [])} */}
 						</SubMenu>,
 					);
 				}

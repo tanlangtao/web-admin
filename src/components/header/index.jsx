@@ -160,6 +160,7 @@ class Header extends Component {
 			if (path.includes("gameBetAmount")) {
 				title = "查询代理链流水数据";
 			}
+			//无限代保底分红 + 无限代保底分红1
 			if (path.includes("baseDividend") && path.includes("getBaseDividendRule")) {
 				title = "查询保底分成规则";
 			}		
@@ -169,8 +170,8 @@ class Header extends Component {
 			if (path.includes("baseDividend") && path.includes("getGlobal")) {
 				title = "查询渠道配置信息";
 			}			
-			if (path.includes("baseDividend") && path.includes("getBaseDividend")) {
-				title = "查询渠道配置信息";
+			if (path.includes("baseDividend") && path.includes("getBaseChannel")) {
+				title = "查询保底分成渠道";
 			}			
 			if (path.includes("getPaymentInfo") && path.includes("details")) {
 				title = "查询玩家分红数据总额";

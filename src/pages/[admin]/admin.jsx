@@ -86,12 +86,13 @@ import ProxyUserGold from "../proxy/baseDividend/UserGold"
 import GetUserSortByGameTag from "../proxy/baseDividend/GetUserSortByGameTag"
 import ProxyBaseDividend from "../proxy/baseDividend/Details"
 import GetBaseDividendRule from "../proxy/baseDividend/GetBaseDividendRule"
-import GetBaseDividend from "../proxy/baseDividend/GetBaseDividend"
+import GetBaseChannel from "../proxy/baseDividend/GetBaseChannel"
 import ProxyGameBetData from "../proxy/gameBetData"
 import ProxyGameBetAmount from "../proxy/gameBetAmount"
 import ProxyLoseProfitDevidend from "../proxy/lose_profit_devidend"
 import GetPaymentInfoDetail from "../proxy/getPaymentInfoDetail"
 import GetPaymentInfo from "../proxy/getPaymentInfo"
+import GetBaseDividendRule1 from '../proxy/newBaseDividend/GetBaseDividentRule1'
 
 import GetProxyGetGlobal from "../proxy/baseDividend/GetProxyGetGlobal"
 import DonateList from '../liveStream/donateList'
@@ -569,9 +570,9 @@ export default class Admin extends Component {
 											<ProxyBaseDividend />
 										</KeepAlive>
 									</Route>
-									<Route path="/proxy/baseDividend/getBaseDividend" exact>
-										<KeepAlive name="GetBaseDividend">
-											<GetBaseDividend />
+									<Route path="/proxy/baseDividend/getBaseChannel" exact>
+										<KeepAlive name="GetBaseChannel">
+											<GetBaseChannel />
 										</KeepAlive>
 									</Route>
 									<Route path="/proxy/baseDividend/getBaseDividendRule" exact>
@@ -582,6 +583,11 @@ export default class Admin extends Component {
 									<Route path="/proxy/baseDividend/getGlobal" exact>
 										<KeepAlive name="GetProxyGetGlobal">
 											<GetProxyGetGlobal />
+										</KeepAlive>
+									</Route>
+									<Route path="/proxy/baseDividendNew/GetBaseDividendRule" exact>
+										<KeepAlive name="GetBaseDividendRule1">
+											<GetBaseDividendRule1 />
 										</KeepAlive>
 									</Route>
 									<Route path="/messageCenter/tasks" exact>
