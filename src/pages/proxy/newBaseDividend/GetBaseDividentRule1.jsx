@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Card, message, Input, Table, Icon } from "antd";
 import { GetBaseDividendRule1 } from "../../../api";
 import LinkButton from "../../../components/link-button";

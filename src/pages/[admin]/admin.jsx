@@ -93,6 +93,7 @@ import ProxyLoseProfitDevidend from "../proxy/lose_profit_devidend"
 import GetPaymentInfoDetail from "../proxy/getPaymentInfoDetail"
 import GetPaymentInfo from "../proxy/getPaymentInfo"
 import GetBaseDividendRule1 from '../proxy/newBaseDividend/GetBaseDividentRule1'
+import ProxyBaseDividend1 from "../proxy/newBaseDividend/Details"
 
 import GetProxyGetGlobal from "../proxy/baseDividend/GetProxyGetGlobal"
 import DonateList from '../liveStream/donateList'
@@ -588,6 +589,11 @@ export default class Admin extends Component {
 									<Route path="/proxy/baseDividendNew/GetBaseDividendRule" exact>
 										<KeepAlive name="GetBaseDividendRule1">
 											<GetBaseDividendRule1 />
+										</KeepAlive>
+									</Route>
+									<Route path="/proxy/baseDividendNew/details" exact>
+										<KeepAlive name="ProxyBaseDividend1">
+											<ProxyBaseDividend1 />
 										</KeepAlive>
 									</Route>
 									<Route path="/messageCenter/tasks" exact>

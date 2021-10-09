@@ -148,6 +148,7 @@ class Header extends Component {
 			if (path.includes("baseDividend") && path.includes("userGold")) {
 				title = "查询代理个人玩家流水";
 			}
+			//获取保底分红发放详情 + 获取保底分红发放详情1
 			if (path.includes("baseDividend") && path.includes("details")) {
 				title = "获取保底分红发放详情";
 			}

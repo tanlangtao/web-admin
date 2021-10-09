@@ -873,10 +873,19 @@ export const GetBaseDividend = reqData => {
 		{ needAuth: false },
 	);
 };
-// 
-export const getProxyBaseDividend = reqData => {
+// 获取保底分红发放详情
+export const getProxyBaseDividendInfo = reqData => {
 	return ajax(
 		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetBaseDividendInfo",
+		{ platform_key: 123456, ...reqData },
+		"GET",
+		{ needAuth: false },
+	);
+};
+// 获取保底分红发放详情1
+export const getProxyBaseDividendInfo1 = reqData => {
+	return ajax(
+		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetBaseDividendInfo1",
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
