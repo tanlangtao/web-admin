@@ -279,6 +279,10 @@ export default async record => {
 						每日免费礼金增加金币:
 						{res.data["每日免费礼金增加金币"] ? res.data["每日免费礼金增加金币"].totalgold : "-"}
 					</div>
+					<div>
+						每日充值赠金活动增加金币:
+						{res.data["每日充值赠金活动增加金币"] ? res.data["每日充值赠金活动增加金币"].totalgold : "-"}
+					</div>				
 					{/* <div>
 					每周佣金奖励领取增加金币：
                         {res.data["每周佣金奖励领取增加金币"]
