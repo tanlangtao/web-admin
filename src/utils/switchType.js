@@ -1,41 +1,42 @@
 /*
   支付渠道判别
 */
-export function switchChannelType(text, record){
-	let word;
-    console.log("switchChannelType",text,record)
-	switch (text) {
-		case "0":
-			word = record;
-			break;
-		case "5":
-			word = "充提UC";
-			break;
-		case "12":
-			word = "onePay";
-			break;
-		case "11":
-			word = "古都";
-			break;
-		case "10":
-		case "13":
-		case "14":
-		case "15":
-		case "16":
-		case "18":
-			word = "聚鑫";
-			break;
-		default:
-			word = text;
-			break;
-	}
-	return word;
+export function switchChannelType(text, record) {
+    let word;
+    console.log("switchChannelType", text, record)
+    switch (text) {
+        case "0":
+            word = record;
+            break;
+        case "5":
+            word = "充提UC";
+            break;
+        case "12":
+            word = "onePay";
+            break;
+        case "11":
+            word = "古都";
+            break;
+        case "10":
+        case "13":
+        case "14":
+        case "15":
+        case "16":
+        case "18":
+        case "19":
+            word = "聚鑫";
+            break;
+        default:
+            word = text;
+            break;
+    }
+    return word;
 };
 
 /*
   支付类型判别
 */
-export function switchType(text){
+export function switchType(text) {
     let word;
     switch (text) {
         case "1":
@@ -81,7 +82,10 @@ export function switchType(text){
             word = "支付宝转卡";
             break;
         case "23":
-            word = "USDT";
+            word = "usdt erc20";
+            break;
+        case "24":
+            word = "usdt trc20";
             break;
         default:
             word = "";
@@ -93,7 +97,7 @@ export function switchType(text){
 /*
 订单状态判别
 */
-export function switchStatus(text){
+export function switchStatus(text) {
     let word;
     switch (text) {
         case "1":

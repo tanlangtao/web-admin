@@ -30,7 +30,7 @@ class GoldDetail extends Component {
 		let isBindInfo = this.props.isBindInfo;
 		let id = this.props.recordID;
 		const res = !isBindInfo
-			? await userDetail(page, limit, id) 
+			? await userDetail(page, limit, id)
 			: await bindInfo(page, limit, id);
 		if (!isBindInfo && res.data.account_change) {
 			this.setState({
@@ -146,7 +146,7 @@ class GoldDetail extends Component {
 					产生来源: ele.pay_account_name,
 					'余额(变动前)': ele.balance + ele.banker_balance,
 					变动金额: ele.final_pay,
-					税收:  ele.final_pay > 0 ? ele.tax.toFixed(6) :"" ,
+					税收: ele.final_pay > 0 ? ele.tax.toFixed(6) : "",
 					'余额(变动后)': ele.final_banker_balance + ele.final_balance,
 					备注: ele.pay_reason,
 					创建时间: formateDate(ele.create_time),
@@ -380,10 +380,17 @@ class GoldDetail extends Component {
 						<LinkButton type="default" onClick={() => this.reset(record, "3")}>
 							解绑银行卡
 						</LinkButton>
-						<LinkButton type="default" onClick={() => this.reset(record, "4")}>
+						<LinkButton type="default" onClick={() => {
+							if (record.protocol === "TRC20") {
+								this.reset(record, "5")
+							} else {
+								this.reset(record, "4")
+							}
+						}
+						}>
 							解绑USDT
 						</LinkButton>
-					</span>	
+					</span>
 				),
 			},
 		];
