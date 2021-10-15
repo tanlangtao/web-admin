@@ -558,7 +558,7 @@ export default class Admin extends Component {
 										</KeepAlive>
 									</Route>
 									<Route path="/proxy/baseDividend/getUserInductionsSortByGameTag" exact>
-										<KeepAlive name="getProxyUserInductionsSortByGameTag">
+										<KeepAlive name="getUserInductionsSortByGameTag">
 											<GetProxyUserInductionsSortByGameTag />
 										</KeepAlive>
 									</Route>
