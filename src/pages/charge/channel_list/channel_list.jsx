@@ -112,7 +112,7 @@ class Channel_list extends Component {
                         defaultCurrent: 1,
                         total: this.state.count,
                         onChange: (page, pageSize) => {
-                            this.getUsers(page, pageSize);
+                            // this.getUsers(page, pageSize);
                             this.setState({
                                 pageSize: pageSize,
                             });

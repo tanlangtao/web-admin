@@ -84,6 +84,7 @@ import { CycdxChangeRoomStatus, CycdxUserLimitRangeBet, CycdxRoomLimitRangeBet }
 import { XWBYcomponent1, XWBYcomponent2, XWBYcomponent3, XWBYcomponent4 } from "../gameSetting/subGameSetting/xwby"
 import ProxyUserGold from "../proxy/baseDividend/UserGold"
 import GetUserSortByGameTag from "../proxy/baseDividend/GetUserSortByGameTag"
+import GetProxyUserInductionsSortByGameTag from "../proxy/baseDividend/GetProxyUserInductionsSortByGameTag"
 import ProxyBaseDividend from "../proxy/baseDividend/Details"
 import GetBaseDividendRule from "../proxy/baseDividend/GetBaseDividendRule"
 import GetBaseChannel from "../proxy/baseDividend/GetBaseChannel"
@@ -553,7 +554,12 @@ export default class Admin extends Component {
 									</Route>
 									<Route path="/proxy/baseDividend/getUserSortByGameTag" exact>
 										<KeepAlive name="getUserSortByGameTag">
-											<GetUserSortByGameTag/>
+											<GetUserSortByGameTag />
+										</KeepAlive>
+									</Route>
+									<Route path="/proxy/baseDividend/getUserInductionsSortByGameTag" exact>
+										<KeepAlive name="getProxyUserInductionsSortByGameTag">
+											<GetProxyUserInductionsSortByGameTag />
 										</KeepAlive>
 									</Route>
 									<Route path="/proxy/gameBetData" exact>

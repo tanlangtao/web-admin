@@ -573,7 +573,7 @@ export const saveConf = (value, action) => {
 	);
 };
 export const getprofitpool = str => {
-	return ajax(process.env.REACT_APP_GAME_HOST + str, {}, "GET", { needAuth:false });
+	return ajax(process.env.REACT_APP_GAME_HOST + str, {}, "GET", { needAuth: false });
 };
 //更新盈余池 -> go-admin -> 控制角色权限
 export const uptprofitpool = (str, formdata) => {
@@ -797,7 +797,7 @@ export const getPaymentDividendInfo = reqData => {
 // 查询玩家分红数据总额
 export const getPaymentInfo = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST  + `/proxy/proxy/GetPaymentInfo`,
+		process.env.REACT_APP_CENTER_HOST + `/proxy/proxy/GetPaymentInfo`,
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
@@ -807,7 +807,7 @@ export const getPaymentInfo = reqData => {
 // 查询玩家分红数据详情
 export const getPaymentInfoDetail = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST  + `/proxy/proxy/GetPaymentInfoDetail`,
+		process.env.REACT_APP_CENTER_HOST + `/proxy/proxy/GetPaymentInfoDetail`,
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
@@ -824,6 +824,15 @@ export const getProxyUserMoneyFlow = reqData => {
 export const getGameUserInductionsSortByGameTag = reqData => {
 	return ajax(
 		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetGameUserInductionsSortByGameTag",
+		{ platform_key: 123456, ...reqData },
+		"GET",
+		{ needAuth: false },
+	);
+};
+//按游戏类型查询团队业绩界面
+export const getProxyUserInductionsSortByGameTag = reqData => {
+	return ajax(
+		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetProxyUserInductionsSortByGameTag",
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
@@ -1247,15 +1256,15 @@ export const reqOrder_list = (page, limit, reqData) => {
 	return ajax(BASE + "/order/recharge", { page, limit, ...reqData }, "POST");
 };
 //修改充值姓名
-export const reqPay_account = ( reqData) => {
-	return ajax(BASE + "/refund/request ", { ...reqData }, "POST" ,{
+export const reqPay_account = (reqData) => {
+	return ajax(BASE + "/refund/request ", { ...reqData }, "POST", {
 		content_type_is_formdata: true,
 	});
 };
 
 //修改充值姓名只能閱讀
-export const reqPay_accountereadonly = ( reqData) => {
-	return ajax(BASE + "/api/payment/refund", { ...reqData ,token: "e40f01afbb1b9ae3dd6747ced5bca532"}, "POST", {
+export const reqPay_accountereadonly = (reqData) => {
+	return ajax(BASE + "/api/payment/refund", { ...reqData, token: "e40f01afbb1b9ae3dd6747ced5bca532" }, "POST", {
 		content_type_is_formdata: true,
 	});
 };
@@ -1711,16 +1720,16 @@ export const GoldDetailorRiskControlSUMdata = (id, start, end) => {
 //B2B
 
 export const getb2bconfig = (skip, limit) => {
-	return ajax( process.env.REACT_APP_B2B_HOST + `/b2b/api/platform/list`, {skip: `${skip - 1}`, limit: limit, token: 982083}, "GET", { needAuth: false });
+	return ajax(process.env.REACT_APP_B2B_HOST + `/b2b/api/platform/list`, { skip: `${skip - 1}`, limit: limit, token: 982083 }, "GET", { needAuth: false });
 };
 export const postb2bconfig = (reqData, action) => {
-	return ajax( process.env.REACT_APP_B2B_HOST + `/b2b/api/platform/${action}`, { ...reqData, token: 982083 }, "POST", {
+	return ajax(process.env.REACT_APP_B2B_HOST + `/b2b/api/platform/${action}`, { ...reqData, token: 982083 }, "POST", {
 		needAuth: false,
 		content_type_is_formdata: true,
 	});
 };
 export const getb2bregister = (skip, limit) => {
-	return ajax( process.env.REACT_APP_B2B_HOST + `/b2b/api/register_recode/list`, { skip: `${skip - 1}`, limit: limit, token: 982083}, "GET", { needAuth: false });
+	return ajax(process.env.REACT_APP_B2B_HOST + `/b2b/api/register_recode/list`, { skip: `${skip - 1}`, limit: limit, token: 982083 }, "GET", { needAuth: false });
 };
 
 //真人视讯，彩票派彩游戏数据
