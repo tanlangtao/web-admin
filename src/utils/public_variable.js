@@ -13,6 +13,7 @@ export const gameRouter = {
     "5b1f3a3cb76a591e7f251717": { path: "/go_lhd/api", name: "龙虎斗" },
     "5b1f3a3cb76a451e210910": { path: "/go_lhd2/api", name: "龙虎斗2" },
     "5b1f3a3cb76a591e7f251713": { path: "/lunpan/api", name: "轮盘" },
+    "5b1f3a3cb76a451e210927": { path: "/lunpan2/api", name: "轮盘2" },
     "5b1f3a3cb76a591e7f251712": { path: "/shuigj/api", name: "水果机" },
     "5b1f3a3cb76alkje7f25170": { path: "/hongbaosl/api", name: "红包扫雷" },
     "5c6a62be7ff587m117d446aa": { path: "/hongbaold/api", name: "红包乱斗" },
