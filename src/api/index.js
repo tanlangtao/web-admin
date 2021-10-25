@@ -1818,8 +1818,11 @@ export const getLiveData = (reqData) => {
 }
 //查询代理链实时余额
 export const getUserLinkAccountsTotal = (reqData) => {
-	return ajax(process.env.REACT_APP_CENTER_HOST + `/Operation/Api/GetUserLinkAccountsTotal`, 
+	return ajax(
+	process.env.REACT_APP_CENTER_HOST + `/operation/api/GetUserLinkAccountsTotal`, 
 	{ ...reqData,platform_key: 654321,},
 	"GET", 
-	{content_type_is_formdata: true,});
+	{ needAuth: false },
+	);
 };
+
