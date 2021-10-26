@@ -1823,6 +1823,6 @@ export const getUserLinkAccountsTotal = (reqData) => {
 	{ ...reqData,platform_key: 654321,},
 	"GET", 
 	{ needAuth: false },
-	);
+	);	
 };
 

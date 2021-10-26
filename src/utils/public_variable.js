@@ -25,6 +25,7 @@ export const gameRouter = {
     "5b1f3a3cb76a591e7f251715": { path: "/zhajh/api", name: "炸金花" },
     "5b1f3a3cb76a451e210912": { path: "/zhajh2/api", name: "炸金花2" },
     "5b1f3a3cb76a591e7f251714": { path: "/qznn/api", name: "抢庄牛牛" },
+    "5b1f3a3cb76a451e211018": { path: "/qznn2/api", name: "抢庄牛牛2" },
     "5b1f3a3cb76a591e7f25171": { path: "/shisanshui/api", name: "十三水" },
     "5b1f3a3cb76a451e210922": { path: "/shisanshui2/api", name: "十三水2" },
     "5b1f3a3cb76a591e7f251722": { path: "/21d/api", name: "21点" },

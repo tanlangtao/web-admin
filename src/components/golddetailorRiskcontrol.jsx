@@ -1266,7 +1266,9 @@ async function check_game_data(record) {
           );
           break;
         case "5b1f3a3cb76a591e7f251714":
+        case "5b1f3a3cb76a451e211018":
           //抢庄牛牛
+          //抢庄牛牛2
           let columns2 = [
             {
               title: "玩家id",
