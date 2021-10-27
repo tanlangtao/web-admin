@@ -5,7 +5,7 @@ import _ from "lodash-es";
 const OnlineGame = (props) => {
   let initColumns = [
     {
-      title: "遊戲名稱",
+      title: "游戏名称",
       dataIndex: "gamename",
     },
     {

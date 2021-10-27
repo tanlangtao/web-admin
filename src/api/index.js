@@ -1837,7 +1837,7 @@ export const getOnlineTotal = () => {
 
 export const getOnlineGame = (id) => {
 	return ajax(
-		BASE + `/chart/getOnlineTotal`,
+		BASE + `/chart/getOnlineGame`,
 		{
 			package_id:id
 		},

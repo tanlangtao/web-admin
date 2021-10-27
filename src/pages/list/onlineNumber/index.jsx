@@ -38,7 +38,7 @@ export default (props) => {
   // });
   let initColumns = [
     {
-      title: "游戏名称",
+      title: "渠道组名称",
       dataIndex: "name",
       render: (record, text) => {
         switch (record) {
