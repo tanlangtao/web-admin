@@ -3,7 +3,6 @@
 */
 export function switchChannelType(text, record) {
     let word;
-    console.log("switchChannelType", text, record)
     switch (text) {
         case "0":
             word = record;
@@ -22,7 +21,6 @@ export function switchChannelType(text, record) {
         case "14":
         case "15":
         case "16":
-        case "17":
         case "18":
         case "19":
         case "20":
@@ -30,9 +28,16 @@ export function switchChannelType(text, record) {
         case "22":
             word = "聚鑫";
             break;
+        case "17":
+        case "23":
+        case "24":
+        case "25":
+        case "26":
+            word = "UC"
+            break
         default:
-            word = text;
-            break;
+        word = text;
+        break;
     }
     return word;
 };

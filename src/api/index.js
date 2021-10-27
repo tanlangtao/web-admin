@@ -1826,3 +1826,21 @@ export const getUserLinkAccountsTotal = (reqData) => {
 	);	
 };
 
+//查詢在線人數
+export const getOnlineTotal = () => {
+	return ajax(
+		BASE + "/chart/getOnlineTotal",
+		"GET",
+	)
+}
+
+
+export const getOnlineGame = (id) => {
+	return ajax(
+		BASE + `/chart/getOnlineTotal`,
+		{
+			package_id:id
+		},
+		"GET",
+	)
+}

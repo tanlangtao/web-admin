@@ -1,38 +1,46 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
-import { Card, message, Input, Table, Select, Button, Icon, Modal } from "antd";
+import { Table, Modal, message, Card, Input, Icon } from "antd";
 import _ from "lodash-es";
 import LinkButton from "../../../components/link-button/index";
-
+import { getOnlineTotal, getOnlineGame } from "../../../api/index";
+import OnlineGame from "./onlineGame";
 export default (props) => {
   const [data, setData] = useState([]);
-  let initialState = {
-    10: 1,
-    11: 49,
-    15: 6,
-    6: 29,
+  const getOnlineNumber = async () => {
+    try {
+      message.loading("正在统计中.....", 20);
+      let res = await getOnlineTotal();
+      if (res.status === 0 && res.data) {
+        message.destroy();
+        message.info(res.msg);
+        let dataBrack = Object.entries(res.data).map(
+          ([dataName, dataValue]) => {
+            return { name: dataName, value: dataValue, id: dataName };
+          }
+        );
+        setData(dataBrack);
+      } else {
+        message.destroy();
+        message.info(res.msg || JSON.stringify(res));
+      }
+    } catch (error) {
+      message.destroy();
+      message.info(JSON.stringify(error.response.data));
+    }
   };
-  //   const getOnlineNumber = async () => {
-  //     let res = await getOnlineNumberList();
-  //     if (res.status === 0 && res.data) {
-  //       let dataBrack = Object.entries(initialState).map(
-  //         ([dataName, dataValue]) => {
-  //           return { name: dataName, value: dataValue, id: dataName };
-  //         }
-  //       );
-  //       setData(dataBrack);
-  //     }
-  //   };
-  let dataBrack = Object.entries(initialState).map(([dataName, dataValue]) => {
-    return { name: dataName, value: dataValue, id: dataName };
-  });
-  console.log("dataBrack", dataBrack);
+
+  useEffect(() => {
+    getOnlineNumber();
+  }, []);
+  // let dataBrack = Object.entries(initialState).map(([dataName, dataValue]) => {
+  //   return { name: dataName, value: dataValue, id: dataName };
+  // });
   let initColumns = [
     {
       title: "游戏名称",
       dataIndex: "name",
       render: (record, text) => {
-        console.log("record", record);
         switch (record) {
           case "1":
           case 1:
@@ -87,7 +95,7 @@ export default (props) => {
       dataIndex: "id",
       render: (record, text) => (
         <span>
-          <LinkButton type="default" onClick={() => getLoadGold(record)}>
+          <LinkButton type="default" onClick={() => getSubGameNumber(record)}>
             查看
           </LinkButton>
         </span>
@@ -95,42 +103,56 @@ export default (props) => {
     },
   ];
 
-  const getLoadGold = async (record) => {
-    console.log("record", record);
-    // const result = await reqLoadGold(id);
-    // result.status === 0
-
-    if (true) {
-      Modal.success({
-        title: "实时余额",
-        // content: `用户${record.id}实时余额是 : ${result.data.game_gold.toFixed(
-        //   6
-        // )}`,
-      });
-    } else {
-      //   message.info(result.msg || JSON.stringify(result));
+  const getSubGameNumber = async (record) => {
+    try {
+      message.loading("正在统计中.....", 5);
+      const result = await getOnlineGame(record);
+      if (result.status === 0) {
+        message.destroy();
+        message.info(result.msg);
+        Modal.info({
+          title: "在线人数",
+          okText: "关闭",
+          content: <OnlineGame data={result.data} />,
+          width: "50%",
+        });
+      } else {
+        message.destroy();
+        message.info(result.msg || JSON.stringify(result));
+      }
+    } catch (error) {
+      message.destroy();
+      message.info(JSON.stringify(error.response.data));
     }
   };
 
   return (
-    <Table
-      bordered
-      size="small"
-      rowKey={(record, index) => `${index}`}
-      dataSource={data}
-      columns={initColumns}
-      pagination={{
-        defaultCurrent: 1,
-        defaultPageSize: 50,
-        // showSizeChanger: true,
-        showQuickJumper: true,
-        // total: count,
-        showTotal: (total) => `共${total}条`,
-        // onChange: (page, pageSize) => {
-        //   setCurrent(page);
-        //   fetchData(page, pageSize);
-        // },
-      }}
-    />
+    <Card
+      extra={
+        <LinkButton onClick={() => window.location.reload()} size="default">
+          <Icon type="reload" />
+        </LinkButton>
+      }
+    >
+      <Table
+        bordered
+        size="small"
+        rowKey={(record, index) => `${index}`}
+        dataSource={data}
+        columns={initColumns}
+        pagination={{
+          defaultCurrent: 1,
+          defaultPageSize: 50,
+          // showSizeChanger: true,
+          showQuickJumper: true,
+          // total: count,
+          showTotal: (total) => `共${total}条`,
+          // onChange: (page, pageSize) => {
+          //   setCurrent(page);
+          //   fetchData(page, pageSize);
+          // },
+        }}
+      />
+    </Card>
   );
 };
