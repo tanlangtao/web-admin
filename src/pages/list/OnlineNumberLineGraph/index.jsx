@@ -6,7 +6,7 @@ import { getOnlineTotalGraph } from "../../../api/index";
 const DemoLine = () => {
   const [data, setData] = useState([]);
   const [dataBrack, setdataBrack] = useState([]);
-  const [abc, setabc] = useState([]);
+  const [Graph, setGraph] = useState([]);
   const [MapTest, setMapTest] = useState([]);
   const getOnlineNumberGraph = async () => {
     try {
@@ -34,7 +34,7 @@ const DemoLine = () => {
                   return dataValue;
                 })[index]
               );
-              return abc.push({
+              return Graph.push({
                 key: switchType(item),
                 year: items.id.slice(11, 16),
                 value: Object.entries(items.value).map(
@@ -43,12 +43,8 @@ const DemoLine = () => {
                   }
                 )[index],
               });
-              // return Object.entries(item.value).map(([dataName, dataValue]) => {
-              //   return dataValue;
-              // });
             });
         });
-        console.log("abc", abc);
         setData(dataBrack);
       } else {
         message.destroy();
@@ -109,114 +105,23 @@ const DemoLine = () => {
         return;
     }
   };
-  // let res = {
-  //   data: [
-  //     {
-  //       id: 33,
-  //       record: '{"15":25,"11":76,"3":1,"9":4,"2":1,"10":16,"6":95}',
-  //       create_time: "2021-10-28T11:00:00+08:00",
-  //     },
-  //     {
-  //       id: 34,
-  //       record: '{"15":26,"6":96,"10":15,"11":74,"3":1,"9":4,"2":1}',
-  //       create_time: "2021-10-28T11:30:00+08:00",
-  //     },
-  //     {
-  //       id: 35,
-  //       record: '{"11":74,"9":4,"3":1,"2":1,"10":15,"15":26,"6":96}',
-  //       create_time: "2021-10-28T12:00:00+08:00",
-  //     },
-  //     {
-  //       id: 36,
-  //       record: '{"10":15,"15":26,"6":96,"11":76,"3":1,"9":4,"2":1}',
-  //       create_time: "2021-10-28T12:30:00+08:00",
-  //     },
-  //     {
-  //       id: 37,
-  //       record: '{"2":1,"10":15,"6":96,"15":26,"11":76,"3":1,"9":4}',
-  //       create_time: "2021-10-28T13:00:00+08:00",
-  //     },
-  //     {
-  //       id: 38,
-  //       record: '{"15":25,"6":96,"10":16,"11":76,"9":4,"2":1}',
-  //       create_time: "2021-10-28T13:30:00+08:00",
-  //     },
-  //     {
-  //       id: 38,
-  //       record: '{"15":25,"6":96,"10":16,"11":76,"9":4,"2":1}',
-  //       create_time: "2021-10-28T14:00:00+08:00",
-  //     },
-  //     {
-  //       id: 38,
-  //       record: '{"15":25,"6":96,"10":16,"11":76,"9":4,"2":1}',
-  //       create_time: "2021-10-28T14:30:00+08:00",
-  //     },
-  //     {
-  //       id: 38,
-  //       record: '{"15":25,"6":96,"10":16,"11":76,"9":4,"2":1}',
-  //       create_time: "2021-10-28T15:30:00+08:00",
-  //     },
-  //     {
-  //       id: 38,
-  //       record: '{"15":25,"6":96,"10":16,"11":76,"9":4,"2":1}',
-  //       create_time: "2021-10-28T16:30:00+08:00",
-  //     },
-  //     {
-  //       id: 38,
-  //       record: '{"15":25,"6":96,"10":16,"11":76,"9":4,"2":1}',
-  //       create_time: "2021-10-28T17:30:00+08:00",
-  //     },
-  //     {
-  //       id: 38,
-  //       record: '{"15":25,"6":96,"10":16,"11":76,"9":4,"2":1}',
-  //       create_time: "2021-10-28T18:30:00+08:00",
-  //     },
-  //     {
-  //       id: 38,
-  //       record: '{"15":25,"6":96,"10":16,"11":76,"9":4,"2":1}',
-  //       create_time: "2021-10-28T19:30:00+08:00",
-  //     },
-  //     {
-  //       id: 38,
-  //       record: '{"15":25,"6":96,"10":16,"11":76,"9":4,"2":1}',
-  //       create_time: "2021-10-28T20:30:00+08:00",
-  //     },
-  //   ],
-  //   msg: "Success!",
-  //   status: 0,
-  // };
-
-  // const secondData = dataBrack.map((item, index) => {
-  //   return {
-  //     value: Object.entries(item.value).map(([dataName, dataValue]) => {
-  //       return dataValue;
-  //     })[index],
-  //     year: item.id,
-  //     key: switchType(
-  //       Object.entries(item.value).map(([dataName, dataValue]) => {
-  //         return dataName;
-  //       })[index]
-  //     ),
-  //   };
-  // });
-  // console.log("secondData", secondData);
 
   var config = {
-    data: abc,
+    data: Graph,
     xField: "year",
     yField: "value",
     legend: false,
     seriesField: "key",
     stepType: "line",
-    // point: {
-    //   size: 5,
-    //   shape: "diamond",
-    //   style: {
-    //     fill: "white",
-    //     stroke: "#5B8FF9",
-    //     lineWidth: 2,
-    //   },
-    // },
+    point: {
+      size: 5,
+      shape: "diamond",
+      style: {
+        fill: "white",
+        stroke: "#5B8FF9",
+        lineWidth: 2,
+      },
+    },
   };
   return <Line {...config} />;
 };

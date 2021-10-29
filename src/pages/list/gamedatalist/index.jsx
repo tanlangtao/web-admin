@@ -62,6 +62,7 @@ export default (props) => {
         reqStr = `${new_gameRouter2[game_id].path}/getFundsFlow?page=${page}&limit=${limit}`;
         break;
       case "5c6a62be7ff587m117d446aa": //红包乱斗
+      case "5b1f3a3cb76a451e210913": //红包乱斗2
         reqStr = `${new_gameRouter2[game_id].path}/getGameDataByTime?page=${page}&limit=${limit}`;
         break;
       case "5b1f3a3cb76a591e7f251720":
