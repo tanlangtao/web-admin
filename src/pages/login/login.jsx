@@ -14,9 +14,9 @@ class Login extends Component {
     const result = await navList();
     if (result.status === 0) {
       let { data } = result;
-      data.forEach(element => {
+      data.forEach((element) => {
         if (element.children) {
-            element.children.forEach(item => {
+          element.children.forEach((item) => {
             item.title = item.title.slice(24);
           });
         }
@@ -32,7 +32,7 @@ class Login extends Component {
     }
   };
   //点击登录按钮
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     // 阻止事件的默认行为
     event.preventDefault();
 
@@ -42,7 +42,11 @@ class Login extends Component {
       if (!err) {
         // 请求登陆
         const { username, password, authcode } = values;
-        const result = await reqLogin(username, password, authcode);
+        const result = await reqLogin(
+          username,
+          window.btoa(password),
+          authcode
+        );
 
         if (result.status === 0) {
           // 登陆成功
@@ -77,7 +81,7 @@ class Login extends Component {
               <div>
                 <img src={result.data.qrurl} alt="验证码" />
               </div>
-            )
+            ),
           });
         } else {
           // 登陆失败
@@ -108,7 +112,7 @@ class Login extends Component {
   };
   componentDidMount() {
     //发送空请求确定BASE地址
-    raceURL()
+    raceURL();
   }
   render() {
     // 如果用户已经登陆, 自动跳转到管理界面
@@ -143,15 +147,15 @@ class Login extends Component {
                   {
                     required: true,
                     whitespace: true,
-                    message: "用户名必须输入"
+                    message: "用户名必须输入",
                   },
                   { min: 3, message: "用户名至少3位" },
                   { max: 12, message: "用户名最多12位" },
                   {
                     pattern: /^[a-zA-Z0-9_]+$/,
-                    message: "用户名必须是英文、数字或下划线组成"
-                  }
-                ]
+                    message: "用户名必须是英文、数字或下划线组成",
+                  },
+                ],
               })(
                 <Input
                   prefix={
@@ -165,9 +169,9 @@ class Login extends Component {
               {getFieldDecorator("password", {
                 rules: [
                   {
-                    validator: this.validatePwd
-                  }
-                ]
+                    validator: this.validatePwd,
+                  },
+                ],
               })(
                 <Input
                   prefix={
@@ -183,7 +187,7 @@ class Login extends Component {
                 rules: [
                   //{ required: true, whitespace: true, message: '验证码必须输入' },
                   //{ min: 4, message: '验证码至少4位' }
-                ]
+                ],
               })(
                 <Input
                   prefix={
@@ -195,10 +199,9 @@ class Login extends Component {
               )}
             </Form.Item>
             <span style={{ marginTop: 5 }} onClick={this.handleClick}>
-              首次登录，手机下载Google Authenticator
-              安装，
+              首次登录，手机下载Google Authenticator 安装，
               <Button type="link" onClick={this.authCode}>
-                 点击此处
+                点击此处
               </Button>
               扫码获取验证码
             </span>

@@ -1834,13 +1834,20 @@ export const getOnlineTotal = () => {
 	)
 }
 
-
+//查詢子遊戲在線人數
 export const getOnlineGame = (id) => {
 	return ajax(
 		BASE + `/chart/getOnlineGame`,
 		{
 			package_id:id
 		},
+		"GET",
+	)
+}
+// 查詢在線人數圖表
+export const getOnlineTotalGraph = () => {
+	return ajax(
+		BASE + `/chart/getOnlineChart`,
 		"GET",
 	)
 }
