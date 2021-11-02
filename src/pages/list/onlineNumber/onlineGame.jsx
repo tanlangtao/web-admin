@@ -11,6 +11,14 @@ const OnlineGame = (props) => {
     {
       title: "人数",
       dataIndex: "count",
+      render: (record, text) => record.length,
+    },
+    {
+      title: "玩家ID",
+      dataIndex: "id",
+      render: (record, text) => {
+        return record.join();
+      },
     },
   ];
 

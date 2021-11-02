@@ -1,17 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Line } from "@ant-design/charts";
-import { message } from "antd";
+import { Card, message, Input, Table, Select, Button, Icon } from "antd";
+import LinkButton from "../../../components/link-button";
+import MyDatePicker from "../../../components/MyDatePicker";
+import { getOnlineTotalGraph, userPackageList } from "../../../api/index";
 
-import { getOnlineTotalGraph } from "../../../api/index";
+let initstate = {
+  start_time: null,
+  end_time: null,
+  packageID: 0,
+};
+
 const DemoLine = () => {
   const [data, setData] = useState([]);
   const [dataBrack, setdataBrack] = useState([]);
   const [Graph, setGraph] = useState([]);
+  const [filterData, setfilterData] = useState([]);
   const [MapTest, setMapTest] = useState([]);
+  const ref = useRef(initstate);
+  const [packageList, setpackageList] = useState([]);
+  const initStates = useRef({
+    start_time: "",
+    end_time: "",
+    packageID: 0,
+  });
+  const getInitialData = async () => {
+    const res = await userPackageList();
+    if (res.status === 0) {
+      setpackageList(res.data.list);
+    }
+  };
+  useEffect(() => {
+    getInitialData();
+  }, []);
+
   const getOnlineNumberGraph = async () => {
+    Graph.length = 0;
+    const { start_time, end_time, packageID } = ref.current;
     try {
       message.loading("正在统计中.....", 20);
-      let res = await getOnlineTotalGraph();
+      let reqData = {
+        start_time: Math.floor(start_time / 1000),
+        end_time: Math.floor(end_time / 1000),
+      };
+      let res = await getOnlineTotalGraph(reqData);
       if (res.status === 0 && res.data) {
         message.destroy();
         message.info(res.msg);
@@ -24,19 +56,12 @@ const DemoLine = () => {
           }
         );
         const MapTest = dataBrack.map((items) => {
-          console.log("items123", items);
           return Object.entries(items.value)
             .map(([dataName, dataValue]) => dataName)
             .map((item, index) => {
-              console.log(
-                "dataValue123",
-                Object.entries(items.value).map(([dataName, dataValue]) => {
-                  return dataValue;
-                })[index]
-              );
               return Graph.push({
                 key: switchType(item),
-                year: items.id.slice(11, 16),
+                year: items.id.slice(5, 16),
                 value: Object.entries(items.value).map(
                   ([dataName, dataValue]) => {
                     return dataValue;
@@ -45,6 +70,13 @@ const DemoLine = () => {
               });
             });
         });
+        setfilterData(
+          packageID === 0
+            ? Graph
+            : Graph.filter((item) => {
+                return item.key === switchType(packageID);
+              })
+        );
         setData(dataBrack);
       } else {
         message.destroy();
@@ -55,10 +87,6 @@ const DemoLine = () => {
       message.info(JSON.stringify(error.response.data));
     }
   };
-
-  useEffect(() => {
-    getOnlineNumberGraph();
-  }, []);
 
   const switchType = (record) => {
     switch (record) {
@@ -105,25 +133,84 @@ const DemoLine = () => {
         return;
     }
   };
-
+  var COLOR_PLATE_10 = [
+    "#5B8FF9",
+    "#5AD8A6",
+    "#5D7092",
+    "#F6BD16",
+    "#E8684A",
+    "#6DC8EC",
+    "#9270CA",
+    "#FF9D4D",
+    "#269A99",
+    "#FF99C3",
+  ];
   var config = {
-    data: Graph,
+    data: filterData,
     xField: "year",
     yField: "value",
-    legend: false,
     seriesField: "key",
-    stepType: "line",
+    smooth: true,
+    color: COLOR_PLATE_10,
     point: {
-      size: 5,
-      shape: "diamond",
-      style: {
-        fill: "white",
-        stroke: "#5B8FF9",
-        lineWidth: 2,
+      size: 2,
+      shape: "circle",
+      style: function style(_ref2) {
+        var year = _ref2.year;
+        return { r: Number(year) % 4 ? 0 : 3 };
       },
     },
+    legend: { position: "top" },
   };
-  return <Line {...config} />;
+  let packageNode;
+  if (packageList) {
+    packageNode = packageList.map((item) => {
+      return (
+        <Select.Option value={item.id} key={item.id}>
+          {item.name}
+        </Select.Option>
+      );
+    });
+  }
+  return (
+    <div>
+      <Card>
+        <MyDatePicker
+          handleValue={(date, dateString) => {
+            ref.current.start_time = date[0] ? date[0].valueOf() : null;
+            ref.current.end_time = date[1] ? date[1].valueOf() : null;
+          }}
+        />
+        &nbsp; &nbsp;
+        <Select
+          placeholder="请选择"
+          style={{ width: 120 }}
+          defaultValue={"全部"}
+          onSelect={(value) => {
+            ref.current.packageID = value;
+          }}
+        >
+          <Select.Option value={0} key={0}>
+            全部
+          </Select.Option>
+          {packageNode}
+        </Select>
+        &nbsp; &nbsp;
+        <LinkButton
+          onClick={() => {
+            getOnlineNumberGraph();
+          }}
+          size="default"
+        >
+          <Icon type="search" />
+        </LinkButton>
+      </Card>
+      &nbsp; &nbsp;
+      <Card>
+        <Line {...config} />
+      </Card>
+    </div>
+  );
 };
 
 export default DemoLine;

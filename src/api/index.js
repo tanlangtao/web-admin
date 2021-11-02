@@ -1827,9 +1827,10 @@ export const getUserLinkAccountsTotal = (reqData) => {
 };
 
 //查詢在線人數
-export const getOnlineTotal = () => {
+export const getOnlineTotal = (reqData) => {
 	return ajax(
 		BASE + "/chart/getOnlineTotal",
+		{...reqData},
 		"GET",
 	)
 }
@@ -1845,9 +1846,10 @@ export const getOnlineGame = (id) => {
 	)
 }
 // 查詢在線人數圖表
-export const getOnlineTotalGraph = () => {
+export const getOnlineTotalGraph = (reqData) => {
 	return ajax(
 		BASE + `/chart/getOnlineChart`,
+		{...reqData},
 		"GET",
 	)
 }

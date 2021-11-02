@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from "react";
 
-import { Table, Modal, message, Card, Input, Icon } from "antd";
+import { Table, Modal, message, Card, Input, Icon, Select } from "antd";
 import _ from "lodash-es";
 import LinkButton from "../../../components/link-button/index";
-import { getOnlineTotal, getOnlineGame } from "../../../api/index";
+import {
+  getOnlineTotal,
+  getOnlineGame,
+  userPackageList,
+} from "../../../api/index";
 import OnlineGame from "./onlineGame";
 export default (props) => {
   const [data, setData] = useState([]);
+  const [packageList, setpackageList] = useState([]);
+  const [packageID, setpackageId] = useState("");
   const getOnlineNumber = async () => {
     try {
       message.loading("正在统计中.....", 20);
-      let res = await getOnlineTotal();
+      let res = await getOnlineTotal({ package_id: packageID });
       if (res.status === 0 && res.data) {
         message.destroy();
         message.info(res.msg);
@@ -29,13 +35,21 @@ export default (props) => {
       message.info(JSON.stringify(error.response.data));
     }
   };
+  const getInitialData = async () => {
+    const res = await userPackageList();
+    if (res.status === 0) {
+      setpackageList(res.data.list);
+      console.log("userPackageList", res.data.list);
+    }
+  };
+  useEffect(() => {
+    getInitialData();
+  }, []);
 
   useEffect(() => {
     getOnlineNumber();
-  }, []);
-  // let dataBrack = Object.entries(initialState).map(([dataName, dataValue]) => {
-  //   return { name: dataName, value: dataValue, id: dataName };
-  // });
+  }, [packageID]);
+
   let initColumns = [
     {
       title: "渠道组名称",
@@ -110,10 +124,16 @@ export default (props) => {
       if (result.status === 0) {
         message.destroy();
         message.info(result.msg);
+        const newResult = result.data.map((item) => {
+          return {
+            ...item,
+            id: item.count,
+          };
+        });
         Modal.info({
           title: "在线人数",
           okText: "关闭",
-          content: <OnlineGame data={result.data} />,
+          content: <OnlineGame data={newResult} />,
           width: "50%",
         });
       } else {
@@ -125,13 +145,36 @@ export default (props) => {
       message.info(JSON.stringify(error.response.data));
     }
   };
-
+  let packageNode;
+  if (packageList) {
+    packageNode = packageList.map((item) => {
+      return (
+        <Select.Option value={item.id} key={item.id}>
+          {item.name}
+        </Select.Option>
+      );
+    });
+  }
   return (
     <Card
-      extra={
-        <LinkButton onClick={() => window.location.reload()} size="default">
-          <Icon type="reload" />
-        </LinkButton>
+      title={
+        <div>
+          <Select
+            placeholder="请选择"
+            style={{ width: 120 }}
+            defaultValue={"全部"}
+            onSelect={(value) => setpackageId(value)}
+          >
+            <Select.Option value={""} key={0}>
+              全部
+            </Select.Option>
+            {packageNode}
+          </Select>
+          &nbsp; &nbsp;
+          <LinkButton onClick={() => window.location.reload()} size="default">
+            <Icon type="reload" />
+          </LinkButton>
+        </div>
       }
     >
       <Table
