@@ -31,7 +31,10 @@ export default function MyDatePicker(props) {
           defaultValue: [moment("00:00", "HH:mm"), moment("00:00", "HH:mm")],
         }}
         format="YYYY-MM-DD HH:mm:ss"
-        placeholder={["开始日期", "结束日期"]}
+        placeholder={[
+          moment().startOf("day").format("YYYY-MM-DD HH:mm:ss"),
+          moment().endOf("day").format("YYYY-MM-DD HH:mm:ss"),
+        ]}
         onChange={(date, dateString) => {
           props.handleValue(date, dateString);
         }}

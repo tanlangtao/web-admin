@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { Line } from "@ant-design/charts";
 import { Card, message, Input, Table, Select, Button, Icon } from "antd";
 import LinkButton from "../../../components/link-button";
-import MyDatePicker from "../../../components/MyDatePicker";
+import MyDatePicker from "../../../components/MyDatePickerStartToday";
 import { getOnlineTotalGraph, userPackageList } from "../../../api/index";
+import moment from "moment";
 
 let initstate = {
   start_time: null,
@@ -20,8 +21,8 @@ const DemoLine = () => {
   const ref = useRef(initstate);
   const [packageList, setpackageList] = useState([]);
   const initStates = useRef({
-    start_time: "",
-    end_time: "",
+    start_time: moment().startOf("day").format("X"),
+    end_time: moment().endOf("day").format("X"),
     packageID: 0,
   });
   const getInitialData = async () => {
@@ -33,7 +34,9 @@ const DemoLine = () => {
   useEffect(() => {
     getInitialData();
   }, []);
-
+  useEffect(() => {
+    getOnlineNumberGraph();
+  }, []);
   const getOnlineNumberGraph = async () => {
     Graph.length = 0;
     const { start_time, end_time, packageID } = ref.current;
@@ -84,7 +87,7 @@ const DemoLine = () => {
       }
     } catch (error) {
       message.destroy();
-      message.info(JSON.stringify(error.response.data));
+      // message.info(JSON.stringify(error.response.data));
     }
   };
 
@@ -133,7 +136,7 @@ const DemoLine = () => {
         return;
     }
   };
-  var COLOR_PLATE_10 = [
+  var COLOR_PLATE_20 = [
     "#5B8FF9",
     "#5AD8A6",
     "#5D7092",
@@ -144,6 +147,16 @@ const DemoLine = () => {
     "#FF9D4D",
     "#269A99",
     "#FF99C3",
+    "#0050f2",
+    "#11d185",
+    "#031942",
+    "#f5b702",
+    "#d62900",
+    "#0a516e",
+    "#6a2dcf",
+    "#f08630",
+    "#099190",
+    "#fa4892",
   ];
   var config = {
     data: filterData,
@@ -151,7 +164,11 @@ const DemoLine = () => {
     yField: "value",
     seriesField: "key",
     smooth: true,
-    color: COLOR_PLATE_10,
+    color: COLOR_PLATE_20,
+    xAxis: {
+      interval: 0,
+      width: 10,
+    },
     point: {
       size: 2,
       shape: "circle",
@@ -160,7 +177,7 @@ const DemoLine = () => {
         return { r: Number(year) % 4 ? 0 : 3 };
       },
     },
-    legend: { position: "top" },
+    // legend: { position: "top" },
   };
   let packageNode;
   if (packageList) {
@@ -203,6 +220,9 @@ const DemoLine = () => {
           size="default"
         >
           <Icon type="search" />
+        </LinkButton>
+        <LinkButton onClick={() => window.location.reload()} size="default">
+          <Icon type="reload" />
         </LinkButton>
       </Card>
       &nbsp; &nbsp;

@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
-
-import { Table, Modal, message, Card, Input, Icon, Select } from "antd";
+import {
+  Table,
+  Modal,
+  message,
+  Card,
+  Input,
+  Icon,
+  Select,
+  Descriptions,
+} from "antd";
 import _ from "lodash-es";
 import LinkButton from "../../../components/link-button/index";
 import {
@@ -8,9 +16,13 @@ import {
   getOnlineGame,
   userPackageList,
 } from "../../../api/index";
+import DemoLine from "../OnlineNumberLineGraph/index";
 import OnlineGame from "./onlineGame";
+import "./index.less";
+
 export default (props) => {
-  const [data, setData] = useState([]);
+  const [data1, setData1] = useState([]);
+  const [data2, setData2] = useState([]);
   const [packageList, setpackageList] = useState([]);
   const [packageID, setpackageId] = useState("");
   const getOnlineNumber = async () => {
@@ -25,7 +37,31 @@ export default (props) => {
             return { name: dataName, value: dataValue, id: dataName };
           }
         );
-        setData(dataBrack);
+        console.log("dataBrack", dataBrack);
+        const push1 = dataBrack
+          .filter((item, index) => {
+            return index % 2 === 1;
+          })
+          .map((item) => {
+            return {
+              name1: item.name,
+              value1: item.value,
+              id1: item.id,
+            };
+          });
+        const push2 = dataBrack
+          .filter((item, index) => {
+            return index % 2 === 0;
+          })
+          .map((item) => {
+            return {
+              name2: item.name,
+              value2: item.value,
+              id2: item.id,
+            };
+          });
+        setData1(push1);
+        setData2(push2);
       } else {
         message.destroy();
         message.info(res.msg || JSON.stringify(res));
@@ -53,8 +89,8 @@ export default (props) => {
   let initColumns = [
     {
       title: "渠道组名称",
-      dataIndex: "name",
-      render: (record, text) => {
+      dataIndex: "name1",
+      render: (record, text, index) => {
         switch (record) {
           case "1":
           case 1:
@@ -102,12 +138,13 @@ export default (props) => {
     },
     {
       title: "在线人数",
-      dataIndex: "value",
+      dataIndex: "value1",
     },
     {
       title: "操作",
-      dataIndex: "id",
-      render: (record, text) => (
+      dataIndex: "id1",
+      height: 0,
+      render: (record, text, index) => (
         <span>
           <LinkButton type="default" onClick={() => getSubGameNumber(record)}>
             查看
@@ -116,7 +153,76 @@ export default (props) => {
       ),
     },
   ];
-
+  let initColumn2s = [
+    {
+      title: "渠道组名称",
+      dataIndex: "name2",
+      render: (record, text, index) => {
+        console.log("record", record);
+        console.log("text", text);
+        console.log("index", index);
+        switch (record) {
+          case "1":
+          case 1:
+            return "特斯特娱乐";
+          case 2:
+          case "2":
+            return "德比游戏";
+          case 3:
+          case "3":
+            return "杏吧娱乐";
+          case 6:
+          case "6":
+            return "91游戏";
+          case 8:
+          case "8":
+            return "新盛游戏";
+          case 9:
+          case "9":
+            return "新贵游戏";
+          case 10:
+          case "10":
+            return "富鑫II游戏";
+          case 11:
+          case "11":
+            return "新豪游戏";
+          case 12:
+          case "12":
+            return "新隆游戏";
+          case 13:
+          case "13":
+            return "皇室游戏";
+          case 15:
+          case "15":
+            return "聚鼎娱乐";
+          case 16:
+          case "16":
+            return "92游戏";
+          case 18:
+          case "18":
+            return "华兴娱乐";
+          default:
+            return;
+        }
+      },
+    },
+    {
+      title: "在线人数",
+      dataIndex: "value2",
+    },
+    {
+      title: "操作",
+      dataIndex: "id2",
+      height: 0,
+      render: (record, text, index) => (
+        <span>
+          <LinkButton type="default" onClick={() => getSubGameNumber(record)}>
+            查看
+          </LinkButton>
+        </span>
+      ),
+    },
+  ];
   const getSubGameNumber = async (record) => {
     try {
       message.loading("正在统计中.....", 5);
@@ -157,45 +263,50 @@ export default (props) => {
   }
   return (
     <Card
-      title={
-        <div>
-          <Select
-            placeholder="请选择"
-            style={{ width: 120 }}
-            defaultValue={"全部"}
-            onSelect={(value) => setpackageId(value)}
-          >
-            <Select.Option value={""} key={0}>
-              全部
-            </Select.Option>
-            {packageNode}
-          </Select>
-          &nbsp; &nbsp;
-          <LinkButton onClick={() => window.location.reload()} size="default">
-            <Icon type="reload" />
-          </LinkButton>
-        </div>
-      }
+    // title={
+    //   <div>
+    //     {/* <Select
+    //       placeholder="请选择"
+    //       style={{ width: 120 }}
+    //       defaultValue={"全部"}
+    //       onSelect={(value) => setpackageId(value)}
+    //     >
+    //       <Select.Option value={""} key={0}>
+    //         全部
+    //       </Select.Option>
+    //       {packageNode}
+    //     </Select>
+    //     &nbsp; &nbsp; */}
+    //     <LinkButton onClick={() => window.location.reload()} size="default">
+    //       <Icon type="reload" />
+    //     </LinkButton>
+    //   </div>
+    // }
     >
-      <Table
-        bordered
-        size="small"
-        rowKey={(record, index) => `${index}`}
-        dataSource={data}
-        columns={initColumns}
-        pagination={{
-          defaultCurrent: 1,
-          defaultPageSize: 50,
-          // showSizeChanger: true,
-          showQuickJumper: true,
-          // total: count,
-          showTotal: (total) => `共${total}条`,
-          // onChange: (page, pageSize) => {
-          //   setCurrent(page);
-          //   fetchData(page, pageSize);
-          // },
-        }}
-      />
+      <DemoLine />
+      &nbsp; &nbsp;
+      <div className="testCss">
+        <div className="tabletest">
+          <Table
+            bordered
+            size="small"
+            rowKey={(record, index) => `${index}`}
+            dataSource={data2}
+            columns={initColumn2s}
+            pagination={false}
+          />
+        </div>
+        <div className="tabletest">
+          <Table
+            bordered
+            size="small"
+            rowKey={(record, index) => `${index}`}
+            dataSource={data1}
+            columns={initColumns}
+            pagination={false}
+          />
+        </div>
+      </div>
     </Card>
   );
 };

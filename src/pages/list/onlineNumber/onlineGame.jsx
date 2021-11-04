@@ -16,6 +16,7 @@ const OnlineGame = (props) => {
     {
       title: "玩家ID",
       dataIndex: "id",
+      width: 200,
       render: (record, text) => {
         return record.join();
       },
