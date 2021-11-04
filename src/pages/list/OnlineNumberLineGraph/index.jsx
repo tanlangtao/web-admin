@@ -12,7 +12,7 @@ let initstate = {
   packageID: 0,
 };
 
-const DemoLine = () => {
+const DemoLine = (props) => {
   const [data, setData] = useState([]);
   const [dataBrack, setdataBrack] = useState([]);
   const [Graph, setGraph] = useState([]);
@@ -34,9 +34,12 @@ const DemoLine = () => {
   useEffect(() => {
     getInitialData();
   }, []);
+  // useEffect(() => {
+  //   getOnlineNumberGraph();
+  // }, []);
   useEffect(() => {
     getOnlineNumberGraph();
-  }, []);
+  }, [props.loading]);
   const getOnlineNumberGraph = async () => {
     Graph.length = 0;
     const { start_time, end_time, packageID } = ref.current;
@@ -87,7 +90,7 @@ const DemoLine = () => {
       }
     } catch (error) {
       message.destroy();
-      // message.info(JSON.stringify(error.response.data));
+      message.info(JSON.stringify(error.response.data));
     }
   };
 
@@ -177,7 +180,6 @@ const DemoLine = () => {
         return { r: Number(year) % 4 ? 0 : 3 };
       },
     },
-    // legend: { position: "top" },
   };
   let packageNode;
   if (packageList) {
@@ -221,7 +223,10 @@ const DemoLine = () => {
         >
           <Icon type="search" />
         </LinkButton>
-        <LinkButton onClick={() => window.location.reload()} size="default">
+        <LinkButton
+          onClick={() => props.changeLoading(!props.loading)}
+          size="default"
+        >
           <Icon type="reload" />
         </LinkButton>
       </Card>
@@ -233,4 +238,4 @@ const DemoLine = () => {
   );
 };
 
-export default DemoLine;
+export default React.memo(DemoLine);

@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Table,
-  Modal,
-  message,
-  Card,
-  Input,
-  Icon,
-  Select,
-  Descriptions,
-} from "antd";
+import { Table, Modal, message, Card } from "antd";
 import _ from "lodash-es";
 import LinkButton from "../../../components/link-button/index";
 import {
@@ -23,7 +14,7 @@ import "./index.less";
 export default (props) => {
   const [data1, setData1] = useState([]);
   const [data2, setData2] = useState([]);
-  const [packageList, setpackageList] = useState([]);
+  const [loading, setloading] = useState(false);
   const [packageID, setpackageId] = useState("");
   const getOnlineNumber = async () => {
     try {
@@ -71,20 +62,10 @@ export default (props) => {
       message.info(JSON.stringify(error.response.data));
     }
   };
-  const getInitialData = async () => {
-    const res = await userPackageList();
-    if (res.status === 0) {
-      setpackageList(res.data.list);
-      console.log("userPackageList", res.data.list);
-    }
-  };
-  useEffect(() => {
-    getInitialData();
-  }, []);
 
   useEffect(() => {
     getOnlineNumber();
-  }, [packageID]);
+  }, [loading]);
 
   let initColumns = [
     {
@@ -251,39 +232,11 @@ export default (props) => {
       message.info(JSON.stringify(error.response.data));
     }
   };
-  let packageNode;
-  if (packageList) {
-    packageNode = packageList.map((item) => {
-      return (
-        <Select.Option value={item.id} key={item.id}>
-          {item.name}
-        </Select.Option>
-      );
-    });
-  }
+
   return (
-    <Card
-    // title={
-    //   <div>
-    //     {/* <Select
-    //       placeholder="请选择"
-    //       style={{ width: 120 }}
-    //       defaultValue={"全部"}
-    //       onSelect={(value) => setpackageId(value)}
-    //     >
-    //       <Select.Option value={""} key={0}>
-    //         全部
-    //       </Select.Option>
-    //       {packageNode}
-    //     </Select>
-    //     &nbsp; &nbsp; */}
-    //     <LinkButton onClick={() => window.location.reload()} size="default">
-    //       <Icon type="reload" />
-    //     </LinkButton>
-    //   </div>
-    // }
-    >
-      <DemoLine />
+    <Card>
+      <DemoLine changeLoading={setloading} loading={loading} />
+      {/* <DemoLine changeLoading={setloading} loading={loading} /> */}
       &nbsp; &nbsp;
       <div className="testCss">
         <div className="tabletest">
