@@ -118,6 +118,7 @@ import ProxyBaseDividend2 from "../proxy/secondBaseDividend/Details2";
 import GetProxyGetGlobal from "../proxy/baseDividend/GetProxyGetGlobal";
 import DonateList from "../liveStream/donateList";
 import LiveReport from "../liveStream/liveReport";
+import LiveBlackList from "../liveStream/blackList";
 
 const { Sider, Content } = Layout;
 
@@ -851,6 +852,11 @@ export default class Admin extends Component {
                   <Route path="/live/user_report" exact>
                     <KeepAlive name="userReport">
                       <LiveReport type="user" />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/live/blacklist" exact>
+                    <KeepAlive name="blacklist">
+                      <LiveBlackList />
                     </KeepAlive>
                   </Route>
                   {/* 改成點擊菜單另開新分頁 */}

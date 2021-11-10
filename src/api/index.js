@@ -918,7 +918,7 @@ export const getProxyBaseDividendInfo1 = reqData => {
 		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetBaseDividendInfo1",
 		{ platform_key: 123456, ...reqData },
 		"GET",
-		{ needAuth: false },	
+		{ needAuth: false },
 	);
 };
 // 获取保底分红发放详情2
@@ -1846,21 +1846,57 @@ export const getLiveData = (reqData) => {
 		{ needAuth: false, content_type_is_formdata: true },
 	)
 }
+//獲取打赏直播黑名单
+export const getLiveBlackList = (reqData) => {
+	return ajax(
+		process.env.REACT_APP_GAME_HOST + `/zhibo/api/getBlacklist`,
+		{
+			game_id: '5b1f3a3cb76a451e210726',
+			...reqData
+		},
+		"GET",
+		{ needAuth: false, content_type_is_formdata: true },
+	)
+}
+//添加打赏直播黑名单
+export const addLiveBlackList = (reqData) => {
+	return ajax(
+		process.env.REACT_APP_GAME_HOST + `/zhibo/api/addBlacklist`,
+		{
+			game_id: '5b1f3a3cb76a451e210726',
+			...reqData
+		},
+		"GET",
+		{ needAuth: false, content_type_is_formdata: true },
+	)
+}
+//刪除打赏直播黑名单
+export const deleteLiveBlackList = (reqData) => {
+	return ajax(
+		process.env.REACT_APP_GAME_HOST + `/zhibo/api/removeBlacklist`,
+		{
+			game_id: '5b1f3a3cb76a451e210726',
+			...reqData
+		},
+		"GET",
+		{ needAuth: false, content_type_is_formdata: true },
+	)
+}
 //查询代理链实时余额
 export const getUserLinkAccountsTotal = (reqData) => {
 	return ajax(
-	process.env.REACT_APP_CENTER_HOST + `/operation/api/GetUserLinkAccountsTotal`, 
-	{ ...reqData,platform_key: 654321,},
-	"GET", 
-	{ needAuth: false },
-	);	
+		process.env.REACT_APP_CENTER_HOST + `/operation/api/GetUserLinkAccountsTotal`,
+		{ ...reqData, platform_key: 654321, },
+		"GET",
+		{ needAuth: false },
+	);
 };
 
 //查詢在線人數
 export const getOnlineTotal = (reqData) => {
 	return ajax(
 		BASE + "/chart/getOnlineTotal",
-		{...reqData},
+		{ ...reqData },
 		"GET",
 	)
 }
@@ -1870,7 +1906,7 @@ export const getOnlineGame = (id) => {
 	return ajax(
 		BASE + `/chart/getOnlineGame`,
 		{
-			package_id:id
+			package_id: id
 		},
 		"GET",
 	)
@@ -1879,7 +1915,7 @@ export const getOnlineGame = (id) => {
 export const getOnlineTotalGraph = (reqData) => {
 	return ajax(
 		BASE + `/chart/getOnlineChart`,
-		{...reqData},
+		{ ...reqData },
 		"GET",
 	)
 }
