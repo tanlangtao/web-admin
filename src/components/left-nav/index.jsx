@@ -179,6 +179,7 @@ class LeftNav extends Component {
                     case "子游戏设定":
                     case "无限代保底分红":
                     case "无限代保底分红1":
+                    case "无限代保底分红2":
                     case "亏损分红充提差":
                     case "提现手续费5级分红":
                       cpre.push(getMoreMenuNodes(ele));

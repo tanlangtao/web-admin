@@ -66,6 +66,7 @@ import Agadmin from "../gameData/ag-admin";
 // import PGgame from "../gameData/pggame";
 import MoneyFloatDetail from "../customer_service/moneyfloat_detail";
 import BankCardCheck from "../user/bank_check";
+import GetAmmountbyPhone from "../user/getAmmountbyPhone";
 import { Provider, KeepAlive } from "react-keep-alive";
 import { History } from "../customer_service/history";
 import {
@@ -110,7 +111,9 @@ import ProxyLoseProfitDevidend from "../proxy/lose_profit_devidend";
 import GetPaymentInfoDetail from "../proxy/getPaymentInfoDetail";
 import GetPaymentInfo from "../proxy/getPaymentInfo";
 import GetBaseDividendRule1 from "../proxy/newBaseDividend/GetBaseDividentRule1";
+import GetBaseDividendRule2 from "../proxy/secondBaseDividend/GetBaseDividentRule2";
 import ProxyBaseDividend1 from "../proxy/newBaseDividend/Details";
+import ProxyBaseDividend2 from "../proxy/secondBaseDividend/Details2";
 
 import GetProxyGetGlobal from "../proxy/baseDividend/GetProxyGetGlobal";
 import DonateList from "../liveStream/donateList";
@@ -374,7 +377,11 @@ export default class Admin extends Component {
                       <BankCardCheck />
                     </KeepAlive>
                   </Route>
-
+                  <Route path="/user/getAmmountbyPhone" exact>
+                    <KeepAlive name="GetAmmountbyPhone">
+                      <GetAmmountbyPhone />
+                    </KeepAlive>
+                  </Route>
                   <Route path="/customer_service/notice_list" exact>
                     <KeepAlive name="Notice_list">
                       <NoticeList />
@@ -628,9 +635,22 @@ export default class Admin extends Component {
                       <GetBaseDividendRule1 />
                     </KeepAlive>
                   </Route>
+                  <Route
+                    path="/proxy/baseDividendsecond/GetBaseDividendRule"
+                    exact
+                  >
+                    <KeepAlive name="GetBaseDividendRule2">
+                      <GetBaseDividendRule2 />
+                    </KeepAlive>
+                  </Route>
                   <Route path="/proxy/baseDividendNew/details" exact>
                     <KeepAlive name="ProxyBaseDividend1">
                       <ProxyBaseDividend1 />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/proxy/baseDividendsecond/details" exact>
+                    <KeepAlive name="ProxyBaseDividend2">
+                      <ProxyBaseDividend2 />
                     </KeepAlive>
                   </Route>
                   <Route path="/messageCenter/tasks" exact>

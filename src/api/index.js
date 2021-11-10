@@ -248,6 +248,18 @@ export const queryAccount = reqData => {
 		"GET",
 	);
 };
+//用户-手机号批量查询
+
+export const getAmmountbyPhone = reqData => {
+	return ajax(
+		BASE + "/user/getAmmountbyPhone",
+		{
+			...reqData,
+			token: "e40f01afbb1b9ae3dd6747ced5bca532",
+		},
+		"GET",
+	);
+};
 //后台管理-账户列表
 export const reqAdminList = (page, limit) => {
 	return ajax(
@@ -873,6 +885,15 @@ export const GetBaseDividendRule1 = reqData => {
 		{ needAuth: false },
 	);
 };
+//查询保底分成规则2
+export const GetBaseDividendRule2 = reqData => {
+	return ajax(
+		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetBaseDividendRule2",
+		{ platform_key: 123456, ...reqData },
+		"GET",
+		{ needAuth: false },
+	);
+};
 //查询保底分成渠道
 export const GetBaseDividend = reqData => {
 	return ajax(
@@ -895,6 +916,15 @@ export const getProxyBaseDividendInfo = reqData => {
 export const getProxyBaseDividendInfo1 = reqData => {
 	return ajax(
 		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetBaseDividendInfo1",
+		{ platform_key: 123456, ...reqData },
+		"GET",
+		{ needAuth: false },	
+	);
+};
+// 获取保底分红发放详情2
+export const getProxyBaseDividendInfo2 = reqData => {
+	return ajax(
+		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetBaseDividendInfo2",
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
