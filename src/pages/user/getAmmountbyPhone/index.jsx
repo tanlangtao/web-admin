@@ -8,6 +8,7 @@ import { forEach } from "lodash";
 export default () => {
   const [data, setData] = useState([]);
   const [count, setCount] = useState(0);
+  // const [arrivalData, setarrivalData] = useState([]);
   const [criteria, setcriteria] = useState();
   const onButtonClick = async () => {
     let number = criteria.slice(0, 11);
@@ -25,9 +26,23 @@ export default () => {
     const res = await getAmmountbyPhone({ phone_number: number });
     if (res.status === 0) {
       message.info(res.msg || "请求成功");
-      setCount(res.data.user?.count || 0);
+      // setCount(res.data.user?.count || 0);
+      // setarrivalData(res.data?.order || []);
+
       setData(res.data.user?.game_user || []);
-      console.log("resdata", res.data.user?.game_user);
+      const newA = res.data.user.game_user.map((e) => {
+        // console.log("e", e);
+        // console.log(
+        //   "e2",
+        //   res.data.order.find((d) => d.id === e.id)
+        // );
+        return Object.assign(
+          e,
+          res.data.order.find((d) => d.id === e.id)
+        );
+      });
+      setCount(newA || 0);
+      console.log("newA", newA);
     } else {
       message.info(res.msg || "请求失败");
     }
@@ -41,22 +56,50 @@ export default () => {
     {
       title: "品牌ID",
       dataIndex: "package_id",
-      render: (text, record, index) => {
-        let res;
-        switch (parseInt(text)) {
+      render: (text) => {
+        switch (text) {
+          case "1":
           case 1:
-            res = "未审核";
-            break;
+            return "特斯特娱乐";
           case 2:
-            res = "审核成功";
-            break;
+          case "2":
+            return "德比游戏";
           case 3:
-            res = "审核拒绝";
-            break;
+          case "3":
+            return "杏吧娱乐";
+          case 6:
+          case "6":
+            return "91游戏";
+          case 8:
+          case "8":
+            return "大喜发";
+          case 9:
+          case "9":
+            return "新贵游戏";
+          case 10:
+          case "10":
+            return "富鑫II游戏";
+          case 11:
+          case "11":
+            return "新豪游戏";
+          case 12:
+          case "12":
+            return "乐派游戏";
+          case 13:
+          case "13":
+            return "皇室游戏";
+          case 15:
+          case "15":
+            return "聚鼎娱乐";
+          case 16:
+          case "16":
+            return "92游戏";
+          case 18:
+          case "18":
+            return "华兴娱乐";
           default:
-            break;
+            return "";
         }
-        return res;
       },
     },
     {
@@ -70,7 +113,7 @@ export default () => {
     },
     {
       title: "充值金额",
-      dataIndex: "bank_gold",
+      dataIndex: "arrival_amount",
     },
   ];
   return (

@@ -56,6 +56,10 @@ export default () => {
       render: reverseNumber,
     },
     {
+      title: "级差",
+      dataIndex: "award",
+    },
+    {
       title: "游戏类型",
       dataIndex: "game_tag",
       render: (text, record) => {
