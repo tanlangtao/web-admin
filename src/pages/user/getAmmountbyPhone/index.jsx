@@ -12,30 +12,25 @@ export default () => {
   const [criteria, setcriteria] = useState();
   const onButtonClick = async () => {
     let number = criteria.slice(0, 11);
-    for (let i = 1; i < criteria.length / 11; i++) {
+    for (let i = 1; i < Math.ceil((criteria.length + 1) / 12); i++) {
+      console.log("i", i);
       let newnumber;
       if (i === 1) {
-        newnumber = "," + criteria.slice(11, 22);
+        newnumber = "," + criteria.slice(12, 23);
       } else {
-        newnumber = "," + criteria.slice(11 * i, 11 * (i + 1));
+        newnumber = "," + criteria.slice(12 * i, 12 * (i + 1) - 1);
       }
       number += newnumber;
     }
-
-    console.log("number", number);
+    // console.log("criteria", criteria);
+    // console.log("criteria1", criteria.slice(12, 23));
+    // console.log("criteria2", criteria.slice(24, 35));
+    // console.log("criteria3", criteria.slice(36, 47));
     const res = await getAmmountbyPhone({ phone_number: number });
     if (res.status === 0) {
       message.info(res.msg || "请求成功");
-      // setCount(res.data.user?.count || 0);
-      // setarrivalData(res.data?.order || []);
-
       setData(res.data.user?.game_user || []);
       const newA = res.data.user.game_user.map((e) => {
-        // console.log("e", e);
-        // console.log(
-        //   "e2",
-        //   res.data.order.find((d) => d.id === e.id)
-        // );
         return Object.assign(
           e,
           res.data.order.find((d) => d.id === e.id)
@@ -73,11 +68,14 @@ export default () => {
         <>
           <div style={{ width: "80%", display: "inline-block" }}>
             <span>批量电话号码查询:</span>
-            <Input
-              placeholder="单次批量查询時，电话号码不能超过 100个"
+            <Input.TextArea
+              placeholder="单次批量查询時，电话号码不能超过 100个，并请换行输入"
               maxLength={1100}
+              height={150}
               type="text"
+              rows={10}
               value={criteria}
+              // onChange={(e) => setcriteria(e.target.value)}
               onChange={(e) => setcriteria(e.target.value.replace(/[, ]/g, ""))}
             />
           </div>
