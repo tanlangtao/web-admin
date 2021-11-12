@@ -870,7 +870,7 @@ export const GetProxyUserLinkstatement = reqData => {
 //查询保底分成规则
 export const GetBaseDividendRule = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetBaseDividendRule",
+		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetBaseDividendRule",
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
@@ -879,7 +879,7 @@ export const GetBaseDividendRule = reqData => {
 //查询保底分成规则1
 export const GetBaseDividendRule1 = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetBaseDividendRule1",
+		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetBaseDividendRule1",
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
@@ -888,7 +888,7 @@ export const GetBaseDividendRule1 = reqData => {
 //查询保底分成规则2
 export const GetBaseDividendRule2 = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetBaseDividendRule2",
+		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetBaseDividendRule2",
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
@@ -906,7 +906,7 @@ export const GetBaseDividend = reqData => {
 // 获取保底分红发放详情
 export const getProxyBaseDividendInfo = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetBaseDividendInfo",
+		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetBaseDividendInfo",
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
@@ -915,7 +915,7 @@ export const getProxyBaseDividendInfo = reqData => {
 // 获取保底分红发放详情1
 export const getProxyBaseDividendInfo1 = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetBaseDividendInfo1",
+		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetBaseDividendInfo1",
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
@@ -924,7 +924,7 @@ export const getProxyBaseDividendInfo1 = reqData => {
 // 获取保底分红发放详情2
 export const getProxyBaseDividendInfo2 = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetBaseDividendInfo2",
+		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetBaseDividendInfo2",
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
