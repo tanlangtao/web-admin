@@ -809,7 +809,7 @@ export const getPaymentDividendInfo = reqData => {
 // 查询玩家分红数据总额
 export const getPaymentInfo = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + `/proxy/proxy/GetPaymentInfo`,
+		process.env.REACT_APP_CENTER_HOST + `/proxy/user/GetPaymentInfo`,
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
@@ -819,7 +819,7 @@ export const getPaymentInfo = reqData => {
 // 查询玩家分红数据详情
 export const getPaymentInfoDetail = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + `/proxy/proxy/GetPaymentInfoDetail`,
+		process.env.REACT_APP_CENTER_HOST + `/proxy/user/GetPaymentInfoDetail`,
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
@@ -827,7 +827,7 @@ export const getPaymentInfoDetail = reqData => {
 };
 export const getProxyUserMoneyFlow = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetGameUserInductions",
+		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetGameUserInductions",
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
@@ -835,7 +835,7 @@ export const getProxyUserMoneyFlow = reqData => {
 };
 export const getGameUserInductionsSortByGameTag = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetGameUserInductionsSortByGameTag",
+		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetGameUserInductionsSortByGameTag",
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
@@ -844,7 +844,7 @@ export const getGameUserInductionsSortByGameTag = reqData => {
 //按游戏类型查询团队业绩界面
 export const getProxyUserInductionsSortByGameTag = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/proxy/GetProxyUserInductionsSortByGameTag",
+		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetProxyUserInductionsSortByGameTag",
 		{ platform_key: 123456, ...reqData },
 		"GET",
 		{ needAuth: false },
