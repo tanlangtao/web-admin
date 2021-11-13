@@ -26,6 +26,8 @@ export function switchChannelType(text, record) {
         case "20":
         case "21":
         case "22":
+        case "27":
+        case "28":
             word = "聚鑫";
             break;
         case "17":
