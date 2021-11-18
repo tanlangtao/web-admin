@@ -889,7 +889,7 @@ export const GetBaseDividendRule1 = reqData => {
 export const GetBaseDividendRule2 = reqData => {
 	return ajax(
 		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetBaseDividendRule2",
-		{ platform_key: 123456, ...reqData },
+		{ ...reqData },
 		"GET",
 		{ needAuth: false },
 	);

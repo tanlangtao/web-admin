@@ -1,45 +1,68 @@
 import React, { useState, useEffect } from "react";
 import { Card, message, Input, Table, Button } from "antd";
-import { queryAccount, userPackageList } from "../../../api";
 import { getAmmountbyPhone } from "../../../api";
 import { formateDate } from "../../../utils/dateUtils";
-import { forEach } from "lodash";
-
 export default () => {
   const [data, setData] = useState([]);
   const [count, setCount] = useState(0);
-  // const [arrivalData, setarrivalData] = useState([]);
   const [criteria, setcriteria] = useState();
   const onButtonClick = async () => {
+    //將輸入的電話號碼每11位數加,
     let number = criteria.slice(0, 11);
     for (let i = 1; i < Math.ceil((criteria.length + 1) / 12); i++) {
-      console.log("i", i);
       let newnumber;
-      if (i === 1) {
-        newnumber = "," + criteria.slice(12, 23);
-      } else {
-        newnumber = "," + criteria.slice(12 * i, 12 * (i + 1) - 1);
-      }
+      newnumber = "," + criteria.slice(12 * i, 12 * (i + 1) - 1);
       number += newnumber;
     }
-    // console.log("criteria", criteria);
-    // console.log("criteria1", criteria.slice(12, 23));
-    // console.log("criteria2", criteria.slice(24, 35));
-    // console.log("criteria3", criteria.slice(36, 47));
-    const res = await getAmmountbyPhone({ phone_number: number });
-    if (res.status === 0) {
-      message.info(res.msg || "请求成功");
-      setData(res.data.user?.game_user || []);
-      const newA = res.data.user.game_user.map((e) => {
+    // 分 100 筆電話號碼請求
+    let sliceArray = [];
+    let sliceArrayNumber = number.split(",");
+    let perNumber = 100;
+    for (
+      let i = 0;
+      i < Math.ceil(number.split(",").length / perNumber) * perNumber;
+      i = i + perNumber
+    ) {
+      sliceArray.push({
+        phone_number: sliceArrayNumber.slice(i, (i + 1) * perNumber).join(","),
+      });
+      console.log("sliceArray", sliceArray);
+    }
+    let resTest;
+    //存取 data.user.game_user
+    let gameUserArray1 = [];
+    //存取 data.order
+    let orderArray1 = [];
+    //每100筆分一組 做分次請求
+    for (const player of sliceArray) {
+      resTest = await getAmmountbyPhone(player);
+      if (resTest.status === 0) {
+        gameUserArray1 = gameUserArray1.concat(resTest?.data.user.game_user);
+        orderArray1 = orderArray1.concat(resTest?.data.order);
+      }
+    }
+    //全部輸入的電話號碼
+    let newArrayNumber = number.split(",").map((item) => {
+      return { phone_number: item };
+    });
+    if (resTest.status === 0) {
+      message.info(resTest.msg || "请求成功");
+      const testObject = newArrayNumber.map((e) => {
         return Object.assign(
           e,
-          res.data.order.find((d) => d.id === e.id)
+          gameUserArray1.find((d) => d.phone_number === e.phone_number)
+        );
+      });
+      const newA = testObject.map((e) => {
+        return Object.assign(
+          e,
+          orderArray1.find((d) => d.id === e.id)
         );
       });
       setCount(newA || 0);
-      console.log("newA", newA);
+      setData(testObject || []);
     } else {
-      message.info(res.msg || "请求失败");
+      message.info(resTest.msg || "请求失败");
     }
   };
 
@@ -69,13 +92,12 @@ export default () => {
           <div style={{ width: "80%", display: "inline-block" }}>
             <span>批量电话号码查询:</span>
             <Input.TextArea
-              placeholder="单次批量查询時，电话号码不能超过 100个，并请换行输入"
-              maxLength={1100}
+              placeholder="单次批量查询時，电话号码不能超过 1000个，并请换行输入"
+              // maxLength={11000}
               height={150}
               type="text"
               rows={10}
               value={criteria}
-              // onChange={(e) => setcriteria(e.target.value)}
               onChange={(e) => setcriteria(e.target.value.replace(/[, ]/g, ""))}
             />
           </div>
@@ -84,7 +106,16 @@ export default () => {
               type="primary"
               icon="search"
               onClick={() => {
-                onButtonClick();
+                if (
+                  criteria.length === 11 ||
+                  (criteria.length - 11) % 12 === 0
+                ) {
+                  onButtonClick();
+                } else {
+                  message.info(
+                    "请输入正确格式，每行电话号码11码，每行不得为空"
+                  );
+                }
               }}
             >
               查询
@@ -105,7 +136,7 @@ export default () => {
           //   pageSize: tableStatus.limit,
           // showSizeChanger: true,
           // showQuickJumper: true,
-          total: count,
+          // total: count,
           showTotal: (total, range) => `共${total}条`,
           // onChange: (page, pageSize) => {
           //   settableStatus({ ...tableStatus, page });

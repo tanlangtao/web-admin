@@ -373,8 +373,7 @@ class DailyReport extends Component {
           .filter((e) => e && e.package_id)
           .map(
             (e) => (
-              (e.statement_ratio = // eslint-disable-next-line
-              (
+              (e.statement_ratio = ( // eslint-disable-next-line
                 (Math.abs(e.lose_statement_total) - e.win_statement_total) /
                 (e.win_statement_total + Math.abs(e.lose_statement_total))
               )
