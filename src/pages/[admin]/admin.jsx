@@ -35,6 +35,7 @@ import ActivityRecieve from "../activity/recieve";
 import ActivitySetting from "../activity/activity_setting";
 import FruitSetting from "../activity/fruit_setting";
 import GiftVoucher from "../activity/giftVoucher";
+import GetBonusPool from "../activity/getBonusPool";
 import GiftList from "../gift/giftList";
 import GiftSetting from "../gift/giftSetting";
 import AI from "../AI/robot";
@@ -753,6 +754,11 @@ export default class Admin extends Component {
                   <Route path="/activity/applyHandleHeNeiPay" exact>
                     <KeepAlive name="ApplyHandleHeNeiPay">
                       <ApplyHandleHeNeiPay />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/activity/getBonusPool" exact>
+                    <KeepAlive name="getBonusPool">
+                      <GetBonusPool />
                     </KeepAlive>
                   </Route>
                   <Route path="/charge/order_list" exact>

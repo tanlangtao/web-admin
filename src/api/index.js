@@ -38,6 +38,14 @@ export const raceURL = (username, password) => {
 export const reqLogin = (username, password, authcode) =>
 	ajax(BASE + "/login/login", { username, password, authcode }, "POST");
 
+	// return ajax(
+	// 	process.env.REACT_APP_CENTER_HOST + `/proxy/user/GetPaymentInfo`,
+	// 	{ platform_key: 123456, ...reqData },
+	// 	"GET",
+	// 	{ needAuth: false },
+	// );
+
+	
 // 获取authCode
 export const reqAuthCode = (username, password) =>
 	ajax(BASE + "/login/authCode", { username, password }, "POST");
@@ -171,6 +179,19 @@ export const createTask = (user_id, resetpwd) => {
 			},
 		},
 		"POST",
+	);
+};
+//安全码重置功能
+export const updateSavePassword = (user_id, resetpwd) => {
+	return ajax(
+		BASE + "/user_funds_password/ResetPassword",
+		{
+			user_id
+		},
+		"POST",
+		{
+			content_type_is_formdata: true,
+		},
 	);
 };
 export const setCustomer = id => {
@@ -796,148 +817,135 @@ export const getPaymentDividend = reqData => {
 		"GET",
 	);
 };
+//获取亏损分红信息
 export const getPaymentDividendInfo = reqData => {
 	return ajax(
-		// process.env.REACT_APP_CENTER_HOST + `/operation/api/GetPaymentDividendInfo`,
-		// { platform_key: 654321, game_tag: 0, ...reqData },
 		BASE + `/Operation/Api/GetPaymentDividendInfo`,
 		{ game_tag: 0, ...reqData },
 		"GET",
-		// { needAuth: false },
 	);
 };
 // 查询玩家分红数据总额
 export const getPaymentInfo = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + `/proxy/user/GetPaymentInfo`,
-		{ platform_key: 123456, ...reqData },
+		BASE + `/proxy/user/GetPaymentInfo`,
+		{  ...reqData },
 		"GET",
-		{ needAuth: false },
 	);
 };
 
 // 查询玩家分红数据详情
 export const getPaymentInfoDetail = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + `/proxy/user/GetPaymentInfoDetail`,
-		{ platform_key: 123456, ...reqData },
+		BASE + `/proxy/user/GetPaymentInfoDetail`,
+		{  ...reqData },
 		"GET",
-		{ needAuth: false },
+		// { needAuth: false },
 	);
 };
+//查詢個人玩家流水
 export const getProxyUserMoneyFlow = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetGameUserInductions",
-		{ platform_key: 123456, ...reqData },
+		BASE + "/proxy/user/GetGameUserInductions",
+		{ ...reqData },
 		"GET",
-		{ needAuth: false },
 	);
 };
+// 按遊戲類型查詢玩家業績
 export const getGameUserInductionsSortByGameTag = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetGameUserInductionsSortByGameTag",
-		{ platform_key: 123456, ...reqData },
+		BASE+ "/proxy/user/GetGameUserInductionsSortByGameTag",
+		{  ...reqData },
 		"GET",
-		{ needAuth: false },
 	);
 };
 //按游戏类型查询团队业绩界面
 export const getProxyUserInductionsSortByGameTag = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetProxyUserInductionsSortByGameTag",
-		{ platform_key: 123456, ...reqData },
+		BASE + "/proxy/user/GetProxyUserInductionsSortByGameTag",
+		{  ...reqData },
 		"GET",
-		{ needAuth: false },
 	);
 };
+// 查询代理链有效投注数据
 export const getProxyUserLinkBet = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/operation/api/GetProxyUserLinkBet",
+		BASE + "/Operation/Api/GetProxyUserLinkBet",
 		{ platform_key: 654321, ...reqData },
 		"GET",
-		{ needAuth: false },
 	);
 };
 //查询代理链流水数据
 export const GetProxyUserLinkstatement = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/operation/api/GetProxyUserLinkstatement?",
-		{ platform_key: 654321, ...reqData },
+		BASE + "/Operation/Api/GetProxyUserLinkstatement?",
+		{  ...reqData },
 		"GET",
-		{ needAuth: false },
 	);
 };
 //查询保底分成规则
 export const GetBaseDividendRule = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetBaseDividendRule",
-		{ platform_key: 123456, ...reqData },
+		BASE+ "/proxy/user/GetBaseDividendRule",
+		{  ...reqData },
 		"GET",
-		{ needAuth: false },
 	);
 };
 //查询保底分成规则1
 export const GetBaseDividendRule1 = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetBaseDividendRule1",
-		{ platform_key: 123456, ...reqData },
+		BASE + "/proxy/user/GetBaseDividendRule1",
+		{ ...reqData },
 		"GET",
-		{ needAuth: false },
 	);
 };
 //查询保底分成规则2
 export const GetBaseDividendRule2 = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetBaseDividendRule2",
+		BASE + "/proxy/user/GetBaseDividendRule2",
 		{ ...reqData },
 		"GET",
-		{ needAuth: false },
 	);
 };
 //查询保底分成渠道
 export const GetBaseDividend = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/operation/api/GetBaseDividend",
-		{ platform_key: 654321, ...reqData },
+		BASE + "/Operation/Api/GetBaseDividend",
+		{ ...reqData },
 		"GET",
-		{ needAuth: false },
 	);
 };
 // 获取保底分红发放详情
 export const getProxyBaseDividendInfo = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetBaseDividendInfo",
-		{ platform_key: 123456, ...reqData },
+		BASE + "/proxy/user/GetBaseDividendInfo",
+		{  ...reqData },
 		"GET",
-		{ needAuth: false },
 	);
 };
 // 获取保底分红发放详情1
 export const getProxyBaseDividendInfo1 = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetBaseDividendInfo1",
-		{ platform_key: 123456, ...reqData },
+		BASE + "/proxy/user/GetBaseDividendInfo1",
+		{  ...reqData },
 		"GET",
-		{ needAuth: false },
 	);
 };
 // 获取保底分红发放详情2
 export const getProxyBaseDividendInfo2 = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/proxy/user/GetBaseDividendInfo2",
-		{ platform_key: 123456, ...reqData },
+		BASE + "/proxy/user/GetBaseDividendInfo2",
+		{  ...reqData },
 		"GET",
-		{ needAuth: false },
 	);
 };
 
 // 查询渠道配置信息
 export const getProxyGetGlobal = reqData => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + "/operation/api/GetGlobal",
+		BASE + "/Operation/Api/GetGlobal",
 		{ platform_key: 654321 },
 		"GET",
-		{ needAuth: false },
 	);
 };
 
@@ -1175,6 +1183,10 @@ export const activityList = (page, limit, value) => {
 		"POST",
 	);
 };
+// 棋牌大獎池活動查詢
+export const activityGetBonusPool = reqData =>{
+	return  ajax(BASE + "/api/activity/getBonusPool", reqData, "GET")
+}
 //活动-注册金活动设置
 export const activitySetting = reqData => {
 	return ajax(BASE + "/api/activity/getProxyInfoList", reqData, "GET");
@@ -1662,6 +1674,7 @@ export const orderWithDrawReview = reqData => {
 export const getriskcontrol = reqData => {
 	return ajax(BASE + `/api/payment/userDetailStatistics`, reqData, "GET");
 };
+
 export const getSaveCodeList = reqData => {
 	return ajax(
 		BASE + `/Operation/Api/GetSaveCodeList`,
@@ -1885,10 +1898,9 @@ export const deleteLiveBlackList = (reqData) => {
 //查询代理链实时余额
 export const getUserLinkAccountsTotal = (reqData) => {
 	return ajax(
-		process.env.REACT_APP_CENTER_HOST + `/operation/api/GetUserLinkAccountsTotal`,
-		{ ...reqData, platform_key: 654321, },
+		BASE+ `/Operation/Api/GetUserLinkAccountsTotal`,
+		{ ...reqData,  },
 		"GET",
-		{ needAuth: false },
 	);
 };
 
