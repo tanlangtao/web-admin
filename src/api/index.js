@@ -258,7 +258,6 @@ export const getteldetail = tel => {
 	);
 };
 //用户-银行卡反查
-
 export const queryAccount = reqData => {
 	return ajax(
 		BASE + "/user/queryAccount",
@@ -269,6 +268,94 @@ export const queryAccount = reqData => {
 		"GET",
 	);
 };
+
+// 用戶 - 銀行卡列表 
+export const getbanklist = reqData =>{
+	return ajax (
+		// BASE +"/user/getbanklist",
+		"http://devadmin.539316.com/admin/bank/getbanklist",
+		{
+			...reqData,
+		},
+		"GET",
+	)
+}
+
+// 用戶 - 新增銀行卡 
+export const addnewbank = reqData =>{
+	return ajax (
+		BASE +"/user/addnewbank",
+		{
+			...reqData,
+		},
+		"GET",
+	)
+}
+// 用戶 - 編輯銀行卡 
+export const modifybank = reqData =>{
+	return ajax (
+		BASE +"/user/modifybank",
+		{
+			...reqData,
+		},
+		"GET",
+	)
+}
+// 用戶 - 刪除銀行卡 
+export const delbank = reqData =>{
+	return ajax (
+		BASE +"/user/delbank",
+		{
+			...reqData,
+		},
+		"GET",
+	)
+}
+
+// 用戶 - 銀行卡綁定列表 
+export const getbindbanklist  = reqData =>{
+	return ajax (
+		BASE +"/user/getbindbanklist ",
+		{
+			...reqData,
+		},
+		"GET",
+	)
+}
+
+// 用戶 - 新增綁定銀行卡 
+export const addnewbindbank = reqData =>{
+	return ajax (
+		BASE +"/user/addnewbindbank",
+		{
+			...reqData,
+		},
+		"GET",
+	)
+}
+// 用戶 - 編輯綁定銀行卡 
+export const modifybindbank = reqData =>{
+	return ajax (
+		BASE +"/user/modifybindbank",
+		{
+			...reqData,
+		},
+		"GET",
+	)
+}
+// 用戶 - 刪除綁定銀行卡 
+export const delbindbank = reqData =>{
+	return ajax (
+		BASE +"/user/delbindbank",
+		{
+			...reqData,
+		},
+		"GET",
+	)
+}
+
+
+
 //用户-手机号批量查询
 
 export const getAmmountbyPhone = reqData => {

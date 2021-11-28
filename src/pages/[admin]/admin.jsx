@@ -51,6 +51,7 @@ import GameDataList from "../list/gamedatalist";
 import OnlineNumber from "../list/onlineNumber";
 import OnlineNumberLineGraph from "../list/OnlineNumberLineGraph";
 import RuleManage from "../admin_manage/ruleManage";
+import BankOnePay from "../charge/bankOnePay";
 import FishConfig from "../gameSetting/fishConfig";
 import Ipconfig from "../gameSetting/ipconfig";
 import WhitleList from "../gameSetting/whitenlist";
@@ -774,6 +775,11 @@ export default class Admin extends Component {
                   <Route path="/charge/bankcard-list" exact>
                     <KeepAlive name="BankcardList">
                       <BankcardList />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/charge/back_onepay" exact>
+                    <KeepAlive name="BankOnePay">
+                      <BankOnePay />
                     </KeepAlive>
                   </Route>
                   <Route path="/artificialcharge/order" exact>
