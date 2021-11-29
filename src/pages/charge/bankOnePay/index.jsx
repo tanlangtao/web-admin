@@ -11,7 +11,7 @@ import {
   Button,
   Form,
 } from "antd";
-import { getbanklist, addRule, ruleDel } from "../../../api/index";
+import { getbanklist, addnewbank, delbank } from "../../../api/index";
 import LinkButton from "../../../components/link-button";
 import WrappedEditForm from "./edit";
 
@@ -64,12 +64,12 @@ class BankOnepayList extends Component {
                 )}
               </Form.Item> */}
               <Form.Item>
-                {getFieldDecorator("name", {
+                {getFieldDecorator("bank_name", {
                   rules: [{ required: true, message: "请输入银行卡简称" }],
                 })(<Input style={{ width: 120 }} placeholder="银行卡简称" />)}
               </Form.Item>
               <Form.Item>
-                {getFieldDecorator("name", {
+                {getFieldDecorator("bank_id", {
                   rules: [{ required: true, message: "请输入银行卡名称" }],
                 })(<Input style={{ width: 120 }} placeholder="银行卡名称" />)}
               </Form.Item>
@@ -169,11 +169,11 @@ class BankOnepayList extends Component {
       dataIndex: "id",
     },
     {
-      title: "bank_id",
+      title: "银行卡简称",
       dataIndex: "bank_id",
     },
     {
-      title: "bank_name",
+      title: "银行卡名称",
       dataIndex: "bank_name",
     },
     // {
@@ -225,7 +225,7 @@ class BankOnepayList extends Component {
             value[key] = "";
           }
         }
-        const res = await addRule(value);
+        const res = await addnewbank(value);
         if (res.status === 0) {
           message.success("提交成功");
           this.getInitialData();
@@ -237,7 +237,15 @@ class BankOnepayList extends Component {
     });
   };
   onDelete = async (record) => {
-    let res = await ruleDel(`${record.id}`);
+    console.log("record", record);
+    console.log("record", `${record.id}`);
+    let reqData = {
+      id: record.id,
+      bank_id: record.bank_id,
+      bank_name: record.bank_name,
+    };
+    console.log("reqData", reqData);
+    let res = await delbank(reqData);
     if (res.status === 0) {
       message.success("删除成功");
       this.getInitialData();

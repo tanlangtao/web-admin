@@ -272,7 +272,7 @@ export const queryAccount = reqData => {
 // 用戶 - 銀行卡列表 
 export const getbanklist = reqData =>{
 	return ajax (
-		// BASE +"/user/getbanklist",
+		// BASE +"/bank/getbanklist",
 		"http://devadmin.539316.com/admin/bank/getbanklist",
 		{
 			...reqData,
@@ -284,38 +284,41 @@ export const getbanklist = reqData =>{
 // 用戶 - 新增銀行卡 
 export const addnewbank = reqData =>{
 	return ajax (
-		BASE +"/user/addnewbank",
+		// BASE +"/bank/addnewbank",
+		"http://devadmin.539316.com/admin/bank/addnewbank",
 		{
 			...reqData,
 		},
-		"GET",
+		"POST",
 	)
 }
 // 用戶 - 編輯銀行卡 
-export const modifybank = reqData =>{
+export const modifybank = (id, value) =>{
 	return ajax (
-		BASE +"/user/modifybank",
+		// BASE +"/bank/modifybank",
+		"http://devadmin.539316.com/admin/bank/modifybank",		
 		{
-			...reqData,
+			...value, id
 		},
-		"GET",
+		"POST",
 	)
 }
 // 用戶 - 刪除銀行卡 
 export const delbank = reqData =>{
 	return ajax (
-		BASE +"/user/delbank",
+		// BASE +"/bank/delbank",
+		"http://devadmin.539316.com/admin/bank/delbank",
 		{
 			...reqData,
 		},
-		"GET",
+		"POST",
 	)
 }
 
 // 用戶 - 銀行卡綁定列表 
 export const getbindbanklist  = reqData =>{
 	return ajax (
-		BASE +"/user/getbindbanklist ",
+		BASE +"/bank/getbindbanklist ",
 		{
 			...reqData,
 		},
@@ -326,7 +329,7 @@ export const getbindbanklist  = reqData =>{
 // 用戶 - 新增綁定銀行卡 
 export const addnewbindbank = reqData =>{
 	return ajax (
-		BASE +"/user/addnewbindbank",
+		BASE +"/bank/addnewbindbank",
 		{
 			...reqData,
 		},
@@ -336,7 +339,7 @@ export const addnewbindbank = reqData =>{
 // 用戶 - 編輯綁定銀行卡 
 export const modifybindbank = reqData =>{
 	return ajax (
-		BASE +"/user/modifybindbank",
+		BASE +"/bank/modifybindbank",
 		{
 			...reqData,
 		},
@@ -346,7 +349,7 @@ export const modifybindbank = reqData =>{
 // 用戶 - 刪除綁定銀行卡 
 export const delbindbank = reqData =>{
 	return ajax (
-		BASE +"/user/delbindbank",
+		BASE +"/bank/delbindbank",
 		{
 			...reqData,
 		},
@@ -958,7 +961,7 @@ export const getProxyUserInductionsSortByGameTag = reqData => {
 export const getProxyUserLinkBet = reqData => {
 	return ajax(
 		BASE + "/Operation/Api/GetProxyUserLinkBet",
-		{ platform_key: 654321, ...reqData },
+		{  ...reqData },
 		"GET",
 	);
 };
