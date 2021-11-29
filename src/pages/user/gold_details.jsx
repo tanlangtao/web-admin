@@ -128,7 +128,7 @@ class GoldDetail extends Component {
 			funds_type: 0,
 		};
 		let id = this.props.recordID;
-		const res = await userDetail(1, this.state.count, id, reqdata);
+		const res = await userDetail(1, 20000, id, reqdata);
 		if (res.data) {
 			this.setState({
 				printData: res.data.account_change || [],
