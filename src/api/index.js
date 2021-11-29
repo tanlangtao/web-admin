@@ -1034,7 +1034,6 @@ export const getProxyBaseDividendInfo2 = reqData => {
 export const getProxyGetGlobal = reqData => {
 	return ajax(
 		BASE + "/Operation/Api/GetGlobal",
-		{ platform_key: 654321 },
 		"GET",
 	);
 };

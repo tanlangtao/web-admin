@@ -25,16 +25,18 @@ const EditForm = (props) => {
     });
   };
   return (
-    <Form labelCol={{ span: 4 }} labelAlign="left" onSubmit={handleEditSubmit}>
-      <Form.Item>
+    <Form labelCol={{ span: 8 }} labelAlign="left" onSubmit={handleEditSubmit}>
+      <Form.Item label="请输入银行卡简称:">
         {getFieldDecorator("bank_id", {
-          rules: [{ required: true, message: "请输入银行卡名称" }],
-        })(<Input style={{ width: 200 }} placeholder="银行卡名称" />)}
-      </Form.Item>
-      <Form.Item>
-        {getFieldDecorator("bank_name", {
           rules: [{ required: true, message: "请输入银行卡简称" }],
-        })(<Input style={{ width: 200 }} placeholder="银行卡简称" />)}
+          initialValue: data.bank_id,
+        })(<Input style={{ width: "40%" }} placeholder="请输入银行卡简称" />)}
+      </Form.Item>
+      <Form.Item label="请输入银行卡名称:">
+        {getFieldDecorator("bank_name", {
+          rules: [{ required: true, message: "请输入银行卡名称" }],
+          initialValue: data.bank_name,
+        })(<Input style={{ width: "40%" }} placeholder="请输入银行卡名称" />)}
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
