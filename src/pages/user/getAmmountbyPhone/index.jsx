@@ -41,11 +41,15 @@ export default () => {
         orderArray1 = orderArray1.concat(resTest?.data.order);
       }
     }
+    console.log("gameUserArray1", gameUserArray1);
+    console.log("orderArray1", orderArray1);
     //全部輸入的電話號碼
     let newArrayNumber = number.split(",").map((item) => {
       return { phone_number: item };
     });
-    if (resTest.status === 0) {
+    console.log("newArrayNumber", newArrayNumber);
+
+    if (resTest.status === 0 || resTest.status === -1) {
       message.info(resTest.msg || "请求成功");
       const testObject = newArrayNumber.map((e) => {
         return Object.assign(
@@ -53,14 +57,16 @@ export default () => {
           gameUserArray1.find((d) => d.phone_number === e.phone_number)
         );
       });
+      console.log("testObject", testObject);
       const newA = testObject.map((e) => {
         return Object.assign(
           e,
           orderArray1.find((d) => d.id === e.id)
         );
       });
+      console.log("newA", newA);
       setCount(newA || 0);
-      setData(testObject || []);
+      setData(newA || []);
     } else {
       message.info(resTest.msg || "请求失败");
     }

@@ -88,7 +88,7 @@ class Order_list extends Component {
       inputParam: this.inputValue,
       paramKey: this.inputKey,
     };
-    const res = await reqOrder_list(1, 100000, data);
+    const res = await reqOrder_list(1, this.state.count, data);
     if (res.data) {
       this.setState({
         printData: res.data.list || [],

@@ -258,7 +258,6 @@ export const getteldetail = tel => {
 	);
 };
 //用户-银行卡反查
-
 export const queryAccount = reqData => {
 	return ajax(
 		BASE + "/user/queryAccount",
@@ -269,6 +268,97 @@ export const queryAccount = reqData => {
 		"GET",
 	);
 };
+
+// 用戶 - 銀行卡列表 
+export const getbanklist = reqData =>{
+	return ajax (
+		// BASE +"/bank/getbanklist",
+		"http://devadmin.539316.com/admin/bank/getbanklist",
+		{
+			...reqData,
+		},
+		"GET",
+	)
+}
+
+// 用戶 - 新增銀行卡 
+export const addnewbank = reqData =>{
+	return ajax (
+		// BASE +"/bank/addnewbank",
+		"http://devadmin.539316.com/admin/bank/addnewbank",
+		{
+			...reqData,
+		},
+		"POST",
+	)
+}
+// 用戶 - 編輯銀行卡 
+export const modifybank = (id, value) =>{
+	return ajax (
+		// BASE +"/bank/modifybank",
+		"http://devadmin.539316.com/admin/bank/modifybank",		
+		{
+			...value, id
+		},
+		"POST",
+	)
+}
+// 用戶 - 刪除銀行卡 
+export const delbank = reqData =>{
+	return ajax (
+		// BASE +"/bank/delbank",
+		"http://devadmin.539316.com/admin/bank/delbank",
+		{
+			...reqData,
+		},
+		"POST",
+	)
+}
+
+// 用戶 - 銀行卡綁定列表 
+export const getbindbanklist  = reqData =>{
+	return ajax (
+		BASE +"/bank/getbindbanklist ",
+		{
+			...reqData,
+		},
+		"GET",
+	)
+}
+
+// 用戶 - 新增綁定銀行卡 
+export const addnewbindbank = reqData =>{
+	return ajax (
+		BASE +"/bank/addnewbindbank",
+		{
+			...reqData,
+		},
+		"GET",
+	)
+}
+// 用戶 - 編輯綁定銀行卡 
+export const modifybindbank = reqData =>{
+	return ajax (
+		BASE +"/bank/modifybindbank",
+		{
+			...reqData,
+		},
+		"GET",
+	)
+}
+// 用戶 - 刪除綁定銀行卡 
+export const delbindbank = reqData =>{
+	return ajax (
+		BASE +"/bank/delbindbank",
+		{
+			...reqData,
+		},
+		"GET",
+	)
+}
+
+
+
 //用户-手机号批量查询
 
 export const getAmmountbyPhone = reqData => {
@@ -871,7 +961,7 @@ export const getProxyUserInductionsSortByGameTag = reqData => {
 export const getProxyUserLinkBet = reqData => {
 	return ajax(
 		BASE + "/Operation/Api/GetProxyUserLinkBet",
-		{ platform_key: 654321, ...reqData },
+		{  ...reqData },
 		"GET",
 	);
 };
@@ -944,7 +1034,6 @@ export const getProxyBaseDividendInfo2 = reqData => {
 export const getProxyGetGlobal = reqData => {
 	return ajax(
 		BASE + "/Operation/Api/GetGlobal",
-		{ platform_key: 654321 },
 		"GET",
 	);
 };
