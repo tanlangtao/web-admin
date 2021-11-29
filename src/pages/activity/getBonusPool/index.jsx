@@ -12,8 +12,8 @@ export default () => {
   const [table_data, set_table_data] = useState([]);
   const [other_data, set_other_data] = useState([]);
   const initstates = useRef({
-    start_time: "",
-    end_time: "",
+    // start_time: "",
+    // end_time: "",
     activity_id: "",
   });
   const initColumns = [
@@ -44,15 +44,15 @@ export default () => {
   ];
 
   const onSearchButtonHandled = async (value) => {
-    let { start_time, end_time, activity_id } = initstates.current;
-    if (!value || !start_time || !end_time || !activity_id) {
+    let { activity_id } = initstates.current;
+    if (!value || !activity_id) {
       message.info("请选择时间范围并输入玩家ID與活动ID");
       return;
     }
     const res = await activityGetBonusPool({
       user_id: value,
-      start_time,
-      end_time,
+      // start_time,
+      // end_time,
       activity_id,
       package_id: 16,
       //   action: 1,
@@ -68,7 +68,7 @@ export default () => {
     <Card
       title={
         <div>
-          <MyDatePicker
+          {/* <MyDatePicker
             handleValue={(date, val) => {
               let diffDays = moment(val[1]).diff(moment(val[0]), "days");
               if (diffDays > 7) {
@@ -82,7 +82,7 @@ export default () => {
                 initstates.current.end_time = "";
               }
             }}
-          />
+          /> */}
           &nbsp;&nbsp;&nbsp;&nbsp;
           <Input
             style={{ width: 200 }}

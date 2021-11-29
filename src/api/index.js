@@ -272,8 +272,8 @@ export const queryAccount = reqData => {
 // 用戶 - 銀行卡列表 
 export const getbanklist = reqData =>{
 	return ajax (
-		// BASE +"/bank/getbanklist",
-		"http://devadmin.539316.com/admin/bank/getbanklist",
+		BASE +"/bank/getbanklist",
+		// "http://devadmin.539316.com/admin/bank/getbanklist",
 		{
 			...reqData,
 		},
@@ -284,8 +284,7 @@ export const getbanklist = reqData =>{
 // 用戶 - 新增銀行卡 
 export const addnewbank = reqData =>{
 	return ajax (
-		// BASE +"/bank/addnewbank",
-		"http://devadmin.539316.com/admin/bank/addnewbank",
+		BASE +"/bank/addnewbank",
 		{
 			...reqData,
 		},
@@ -295,8 +294,7 @@ export const addnewbank = reqData =>{
 // 用戶 - 編輯銀行卡 
 export const modifybank = (id, value) =>{
 	return ajax (
-		// BASE +"/bank/modifybank",
-		"http://devadmin.539316.com/admin/bank/modifybank",		
+		BASE +"/bank/modifybank",
 		{
 			...value, id
 		},
@@ -306,8 +304,7 @@ export const modifybank = (id, value) =>{
 // 用戶 - 刪除銀行卡 
 export const delbank = reqData =>{
 	return ajax (
-		// BASE +"/bank/delbank",
-		"http://devadmin.539316.com/admin/bank/delbank",
+		BASE +"/bank/delbank",
 		{
 			...reqData,
 		},
@@ -333,17 +330,17 @@ export const addnewbindbank = reqData =>{
 		{
 			...reqData,
 		},
-		"GET",
+		"POST",
 	)
 }
 // 用戶 - 編輯綁定銀行卡 
-export const modifybindbank = reqData =>{
+export const modifybindbank = (id,value) =>{
 	return ajax (
 		BASE +"/bank/modifybindbank",
 		{
-			...reqData,
+			...value, id
 		},
-		"GET",
+		"POST",
 	)
 }
 // 用戶 - 刪除綁定銀行卡 
@@ -353,7 +350,7 @@ export const delbindbank = reqData =>{
 		{
 			...reqData,
 		},
-		"GET",
+		"POST",
 	)
 }
 
@@ -2020,3 +2017,12 @@ export const getOnlineTotalGraph = (reqData) => {
 		"GET",
 	)
 }
+
+//查询全盘分红分红详情
+export const getStockDividendInfo = (reqData) => {
+	return ajax(
+		BASE+ `/Operation/Api/GetStockDividendInfo`,
+		{ ...reqData},
+		"GET",
+	);
+};

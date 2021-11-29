@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, message, Input, Table, Button } from "antd";
 import { getAmmountbyPhone } from "../../../api";
 import { formateDate } from "../../../utils/dateUtils";
+import { array } from "prop-types";
 export default () => {
   const [data, setData] = useState([]);
   const [count, setCount] = useState(0);
@@ -41,32 +42,27 @@ export default () => {
         orderArray1 = orderArray1.concat(resTest?.data.order);
       }
     }
-    console.log("gameUserArray1", gameUserArray1);
-    console.log("orderArray1", orderArray1);
-    //全部輸入的電話號碼
-    let newArrayNumber = number.split(",").map((item) => {
-      return { phone_number: item };
-    });
-    console.log("newArrayNumber", newArrayNumber);
-
     if (resTest.status === 0 || resTest.status === -1) {
       message.info(resTest.msg || "请求成功");
-      const testObject = newArrayNumber.map((e) => {
-        return Object.assign(
-          e,
-          gameUserArray1.find((d) => d.phone_number === e.phone_number)
-        );
-      });
-      console.log("testObject", testObject);
-      const newA = testObject.map((e) => {
+      const objectAssignData = gameUserArray1.map((e) => {
         return Object.assign(
           e,
           orderArray1.find((d) => d.id === e.id)
         );
       });
-      console.log("newA", newA);
-      setCount(newA || 0);
-      setData(newA || []);
+      //輸入返回沒有數據的電話號碼
+      const newNumberData = number
+        .split(",")
+        .filter((item) => {
+          return !objectAssignData.some(
+            (object) => object.phone_number === item
+          );
+        })
+        .map((item) => {
+          return { phone_number: item };
+        });
+      let newobjectAssignData = objectAssignData.concat(newNumberData);
+      setData(newobjectAssignData || []);
     } else {
       message.info(resTest.msg || "请求失败");
     }
