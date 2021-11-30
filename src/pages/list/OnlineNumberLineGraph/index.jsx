@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Line } from "@ant-design/charts";
-import { Card, message, Input, Table, Select, Button, Icon } from "antd";
+import { Card, message, Select, Icon } from "antd";
 import LinkButton from "../../../components/link-button";
 import MyDatePicker from "../../../components/MyDatePickerStartToday";
 import { getOnlineTotalGraph, userPackageList } from "../../../api/index";
-import moment from "moment";
 
 let initstate = {
   start_time: null,
@@ -14,17 +13,10 @@ let initstate = {
 
 const DemoLine = (props) => {
   const [data, setData] = useState([]);
-  const [dataBrack, setdataBrack] = useState([]);
   const [Graph, setGraph] = useState([]);
   const [filterData, setfilterData] = useState([]);
-  const [MapTest, setMapTest] = useState([]);
   const ref = useRef(initstate);
   const [packageList, setpackageList] = useState([]);
-  const initStates = useRef({
-    start_time: moment().startOf("day").format("X"),
-    end_time: moment().endOf("day").format("X"),
-    packageID: 0,
-  });
   const getInitialData = async () => {
     const res = await userPackageList();
     if (res.status === 0) {
@@ -34,9 +26,7 @@ const DemoLine = (props) => {
   useEffect(() => {
     getInitialData();
   }, []);
-  // useEffect(() => {
-  //   getOnlineNumberGraph();
-  // }, []);
+
   useEffect(() => {
     getOnlineNumberGraph();
   }, [props.loading]);
@@ -80,8 +70,8 @@ const DemoLine = (props) => {
           packageID === 0
             ? Graph
             : Graph.filter((item) => {
-                return item.key === switchType(packageID);
-              })
+              return item.key === switchType(packageID);
+            })
         );
         setData(dataBrack);
       } else {

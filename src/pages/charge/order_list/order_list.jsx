@@ -3,7 +3,6 @@ import { Card, Table, message, Icon, Input, Select, Modal, Button } from "antd";
 import { formateDate } from "../../../utils/dateUtils";
 import {
   reqOrder_list,
-  downloadList,
   orderReviewEdit,
   getSubOrderRemark,
   reqPay_account,
@@ -73,14 +72,6 @@ class Order_list extends Component {
     }
     this.getUsers(page, limit, reqData);
   };
-  // download = () => {
-  // 	let data = {
-  // 		...this.reqData,
-  // 		inputParam: this.inputValue,
-  // 		paramKey: this.inputKey,
-  // 	};
-  // 	downloadList(data);
-  // };
 
   download = async () => {
     let data = {
@@ -342,7 +333,6 @@ class Order_list extends Component {
             onCancel={() => {
               this.setState({ isAccountShow: false });
             }}
-            footer={null}
             width="25%"
             footer={[
               <Button
@@ -358,7 +348,7 @@ class Order_list extends Component {
                 type="primary"
                 onClick={
                   this.state.pay_name.length !== 0 &&
-                  /^\d{16,19}$/.test(this.state.pay_account)
+                    /^\d{16,19}$/.test(this.state.pay_account)
                     ? this.sendChangepayAccountReadOnly
                     : this.sendChangepayAccount
                 }

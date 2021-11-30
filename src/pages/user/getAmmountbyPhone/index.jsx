@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, message, Input, Table, Button } from "antd";
 import { getAmmountbyPhone } from "../../../api";
 import { formateDate } from "../../../utils/dateUtils";
-import { array } from "prop-types";
+
 export default () => {
   const [data, setData] = useState([]);
-  const [count, setCount] = useState(0);
   const [criteria, setcriteria] = useState();
   const onButtonClick = async () => {
     //將輸入的電話號碼每11位數加,
@@ -134,20 +133,7 @@ export default () => {
         dataSource={data}
         columns={initColumns}
         pagination={{
-          //   current: tableStatus.page,
-          //   pageSize: tableStatus.limit,
-          // showSizeChanger: true,
-          // showQuickJumper: true,
-          // total: count,
           showTotal: (total, range) => `共${total}条`,
-          // onChange: (page, pageSize) => {
-          //   settableStatus({ ...tableStatus, page });
-          //   onButtonClick(page, pageSize);
-          // },
-          // onShowSizeChange: (current, size) => {
-          //   settableStatus({ ...tableStatus, limit: size });
-          //   onButtonClick(current, size);
-          // },
         }}
       />
     </Card>

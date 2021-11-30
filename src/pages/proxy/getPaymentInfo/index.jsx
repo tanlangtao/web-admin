@@ -3,8 +3,7 @@ import { Card, message, Input, Table } from "antd";
 import { getPaymentInfo } from "../../../api";
 import MyDatePicker from "../../../components/MyDatePicker";
 
-import { reverseNumber2, reverseDecimal } from "../../../utils/commonFuntion";
-import moment from "moment";
+import { reverseNumber2 } from "../../../utils/commonFuntion";
 
 let initstate = {
     start_time: null,
@@ -34,37 +33,26 @@ export default () => {
                 switch (text) {
                     case 1:
                         return "特斯特娱乐"
-                        break
                     case 2:
                         return "德比游戏"
-                        break
-                        case 3:
+                    case 3:
                         return "杏吧娱乐"
-                        break
                     case 6:
                         return "91游戏"
-                        break
                     case 8:
                         return "新盛棋牌"
-                        break
                     case 9:
                         return "新贵游戏"
-                        break
                     case 10:
                         return "富鑫II游戏"
-                        break
                     case 11:
                         return "新豪游戏"
-                        break
                     case 12:
                         return "新隆游戏"
-                        break
                     case 13:
                         return "皇室游戏"
-                        break
                     case 15:
                         return "聚鼎娱乐"
-                        break
                     default:
                         return ""
                 }

@@ -23,7 +23,7 @@ class GoldDetail extends Component {
 			count: 0,
 			sumData: null,
 			current: 1,
-			printData: []
+			printData: [],
 		};
 	}
 	getUsers = async (page, limit) => {
@@ -78,8 +78,6 @@ class GoldDetail extends Component {
 
 		//资金明细总计部分的数据
 		if (!isBindInfo) {
-			// let start = moment().subtract(7, "day").format("YYYY-MM-DD HH:mm:ss")
-			// let end = moment().format("YYYY-MM-DD HH:mm:ss")
 			const result = await GoldDetailorRiskControlSUMdata(id);
 			if (result.status === 0) {
 				this.setState({ sumData: result.data });
@@ -128,13 +126,45 @@ class GoldDetail extends Component {
 			funds_type: 0,
 		};
 		let id = this.props.recordID;
-		const res = await userDetail(1, 20000, id, reqdata);
-		if (res.data) {
-			this.setState({
-				printData: res.data.account_change || [],
-			});
+
+		let totalPage = Math.ceil(this.state.count / 20000);
+		let proArr = []
+
+		if (totalPage > 1) {
+			let _printData = []
+
+			for (let i = 1; i <= totalPage; i++) {
+				let p = new Promise((resolve, reject) => {
+					userDetail(i, 20000, id, reqdata).then(res => {
+						if (res.status === 0) {
+							let data = res.data.account_change
+							_printData = _printData.concat(data)
+						} else {
+							message.info(res.msg || `请求失败，失败頁數:${i}`)
+						}
+						resolve()
+					}).catch(err => {
+						console.log(err)
+						reject()
+					})
+				})
+				proArr.push(p)
+			}
+			await Promise.all(proArr).then(res => {
+				let sortData = _printData.sort((a, b) => new Date(b.create_time) - new Date(a.create_time))
+				this.setState({
+					printData: sortData || [],
+				});
+			})
 		} else {
-			message.info(JSON.stringify(res));
+			const res = await userDetail(1, 20000, id, reqdata);
+			if (res.data) {
+				this.setState({
+					printData: res.data.account_change || [],
+				});
+			} else {
+				message.info(JSON.stringify(res));
+			}
 		}
 
 		var option = {};
@@ -170,7 +200,6 @@ class GoldDetail extends Component {
 	};
 
 	render() {
-		// const { data } = this.props.GoldDetailRecord;
 		let title;
 		let { data, count, current, sumData } = this.state;
 		if (!this.props.isBindInfo) {
@@ -245,13 +274,6 @@ class GoldDetail extends Component {
 								this.getUsers(page, pageSize);
 							}
 						}}
-					// tableOnShowSizeChange={(current, size) => {
-					// 	if (this.isOnSearch && this.startTime) {
-					// 		this.onSearchData(current, size);
-					// 	} else {
-					// 		this.getUsers(current, size);
-					// 	}
-					// }}
 					/>
 				)}
 			</Card>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, message, Button, Form, Radio, InputNumber } from "antd";
 import {
-	getBuYuConfig,
-	setBuYuConfig,
 	getThirdAlgStatus,
 	getTableScore,
 	setchouFangThirdAlg,
@@ -71,17 +69,17 @@ function Fishconfigform(props) {
 				//合并多个data
 				data1.forEach(e => {
 					data2.forEach(e2 => {
-							if (e.tid == e2.table_id.split("-")?.[1]) {
-								e.TotalWin = e2.player_total_win;
-								e.TotalLose = e2.player_total_lose;
-							}
+						if (e.tid == e2.table_id.split("-")?.[1]) {
+							e.TotalWin = e2.player_total_win;
+							e.TotalLose = e2.player_total_lose;
+						}
 					});
 				});
 				data1.forEach(e => {
 					data3.forEach(e3 => {
-							if (e.tid == e3.tid) {
-								e.chouFangVal = e3.chouFangVal;
-							}
+						if (e.tid == e3.tid) {
+							e.chouFangVal = e3.chouFangVal;
+						}
 					});
 				});
 				//排序
@@ -252,10 +250,6 @@ function Fishconfigform(props) {
 						<Form.Item label="抽放水" style={{ marginBottom: "5px" }}>
 							{getFieldDecorator(`num${index}`, {
 								rules: [
-									// {
-									// 	required: true,
-									// 	message: "该项不能为空",
-									// },
 									{
 										pattern: /^(-|\+)?\d+(\.\d+)?$/,
 										message: "请输入有效数字",
@@ -274,7 +268,6 @@ function Fishconfigform(props) {
 										},
 									},
 								],
-								// initialValue: room.ChouFang,
 							})(<InputNumber style={{ width: 150 }}></InputNumber>)}
 							<span
 								style={{

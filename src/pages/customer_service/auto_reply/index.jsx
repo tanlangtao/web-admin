@@ -81,14 +81,14 @@ export default () => {
 			},
 		},
 	];
-	const onSearchButtonHandled = async value => {
-		if (!value) {
-			message.info("请输入user_id");
-			return;
-		}
-		ref.current.search_value = value;
-		fetchData(1, 20, value);
-	};
+	// const onSearchButtonHandled = async value => {
+	// 	if (!value) {
+	// 		message.info("请输入user_id");
+	// 		return;
+	// 	}
+	// 	ref.current.search_value = value;
+	// 	fetchData(1, 20, value);
+	// };
 	const onAddButtonHandled = (buttonStatus, record) => {
 		ref.current.buttonStatus = buttonStatus;
 		if (record) ref.current.field = record;

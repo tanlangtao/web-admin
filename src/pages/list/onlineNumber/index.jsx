@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Table, Modal, message, Card } from "antd";
-import _ from "lodash-es";
 import LinkButton from "../../../components/link-button/index";
 import {
   getOnlineTotal,
   getOnlineGame,
-  userPackageList,
 } from "../../../api/index";
 import DemoLine from "../OnlineNumberLineGraph/index";
 import OnlineGame from "./onlineGame";
 import "./index.less";
 
-export default (props) => {
+export default () => {
   const [data1, setData1] = useState([]);
   const [data2, setData2] = useState([]);
   const [loading, setloading] = useState(false);
@@ -236,7 +234,6 @@ export default (props) => {
   return (
     <Card>
       <DemoLine changeLoading={setloading} loading={loading} />
-      {/* <DemoLine changeLoading={setloading} loading={loading} /> */}
       &nbsp; &nbsp;
       <div className="testCss">
         <div className="tabletest">

@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Select, Button, message, Radio } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { modifybank } from "../../../api/index";
 const EditForm = (props) => {
   const { getFieldDecorator } = props.form;

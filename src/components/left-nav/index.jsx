@@ -13,7 +13,7 @@ class LeftNav extends Component {
   }
   /*
    获取左侧菜单导航栏
-	*/
+  */
   getMenuList = async () => {
     const result = await navList();
     if (result.status === 0) {
@@ -163,7 +163,7 @@ class LeftNav extends Component {
                     cpre.push(
                       //不在後台操作，瀏覽器打開新分頁訪問三方後台
                       <Menu.Item key={ele.key}>
-                        <a href={ele.key} target="_blank">
+                        <a href={ele.key} target="_blank" rel="noreferrer noopener">
                           <span>{ele.title}</span>
                         </a>
                       </Menu.Item>

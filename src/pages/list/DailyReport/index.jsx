@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Card, Table, Modal, message, Icon, Select } from "antd";
-
 import {
   dailyReport,
   userPackageList,
@@ -9,7 +8,7 @@ import {
 } from "../../../api/index";
 
 import moment from "moment";
-import _, { isArray, isArrayLikeObject, isObject } from "lodash-es";
+import _, { isArray } from "lodash-es";
 
 import LinkButton from "../../../components/link-button/index";
 import MoreDetail from "./details";
@@ -387,7 +386,7 @@ class DailyReport extends Component {
               (e.statement_total =
                 Math.round(
                   (e.win_statement_total + Math.abs(e.lose_statement_total)) *
-                    10000
+                  10000
                 ) / 10000)
               //(e.package_id = parseInt(e._id.package_id)),
               //delete e._id
@@ -511,7 +510,7 @@ class DailyReport extends Component {
             (e.statement_total =
               Math.round(
                 (e.win_statement_total + Math.abs(e.lose_statement_total)) *
-                  10000
+                10000
               ) / 10000),
             (e.date = e.create_time)
             //delete e._id

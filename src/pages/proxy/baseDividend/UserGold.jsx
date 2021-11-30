@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Card, message, Input, Table, Icon } from "antd";
 import { getProxyUserMoneyFlow } from "../../../api";
 import LinkButton from "../../../components/link-button";
@@ -51,23 +51,19 @@ export default () => {
 
     //搜寻代理个人玩家流水
     const proxySearch = async () => {
-        const { start_time, end_time, proxy_pid, proxy_id ,game_tags } = ref.current
+        const { start_time, end_time, proxy_pid, proxy_id, game_tags } = ref.current
         if (!proxy_id) {
-			message.info("请输入玩家ID");
-			return;
-		}
+            return message.info("请输入玩家ID");
+        }
         if (!proxy_pid) {
-			message.info("请输入上级ID");
-			return;
-		}
+            return message.info("请输入上级ID");
+        }
         if (!start_time || !end_time) {
-			message.info("请选择时间范围");
-			return;
-		}
+            return message.info("请选择时间范围");
+        }
         if (!game_tags) {
-			message.info("请选择游戏类型");
-			return;
-		}
+            return message.info("请选择游戏类型");
+        }
         let reqData = {
             start_time: Math.floor(start_time / 1000),
             end_time: Math.floor(end_time / 1000),
@@ -91,17 +87,17 @@ export default () => {
                     <Input
                         style={{ width: 200 }}
                         placeholder="请输入上級ID"
-                    onChange={e => {
-                        ref.current.proxy_pid = e.target.value
-                    }}
+                        onChange={e => {
+                            ref.current.proxy_pid = e.target.value
+                        }}
                     />
                     &nbsp; &nbsp;
                     <Input
                         style={{ width: 200 }}
                         placeholder="请输入玩家ID"
-                    onChange={e => {
-                        ref.current.proxy_id = e.target.value
-                    }}
+                        onChange={e => {
+                            ref.current.proxy_id = e.target.value
+                        }}
                     />
                     &nbsp; &nbsp;
                     <MyDatePicker
@@ -114,16 +110,16 @@ export default () => {
                     <Input
                         style={{ width: 200 }}
                         placeholder="游戏类型"
-                    onChange={e => {
-                        ref.current.game_tags = e.target.value
-                    }}
+                        onChange={e => {
+                            ref.current.game_tags = e.target.value
+                        }}
                     />
-                     &nbsp; &nbsp;
+                    &nbsp; &nbsp;
                     <LinkButton onClick={() => proxySearch()} size="default">
                         <Icon type="search" />
                     </LinkButton>
                     &nbsp; &nbsp;
-                    <span style={{color: "#dc143c"}} >**game_tags: 渠道组为6,12 输入 1 , 渠道组为8,9,10输入 1,5</span>
+                    <span style={{ color: "#dc143c" }} >**game_tags: 渠道组为6,12 输入 1 , 渠道组为8,9,10输入 1,5</span>
                 </div>
             }
         >

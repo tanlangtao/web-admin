@@ -1,21 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
-
-import { Table, message, Card, Input, Button, Modal, Select, AutoComplete, Pagination } from "antd";
-import styled from "styled-components";
+import { Table, message, Card, Input, Button, Modal, Select, Pagination } from "antd";
 import moment from "moment";
-
 import _ from "lodash-es";
 import { IMsystem } from "../../../api";
 import { formateDate } from "../../../utils/dateUtils";
 import LinkButton from "../../../components/link-button/index";
 import MyDatePicker from "../../../components/MyDatePicker";
 
-const Span = styled.span`
-	width: 80px;
-	display: inline-block;
-	text-align: right;
-	padding-right: 20px;
-`;
 export const History = () => {
 	const [table, setTable] = useState({ data: [], count: 0, current: 1 });
 	const [contentData, setContentData] = useState({ data: [], count: 0, current: 1 });
@@ -128,14 +119,6 @@ export const History = () => {
 			message.info("时间范围内没有聊天记录");
 		}
 	};
-	const onModalSearchButtonHandled = async () => {
-		let { start_time, end_time } = ref.current.content;
-		if (!start_time || !end_time) {
-			message.info("请选择时间范围");
-			return;
-		}
-		checkContentHistory(1, 10, start_time, end_time);
-	};
 	return (
 		<Card
 			title={
@@ -205,11 +188,10 @@ export const History = () => {
 			/>
 			{is_modal_show && (
 				<Modal
-					title={`询前分类  ${
-						customer_service_type_list.find(
-							ele => ele.value === parseInt(ref.current.field.customer_service_type),
-						)?.word || ""
-					}`}
+					title={`询前分类  ${customer_service_type_list.find(
+						ele => ele.value === parseInt(ref.current.field.customer_service_type),
+					)?.word || ""
+						}`}
 					visible={is_modal_show}
 					onCancel={() => setis_modal_show(false)}
 					footer={null}
@@ -217,25 +199,6 @@ export const History = () => {
 					style={{ padding: 10 }}
 					width="60%"
 				>
-					{/* <>
-						<MyDatePicker
-							defaultValue={[moment().subtract(7, "day"), moment()]}
-							handleValue={(date, dateString) => {
-								if (date && date.length !== 0) {
-									ref.current.content.start_time = date[0].unix();
-									ref.current.content.end_time = date[1].unix();
-								} else {
-									ref.current.content.start_time = null;
-									ref.current.content.end_time = null;
-								}
-							}}
-							style={{ width: 350 }}
-						/>
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<Button type="primary" onClick={() => onModalSearchButtonHandled()}>
-							搜索
-						</Button>
-					</> */}
 					<div style={{ border: "1px solid #686262", marginTop: 10, paddingBottom: 10 }}>
 						<div style={{ display: "flex", justifyContent: "space-between" }}>
 							<div style={{ fontSize: 20, padding: 10 }}>
@@ -277,6 +240,7 @@ export const History = () => {
 										) : (
 											<img
 												src={`${process.env.REACT_APP_IM_HOST}/im/api/file/${ele.content}`}
+												alt=''
 											/>
 										)}
 									</div>

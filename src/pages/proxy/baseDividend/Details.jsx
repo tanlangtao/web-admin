@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Card, message, Input, Table, Icon } from "antd";
+import React, { useState } from "react";
+import { Card, message, Input, Table } from "antd";
 import { getProxyBaseDividendInfo } from "../../../api";
 import MyDatePicker from "../../../components/MyDatePicker";
 import moment from "moment";
