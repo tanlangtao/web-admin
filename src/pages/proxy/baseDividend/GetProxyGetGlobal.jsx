@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Card, message, Input, Table, Icon } from "antd";
+import React, { useState, useEffect } from "react";
+import { Card, message, Table } from "antd";
 import { getProxyGetGlobal, packageList } from "../../../api";
 import { reverseNumber } from "../../../utils/commonFuntion";
 
@@ -44,10 +44,10 @@ export default () => {
         text === 1
           ? "无限代"
           : text === 2
-          ? "无限代有收益（35%）"
-          : text === 3
-          ? "无限代 无收益"
-          : "",
+            ? "无限代有收益（35%）"
+            : text === 3
+              ? "无限代 无收益"
+              : "",
     },
     {
       title: "提现手续费收入比例",
@@ -69,16 +69,6 @@ export default () => {
       dataIndex: "regin_interval_limit",
       render: reverseNumber,
     },
-    // {
-    //   title: "业绩统计方式",
-    //   dataIndex: "base_dividend_type",
-    //   render: (text) => (text === 1 ? "流水" : text === 2 ? "有效投注" : ""),
-    // },
-    // {
-    //   title: "业绩折扣比例",
-    //   dataIndex: "base_dividend_discount",
-    //   render: (text) => text + "%",
-    // },
     {
       title: "无限代保底分红统计游戏类型",
       dataIndex: "base_dividend_game_tag",
@@ -86,14 +76,14 @@ export default () => {
         text === 1
           ? "棋牌"
           : text === 2
-          ? "彩票"
-          : text === 3
-          ? "体育"
-          : text === 4
-          ? "视讯"
-          : text === 5
-          ? "电子"
-          : "",
+            ? "彩票"
+            : text === 3
+              ? "体育"
+              : text === 4
+                ? "视讯"
+                : text === 5
+                  ? "电子"
+                  : "",
     },
     {
       title: "保底分红扣除比例",

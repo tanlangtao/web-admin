@@ -140,7 +140,7 @@ class GoldDetail extends Component {
 							let data = res.data.account_change
 							_printData = _printData.concat(data)
 						} else {
-							message.info(res.status || `请求失败，失败頁數:${i}`)
+							message.info(res.msg || `请求失败，失败頁數:${i}`)
 						}
 						resolve()
 					}).catch(err => {

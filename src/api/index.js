@@ -38,14 +38,14 @@ export const raceURL = (username, password) => {
 export const reqLogin = (username, password, authcode) =>
 	ajax(BASE + "/login/login", { username, password, authcode }, "POST");
 
-	// return ajax(
-	// 	process.env.REACT_APP_CENTER_HOST + `/proxy/user/GetPaymentInfo`,
-	// 	{ platform_key: 123456, ...reqData },
-	// 	"GET",
-	// 	{ needAuth: false },
-	// );
+// return ajax(
+// 	process.env.REACT_APP_CENTER_HOST + `/proxy/user/GetPaymentInfo`,
+// 	{ platform_key: 123456, ...reqData },
+// 	"GET",
+// 	{ needAuth: false },
+// );
 
-	
+
 // 获取authCode
 export const reqAuthCode = (username, password) =>
 	ajax(BASE + "/login/authCode", { username, password }, "POST");
@@ -270,8 +270,8 @@ export const queryAccount = reqData => {
 };
 
 // 用戶 - 銀行卡列表 
-export const getbanklist = reqData =>{
-	return ajax (
+export const getbanklist = reqData => {
+	return ajax(
 		// BASE +"/bank/getbanklist",
 		"http://devadmin.539316.com/admin/bank/getbanklist",
 		{
@@ -282,8 +282,8 @@ export const getbanklist = reqData =>{
 }
 
 // 用戶 - 新增銀行卡 
-export const addnewbank = reqData =>{
-	return ajax (
+export const addnewbank = reqData => {
+	return ajax(
 		// BASE +"/bank/addnewbank",
 		"http://devadmin.539316.com/admin/bank/addnewbank",
 		{
@@ -293,10 +293,10 @@ export const addnewbank = reqData =>{
 	)
 }
 // 用戶 - 編輯銀行卡 
-export const modifybank = (id, value) =>{
-	return ajax (
+export const modifybank = (id, value) => {
+	return ajax(
 		// BASE +"/bank/modifybank",
-		"http://devadmin.539316.com/admin/bank/modifybank",		
+		"http://devadmin.539316.com/admin/bank/modifybank",
 		{
 			...value, id
 		},
@@ -304,8 +304,8 @@ export const modifybank = (id, value) =>{
 	)
 }
 // 用戶 - 刪除銀行卡 
-export const delbank = reqData =>{
-	return ajax (
+export const delbank = reqData => {
+	return ajax(
 		// BASE +"/bank/delbank",
 		"http://devadmin.539316.com/admin/bank/delbank",
 		{
@@ -316,9 +316,9 @@ export const delbank = reqData =>{
 }
 
 // 用戶 - 銀行卡綁定列表 
-export const getbindbanklist  = reqData =>{
-	return ajax (
-		BASE +"/bank/getbindbanklist ",
+export const getbindbanklist = reqData => {
+	return ajax(
+		BASE + "/bank/getbindbanklist ",
 		{
 			...reqData,
 		},
@@ -327,9 +327,9 @@ export const getbindbanklist  = reqData =>{
 }
 
 // 用戶 - 新增綁定銀行卡 
-export const addnewbindbank = reqData =>{
-	return ajax (
-		BASE +"/bank/addnewbindbank",
+export const addnewbindbank = reqData => {
+	return ajax(
+		BASE + "/bank/addnewbindbank",
 		{
 			...reqData,
 		},
@@ -337,9 +337,9 @@ export const addnewbindbank = reqData =>{
 	)
 }
 // 用戶 - 編輯綁定銀行卡 
-export const modifybindbank = reqData =>{
-	return ajax (
-		BASE +"/bank/modifybindbank",
+export const modifybindbank = reqData => {
+	return ajax(
+		BASE + "/bank/modifybindbank",
 		{
 			...reqData,
 		},
@@ -347,9 +347,9 @@ export const modifybindbank = reqData =>{
 	)
 }
 // 用戶 - 刪除綁定銀行卡 
-export const delbindbank = reqData =>{
-	return ajax (
-		BASE +"/bank/delbindbank",
+export const delbindbank = reqData => {
+	return ajax(
+		BASE + "/bank/delbindbank",
 		{
 			...reqData,
 		},
@@ -919,7 +919,7 @@ export const getPaymentDividendInfo = reqData => {
 export const getPaymentInfo = reqData => {
 	return ajax(
 		BASE + `/proxy/user/GetPaymentInfo`,
-		{  ...reqData },
+		{ ...reqData },
 		"GET",
 	);
 };
@@ -928,7 +928,7 @@ export const getPaymentInfo = reqData => {
 export const getPaymentInfoDetail = reqData => {
 	return ajax(
 		BASE + `/proxy/user/GetPaymentInfoDetail`,
-		{  ...reqData },
+		{ ...reqData },
 		"GET",
 		// { needAuth: false },
 	);
@@ -944,8 +944,8 @@ export const getProxyUserMoneyFlow = reqData => {
 // 按遊戲類型查詢玩家業績
 export const getGameUserInductionsSortByGameTag = reqData => {
 	return ajax(
-		BASE+ "/proxy/user/GetGameUserInductionsSortByGameTag",
-		{  ...reqData },
+		BASE + "/proxy/user/GetGameUserInductionsSortByGameTag",
+		{ ...reqData },
 		"GET",
 	);
 };
@@ -953,7 +953,7 @@ export const getGameUserInductionsSortByGameTag = reqData => {
 export const getProxyUserInductionsSortByGameTag = reqData => {
 	return ajax(
 		BASE + "/proxy/user/GetProxyUserInductionsSortByGameTag",
-		{  ...reqData },
+		{ ...reqData },
 		"GET",
 	);
 };
@@ -961,7 +961,7 @@ export const getProxyUserInductionsSortByGameTag = reqData => {
 export const getProxyUserLinkBet = reqData => {
 	return ajax(
 		BASE + "/Operation/Api/GetProxyUserLinkBet",
-		{  ...reqData },
+		{ ...reqData },
 		"GET",
 	);
 };
@@ -969,15 +969,15 @@ export const getProxyUserLinkBet = reqData => {
 export const GetProxyUserLinkstatement = reqData => {
 	return ajax(
 		BASE + "/Operation/Api/GetProxyUserLinkstatement?",
-		{  ...reqData },
+		{ ...reqData },
 		"GET",
 	);
 };
 //查询保底分成规则
 export const GetBaseDividendRule = reqData => {
 	return ajax(
-		BASE+ "/proxy/user/GetBaseDividendRule",
-		{  ...reqData },
+		BASE + "/proxy/user/GetBaseDividendRule",
+		{ ...reqData },
 		"GET",
 	);
 };
@@ -1009,7 +1009,7 @@ export const GetBaseDividend = reqData => {
 export const getProxyBaseDividendInfo = reqData => {
 	return ajax(
 		BASE + "/proxy/user/GetBaseDividendInfo",
-		{  ...reqData },
+		{ ...reqData },
 		"GET",
 	);
 };
@@ -1017,7 +1017,7 @@ export const getProxyBaseDividendInfo = reqData => {
 export const getProxyBaseDividendInfo1 = reqData => {
 	return ajax(
 		BASE + "/proxy/user/GetBaseDividendInfo1",
-		{  ...reqData },
+		{ ...reqData },
 		"GET",
 	);
 };
@@ -1025,7 +1025,7 @@ export const getProxyBaseDividendInfo1 = reqData => {
 export const getProxyBaseDividendInfo2 = reqData => {
 	return ajax(
 		BASE + "/proxy/user/GetBaseDividendInfo2",
-		{  ...reqData },
+		{ ...reqData },
 		"GET",
 	);
 };
@@ -1273,8 +1273,8 @@ export const activityList = (page, limit, value) => {
 	);
 };
 // 棋牌大獎池活動查詢
-export const activityGetBonusPool = reqData =>{
-	return  ajax(BASE + "/api/activity/getBonusPool", reqData, "GET")
+export const activityGetBonusPool = reqData => {
+	return ajax(BASE + "/api/activity/getBonusPool", reqData, "GET")
 }
 //活动-注册金活动设置
 export const activitySetting = reqData => {
@@ -1635,13 +1635,13 @@ export const withDraw = (page, limit, data) => {
 		"POST",
 	);
 };
-export const withdrawClaim = () => {
-	return ajax(
-		BASE + "/api/with_draw/WithdrawClaim",
-		{},
-		"GET",
-	);
-};
+// export const withdrawClaim = () => {
+// 	return ajax(
+// 		BASE + "/api/with_draw/WithdrawClaim",
+// 		{},
+// 		"GET",
+// 	);
+// };
 export const reviewInfo = (page, limit, id) => {
 	return ajax(
 		BASE + "/order/reviewInfo",
@@ -1987,8 +1987,8 @@ export const deleteLiveBlackList = (reqData) => {
 //查询代理链实时余额
 export const getUserLinkAccountsTotal = (reqData) => {
 	return ajax(
-		BASE+ `/Operation/Api/GetUserLinkAccountsTotal`,
-		{ ...reqData,  },
+		BASE + `/Operation/Api/GetUserLinkAccountsTotal`,
+		{ ...reqData, },
 		"GET",
 	);
 };

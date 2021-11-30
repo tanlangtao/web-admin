@@ -60,7 +60,7 @@ import B2bConfig from "../b2b/config";
 import B2bRegister from "../b2b/register";
 import ZRSX from "../gameData/ZRSX";
 // import PCCP from "../gameData/PCCP";
-import Agadmin from "../gameData/ag-admin";
+// import Agadmin from "../gameData/ag-admin";
 // import Sbadmin from "../gameData/sb-admin";
 // import Cyadmin from "../gameData/cy-admin";
 // import Cqgame from "../gameData/cqgame";
@@ -125,13 +125,13 @@ import LiveBlackList from "../liveStream/blackList";
 const { Sider, Content } = Layout;
 
 const history = createHashHistory();
-let is_ag_load = false;
-let is_sb_load = false;
-let is_cy_load = false;
-let is_pccp_load = false;
-let is_cqgame_load = false;
-let is_PTadmin_load = false;
-let is_pggame_load = false;
+// let is_ag_load = false;
+// let is_sb_load = false;
+// let is_cy_load = false;
+// let is_pccp_load = false;
+// let is_cqgame_load = false;
+// let is_PTadmin_load = false;
+// let is_pggame_load = false;
 
 //后台管理的路由组件
 export default class Admin extends Component {

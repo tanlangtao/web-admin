@@ -25,18 +25,18 @@ export default () => {
             title: "上级ID",
             dataIndex: "proxy_user_id",
         },
-		{
-			title: "分红类型",
-			dataIndex: "type",
-			render: text =>
-				text === 1
-					? "流水分红"
-					: text === 2
-					? "亏损分红(输赢差)"
-					: text === 3
-					? "亏损分红(充提差)"
-					: "",
-		},
+        {
+            title: "分红类型",
+            dataIndex: "type",
+            render: text =>
+                text === 1
+                    ? "流水分红"
+                    : text === 2
+                        ? "亏损分红(输赢差)"
+                        : text === 3
+                            ? "亏损分红(充提差)"
+                            : "",
+        },
         {
             title: "团队总充值",
             dataIndex: "top_up",
@@ -61,7 +61,7 @@ export default () => {
             title: "流水分红扣除",
             dataIndex: "",
             render: (text, record) => reverseNumber2((record.top_up || 0) + (record.withdraw || 0) + (record.first_balance || 0) - (record.last_balance || 0) - (record.amount || 0))
-                
+
         },
         {
             title: "渠道三方费用",
@@ -100,7 +100,7 @@ export default () => {
         const res = await getPaymentDividendInfo(reqData)
         if (res.code === 200) {
             message.success(res.status)
-            setData(res.msg && res.msg[`${start_time}:${end_time}`] || [])
+            setData((res.msg && res.msg[`${start_time}:${end_time}`]) || [])
         } else {
             message.info(res.status || JSON.stringify(res))
         }

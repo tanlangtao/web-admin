@@ -1,7 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Card, message, Input, Table, Select, Modal, Button, Icon } from "antd";
-import ExportJsonExcel from "js-export-excel";
-import { formateDate } from "../../../utils/dateUtils";
+import React, { useState, useRef } from "react";
+import { Card, message, Input, Table, Modal, Button, Icon } from "antd";
 import { reverseNumber } from "../../../utils/commonFuntion";
 import MyDatePicker from "../../../components/MyDatePicker";
 import LinkButton from "../../../components/link-button";
@@ -13,7 +11,6 @@ const LiveReport = (props) => {
     const { type } = props
     const [data, setData] = useState([])
     const [details, setDetails] = useState([])
-    const [loading, setLoading] = useState(false)
     const [showDetails, setShowDetails] = useState(false)
 
     const initStates = useRef({
@@ -50,7 +47,7 @@ const LiveReport = (props) => {
         //状态码，0： 成功；-1：失败
         if (res.code === 0) {
             message.success(res.msg)
-            setData(res.data.summary_list && res.data.summary_list || [])
+            setData((res.data.summary_list && res.data.summary_list) || [])
         }
         else {
             message.info(res.msg || JSON.stringify(res));
@@ -85,7 +82,7 @@ const LiveReport = (props) => {
         if (res.code === 0) {
             setShowDetails(true)
             message.success(res.msg)
-            setDetails(res.data.summary_list && res.data.summary_list || [])
+            setDetails((res.data.summary_list && res.data.summary_list) || [])
         }
         else {
             message.info(res.msg || JSON.stringify(res));

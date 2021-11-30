@@ -1,7 +1,7 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { Form, Input, Button, message } from "antd";
 import { proxy_changeGold } from "../../../api/index";
-import { throttle } from "../../../utils/commonFuntion";
+// import { throttle } from "../../../utils/commonFuntion";
 const EditForm = (props) => {
   const { getFieldDecorator } = props.form;
   const record = props.record;
@@ -32,7 +32,7 @@ const EditForm = (props) => {
     });
   };
   //保存函数节流返回的函数在内存中不要随着组件更新而释放
-  const handleThrottled = useCallback(throttle(handleEditSubmit, 3000), []);
+  // const handleThrottled = useCallback(throttle(handleEditSubmit, 3000), []);
   return (
     <Form
       labelCol={{ span: 4 }}

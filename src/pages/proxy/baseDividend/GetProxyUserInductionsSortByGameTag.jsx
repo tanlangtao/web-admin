@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Card, message, Input, Table, Icon } from "antd";
 import { getProxyUserInductionsSortByGameTag } from "../../../api";
 import LinkButton from "../../../components/link-button";
@@ -78,10 +78,8 @@ export default () => {
                 switch (text) {
                     case 1:
                         return "输赢流水"
-                        break
                     case 2:
                         return "有效投注"
-                        break
                     default:
                         return
                 }

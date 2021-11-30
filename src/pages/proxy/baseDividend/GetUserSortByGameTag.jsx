@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Card, message, Input, Table, Icon } from "antd";
 import { getGameUserInductionsSortByGameTag } from "../../../api";
 import LinkButton from "../../../components/link-button";
@@ -10,9 +10,6 @@ let initstate = {
     end_time: null,
     account_name: null,
     ids: null,
-    // proxy_pid: '',
-    // proxy_id: '',
-    // game_tags: ''
 };
 
 export default () => {
@@ -22,10 +19,10 @@ export default () => {
         {
             title: "玩家ID",
             dataIndex: "ids",
-            render: (text,record) => {
-                if(record.totalIndex === "合计"){
+            render: (text, record) => {
+                if (record.totalIndex === "合计") {
                     return "合计"
-                }else {
+                } else {
                     return ref.current.ids
                 }
             }
@@ -65,7 +62,7 @@ export default () => {
         {
             title: "玩家总流水",
             dataIndex: "winPluslose",
-            render: (text,record) => {
+            render: (text, record) => {
                 return reverseNumber(Math.abs(record.lose_total) + record.win_total)
             }
         },
@@ -81,10 +78,8 @@ export default () => {
                 switch (text) {
                     case 1:
                         return "输赢流水"
-                        break
                     case 2:
                         return "有效投注"
-                        break
                     default:
                         return
                 }
@@ -94,7 +89,7 @@ export default () => {
             title: "折扣比例",
             dataIndex: "base_dividend_discount",
             render: (text, record) => {
-                if(text){
+                if (text) {
                     return text + "%"
                 }
             },
@@ -103,12 +98,12 @@ export default () => {
             title: "流水折扣",
             dataIndex: "allMoney",
             render: (text, record) => {
-                if(record.totalIndex === "合计"){
+                if (record.totalIndex === "合计") {
                     return reverseNumber(record.allMoney)
                 }
-                else if(record.base_dividend_type === 1){
-                    return reverseNumber((Math.abs(record.lose_total) + record.win_total )* (record.base_dividend_discount/100)) 
-                }else {
+                else if (record.base_dividend_type === 1) {
+                    return reverseNumber((Math.abs(record.lose_total) + record.win_total) * (record.base_dividend_discount / 100))
+                } else {
                     return 0
                 }
             },
@@ -117,12 +112,12 @@ export default () => {
             title: "投注折扣",
             dataIndex: "bet_Account",
             render: (text, record) => {
-                if(record.totalIndex === "合计"){
+                if (record.totalIndex === "合计") {
                     return reverseNumber(record.bet_Account)
                 }
-                else if(record.base_dividend_type === 2){
-                    return reverseNumber(record.bet_total * (record.base_dividend_discount/100) )
-                }else {
+                else if (record.base_dividend_type === 2) {
+                    return reverseNumber(record.bet_total * (record.base_dividend_discount / 100))
+                } else {
                     return 0
                 }
             },
@@ -131,7 +126,6 @@ export default () => {
 
     //搜寻代理个人玩家流水
     const proxySearch = async () => {
-        // const { start_time, end_time, proxy_pid, proxy_id ,game_tags } = ref.current
         const { start_time, end_time, account_name, ids } = ref.current
         if (!account_name) {
             message.info("请输入玩家ID");
@@ -156,27 +150,27 @@ export default () => {
         if (res.code === 200) {
             message.success(res.status)
             let totalLose = 0,
-             totalwin  = 0 , totalbet = 0, totalMoney = 0 ,totalbetAccount = 0;
-            if(res.msg[ids]){
-             res.msg[ids].forEach((ele) =>{
-                totalLose += ele.lose_total;
-                totalwin  += ele.win_total;
-                totalbet += ele.bet_total;
-                totalMoney += ele.base_dividend_type === 1 ? (Math.abs(ele.lose_total) + ele.win_total ) * (ele.base_dividend_discount/100) : 0
-                totalbetAccount  += ele.base_dividend_type === 2 ?  ele.bet_total * (ele.base_dividend_discount/100) : 0
-            })
-        }
-             const totalRow = {
-                 totalIndex : "合计",
-                 lose_total:totalLose,
-                 win_total: totalwin,
-                 bet_total :totalbet,
-                 winPluslose: totalwin - Math.abs(totalLose),
-                 base_dividend_discount:"",
-                 allMoney: totalMoney,
-                 bet_Account: totalbetAccount
-             }
-             let _list = res.msg[ids] && res.msg[ids].length > 0 ? [...res.msg[ids], totalRow] : []
+                totalwin = 0, totalbet = 0, totalMoney = 0, totalbetAccount = 0;
+            if (res.msg[ids]) {
+                res.msg[ids].forEach((ele) => {
+                    totalLose += ele.lose_total;
+                    totalwin += ele.win_total;
+                    totalbet += ele.bet_total;
+                    totalMoney += ele.base_dividend_type === 1 ? (Math.abs(ele.lose_total) + ele.win_total) * (ele.base_dividend_discount / 100) : 0
+                    totalbetAccount += ele.base_dividend_type === 2 ? ele.bet_total * (ele.base_dividend_discount / 100) : 0
+                })
+            }
+            const totalRow = {
+                totalIndex: "合计",
+                lose_total: totalLose,
+                win_total: totalwin,
+                bet_total: totalbet,
+                winPluslose: totalwin - Math.abs(totalLose),
+                base_dividend_discount: "",
+                allMoney: totalMoney,
+                bet_Account: totalbetAccount
+            }
+            let _list = res.msg[ids] && res.msg[ids].length > 0 ? [...res.msg[ids], totalRow] : []
             setData(_list || [])
         } else {
             message.info(res.status || JSON.stringify(res))
@@ -209,20 +203,10 @@ export default () => {
                             ref.current.end_time = date[1] ? date[1].valueOf() : null;
                         }}
                     />
-                  
-                    {/* <Input
-                        style={{ width: 200 }}
-                        placeholder="游戏类型"
-                    onChange={e => {
-                        ref.current.game_tags = e.target.value
-                    }}
-                    /> */}
                     &nbsp; &nbsp;
                     <LinkButton onClick={() => proxySearch()} size="default">
                         <Icon type="search" />
                     </LinkButton>
-                    {/* &nbsp; &nbsp; */}
-                    {/* <span style={{color: "#dc143c"}} >**game_tags: 渠道组为6,12 输入 1 , 渠道组为8,9,10输入 1,5</span> */}
                 </div>
             }
         >

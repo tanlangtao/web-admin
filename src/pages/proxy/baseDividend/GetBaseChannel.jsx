@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Card, message, Input, Table } from "antd";
 import { GetBaseDividend, packageList } from "../../../api";
 import { reverseNumber } from "../../../utils/commonFuntion";
-import { result } from "lodash-es";
 
 export default () => {
   const [data, setData] = useState([]);

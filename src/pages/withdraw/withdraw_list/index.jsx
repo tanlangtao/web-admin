@@ -6,7 +6,7 @@ import riskcontrolfn from "../../../components/riskcontrol";
 import moment from "moment";
 import { formateDate } from "../../../utils/dateUtils";
 import MyDatePicker from "../../../components/MyDatePicker";
-import { withDraw, downloadWithdrawList, reviewInfo, remarkInfo, auditOrder, orderWithDrawReview, withdrawClaim } from "../../../api";
+import { withDraw, downloadWithdrawList, reviewInfo, remarkInfo, auditOrder, orderWithDrawReview } from "../../../api";
 import WrappedComponent from "./details";
 import WrappedEdit from "./edit";
 
