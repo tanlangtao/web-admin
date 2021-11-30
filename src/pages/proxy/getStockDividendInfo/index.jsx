@@ -1,8 +1,6 @@
 import React, { useRef, useState } from "react";
-
 import { Table, message, Card, Input } from "antd";
 import _ from "lodash-es";
-
 import MyDatePicker from "../../../components/MyDatePicker";
 import { getStockDividendInfo } from "../../../api";
 import { reverseNumber } from "../../../utils/commonFuntion";
@@ -13,7 +11,6 @@ export default () => {
   const initstates = useRef({
     first_date: "",
     last_date: "",
-    // activity_id: "",
   });
   const initColumns = [
     {
@@ -30,13 +27,14 @@ export default () => {
       title: "团队份额",
       width: 100,
       dataIndex: "amount",
+      render: reverseNumber,
     },
     {
       title: "分红类型",
       width: 100,
-      dataIndex: "分红类型 ",
+      dataIndex: "bonustype",
       render: () => {
-        return "固定填写全盘分红";
+        return "全盘分红";
       },
     },
     {
@@ -44,8 +42,9 @@ export default () => {
       dataIndex: "net_profit",
       width: 100,
       render: (text, record) => {
+        console.log("record", record);
         if (record.net_profit > 0) {
-          reverseNumber(record.net_profit * 0.3);
+          return reverseNumber(record.net_profit * 0.3);
         } else return 0;
       },
     },
@@ -53,11 +52,18 @@ export default () => {
       title: "平台总股份",
       width: 100,
       dataIndex: "master_amount",
+      render: reverseNumber,
+    },
+    {
+      title: "我的有效业绩算法",
+      width: 100,
+      dataIndex: "shareCount",
+      render: reverseNumber,
     },
     {
       title: "我的股份份额",
       width: 100,
-      dataIndex: "player_bonus_pool_ratio",
+      dataIndex: "myShares",
       render: reverseNumber,
     },
     {
@@ -66,7 +72,7 @@ export default () => {
       dataIndex: "price",
       render: (text, record) => {
         if (record.price > 0) {
-          reverseNumber(record.price);
+          return reverseNumber(record.price);
         } else return 0;
       },
     },
@@ -81,7 +87,7 @@ export default () => {
       dataIndex: "money",
       render: (text, record) => {
         if (record.price > 0) {
-          reverseNumber(record.price);
+          return reverseNumber(record.price);
         } else return 0;
       },
     },
@@ -112,11 +118,25 @@ export default () => {
     if (res.code === 200 && res.msg) {
       message.destroy();
       message.info(res.status);
-      // console.log("res", res.msg[`${first_date + ":" + last_date}`]);
-      // console.log("res", res.msg[`${first_date + ":" + last_date}`][0]);
-      // console.log(res.msg);
-      // console.log(`${first_date + ":" + last_date}`);
-      set_table_data(res.msg[`${first_date + ":" + last_date}`][0]);
+      let totalPlayerBonusPoolRatio, totalShare;
+      if (res.msg[`${first_date + ":" + last_date}`]) {
+        totalPlayerBonusPoolRatio =
+          res.msg[`${first_date + ":" + last_date}`][0]["amount"];
+        totalShare =
+          (res.msg[`${first_date + ":" + last_date}`][0]["amount"] /
+            res.msg[`${first_date + ":" + last_date}`][0]["share"]) *
+          1000;
+        res.msg[`${first_date + ":" + last_date}`].forEach((ele, index) => {
+          if (index > 0) {
+            totalPlayerBonusPoolRatio -= ele.amount;
+          }
+        });
+        res.msg[`${first_date + ":" + last_date}`][0]["myShares"] =
+          totalPlayerBonusPoolRatio;
+        res.msg[`${first_date + ":" + last_date}`][0]["shareCount"] =
+          totalShare;
+      }
+      set_table_data(res.msg[`${first_date + ":" + last_date}`]);
     } else {
       message.destroy();
       message.info(res.status || JSON.stringify(res));
@@ -132,21 +152,18 @@ export default () => {
               if (diffDays > 7) {
                 message.info("请选择时间范围不超过7天");
               } else if (date && date.length !== 0) {
-                initstates.current.first_date = date[0].valueOf() / 1000;
-                initstates.current.last_date =
-                  Math.ceil(date[1].valueOf() / 1000) - 1;
+                initstates.current.first_date = date[0]
+                  ? moment(date[0].valueOf()).format("YYYY-MM-DD")
+                  : null;
+                initstates.current.last_date = date[1]
+                  ? moment(date[1].valueOf()).format("YYYY-MM-DD")
+                  : null;
               } else {
                 initstates.current.start_time = "";
                 initstates.current.last_date = "";
               }
             }}
           />
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          {/* <Input
-            style={{ width: 200 }}
-            placeholder="活動ID"
-            onChange={(e) => (initstates.current.activity_id = e.target.value)}
-          /> */}
           &nbsp;&nbsp;&nbsp;&nbsp;
           <Input.Search
             style={{ width: 200 }}
@@ -160,7 +177,7 @@ export default () => {
       <Table
         bordered
         rowKey={(record, index) => `${index}`}
-        dataSource={[table_data]}
+        dataSource={table_data}
         columns={initColumns}
         size="small"
         pagination={false}

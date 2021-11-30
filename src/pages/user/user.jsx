@@ -487,7 +487,6 @@ export default class User extends Component {
       this.moreModal.destroy();
     }
     this.setState({ isResetSavePwdShow: true });
-    console.log("record.id", record.id);
     this.resetSavePwdId = record.id;
   };
   handleSaveResetpwd = async () => {
