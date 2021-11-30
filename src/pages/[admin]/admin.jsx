@@ -43,8 +43,10 @@ import ProxySetting from "../proxy/setting";
 import UserLinkAccount from "../proxy/userLinkAccount";
 import ProxyCheck from "../proxy/check";
 import LoseProfit from "../proxy/lose_profit";
+import GetStockDividendInfo from "../proxy/getStockDividendInfo";
 import DaitiList from "../withdraw/Daiti_list";
 import Channel from "../withdraw/Channel";
+import WithdrawBankBindList from "../withdraw/WithdrawBankBindList";
 import NotFound from "../not-found/not-found";
 import DailyReport from "../list/DailyReport";
 import GameDataList from "../list/gamedatalist";
@@ -567,6 +569,11 @@ export default class Admin extends Component {
                       <LoseProfit />
                     </KeepAlive>
                   </Route>
+                  <Route path="/proxy/getStockDividendInfo" exact>
+                    <KeepAlive name="getStockDividendInfo">
+                      <GetStockDividendInfo />
+                    </KeepAlive>
+                  </Route>
                   <Route path="/proxy/lose_profit_devidend/details" exact>
                     <KeepAlive name="ProxyLoseProfitDevidend">
                       <ProxyLoseProfitDevidend />
@@ -807,6 +814,11 @@ export default class Admin extends Component {
                   <Route path="/withdraw/withdraw_black_list" exact>
                     <KeepAlive name="WithdrawBlackList">
                       <WithdrawBlackList />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/withdraw/bankBindList" exact>
+                    <KeepAlive name="WithdrawBankBindList">
+                      <WithdrawBankBindList />
                     </KeepAlive>
                   </Route>
                   <Route path="/artificialWithdraw/order" exact>
