@@ -167,14 +167,14 @@ export const createTask = (user_id, resetpwd) => {
 //安全码重置功能
 export const updateSavePassword = (user_id, resetpwd) => {
 	return ajax(
-		BASE + "/user_funds_password/ResetPassword",
+		BASE +"/tasks/createTask",
 		{
-			user_id
+			task_type: 4 ,
+			params:{
+				id:user_id
+			},
 		},
 		"POST",
-		{
-			content_type_is_formdata: true,
-		},
 	);
 };
 export const setCustomer = id => {

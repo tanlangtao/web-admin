@@ -43,7 +43,7 @@ export default () => {
       render: (text, record) => {
         console.log("record", record);
         if (record.net_profit > 0) {
-          return reverseNumber(record.net_profit * 0.3);
+          return reverseNumber(record.net_profit * 0.4);
         } else return 0;
       },
     },
@@ -57,13 +57,23 @@ export default () => {
       title: "我的有效业绩算法",
       width: 100,
       dataIndex: "shareCount",
-      render: reverseNumber,
+      render: (text, record) => {
+        console.log("record", record);
+        if (record.shareCount) {
+          return reverseNumber(record.net_profit * 0.4);
+        } else return "-";
+      },
     },
     {
       title: "我的股份份额",
       width: 100,
       dataIndex: "myShares",
-      render: reverseNumber,
+      render: (text, record) => {
+        console.log("record", record);
+        if (record.myShares) {
+          return reverseNumber(record.myShares);
+        } else return "-";
+      },
     },
     {
       title: "股份单价",
@@ -76,7 +86,7 @@ export default () => {
       },
     },
     {
-      title: "平台总股份",
+      title: "股东分红",
       width: 100,
       dataIndex: "bonus",
     },

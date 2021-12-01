@@ -32,7 +32,7 @@ class BankbindOnepayList extends Component {
     const res = await getbindbanklist();
     if (res.status === 0) {
       this.setState({
-        data: res.data,
+        data: res.data.sort((a, b) => b.id - a.id),
         count: res.data && res.data.count,
       });
     } else {
@@ -56,17 +56,6 @@ class BankbindOnepayList extends Component {
         title={
           <div>
             <Form layout="inline" onSubmit={this.handleSubmit}>
-              {/* <Form.Item>
-                {getFieldDecorator("pid", {
-                  rules: [{ required: true, message: "请选择权限" }],
-                  initialValue: 0,
-                })(
-                  <Select style={{ width: 200 }}>
-                    <Select.Option value={0}>一级权限</Select.Option>
-                    {packageNode}
-                  </Select>
-                )}
-              </Form.Item> */}
               <Form.Item>
                 {getFieldDecorator("bank_name", {
                   rules: [{ required: true, message: "请输入银行卡简称" }],
@@ -77,29 +66,6 @@ class BankbindOnepayList extends Component {
                   rules: [{ required: true, message: "请输入银行卡名称" }],
                 })(<Input style={{ width: 120 }} placeholder="银行卡名称" />)}
               </Form.Item>
-              {/* <Form.Item>
-                {getFieldDecorator(
-                  "href",
-                  {}
-                )(<Input style={{ width: 120 }} placeholder="模板路径" />)}
-              </Form.Item>
-              <Form.Item>
-                {getFieldDecorator(
-                  "router_key",
-                  {}
-                )(<Input style={{ width: 120 }} placeholder="路由key" />)}
-              </Form.Item>
-              <Form.Item>
-                {getFieldDecorator(
-                  "icon",
-                  {}
-                )(<Input style={{ width: 120 }} placeholder="icon样式" />)}
-              </Form.Item>
-              <Form.Item>
-                {getFieldDecorator("sort", {
-                  rules: [{ required: true, message: "请输入排序值" }],
-                })(<Input style={{ width: 120 }} placeholder="菜单排序" />)}
-              </Form.Item> */}
               <Form.Item>
                 <Button
                   size="default"
@@ -161,13 +127,6 @@ class BankbindOnepayList extends Component {
     );
   }
   initColumns = () => [
-    // {
-    //   title: "菜单名",
-    //   dataIndex: "name",
-    //   render: (text, record, index) => (
-    //     <span>{record.name.replace(/&nbsp;/g, "-")}</span>
-    //   ),
-    // },
     {
       title: "id",
       dataIndex: "id",
@@ -180,23 +139,6 @@ class BankbindOnepayList extends Component {
       title: "银行卡名称",
       dataIndex: "bank_name",
     },
-    // {
-    //   title: "路由key",
-    //   dataIndex: "router_key",
-    // },
-    // {
-    //   title: "icon样式",
-    //   dataIndex: "icon",
-    // },
-    // {
-    //   title: "显示",
-    //   dataIndex: "status",
-    //   render: (text) => <span>{text === 1 ? "是" : "否"}</span>,
-    // },
-    // {
-    //   title: "菜单排序",
-    //   dataIndex: "sort",
-    // },
     {
       title: "操作",
       dataIndex: "",
