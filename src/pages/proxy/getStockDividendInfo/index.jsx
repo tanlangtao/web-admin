@@ -54,7 +54,7 @@ export default () => {
       render: reverseNumber,
     },
     {
-      title: "我的有效业绩算法",
+      title: "我的有效业绩",
       width: 100,
       dataIndex: "shareCount",
       render: (text, record) => {
@@ -95,8 +95,8 @@ export default () => {
       width: 100,
       dataIndex: "money",
       render: (text, record) => {
-        if (record.price > 0) {
-          return reverseNumber(record.price);
+        if (record.money > 0) {
+          return reverseNumber(record.money);
         } else return 0;
       },
     },
@@ -107,7 +107,9 @@ export default () => {
       render: (text, record) => {
         if (record.status === 0) {
           return "未领取";
-        } else return "领取";
+        } else if (record.status === 1) {
+          return "领取";
+        } else return "-";
       },
     },
   ];

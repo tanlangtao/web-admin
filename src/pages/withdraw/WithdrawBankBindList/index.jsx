@@ -57,12 +57,12 @@ class BankbindOnepayList extends Component {
           <div>
             <Form layout="inline" onSubmit={this.handleSubmit}>
               <Form.Item>
-                {getFieldDecorator("bank_name", {
+                {getFieldDecorator("bank_id", {
                   rules: [{ required: true, message: "请输入银行卡简称" }],
                 })(<Input style={{ width: 120 }} placeholder="银行卡简称" />)}
               </Form.Item>
               <Form.Item>
-                {getFieldDecorator("bank_id", {
+                {getFieldDecorator("bank_name", {
                   rules: [{ required: true, message: "请输入银行卡名称" }],
                 })(<Input style={{ width: 120 }} placeholder="银行卡名称" />)}
               </Form.Item>

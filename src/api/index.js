@@ -298,7 +298,7 @@ export const delbank = reqData => {
 // 用戶 - 銀行卡綁定列表 
 export const getbindbanklist = reqData => {
 	return ajax(
-		BASE + "/bank/getbindbanklist ",
+		BASE + "/bank/getbindbanklist",
 		{
 			...reqData,
 		},
