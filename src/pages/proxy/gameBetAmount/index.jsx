@@ -13,9 +13,7 @@ let initstate = {
 let gameNameMap = {
     ...gameRouter,
     ...thirdPartyGameRouter,
-    // 以下二款遊戲尚未取得api，無法用於用戶資金明細、盈餘池查詢、玩家遊戲數據，僅在此組件作為遊戲名稱map
-    "5b1f3a3cb76a591e7f251728": { path: null, name: "云谷寻宝" },
-    "5c6a62be56209ac117d446aa": { path: null, name: "聚宝盆捕鱼" },
+    "5b1f3a3cb76a591e7f251729": { path: "/castcraft/api", name: "城堡争霸" },
 }
 
 export default () => {

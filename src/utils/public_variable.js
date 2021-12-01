@@ -46,12 +46,9 @@ export const gameRouter = {
     "5b1f3a3cb76a451e7f0622": { path: "/fctbj/api", name: "发财推币机" },
     "5b1f3a3cb76a59n210407n738": { path: "/xwby/api", name: "疯狂漩涡" },
     "5b1f3a3cb76a451e210820": { path: "/szffc/api", name: "上庄分分彩" },
+    "5b1f3a3cb76a591e7f251728": { path: "/ygxb/api", name: "云谷寻宝" },
     // 城堡争霸，分防守與進攻兩種數據，在用戶>資金明細、盈餘池查詢、玩家遊戲數據組件個別寫入
     // "5b1f3a3cb76a591e7f251729": { path: "/castcraft/api", name: "城堡争霸" }, 
-
-    // 以下二款遊戲開發中，尚未確認接口路徑
-    "5b1f3a3cb76a591e7f251728": { path: "/ygxb/api", name: "云谷寻宝" },
-    // "5c6a62be56209ac117d446aa": { path: null, name: "聚宝盆捕鱼" },
 };
 
 // 三方遊戲
@@ -70,4 +67,6 @@ export const thirdPartyGameRouter = {
     "5b1f3a3cb76a451e210726": { path: "/zhibo/api", name: "直播平台" },
     "5b1f3a3cb76a451e210821": { path: "/mg/api", name: "MG游戏" },
     "5b1f3a3cb76a451e210822": { path: "/qt/api", name: "QT游戏" },
+    "5b1f3a3cb76a451e211109": { path: "/sanshengtiyu/api", name: "三昇体育" },
+    "5b1f3a3cb76a451e211110": { path: "/pp/api", name: "PP电子" },
 }
