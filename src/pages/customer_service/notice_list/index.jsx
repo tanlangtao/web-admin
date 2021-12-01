@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Card, Table, Modal, message, Icon, Button, Popover, Popconfirm } from "antd";
 import LinkButton from "../../../components/link-button/index";
-import { getList, delNotice } from "../../../api/index";
+import { getNoticeList, delNotice } from "../../../api/index";
 import WrappedAddDataForm from "./addorEdit";
 import { formateDate } from "../../../utils/dateUtils";
 
@@ -17,13 +17,13 @@ class Notice_list extends Component {
       isEditDataShow: false
     };
   }
-  getUsers = async (page, limit) => {
-    const result = await getList(page, limit);
+  fetchNoticeList = async (page, limit) => {
+    const result = await getNoticeList(page, limit);
     if (result.data) {
       let newData = JSON.parse(result.data)
       this.setState({
         data: newData,
-        count: parseInt(result.data && result.data.count)
+        count: newData.length
       });
     }
   };
@@ -56,10 +56,10 @@ class Notice_list extends Component {
       isAddDataShow: false,
       isEditDataShow: false
     });
-    this.getUsers(1, 20);
+    this.fetchNoticeList();
   };
   componentDidMount() {
-    this.getUsers(1, 20);
+    this.fetchNoticeList();
   }
   render() {
     return (
@@ -90,22 +90,12 @@ class Notice_list extends Component {
             showTotal: (total, range) => `共${total}条`,
             defaultCurrent: 1,
             total: this.state.count,
-            onChange: (page, pageSize) => {
-              this.getUsers(page, pageSize);
-              this.setState({
-                pageSize: pageSize
-              });
-            },
-            onShowSizeChange: (current, size) => {
-              this.getUsers(current, size);
-            }
           }}
-          scroll={{ x: "max-content"}}
+          scroll={{ x: "max-content" }}
         />
         <Modal
           title="新增公告"
           visible={this.state.isAddDataShow}
-          // onOk={this.handleAddData}
           onCancel={() => {
             this.setState({ isAddDataShow: false });
           }}
@@ -124,7 +114,6 @@ class Notice_list extends Component {
           <Modal
             title="编辑用户"
             visible={this.state.isEditDataShow}
-            // onOk={this.handleAddData}
             onCancel={() => {
               this.setState({ isEditDataShow: false });
             }}
@@ -138,7 +127,7 @@ class Notice_list extends Component {
                   isEditDataShow: false
                 })
               }
-              refreshPage={() => this.getUsers(1, 20)}
+              refreshPage={() => this.fetchNoticeList()}
             />
           </Modal>
         )}
