@@ -74,7 +74,7 @@ export default (props) => {
       case "5b1f3a3cb76a591e7f251730": //财神到
         reqStr = `${new_gameRouter2[game_id].path}/getGamePlayerData?page=${page}&limit=${limit}`;
         break;
-      case "5b1f3a3cb76a591e7f251715": //炸金花
+      case "5b1f3a3cb76a591e7f251715": //扎金花
       case "5b1f3a3cb76a591e7f251714": //抢庄牛牛
       case "5b1f3a3cb76a451e211018": //抢庄牛牛2
       case "5b1f3a3cb76a591e7f25171": //十三水
@@ -231,7 +231,7 @@ export default (props) => {
             );
             break;
           case "5c6a62be7ff09a54amb446aa": //跑得快
-          case "5b1f3a3cb76a591e7f251715": //炸金花
+          case "5b1f3a3cb76a591e7f251715": //扎金花
           case "5b1f3a3cb76a591e7f251714": //抢庄牛牛
           case "5b1f3a3cb76a451e211018": //抢庄牛牛2
           case "5b1f3a3cb76a591e7f25171": //十三水
@@ -299,7 +299,7 @@ export default (props) => {
             );
             break;
           case "5c6a62be7ff09a54amb446aa": //跑得快
-          case "5b1f3a3cb76a591e7f251715": //炸金花
+          case "5b1f3a3cb76a591e7f251715": //扎金花
           case "5b1f3a3cb76a591e7f251714": //抢庄牛牛
           case "5b1f3a3cb76a451e211018": //抢庄牛牛2
           case "5b1f3a3cb76a591e7f25171": //十三水
@@ -359,7 +359,7 @@ export default (props) => {
             );
             break;
           case "5c6a62be7ff09a54amb446aa": //跑得快
-          case "5b1f3a3cb76a591e7f251715": //炸金花
+          case "5b1f3a3cb76a591e7f251715": //扎金花
           case "5b1f3a3cb76a591e7f251714": //抢庄牛牛
           case "5b1f3a3cb76a451e211018": //抢庄牛牛2
           case "5b1f3a3cb76a591e7f25171": //十三水
@@ -433,7 +433,7 @@ export default (props) => {
       case "5b1f3a3cb76a591e7f251730": //财神到
         reqStr = `${new_gameRouter2[game_id].path}/getGamePlayerData?page=${page}&limit=${limit}`;
         break;
-      case "5b1f3a3cb76a591e7f251715": //炸金花
+      case "5b1f3a3cb76a591e7f251715": //扎金花
       case "5b1f3a3cb76a591e7f251714": //抢庄牛牛
       case "5b1f3a3cb76a451e211018": //抢庄牛牛2
       case "5b1f3a3cb76a591e7f25171": //十三水
@@ -550,24 +550,22 @@ export default (props) => {
               switch (searchData.current.game_id) {
                 case "5b1f3a3cb76a591e7f251711": //斗地主
                   res = (record?.settlement || []).map((ele, i) => {
-                    return `${ele.PlayerId}${
-                      record?.player_info?.[ele.PlayerId]?.is_robot
+                    return `${ele.PlayerId}${record?.player_info?.[ele.PlayerId]?.is_robot
                         ? "(robot)"
                         : ""
-                    }\n`;
+                      }\n`;
                   });
                   break;
                 case "5b1f3a3cb76a591e7f25170": //二人麻将
                   res = (record?.settlement?.player_settlement_info || []).map(
                     (ele, i) => {
-                      return ` ${ele.player_id}${
-                        ele.is_robot ? "(robot)" : ""
-                      }\n`;
+                      return ` ${ele.player_id}${ele.is_robot ? "(robot)" : ""
+                        }\n`;
                     }
                   );
                   break;
                 case "5c6a62be7ff09a54amb446aa": //跑得快
-                case "5b1f3a3cb76a591e7f251715": //炸金花
+                case "5b1f3a3cb76a591e7f251715": //扎金花
                 case "5b1f3a3cb76a591e7f251714": //抢庄牛牛
                 case "5b1f3a3cb76a451e211018": //抢庄牛牛2
                 case "5b1f3a3cb76a591e7f25171": //十三水
@@ -607,7 +605,7 @@ export default (props) => {
                   );
                   break;
                 case "5c6a62be7ff09a54amb446aa": //跑得快
-                case "5b1f3a3cb76a591e7f251715": //炸金花
+                case "5b1f3a3cb76a591e7f251715": //扎金花
                 case "5b1f3a3cb76a591e7f251714": //抢庄牛牛
                 case "5b1f3a3cb76a451e211018": //抢庄牛牛2
                 case "5b1f3a3cb76a591e7f25171": //十三水
@@ -647,7 +645,7 @@ export default (props) => {
                   );
                   break;
                 case "5c6a62be7ff09a54amb446aa": //跑得快
-                case "5b1f3a3cb76a591e7f251715": //炸金花
+                case "5b1f3a3cb76a591e7f251715": //扎金花
                 case "5b1f3a3cb76a591e7f251714": //抢庄牛牛
                 case "5b1f3a3cb76a451e211018": //抢庄牛牛2
                 case "5b1f3a3cb76a591e7f25171": //十三水

@@ -22,20 +22,20 @@ const { Option } = Select;
 // 了不同玩法
 // NN  牛牛
 // BJ  Blackjack
-// ZJH  炸金花
+// ZJH  扎金花
 // BF  斗牛
 let inputData = {
-	date       : null,
-	start_time : null,
-	end_time   : null,
-	gametype   : undefined,
-	pageSize   : 20,
+	date: null,
+	start_time: null,
+	end_time: null,
+	gametype: undefined,
+	pageSize: 20,
 };
 let searchData = {};
 export default () => {
-	const [ data, setData ] = useState([]);
-	const [ count, setCount ] = useState(0);
-	const [ tableType, setTableType ] = useState(1);
+	const [data, setData] = useState([]);
+	const [count, setCount] = useState(0);
+	const [tableType, setTableType] = useState(1);
 	// 解决当用户改变输入或选择的option的时候,虽然未点击搜索按钮,但是搜索条件改变的问题
 	let searchButtonOnclick = () => {
 		let { date, start_time, end_time, gametype } = inputData;
@@ -92,49 +92,49 @@ export default () => {
 		if (tableType === 1) {
 			return [
 				{
-					title     : "局号",
-					dataIndex : "GameCode",
+					title: "局号",
+					dataIndex: "GameCode",
 				},
 				{
-					title     : "开始时间",
-					dataIndex : "Begintime",
+					title: "开始时间",
+					dataIndex: "Begintime",
 				},
 				{
-					title     : "结束时间",
-					dataIndex : "Closetime",
+					title: "结束时间",
+					dataIndex: "Closetime",
 				},
 				{
-					title     : "荷官名称",
-					dataIndex : "Dealer",
+					title: "荷官名称",
+					dataIndex: "Dealer",
 				},
 				{
-					title     : "靴号",
-					dataIndex : "Shoecode",
+					title: "靴号",
+					dataIndex: "Shoecode",
 				},
 				{
-					title     : "结果状态",
-					dataIndex : "Flag",
-					render    : (text, record, index) => {
+					title: "结果状态",
+					dataIndex: "Flag",
+					render: (text, record, index) => {
 						return <div>{text === "0" ? "无效" : text === "1" ? "有效" : text}</div>;
 					},
 				},
 				{
-					title     : "庄分数",
-					dataIndex : "Bankerpoint",
+					title: "庄分数",
+					dataIndex: "Bankerpoint",
 				},
 				{
-					title     : "闲分数",
-					dataIndex : "Playerpoint",
+					title: "闲分数",
+					dataIndex: "Playerpoint",
 				},
 				{
-					title     : "牌张数",
-					dataIndex : "Cardnum",
+					title: "牌张数",
+					dataIndex: "Cardnum",
 				},
 
 				{
-					title     : "对子结果",
-					dataIndex : "Pair",
-					render    : (text, record, index) => {
+					title: "对子结果",
+					dataIndex: "Pair",
+					render: (text, record, index) => {
 						let restext = "";
 						switch (parseInt(text)) {
 							case 0:
@@ -156,30 +156,30 @@ export default () => {
 					},
 				},
 				{
-					title     : "龙点数",
-					dataIndex : "Drgonpoint",
+					title: "龙点数",
+					dataIndex: "Drgonpoint",
 				},
 				{
-					title     : "虎点数",
-					dataIndex : "Tigerpoint",
+					title: "虎点数",
+					dataIndex: "Tigerpoint",
 				},
 
 				{
-					title     : "牌结果",
-					dataIndex : "Cardlist",
+					title: "牌结果",
+					dataIndex: "Cardlist",
 				},
 				{
-					title     : "视频id",
-					dataIndex : "Vid",
+					title: "视频id",
+					dataIndex: "Vid",
 				},
 				{
-					title     : "平台类型",
-					dataIndex : "Platformtype",
+					title: "平台类型",
+					dataIndex: "Platformtype",
 				},
 				{
-					title     : "游戏类型",
-					dataIndex : "Gametype",
-					render    : (text, record) =>
+					title: "游戏类型",
+					dataIndex: "Gametype",
+					render: (text, record) =>
 						text === "BAC" ? "百家乐" : text === "DT" ? "龙虎" : text,
 				},
 				// {
@@ -216,41 +216,41 @@ export default () => {
 			// Seat:  座位號(只顯示於遊戲類型為 BJ)
 			return [
 				{
-					title     : "订单号",
-					dataIndex : "BillNo",
+					title: "订单号",
+					dataIndex: "BillNo",
 				},
 				{
-					title     : "用户名",
-					dataIndex : "PlayName",
+					title: "用户名",
+					dataIndex: "PlayName",
 				},
 				{
-					title     : "局号",
-					dataIndex : "GameCode",
+					title: "局号",
+					dataIndex: "GameCode",
 				},
 				{
-					title     : "派彩额度",
-					dataIndex : "NetAmount",
+					title: "派彩额度",
+					dataIndex: "NetAmount",
 				},
 				{
-					title     : "下注时间",
-					dataIndex : "BetTime",
+					title: "下注时间",
+					dataIndex: "BetTime",
 				},
 				{
-					title     : "游戏类型",
-					dataIndex : "GameType",
+					title: "游戏类型",
+					dataIndex: "GameType",
 				},
 				{
-					title     : "投注额度",
-					dataIndex : "BetAmount",
+					title: "投注额度",
+					dataIndex: "BetAmount",
 				},
 				{
-					title     : "有效投注额度",
-					dataIndex : "ValidBetAmount",
+					title: "有效投注额度",
+					dataIndex: "ValidBetAmount",
 				},
 				{
-					title     : "订单状态",
-					dataIndex : "Flag",
-					render    : (text) => {
+					title: "订单状态",
+					dataIndex: "Flag",
+					render: (text) => {
 						let result = text;
 						switch (parseInt(text)) {
 							case 0:
@@ -273,46 +273,46 @@ export default () => {
 				},
 
 				{
-					title     : "玩法类型",
-					dataIndex : "PlayType",
+					title: "玩法类型",
+					dataIndex: "PlayType",
 				},
 				{
-					title     : "投注币种",
-					dataIndex : "Currency",
+					title: "投注币种",
+					dataIndex: "Currency",
 				},
 				{
-					title     : "桌台号",
-					dataIndex : "TableCode",
+					title: "桌台号",
+					dataIndex: "TableCode",
 				},
 
 				{
-					title     : "派彩时间",
-					dataIndex : "RecalcuTime",
+					title: "派彩时间",
+					dataIndex: "RecalcuTime",
 				},
 				{
-					title     : "余额",
-					dataIndex : "BeforeCredit",
+					title: "余额",
+					dataIndex: "BeforeCredit",
 				},
 				{
-					title     : "投注IP",
-					dataIndex : "BetIP",
+					title: "投注IP",
+					dataIndex: "BetIP",
 				},
 				{
-					title     : "平台类型",
-					dataIndex : "PlatformType",
+					title: "平台类型",
+					dataIndex: "PlatformType",
 				},
 				{
-					title     : "注释",
-					dataIndex : "Remark",
+					title: "注释",
+					dataIndex: "Remark",
 				},
 				{
-					title     : "设备类型",
-					dataIndex : "Devicetype",
-					render    : (text) => (parseInt(text) === 0 ? "PC" : "手机"),
+					title: "设备类型",
+					dataIndex: "Devicetype",
+					render: (text) => (parseInt(text) === 0 ? "PC" : "手机"),
 				},
 				{
-					title     : "座位号",
-					dataIndex : "Seat",
+					title: "座位号",
+					dataIndex: "Seat",
 				},
 			];
 		}
@@ -398,10 +398,10 @@ export default () => {
 		option.fileName = `${start};${end};${searchData.gametype}${type}数据`;
 		option.datas = [
 			{
-				sheetData   : dataTable,
-				sheetName   : "sheet",
-				sheetFilter : sheetFilter,
-				sheetHeader : sheetFilter,
+				sheetData: dataTable,
+				sheetName: "sheet",
+				sheetFilter: sheetFilter,
+				sheetHeader: sheetFilter,
 			},
 		];
 		var toExcel = new ExportJsonExcel(option); //new
@@ -532,17 +532,17 @@ export default () => {
 				dataSource={data}
 				columns={initColumns()}
 				pagination={{
-					defaultCurrent   : 1,
-					defaultPageSize  : 20,
-					total            : count,
-					showQuickJumper  : true,
-					showSizeChanger  : true,
-					pageSizeOptions  : [ "10", "20", "30", "50", "500" ],
-					showTotal        : (total, range) => `共${total}条`,
-					onChange         : (page, pageSize) => {
+					defaultCurrent: 1,
+					defaultPageSize: 20,
+					total: count,
+					showQuickJumper: true,
+					showSizeChanger: true,
+					pageSizeOptions: ["10", "20", "30", "50", "500"],
+					showTotal: (total, range) => `共${total}条`,
+					onChange: (page, pageSize) => {
 						fetchData(page, pageSize);
 					},
-					onShowSizeChange : (current, size) => {
+					onShowSizeChange: (current, size) => {
 						inputData.pageSize = size;
 						fetchData(current, size);
 					},
