@@ -21,9 +21,7 @@ let new_gameRouter1 = {
 export default function GoldDetailorRiskControl({
   goldDetailData,
   tableOnchange,
-  tableOnShowSizeChange,
 }) {
-  // console.log('goldDetailData', goldDetailData);
   const { data, count, current, sumData } = goldDetailData;
   if (sumData) {
     var {
@@ -35,13 +33,10 @@ export default function GoldDetailorRiskControl({
   }
   let paginationConfig = {
     defaultPageSize: 50,
-    // showSizeChanger: true,
     showQuickJumper: true,
-    // pageSizeOptions: ["10", "20", "30", "50"],
     showTotal: (total, range) => `共${total}条`,
     total: count,
     onChange: tableOnchange,
-    // onShowSizeChange: tableOnShowSizeChange
   };
   if (current) {
     paginationConfig.current = current;
@@ -71,7 +66,6 @@ export default function GoldDetailorRiskControl({
         size="small"
         pagination={paginationConfig}
         scroll={{ x: "max-content" }}
-        // footer={footerData}
       />
     </div>
   );
@@ -461,12 +455,12 @@ async function check_game_data(record) {
                 {data.roomLevel === 1
                   ? "体验房"
                   : data.roomLevel === 2
-                  ? "初级场"
-                  : data.roomLevel === 3
-                  ? "中级场"
-                  : data.roomLevel === 4
-                  ? "高级场"
-                  : "-"}
+                    ? "初级场"
+                    : data.roomLevel === 3
+                      ? "中级场"
+                      : data.roomLevel === 4
+                        ? "高级场"
+                        : "-"}
               </Descriptions.Item>
             </Descriptions>
           );
@@ -1186,12 +1180,12 @@ async function check_game_data(record) {
                 {data.room_type === 1
                   ? "体验场"
                   : data.room_type === 2
-                  ? "初级场"
-                  : data.room_type === 3
-                  ? "中级场"
-                  : data.room_type === 4
-                  ? "高级场"
-                  : data.room_type}
+                    ? "初级场"
+                    : data.room_type === 3
+                      ? "中级场"
+                      : data.room_type === 4
+                        ? "高级场"
+                        : data.room_type}
               </Descriptions.Item>
               <Descriptions.Item label="底牌">
                 {reverse_ddz(data.bottom_card)}
@@ -1230,7 +1224,7 @@ async function check_game_data(record) {
           break;
         case "5b1f3a3cb76a591e7f251715":
         case "5b1f3a3cb76a451e210912":
-          //炸金花
+          //扎金花
           let columns = [
             {
               title: "玩家id",
@@ -1582,8 +1576,7 @@ async function check_game_data(record) {
                     >
                       <Table
                         title={() =>
-                          `总番数${
-                            data.settlement?.fang_info?.fang_total || ""
+                          `总番数${data.settlement?.fang_info?.fang_total || ""
                           }`
                         }
                         bordered
@@ -1917,9 +1910,8 @@ async function check_game_data(record) {
                 <Descriptions.Item label="当局投注资讯">
                   {(data.betinfo || []).map((ele, i) => {
                     return (
-                      <div key={i}>{`区域${index_shaibao[ele.BetIndex]} : ${
-                        ele.Total_gold
-                      }`}</div>
+                      <div key={i}>{`区域${index_shaibao[ele.BetIndex]} : ${ele.Total_gold
+                        }`}</div>
                     );
                   })}
                 </Descriptions.Item>
@@ -2442,8 +2434,8 @@ async function check_game_data(record) {
                   {data.room_name === "01"
                     ? "河内分分彩"
                     : data.room_name === "02"
-                    ? "奇趣分分彩"
-                    : ""}
+                      ? "奇趣分分彩"
+                      : ""}
                 </Descriptions.Item>
                 <Descriptions.Item label="开奖期数">
                   {data.issue_id}
@@ -2528,8 +2520,8 @@ async function check_game_data(record) {
                   {data.room_id === "1"
                     ? "河内分分彩"
                     : data.room_id === "2"
-                    ? "奇趣分分彩"
-                    : ""}
+                      ? "奇趣分分彩"
+                      : ""}
                 </Descriptions.Item>
                 <Descriptions.Item label="结算号码">
                   {data.card.resultNum}
@@ -2538,8 +2530,8 @@ async function check_game_data(record) {
                   {data.card.bigSmall === 1
                     ? "小"
                     : data.card.bigSmall === 2
-                    ? "大"
-                    : ""}
+                      ? "大"
+                      : ""}
                 </Descriptions.Item>
                 <Descriptions.Item label="玩家下注">
                   注池 大:{data.bet_info.BigDownBet}
@@ -2650,32 +2642,32 @@ async function check_game_data(record) {
                 <Descriptions.Item label="中奖区域">
                   {!data.isBanker &&
                     (data.card.result.cardType[0] === 1 &&
-                    data.card.result.cardType[1] === 3
+                      data.card.result.cardType[1] === 3
                       ? "小单"
                       : data.card.result.cardType[0] === 1 &&
                         data.card.result.cardType[1] === 4
-                      ? "小双"
-                      : data.card.result.cardType[0] === 2 &&
-                        data.card.result.cardType[1] === 3
-                      ? "大单"
-                      : data.card.result.cardType[0] === 2 &&
-                        data.card.result.cardType[1] === 4
-                      ? "大双"
-                      : "豹子")}
+                        ? "小双"
+                        : data.card.result.cardType[0] === 2 &&
+                          data.card.result.cardType[1] === 3
+                          ? "大单"
+                          : data.card.result.cardType[0] === 2 &&
+                            data.card.result.cardType[1] === 4
+                            ? "大双"
+                            : "豹子")}
                   {data.isBanker &&
                     (data.card.result.cardType[0] === 1 &&
-                    data.card.result.cardType[1] === 3
+                      data.card.result.cardType[1] === 3
                       ? "庄小单"
                       : data.card.result.cardType[0] === 1 &&
                         data.card.result.cardType[1] === 4
-                      ? "庄小双"
-                      : data.card.result.cardType[0] === 2 &&
-                        data.card.result.cardType[1] === 3
-                      ? "庄大单"
-                      : data.card.result.cardType[0] === 2 &&
-                        data.card.result.cardType[1] === 4
-                      ? "庄大双"
-                      : "庄豹子")}
+                        ? "庄小双"
+                        : data.card.result.cardType[0] === 2 &&
+                          data.card.result.cardType[1] === 3
+                          ? "庄大单"
+                          : data.card.result.cardType[0] === 2 &&
+                            data.card.result.cardType[1] === 4
+                            ? "庄大双"
+                            : "庄豹子")}
                 </Descriptions.Item>
                 <Descriptions.Item label="玩家下注">
                   注池 大:{data.bet_info.BigDownBet}

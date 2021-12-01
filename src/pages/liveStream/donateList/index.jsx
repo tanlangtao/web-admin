@@ -12,7 +12,6 @@ const DonateList = () => {
     const [data, setData] = useState([])
     const [gameList, setGameList] = useState({})
     const [loading, setLoading] = useState(false)
-    const [gameID, set_gameID] = useState();
     const initStates = useRef({
         streamerId: "",
         userId: "",
@@ -159,7 +158,6 @@ const DonateList = () => {
                             allowClear
                             onChange={value => {
                                 initStates.current.game_code = value;
-                                set_gameID(value);
                             }}
                         >
                             {_.map(gameList, (value, key) => {

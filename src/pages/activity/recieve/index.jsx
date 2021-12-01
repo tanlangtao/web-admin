@@ -152,7 +152,7 @@ class AccountList extends Component {
                 let res = "";
                 switch (text.split("-")[1]) {
                     case "100":
-                        res = "炸金花赢局";
+                        res = "扎金花赢局";
                         break;
                     case "101":
                         res = "斗地主赢局";
