@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { Card, Table, Modal, message, Icon, Button, Popover, Popconfirm } from "antd";
+import {
+  Card,
+  Table,
+  Modal,
+  message,
+  Icon,
+  Button,
+  Popover,
+  Popconfirm,
+} from "antd";
 import LinkButton from "../../../components/link-button/index";
 import { getNoticeList, delNotice } from "../../../api/index";
 import WrappedAddDataForm from "./addorEdit";
@@ -14,31 +23,31 @@ class Notice_list extends Component {
       pageSize: 20,
       inputParam: "",
       isAddDataShow: false,
-      isEditDataShow: false
+      isEditDataShow: false,
     };
   }
-  fetchNoticeList = async (page, limit) => {
-    const result = await getNoticeList(page, limit);
+  fetchNoticeList = async () => {
+    const result = await getNoticeList();
     if (result.data) {
-      let newData = JSON.parse(result.data)
+      let newData = JSON.parse(result.data);
       this.setState({
         data: newData,
-        count: newData.length
+        count: newData.length,
       });
     }
   };
   addData = () => {
     this.setState({
-      isAddDataShow: true
+      isAddDataShow: true,
     });
   };
-  edit = async record => {
+  edit = async (record) => {
     this.editDataRecord = record;
     this.setState({
-      isEditDataShow: true
+      isEditDataShow: true,
     });
   };
-  onDelete = async record => {
+  onDelete = async (record) => {
     let res = await delNotice(record._id);
     if (res.status === 0) {
       message.success("删除成功");
@@ -54,7 +63,7 @@ class Notice_list extends Component {
       pageSize: 20,
       inputParam: "",
       isAddDataShow: false,
-      isEditDataShow: false
+      isEditDataShow: false,
     });
     this.fetchNoticeList();
   };
@@ -104,7 +113,7 @@ class Notice_list extends Component {
           <WrappedAddDataForm
             cancel={() =>
               this.setState({
-                isAddDataShow: false
+                isAddDataShow: false,
               })
             }
             refreshPage={this.refreshPage}
@@ -124,7 +133,7 @@ class Notice_list extends Component {
               editDataRecord={this.editDataRecord}
               cancel={() =>
                 this.setState({
-                  isEditDataShow: false
+                  isEditDataShow: false,
                 })
               }
               refreshPage={() => this.fetchNoticeList()}
@@ -142,24 +151,24 @@ class Notice_list extends Component {
     {
       title: "品牌",
       dataIndex: "package_ids",
-      render: (text, record) => <span>{text.join(",")}</span>
+      render: (text, record) => <span>{text.join(",")}</span>,
     },
     {
       title: "代理",
-      dataIndex: "proxy_user_id"
+      dataIndex: "proxy_user_id",
     },
     {
       title: "公告类型",
       dataIndex: "type",
       render: (text, record) => (
         <span>{text === "1" || text === 1 ? "活动" : "公告"}</span>
-      )
+      ),
     },
     {
       title: "是否跑马灯",
       dataIndex: "is_slider",
       // eslint-disable-next-line
-      render: (text, record) => <span>{text == 1 ? "是" : "否"}</span>
+      render: (text, record) => <span>{text == 1 ? "是" : "否"}</span>,
     },
     {
       title: "公告内容",
@@ -171,7 +180,7 @@ class Notice_list extends Component {
               width: "170px",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
-              overflow: "hidden"
+              overflow: "hidden",
             }}
           >
             {text}
@@ -180,15 +189,15 @@ class Notice_list extends Component {
       ),
       onCell: (record, rowIndex) => {
         return {
-          onClick: event => { }, // 点击行
-          onDoubleClick: event => { },
-          onContextMenu: event => { },
-          onMouseEnter: event => {
+          onClick: (event) => {}, // 点击行
+          onDoubleClick: (event) => {},
+          onContextMenu: (event) => {},
+          onMouseEnter: (event) => {
             event.target.style.cursor = "pointer";
           }, // 鼠标移入行
-          onMouseLeave: event => { }
+          onMouseLeave: (event) => {},
         };
-      }
+      },
     },
     {
       title: "开始时间",
@@ -225,8 +234,8 @@ class Notice_list extends Component {
             </Button>
           </Popconfirm>
         </span>
-      )
-    }
+      ),
+    },
   ];
 }
 
