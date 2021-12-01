@@ -498,13 +498,10 @@ export const editUserRules = (id, rules, desc) => {
 //     return ajax("http://admin.miamirra.com/api/assignRule", {}, "GET", { needAuth: false });
 // };
 //客服-公告设置
-export const getList = (page, limit) => {
+export const getNoticeList = () => {
 	return ajax(
 		BASE + "/notice/getNoticeList",
-		{
-			page,
-			limit,
-		},
+		{},
 		"POST",
 	);
 };
