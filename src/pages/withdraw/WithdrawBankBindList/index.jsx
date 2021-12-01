@@ -92,7 +92,7 @@ class BankbindOnepayList extends Component {
           columns={this.initColumns()}
           size="small"
           pagination={{
-            defaultPageSize: 20,
+            defaultPageSize: 30,
             showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total, range) => `共${total}条`,
