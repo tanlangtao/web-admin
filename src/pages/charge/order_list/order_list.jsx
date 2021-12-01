@@ -76,9 +76,13 @@ class Order_list extends Component {
   download = async () => {
     let data = {
       ...this.reqData,
-      inputParam: this.inputValue,
-      paramKey: this.inputKey,
     };
+    if (this.inputKey === "1" || this.inputKey === "2") {
+      data.time_type = this.inputKey;
+    } else if (this.inputKey) {
+      data[this.inputKey] = this.inputValue;
+    }
+
     const res = await reqOrder_list(1, this.state.count, data);
     if (res.data) {
       this.setState({
@@ -348,7 +352,7 @@ class Order_list extends Component {
                 type="primary"
                 onClick={
                   this.state.pay_name.length !== 0 &&
-                    /^\d{16,19}$/.test(this.state.pay_account)
+                  /^\d{16,19}$/.test(this.state.pay_account)
                     ? this.sendChangepayAccountReadOnly
                     : this.sendChangepayAccount
                 }
