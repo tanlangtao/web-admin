@@ -176,7 +176,7 @@ export default (props) => {
           case "5c6a62be7ff587m117d446aa": //红包乱斗
             res = record?.room_name;
             break;
-          case "5c6a62be56209ac117d446aa": //聚宝盆
+          case "5c6a62be56209ac117d446aa": //聚宝盆捕鱼
             res = record?.room_info;
             break;
           case "cbzb2":
@@ -536,7 +536,7 @@ export default (props) => {
                 case "5c6a62be7ff587m117d446aa": //红包乱斗
                   res = record?.room_name;
                   break;
-                case "5c6a62be56209ac117d446aa": //聚宝盆
+                case "5c6a62be56209ac117d446aa": //聚宝盆捕鱼
                   res = record?.room_info;
                   break;
                 default:
