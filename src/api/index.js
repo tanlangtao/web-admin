@@ -1772,6 +1772,43 @@ export const saveWithDrawChannel = (id, name, value) => {
 //官方兑换-兑换黑名单
 export const withdrawBlack = (api, reqData, type = "GET") =>
 	ajax(`${BASE}/withdraw/${api}`, reqData, type);
+// 查询代理用户黑名单 
+export const getBlackProxyUserList = (page,limit,id) => {
+	return ajax(
+		BASE +"/Operation/Api/getBlackProxyUserList",
+		{
+			page,
+			limit,
+			id
+		},
+		"GET",
+	)
+}
+// 新增代理用户黑名单 
+export const addBlackProxyUserList = (id) => {
+	return ajax(
+		BASE +"/Operation/Api/addBlackProxyUserList",
+		{
+			id
+		},
+		"POST",
+		{content_type_is_formdata: true,}
+	)
+}
+// 刪除代理用户黑名单 
+export const deleteBlackProxyUserList = (id) => {
+	return ajax(
+		BASE +"/Operation/Api/deleteBlackProxyUserList",
+		{
+			id
+		},
+		"POST",
+		{content_type_is_formdata: true,}
+
+	)
+}
+
+	
 //赠送-赠送订单
 export const withDrawReview = (order_id, user_id, review_status) => {
 	return ajax(

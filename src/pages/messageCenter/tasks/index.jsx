@@ -162,6 +162,8 @@ class Tasks extends Component {
             ? "用户重置密码"
             : parseInt(text) === 3
             ? "解绑用户绑定账户"
+            : parseInt(text) === 4
+            ? "安全码重置"
             : ""}
         </span>
       ),

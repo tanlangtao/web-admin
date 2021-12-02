@@ -71,6 +71,7 @@ import ZRSX from "../gameData/ZRSX";
 import MoneyFloatDetail from "../customer_service/moneyfloat_detail";
 import BankCardCheck from "../user/bank_check";
 import GetAmmountbyPhone from "../user/getAmmountbyPhone";
+import GetBlackProxyUserList from "../user/getBlackProxyUserList";
 import { Provider, KeepAlive } from "react-keep-alive";
 import { History } from "../customer_service/history";
 import {
@@ -387,6 +388,11 @@ export default class Admin extends Component {
                       <GetAmmountbyPhone />
                     </KeepAlive>
                   </Route>
+                  <Route path="/user/getBlackProxyUserList" exact>
+                    <KeepAlive name="getBlackProxyUserList">
+                      <GetBlackProxyUserList />
+                    </KeepAlive>
+                  </Route>
                   <Route path="/customer_service/notice_list" exact>
                     <KeepAlive name="Notice_list">
                       <NoticeList />
@@ -432,13 +438,11 @@ export default class Admin extends Component {
                       <Role />
                     </KeepAlive>
                   </Route>
-
                   <Route path="/list/daily-report" exact>
                     <KeepAlive name="DailyReport">
                       <DailyReport />
                     </KeepAlive>
                   </Route>
-
                   <Route path="/list/gameDataList" exact>
                     <KeepAlive name="GameDataList">
                       <GameDataList />
@@ -459,7 +463,6 @@ export default class Admin extends Component {
                       <WrappedConfig />
                     </KeepAlive>
                   </Route>
-
                   <Route path="/gameSetting/setBuYuConfig" exact>
                     <KeepAlive name="FishConfig">
                       <FishConfig />
@@ -475,7 +478,6 @@ export default class Admin extends Component {
                       <WhitleList />
                     </KeepAlive>
                   </Route>
-
                   <Route path="/gameSetting/profitpoolsetting" exact>
                     <KeepAlive name="Profitpoolsetting">
                       <Profitpoolsetting isAuthed={true} />
@@ -673,7 +675,6 @@ export default class Admin extends Component {
                       <TaskList />
                     </KeepAlive>
                   </Route>
-
                   <Route path="/trade/accountList" exact>
                     <KeepAlive name="AccountList">
                       <AccountList />
@@ -794,13 +795,11 @@ export default class Admin extends Component {
                       <RechargeOrder />
                     </KeepAlive>
                   </Route>
-
                   <Route path="/artificialcharge/Daichong" exact>
                     <KeepAlive name="Daichong">
                       <Daichong />
                     </KeepAlive>
                   </Route>
-
                   <Route path="/charge/recharge_channel" exact>
                     <KeepAlive name="RechargeChannel">
                       <RechargeChannel />
@@ -846,13 +845,11 @@ export default class Admin extends Component {
                       <AI />
                     </KeepAlive>
                   </Route>
-
                   <Route path="/b2b/config" exact>
                     <KeepAlive name="B2bConfig">
                       <B2bConfig />
                     </KeepAlive>
                   </Route>
-
                   <Route path="/b2b/register" exact>
                     <KeepAlive name="B2bRegister">
                       <B2bRegister />
