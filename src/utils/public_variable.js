@@ -2,7 +2,7 @@
 export const gameRouter = {
     "5b1f3a3cb76a591e7f251721": { path: "/baijl/api", name: "百家乐" },
     "5b1f3a3cb76a451e210926": { path: "/baijl2/api", name: "百家乐2" },
-    "5c6a62be56209ac117d446aa": { path: "/jbpconsole/api", name: "聚宝盆" },
+    "5c6a62be56209ac117d446aa": { path: "/jbpconsole/api", name: "聚宝盆捕鱼" },
     "5b1f3a3cb76a591e7f2517a6": { path: "/haiwangbuyu/api", name: "海王捕鱼" },
     "5b1f3a3cb76a591e7f251719": { path: "/redblackwar/api", name: "红黑大战" },
     "5b1f3a3cb76a451e210919": { path: "/redblackwar2/api", name: "红黑大战2" },

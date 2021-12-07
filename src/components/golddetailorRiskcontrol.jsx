@@ -435,7 +435,7 @@ async function check_game_data(record) {
             </Descriptions>
           );
           break;
-        case "5c6a62be56209ac117d446aa": //聚宝盆
+        case "5c6a62be56209ac117d446aa": //聚宝盆捕鱼
           reactnode = (
             <Descriptions bordered size="small">
               <Descriptions.Item label="房间等级" span={3}>
