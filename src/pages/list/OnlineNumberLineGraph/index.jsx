@@ -70,8 +70,8 @@ const DemoLine = (props) => {
           packageID === 0
             ? Graph
             : Graph.filter((item) => {
-              return item.key === switchType(packageID);
-            })
+                return item.key === switchType(packageID);
+              })
         );
         setData(dataBrack);
       } else {
@@ -100,7 +100,7 @@ const DemoLine = (props) => {
         return "91游戏";
       case 8:
       case "8":
-        return "新盛游戏";
+        return "大喜发";
       case 9:
       case "9":
         return "新贵游戏";
