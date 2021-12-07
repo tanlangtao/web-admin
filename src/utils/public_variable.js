@@ -30,6 +30,7 @@ export const gameRouter = {
     "5b1f3a3cb76a451e210922": { path: "/shisanshui2/api", name: "十三水2" },
     "5b1f3a3cb76a591e7f251722": { path: "/21d/api", name: "21点" },
     "5b1f3a3cb76a591e7f25170": { path: "/ermj/api", name: "二人麻将" },
+    "5b1f3a3cb76a451e210923": { path: "/ermj2/api", name: "二人麻将2" },
     "5c6a62be7ff09a54amb446aa": { path: "/paodekuai/api", name: "跑得快" },
     "5b1f3a3cb76a591e7f251724": { path: "/shaibao/api", name: "骰宝" },
     "5b1f3a3cb76a451e210921": { path: "/shaibao2/api", name: "骰宝2" },
