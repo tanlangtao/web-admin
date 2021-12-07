@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Modal, message, Card } from "antd";
 import LinkButton from "../../../components/link-button/index";
-import {
-  getOnlineTotal,
-  getOnlineGame,
-} from "../../../api/index";
+import { getOnlineTotal, getOnlineGame } from "../../../api/index";
 import DemoLine from "../OnlineNumberLineGraph/index";
 import OnlineGame from "./onlineGame";
 import "./index.less";
@@ -85,7 +82,7 @@ export default () => {
             return "91游戏";
           case 8:
           case "8":
-            return "新盛游戏";
+            return "大喜发";
           case 9:
           case "9":
             return "新贵游戏";
@@ -155,7 +152,7 @@ export default () => {
             return "91游戏";
           case 8:
           case "8":
-            return "新盛游戏";
+            return "大喜发";
           case 9:
           case "9":
             return "新贵游戏";

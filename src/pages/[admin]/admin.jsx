@@ -51,7 +51,6 @@ import NotFound from "../not-found/not-found";
 import DailyReport from "../list/DailyReport";
 import GameDataList from "../list/gamedatalist";
 import OnlineNumber from "../list/onlineNumber";
-import OnlineNumberLineGraph from "../list/OnlineNumberLineGraph";
 import RuleManage from "../admin_manage/ruleManage";
 import BankOnePay from "../charge/bankOnePay";
 import FishConfig from "../gameSetting/fishConfig";
@@ -451,11 +450,6 @@ export default class Admin extends Component {
                   <Route path="/list/onlineNumber" exact>
                     <KeepAlive name="onlineNumber">
                       <OnlineNumber />
-                    </KeepAlive>
-                  </Route>
-                  <Route path="/list/onlineNumberLineGraph" exact>
-                    <KeepAlive name="onlineNumberLineGraph">
-                      <OnlineNumberLineGraph />
                     </KeepAlive>
                   </Route>
                   <Route path="/gameSetting/config" exact>
