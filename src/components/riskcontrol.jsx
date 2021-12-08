@@ -190,10 +190,10 @@ export default async (record) => {
             代理提现：
             {res.data["代理提现"] ? res.data["代理提现"].totalgold : "-"}
           </div>
-          {/* <div>
+          <div>
             转移收益：
             {res.data["转移收益"] ? res.data["转移收益"].totalgold : "-"}
-          </div> */}
+          </div>
           <br />
           <div>
             每日任务 :
