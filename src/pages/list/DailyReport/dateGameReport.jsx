@@ -60,7 +60,7 @@ const DateGameReport = (props) => {
             <>
                 &nbsp; &nbsp;
                 <p>以下时段无数据：</p>
-                <Table 
+                <Table
                     bordered
                     rowKey={(record, index) => `${index}`}
                     dataSource={details}
@@ -76,17 +76,17 @@ const DateGameReport = (props) => {
         //start_time=1599053186&end_time=1599153186&game_id=5b1f3a3cb76a591e7f251725&package_id=1
         console.log(record.game_id, start_time, end_time, package_id);
         message.loading({
-			content: "查询中",
-			key: "loadingMsg",
-			duration: 0
-		});
+            content: "查询中",
+            key: "loadingMsg",
+            duration: 0
+        });
         const res = await getGameUserStatementTotalList({
             game_id: record.game_id,
             start_time,
             end_time,
             package_id,
         });
-		message.destroy("loadingMsg");
+        message.destroy("loadingMsg");
         if (res.code === 200) {
             message.success(res.status);
             Modal.info({
@@ -143,6 +143,13 @@ const DateGameReport = (props) => {
             render: reverseNumber,
         },
         {
+            title: "玩家输赢差",
+            dataIndex: "",
+            render: (text, record) => {
+                return (Math.abs(record.lose_statement_total || 0) - (record.win_statement_total || 0))
+            },
+        },
+        {
             title: "玩家总流水",
             dataIndex: "statement_total",
             defaultSortOrder: "descend",
@@ -166,6 +173,7 @@ const DateGameReport = (props) => {
                     人数: ele.count,
                     玩家总赢额: ele.win_statement_total,
                     玩家总输额: ele.lose_statement_total,
+                    玩家输赢差: Math.abs(ele.lose_statement_total) - ele.win_statement_total,
                     玩家总流水: ele.statement_total,
                     盈亏比: ele.statement_ratio,
                 };
@@ -178,8 +186,8 @@ const DateGameReport = (props) => {
             {
                 sheetData: dataTable,
                 sheetName: "sheet",
-                sheetFilter: ["游戏", "人数", "玩家总赢额", "玩家总输额", "玩家总流水", "盈亏比"],
-                sheetHeader: ["游戏", "人数", "玩家总赢额", "玩家总输额", "玩家总流水", "盈亏比"],
+                sheetFilter: ["游戏", "人数", "玩家总赢额", "玩家总输额", "玩家输赢差", "玩家总流水", "盈亏比"],
+                sheetHeader: ["游戏", "人数", "玩家总赢额", "玩家总输额", "玩家输赢差", "玩家总流水", "盈亏比"],
             },
         ];
 
