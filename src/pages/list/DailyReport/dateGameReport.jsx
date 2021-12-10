@@ -146,7 +146,7 @@ const DateGameReport = (props) => {
             title: "玩家输赢差",
             dataIndex: "",
             render: (text, record) => {
-                return (Math.abs(record.lose_statement_total || 0) - (record.win_statement_total || 0))
+                return reverseNumber((Math.abs(record.lose_statement_total || 0) - (record.win_statement_total || 0)))
             },
         },
         {
