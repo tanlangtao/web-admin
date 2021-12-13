@@ -60,7 +60,7 @@ export default () => {
       render: (text, record) => {
         console.log("record", record);
         if (record.shareCount) {
-          return reverseNumber(record.net_profit * 0.4);
+          return reverseNumber(record.shareCount);
         } else return "-";
       },
     },
