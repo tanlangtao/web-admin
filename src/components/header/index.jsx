@@ -155,6 +155,9 @@ class Header extends Component {
       if (path.includes("subGame") && path.includes("xwby/level4")) {
         title = "大师房";
       }
+      if (path.includes("subGame") && path.includes("xwby/switchChouFang")) {
+        title = "自动抽水设置";
+      }
       if (path.includes("baseDividend") && path.includes("userGold")) {
         title = "查询代理个人玩家流水";
       }

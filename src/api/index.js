@@ -167,11 +167,11 @@ export const createTask = (user_id, resetpwd) => {
 //安全码重置功能
 export const updateSavePassword = (user_id, resetpwd) => {
 	return ajax(
-		BASE +"/tasks/createTask",
+		BASE + "/tasks/createTask",
 		{
-			task_type: 4 ,
-			params:{
-				id:user_id
+			task_type: 4,
+			params: {
+				id: user_id
 			},
 		},
 		"POST",
@@ -797,6 +797,24 @@ export const updateThirdAlg = ({ serverId, tid, diff, level, place }) => {
 	return ajax(
 		process.env.REACT_APP_GAME_HOST + "/xwby/api/updateThirdAlg",
 		{ serverName: "smxw", serverId, tid, diff, level, place },
+		"GET",
+		{ needAuth: false },
+	);
+};
+//自动抽水设置 关开 0关闭 1开启
+export const switchChouFang = (room, status) => {
+	return ajax(
+		process.env.REACT_APP_GAME_HOST + "/xwby/api/switchChouFang",
+		{ room, status },
+		"GET",
+		{ needAuth: false },
+	);
+};
+//各房间自动抽水设置
+export const getRoomsChouFangStatus = () => {
+	return ajax(
+		process.env.REACT_APP_GAME_HOST + "/xwby/api/roomsChouFangStatus",
+		{},
 		"GET",
 		{ needAuth: false },
 	);
@@ -1773,9 +1791,9 @@ export const saveWithDrawChannel = (id, name, value) => {
 export const withdrawBlack = (api, reqData, type = "GET") =>
 	ajax(`${BASE}/withdraw/${api}`, reqData, type);
 // 查询代理用户黑名单 
-export const getBlackProxyUserList = (page,limit,id) => {
+export const getBlackProxyUserList = (page, limit, id) => {
 	return ajax(
-		BASE +"/Operation/Api/getBlackProxyUserList",
+		BASE + "/Operation/Api/getBlackProxyUserList",
 		{
 			page,
 			limit,
@@ -1787,28 +1805,28 @@ export const getBlackProxyUserList = (page,limit,id) => {
 // 新增代理用户黑名单 
 export const addBlackProxyUserList = (id) => {
 	return ajax(
-		BASE +"/Operation/Api/addBlackProxyUserList",
+		BASE + "/Operation/Api/addBlackProxyUserList",
 		{
 			id
 		},
 		"POST",
-		{content_type_is_formdata: true,}
+		{ content_type_is_formdata: true, }
 	)
 }
 // 刪除代理用户黑名单 
 export const deleteBlackProxyUserList = (id) => {
 	return ajax(
-		BASE +"/Operation/Api/deleteBlackProxyUserList",
+		BASE + "/Operation/Api/deleteBlackProxyUserList",
 		{
 			id
 		},
 		"POST",
-		{content_type_is_formdata: true,}
+		{ content_type_is_formdata: true, }
 
 	)
 }
 
-	
+
 //赠送-赠送订单
 export const withDrawReview = (order_id, user_id, review_status) => {
 	return ajax(

@@ -102,6 +102,7 @@ import {
   XWBYcomponent2,
   XWBYcomponent3,
   XWBYcomponent4,
+  SwitchChouFang
 } from "../gameSetting/subGameSetting/xwby";
 import ProxyUserGold from "../proxy/baseDividend/UserGold";
 import GetUserSortByGameTag from "../proxy/baseDividend/GetUserSortByGameTag";
@@ -543,6 +544,11 @@ export default class Admin extends Component {
                   <Route path="/gameSetting/subGame/xwby/level4" exact>
                     <KeepAlive name="XWBYcomponent4">
                       <XWBYcomponent4 serverId={3003} />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/gameSetting/subGame/xwby/switchChouFang" exact>
+                    <KeepAlive name="SwitchChouFang">
+                      <SwitchChouFang />
                     </KeepAlive>
                   </Route>
                   <Route path="/proxy/setting" exact>

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Card, message, Button, Form, Radio, InputNumber } from "antd";
+import { Card, message, Button, Form, Radio, InputNumber, Table } from "antd";
+import LinkButton from "../../../../components/link-button";
 import {
 	getThirdAlgStatus,
 	getTableScore,
 	setchouFangThirdAlg,
 	updateThirdAlg,
+	switchChouFang,
+	getRoomsChouFangStatus
 } from "../../../../api";
 
 import _ from "lodash-es";
@@ -305,3 +308,96 @@ export const XWBYcomponent1 = XWBYcomponent;
 export const XWBYcomponent2 = XWBYcomponent;
 export const XWBYcomponent3 = XWBYcomponent;
 export const XWBYcomponent4 = XWBYcomponent;
+
+export const SwitchChouFang = () => {
+	const [roomStatus, setRoomStatus] = useState([])
+
+	const getRoomStatus = async () => {
+		const res = await getRoomsChouFangStatus()
+		if (res.code === 200) {
+			setRoomStatus(JSON.parse(res.detail).data)
+		} else {
+			message.info(res.status || JSON.stringify(res))
+		}
+	}
+
+	useEffect(() => {
+		getRoomStatus()
+	}, [])
+
+	const toggleSwitch = async (roomId, status) => {
+		const res = await switchChouFang(roomId, status ? 1 : 0)
+		const resParse = JSON.parse(res.detail)
+		if (resParse.code === 0) {
+			message.success("提交成功:" + res.detail);
+			getRoomStatus()
+		} else {
+			message.info("出错了：" + res.detail);
+		}
+	}
+
+	const initColumns = [
+		{
+			title: "序号",
+			dataIndex: "",
+			align: "center",
+			render: (text, record, index) => {
+				return `${index + 1}`
+			}
+		},
+		{
+			title: "房间类型",
+			dataIndex: "roomId",
+			align: "center",
+			render: (text, record, index) => {
+				let word;
+				switch (text) {
+					case 3000:
+						word = "初级房";
+						break;
+					case 3001:
+						word = "中级房";
+						break;
+					case 3002:
+						word = "高级房";
+						break;
+					case 3003:
+						word = "大师房";
+						break;
+					default:
+						word = "";
+						break;
+				}
+				return <span>{word}</span>;
+			}
+		},
+		{
+			title: "自动抽水状态",
+			dataIndex: "isChouFangOpen",
+			align: "center",
+			render: (text, record) => text ? '开启' : '关闭',
+		},
+		{
+			title: "操作",
+			dataIndex: "",
+			render: (record) => (
+				<span>
+					<LinkButton onClick={() => toggleSwitch(record.roomId, !record.isChouFangOpen)}>修改</LinkButton>
+				</span>
+			),
+		},
+	];
+	return (
+		<Card>
+			<Table
+				bordered
+				rowKey={(record, index) => `${index}`}
+				dataSource={roomStatus}
+				columns={initColumns}
+				size="small"
+				pagination={false}
+			// style={{ width: '500px' }}
+			/>
+		</Card>
+	)
+}
