@@ -23,7 +23,7 @@ export default () => {
       title: "用户有效投注",
       width: 200,
 
-      dataIndex: "platform_bet_total",
+      dataIndex: "player_bet_total",
     },
     {
       title: "用户奖金池占比",
