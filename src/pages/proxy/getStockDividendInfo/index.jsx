@@ -41,9 +41,8 @@ export default () => {
       dataIndex: "net_profit",
       width: 100,
       render: (text, record) => {
-        console.log("record", record);
         if (record.net_profit > 0) {
-          return reverseNumber(record.net_profit * 0.4);
+          return reverseNumber(record.net_profit * 0.5);
         } else return 0;
       },
     },
@@ -58,7 +57,6 @@ export default () => {
       width: 100,
       dataIndex: "shareCount",
       render: (text, record) => {
-        console.log("record", record);
         if (record.shareCount) {
           return reverseNumber(record.shareCount);
         } else return "-";
@@ -69,7 +67,6 @@ export default () => {
       width: 100,
       dataIndex: "myShares",
       render: (text, record) => {
-        console.log("record", record);
         if (record.myShares) {
           return reverseNumber(record.myShares);
         } else return "-";
