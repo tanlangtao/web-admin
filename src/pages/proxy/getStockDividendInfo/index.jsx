@@ -133,7 +133,7 @@ export default () => {
         totalShare =
           (res.msg[`${first_date + ":" + last_date}`][0]["amount"] /
             res.msg[`${first_date + ":" + last_date}`][0]["share"]) *
-          1000;
+          10000;
         res.msg[`${first_date + ":" + last_date}`].forEach((ele, index) => {
           if (index > 0) {
             totalPlayerBonusPoolRatio -= ele.amount;
