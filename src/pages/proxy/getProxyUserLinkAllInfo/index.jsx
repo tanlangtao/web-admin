@@ -26,7 +26,6 @@ export default () => {
     {
       title: "玩家ID",
       width: 100,
-
       dataIndex: "id",
     },
     {
@@ -40,7 +39,6 @@ export default () => {
     },
     {
       title: "上級ID",
-
       dataIndex: "proxy_user_id",
     },
     {
@@ -491,6 +489,7 @@ export default () => {
         columns={initColumns}
         size="small"
         pagination={false}
+        scroll={{ x: "max-content" }}
       />
     </Card>
   );
