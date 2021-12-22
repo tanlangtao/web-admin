@@ -44,6 +44,7 @@ import UserLinkAccount from "../proxy/userLinkAccount";
 import ProxyCheck from "../proxy/check";
 import LoseProfit from "../proxy/lose_profit";
 import GetStockDividendInfo from "../proxy/getStockDividendInfo";
+import GetProxyUserLinkAllInfo from "../proxy/getProxyUserLinkAllInfo";
 import DaitiList from "../withdraw/Daiti_list";
 import Channel from "../withdraw/Channel";
 import WithdrawBankBindList from "../withdraw/WithdrawBankBindList";
@@ -102,7 +103,7 @@ import {
   XWBYcomponent2,
   XWBYcomponent3,
   XWBYcomponent4,
-  SwitchChouFang
+  SwitchChouFang,
 } from "../gameSetting/subGameSetting/xwby";
 import ProxyUserGold from "../proxy/baseDividend/UserGold";
 import GetUserSortByGameTag from "../proxy/baseDividend/GetUserSortByGameTag";
@@ -576,6 +577,12 @@ export default class Admin extends Component {
                       <GetStockDividendInfo />
                     </KeepAlive>
                   </Route>
+                  <Route path="/proxy/getProxyUserLinkAllInfo" exact>
+                    <KeepAlive name="getProxyUserLinkAllInfo">
+                      <GetProxyUserLinkAllInfo />
+                    </KeepAlive>
+                  </Route>
+
                   <Route path="/proxy/lose_profit_devidend/details" exact>
                     <KeepAlive name="ProxyLoseProfitDevidend">
                       <ProxyLoseProfitDevidend />

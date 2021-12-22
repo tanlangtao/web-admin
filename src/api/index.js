@@ -2061,3 +2061,14 @@ export const getStockDividendInfo = (reqData) => {
 		"GET",
 	);
 };
+
+
+//查询获取代理链玩家明细
+export const getProxyUserLinkAllInfo = (reqData) => {
+	return ajax(
+		BASE + `/Operation/Api/GetProxyUserLinkAllInfo`,
+		{ ...reqData },
+		"GET",
+	);
+};
+

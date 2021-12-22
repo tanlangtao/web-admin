@@ -24,6 +24,19 @@ export function reverseNumber2(num) {
 }
 
 /*
+  四舍五入第六位保留四位小数 for excel download
+*/
+export function reverseNumberforExcelDownLoad(num) {
+    if (!num) return 0;
+    let f = parseFloat(num);
+    if (isNaN(f)) {
+        return undefined;
+    }
+    if (num === 0) return 0;
+    return (Math.round(num * 1000000) / 1000000).toFixed(4);
+}
+
+/*
   科学技术法还原真值
 */
 export function toNonExponential(num) {
