@@ -2072,3 +2072,27 @@ export const getProxyUserLinkAllInfo = (reqData) => {
 	);
 };
 
+//新增AG电子游戏开启与关闭界面
+export const getGamelistInfo = (reqData) => {
+	return ajax(
+		process.env.REACT_APP_GAME_HOST + `/ag/api/getGamelistInfo`,
+		{
+			...reqData
+		},
+		"GET",
+		{ needAuth: false, content_type_is_formdata: true },
+	)
+}
+
+// updateAG电子游戏清单
+export const updateGamelistInfo = (reqData) =>{
+	return ajax (
+		process.env.REACT_APP_GAME_HOST + `/ag/api/updateGamelistInfo`,
+		{
+			...reqData,
+			game_id:"5b1f3a3cb76a591e7f251736"
+		},
+		"POST",
+		{ needAuth: false, content_type_is_formdata: true },
+	)
+}

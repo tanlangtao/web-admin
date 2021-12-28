@@ -105,6 +105,7 @@ import {
   XWBYcomponent4,
   SwitchChouFang,
 } from "../gameSetting/subGameSetting/xwby";
+import GetGamelistInfo from "../gameSetting/subGameSetting/agGetGamelistInfo";
 import ProxyUserGold from "../proxy/baseDividend/UserGold";
 import GetUserSortByGameTag from "../proxy/baseDividend/GetUserSortByGameTag";
 import GetProxyUserInductionsSortByGameTag from "../proxy/baseDividend/GetProxyUserInductionsSortByGameTag";
@@ -550,6 +551,11 @@ export default class Admin extends Component {
                   <Route path="/gameSetting/subGame/xwby/switchChouFang" exact>
                     <KeepAlive name="SwitchChouFang">
                       <SwitchChouFang />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/gameSetting/subGame/agGetGamelistInfo" exact>
+                    <KeepAlive name="agGetGamelistInfo">
+                      <GetGamelistInfo />
                     </KeepAlive>
                   </Route>
                   <Route path="/proxy/setting" exact>
