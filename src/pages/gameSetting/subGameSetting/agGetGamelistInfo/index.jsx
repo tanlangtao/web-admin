@@ -93,9 +93,9 @@ class GamelistInfoList extends Component {
       dataIndex: "isclose",
       render: (text, record) => {
         if (text) {
-          return "开启";
-        } else {
           return "维护";
+        } else {
+          return "开启";
         }
       },
     },
