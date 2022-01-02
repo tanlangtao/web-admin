@@ -38,8 +38,8 @@ export function switchChannelType(text, record) {
             word = "UC"
             break
         default:
-        word = text;
-        break;
+            word = text;
+            break;
     }
     return word;
 };
@@ -97,6 +97,9 @@ export function switchType(text) {
             break;
         case "24":
             word = "usdt trc20";
+            break;
+        case "25":
+            word = "极速充值";
             break;
         default:
             word = "";

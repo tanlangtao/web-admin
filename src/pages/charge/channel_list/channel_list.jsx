@@ -251,6 +251,9 @@ class Channel_list extends Component {
           case "24":
             word = "usdt trc20";
             break;
+          case "25":
+            word = "极速充值";
+            break;
           default:
             word = "";
             break;

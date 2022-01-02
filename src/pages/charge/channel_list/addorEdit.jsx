@@ -103,6 +103,7 @@ class AddDataForm extends Component {
                             <Select.Option value="22">uc支付宝2</Select.Option>
                             <Select.Option value="23">usdt erc20</Select.Option>
                             <Select.Option value="24">usdt trc20</Select.Option>
+                            <Select.Option value="25">极速充值</Select.Option>
                         </Select>,
                     )}
                 </Form.Item>

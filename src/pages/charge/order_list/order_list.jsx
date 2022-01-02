@@ -229,6 +229,7 @@ class Order_list extends Component {
                 <Select.Option value="22">支付宝转卡</Select.Option>
                 <Select.Option value="23">usdt erc20</Select.Option>
                 <Select.Option value="24">usdt trc20</Select.Option>
+                <Select.Option value="25">极速充值</Select.Option>
               </Select>
               &nbsp; &nbsp;
               <LinkButton
@@ -352,7 +353,7 @@ class Order_list extends Component {
                 type="primary"
                 onClick={
                   this.state.pay_name.length !== 0 &&
-                  /^\d{16,19}$/.test(this.state.pay_account)
+                    /^\d{16,19}$/.test(this.state.pay_account)
                     ? this.sendChangepayAccountReadOnly
                     : this.sendChangepayAccount
                 }
@@ -476,6 +477,9 @@ class Order_list extends Component {
             break;
           case "24":
             word = "usdt trc20";
+            break;
+          case "25":
+            word = "极速充值";
             break;
           default:
             word = "";
