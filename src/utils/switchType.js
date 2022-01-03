@@ -11,6 +11,7 @@ export function switchChannelType(text, record) {
             word = "充提UC";
             break;
         case "12":
+        case "29":
             word = "onePay";
             break;
         case "11":
@@ -45,7 +46,7 @@ export function switchChannelType(text, record) {
 };
 
 /*
-  支付类型判别
+  支付类型判别(for order list 后端key type)
 */
 export function switchType(text) {
     let word;
@@ -98,7 +99,7 @@ export function switchType(text) {
         case "24":
             word = "usdt trc20";
             break;
-        case "25":
+        case "26":
             word = "极速充值";
             break;
         default:

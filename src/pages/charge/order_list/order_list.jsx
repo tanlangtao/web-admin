@@ -229,7 +229,8 @@ class Order_list extends Component {
                 <Select.Option value="22">支付宝转卡</Select.Option>
                 <Select.Option value="23">usdt erc20</Select.Option>
                 <Select.Option value="24">usdt trc20</Select.Option>
-                <Select.Option value="25">极速充值</Select.Option>
+                {/* order list 后端使用key为type 极速充值的value是26 */}
+                <Select.Option value="26">极速充值</Select.Option>
               </Select>
               &nbsp; &nbsp;
               <LinkButton
@@ -428,63 +429,7 @@ class Order_list extends Component {
       title: "支付类型",
       dataIndex: "type",
       render: (text, record, index) => {
-        let word;
-        switch (text) {
-          case "1":
-            word = "alipay";
-            break;
-          case "2":
-            word = "银行卡转账";
-            break;
-          case "3":
-            word = "人工代充";
-            break;
-          case "4":
-            word = "人工代提";
-            break;
-          case "5":
-            word = "被赠送";
-            break;
-          case "6":
-            word = "微信支付";
-            break;
-          case "7":
-            word = "银联支付";
-            break;
-          case "8":
-            word = "网银支付";
-            break;
-          case "9":
-            word = "快捷支付";
-            break;
-          case "18":
-            word = "imalipay";
-            break;
-          case "19":
-            word = "imwechat";
-            break;
-          case "20":
-            word = "imbank";
-            break;
-          case "21":
-            word = "imunionpay";
-            break;
-          case "22":
-            word = "支付宝转卡";
-            break;
-          case "23":
-            word = "usdt erc20";
-            break;
-          case "24":
-            word = "usdt trc20";
-            break;
-          case "25":
-            word = "极速充值";
-            break;
-          default:
-            word = "";
-            break;
-        }
+        const word = switchType(text)
         return <span>{word}</span>;
       },
     },
