@@ -189,6 +189,12 @@ export default async (record) => {
               : "-"}
           </div>
           <div>
+            极速兑换拒绝保证金退回:
+            {res.data["极速兑换拒绝保证金退回"]
+              ? reverseNumber(res.data["极速兑换拒绝保证金退回"].totalgold)
+              : "-"}
+          </div>
+          <div>
             极速兑换保证金扣除:
             {res.data["极速兑换保证金扣除"]
               ? reverseNumber(res.data["极速兑换保证金扣除"].totalgold)
@@ -491,6 +497,10 @@ export default async (record) => {
         </div>
         <div>
           提现拒绝增加金币:
+          {"-"}
+        </div>
+        <div>
+          极速兑换拒绝保证金退回:
           {"-"}
         </div>
         <div>
