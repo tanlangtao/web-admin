@@ -90,6 +90,7 @@ export default async (record) => {
         res.data["银行卡充值订单补单增加金币"]?.totalgold,
         res.data["渠道充值增加金币"]?.totalgold,
         res.data["渠道充值订单补单增加金币"]?.totalgold,
+        res.data["极速支付增加金币"]?.totalgold,
       ];
       var afterdeal_charge = _.compact(charge);
       let sumcharge = _.sumBy(afterdeal_charge, _.toNumber);
@@ -124,9 +125,9 @@ export default async (record) => {
             充值兑换差:
             {userStatistics.data
               ? reverseNumber(
-                  userStatistics.data.total_payment_arrival_amount -
-                    userStatistics.data.total_with_draw_amount
-                )
+                userStatistics.data.total_payment_arrival_amount -
+                userStatistics.data.total_with_draw_amount
+              )
               : "-"}
           </div>
           <div>总流水:{reverseNumber(sumgold)}</div>
@@ -148,6 +149,7 @@ export default async (record) => {
           <div>银行卡充值订单补单增加金币:{charge[3] || "-"}</div>
           <div>渠道充值增加金币:{charge[4] || "-"}</div>
           <div>渠道充值订单补单增加金币:{charge[5] || "-"}</div>
+          <div>极速支付增加金币:{charge[6] || "-"}</div>
           <div>
             不同名笔数:
             {res.data.bypayname && res.data.bypayname["不同名笔数"]
@@ -184,6 +186,24 @@ export default async (record) => {
             提现拒绝增加金币:
             {res.data["提现拒绝增加金币"]
               ? reverseNumber(res.data["提现拒绝增加金币"].totalgold)
+              : "-"}
+          </div>
+          <div>
+            极速兑换保证金扣除:
+            {res.data["极速兑换保证金扣除"]
+              ? reverseNumber(res.data["极速兑换保证金扣除"].totalgold)
+              : "-"}
+          </div>
+          <div>
+            极速兑换保证金退回:
+            {res.data["极速兑换保证金退回"]
+              ? reverseNumber(res.data["极速兑换保证金退回"].totalgold)
+              : "-"}
+          </div>
+          <div>
+            极速兑换红利增加金币:
+            {res.data["极速兑换红利增加金币"]
+              ? reverseNumber(res.data["极速兑换红利增加金币"].totalgold)
               : "-"}
           </div>
           <div>
@@ -425,9 +445,9 @@ export default async (record) => {
           充值兑换差:
           {userStatistics.data
             ? reverseNumber(
-                userStatistics.data.total_payment_arrival_amount -
-                  userStatistics.data.total_with_draw_amount
-              )
+              userStatistics.data.total_payment_arrival_amount -
+              userStatistics.data.total_with_draw_amount
+            )
             : "-"}
         </div>
         <div>总流水:"-"</div>
@@ -446,6 +466,7 @@ export default async (record) => {
         <div>银行卡充值订单补单增加金币:{"-"}</div>
         <div>渠道充值增加金币:{"-"}</div>
         <div>渠道充值订单补单增加金币:{"-"}</div>
+        <div>极速支付增加金币:{"-"}</div>
         <div>
           不同名笔数:
           {"-"}
@@ -470,6 +491,18 @@ export default async (record) => {
         </div>
         <div>
           提现拒绝增加金币:
+          {"-"}
+        </div>
+        <div>
+          极速兑换保证金扣除:
+          {"-"}
+        </div>
+        <div>
+          极速兑换保证金退回:
+          {"-"}
+        </div>
+        <div>
+          极速兑换红利增加金币:
           {"-"}
         </div>
         <div>代理提现： {"-"}</div>
