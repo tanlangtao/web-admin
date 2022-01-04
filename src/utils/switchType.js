@@ -7,9 +7,6 @@ export function switchChannelType(text, record) {
         case "0":
             word = record;
             break;
-        case "5":
-            word = "充提UC";
-            break;
         case "12":
         case "29":
             word = "onePay";
@@ -31,6 +28,7 @@ export function switchChannelType(text, record) {
         case "28":
             word = "聚鑫";
             break;
+        case "5":
         case "17":
         case "23":
         case "24":
