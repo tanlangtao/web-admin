@@ -7,10 +7,10 @@ import WrappedDataForm from "./add_or_edit";
 
 let recordData;
 export default function B2bconfig(props) {
-	const [ data, setData ] = useState([]);
-	const [ count, setCount ] = useState(0);
-	const [ dataForm, setdataForm ] = useState(false);
-	const [ dataFormTitle, setdataFormTitle ] = useState("");
+	const [data, setData] = useState([]);
+	const [count, setCount] = useState(0);
+	const [dataForm, setdataForm] = useState(false);
+	const [dataFormTitle, setdataFormTitle] = useState("");
 
 	const fetchData = async (page, limit) => {
 		const res = await getb2bconfig(page, limit);
@@ -35,35 +35,39 @@ export default function B2bconfig(props) {
 	};
 	const initColumns = [
 		{
-			title     : "平台码",
-			dataIndex : "platform_code"
+			title: "平台码",
+			dataIndex: "platform_code"
 		},
 		{
-			title     : "平台名称",
-			dataIndex : "name"
+			title: "平台名称",
+			dataIndex: "name"
 		},
 		{
-			title     : "平台验证token",
-			dataIndex : "token"
+			title: "平台环境包名",
+			dataIndex: "package_name"
 		},
 		{
-			title     : "平台上级代理ID",
-			dataIndex : "superior_agent"
+			title: "平台验证token",
+			dataIndex: "token"
 		},
 		{
-			title     : "创建时间",
-			dataIndex : "create_time",
-			render    : (text, record, index) => formateDate(text / 1000)
+			title: "平台上级代理ID",
+			dataIndex: "superior_agent"
 		},
 		{
-			title     : "更新时间",
-			dataIndex : "update_time",
-			render    : (text, record, index) => formateDate(text / 1000)
+			title: "创建时间",
+			dataIndex: "create_time",
+			render: (text, record, index) => formateDate(text / 1000)
 		},
 		{
-			title     : "操作",
-			dataIndex : "",
-			render    : (text, record, index) => {
+			title: "更新时间",
+			dataIndex: "update_time",
+			render: (text, record, index) => formateDate(text / 1000)
+		},
+		{
+			title: "操作",
+			dataIndex: "",
+			render: (text, record, index) => {
 				return (
 					<div>
 						<LinkButton
@@ -114,12 +118,12 @@ export default function B2bconfig(props) {
 				dataSource={data}
 				columns={initColumns}
 				pagination={{
-					defaultCurrent  : 1,
-					defaultPageSize : 20,
-					showQuickJumper : true,
-					showTotal       : (total, range) => `共${total}条`,
-					total           : count,
-					onChange        : (page, pageSize) => {
+					defaultCurrent: 1,
+					defaultPageSize: 20,
+					showQuickJumper: true,
+					showTotal: (total, range) => `共${total}条`,
+					total: count,
+					onChange: (page, pageSize) => {
 						fetchData(page, pageSize);
 					}
 				}}

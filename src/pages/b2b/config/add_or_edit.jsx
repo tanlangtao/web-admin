@@ -25,46 +25,57 @@ function dataForm({ data, action, form, cancel }) {
 		<Form labelCol={{ span: 7 }} onSubmit={handleSubmit}>
 			<Form.Item label="平台码">
 				{getFieldDecorator("platform_code", {
-					rules        : [
+					rules: [
 						{
-							required : true,
-							message  : "该项不能为空"
+							required: true,
+							message: "该项不能为空"
 						}
 					],
-					initialValue : action === "upt" ? data.platform_code : ""
+					initialValue: action === "upt" ? data.platform_code : ""
 				})(<Input style={{ width: "60%" }} />)}
 			</Form.Item>
 			<Form.Item label="平台验证token">
 				{getFieldDecorator("platform_token", {
-					rules        : [
+					rules: [
 						{
-							required : true,
-							message  : "该项不能为空"
+							required: true,
+							message: "该项不能为空"
 						}
 					],
-					initialValue : action === "upt" ? data.token : ""
+					initialValue: action === "upt" ? data.token : ""
 				})(<Input style={{ width: "60%" }} />)}
 			</Form.Item>
 			<Form.Item label="平台名">
 				{getFieldDecorator("platform_name", {
-					rules        : [
+					rules: [
 						{
-							required : true,
-							message  : "该项不能为空"
+							required: true,
+							message: "该项不能为空"
 						}
 					],
-					initialValue : action === "upt" ? data.name : ""
+					initialValue: action === "upt" ? data.name : ""
+				})(<Input style={{ width: "60%" }} />)}
+			</Form.Item>
+			<Form.Item label="平台环境包名">
+				{getFieldDecorator("package_name", {
+					rules: [
+						{
+							required: true,
+							message: "该项不能为空"
+						}
+					],
+					initialValue: action === "upt" ? data.package_name : ""
 				})(<Input style={{ width: "60%" }} />)}
 			</Form.Item>
 			<Form.Item label="平台上级代理ID">
 				{getFieldDecorator("superior_agent", {
-					rules        : [
+					rules: [
 						{
-							required : true,
-							message  : "该项不能为空"
+							required: true,
+							message: "该项不能为空"
 						}
 					],
-					initialValue : action === "upt" ? data.superior_agent : ""
+					initialValue: action === "upt" ? data.superior_agent : ""
 				})(<Input style={{ width: "60%" }} />)}
 			</Form.Item>
 			{/* <Form.Item label="用途">
