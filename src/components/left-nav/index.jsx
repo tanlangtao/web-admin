@@ -234,7 +234,7 @@ class LeftNav extends Component {
           onClick={() => (window.location.href = "/")}
         >
           <h1>QGame后台管理</h1>
-          <h4>V:1.0.7</h4>
+          <h4>V:1.0.8</h4>
         </div>
         <Menu
           mode="inline"

@@ -1,5 +1,5 @@
 import React from "react"
-import { Form, Input, Button, message } from "antd";
+import { Card, Form, Input, Button, message } from "antd";
 import { sendHighSpeedNotification } from "../../../api"
 import { useState } from "react";
 
@@ -26,39 +26,44 @@ const HighSpeedNotification = (props) => {
   }
 
   return (
-    <div style={{ padding: 30 }}>
-      <Form labelCol={{ span: 2 }} onSubmit={handleSubmit} labelAlign="left">
-        <Form.Item label="兑换订单ID:">
-          {getFieldDecorator("order_id", {
-            rules: [{ required: true, message: "请输入兑换订单ID" }],
-          })(<Input style={{ width: 300 }} placeholder="请输入兑换订单ID" />)}
-        </Form.Item>
-        <Form.Item label="金额:">
-          {getFieldDecorator("amount", {
-            rules: [{ required: true, message: "请输入金额" },
-            {
-              pattern: /^\d+(\.\d+)?$/,
-              message: "请输入有效数字"
-            }],
-          })(<Input style={{ width: 300 }} placeholder="请输入金额" />)}
-        </Form.Item>
-        <Form.Item label="状态:">
-          {getFieldDecorator("status", {
-            rules: [{ required: true, message: "请输入状态码" },
-            {
-              pattern: /^[0-1]?$/,
-              message: "请输入0或1"
-            },],
-          })(<Input style={{ width: 300 }} placeholder="请输入状态码" />)}
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            提交
-          </Button>
-        </Form.Item>
-      </Form>
-      <pre style={{ background: "#ececec", padding: 30 }}>{JSON.stringify(resMsg)}</pre>
-      <div style={{ 'fontSize': '16px' }}>
+    <div>
+      <Card
+        title={
+          <Form labelCol={{ span: 2 }} onSubmit={handleSubmit} labelAlign="left">
+            <Form.Item label="兑换订单ID:">
+              {getFieldDecorator("order_id", {
+                rules: [{ required: true, message: "请输入兑换订单ID" }],
+              })(<Input style={{ width: 300 }} placeholder="请输入兑换订单ID" />)}
+            </Form.Item>
+            <Form.Item label="金额:">
+              {getFieldDecorator("amount", {
+                rules: [{ required: true, message: "请输入金额" },
+                {
+                  pattern: /^\d+(\.\d+)?$/,
+                  message: "请输入有效数字"
+                }],
+              })(<Input style={{ width: 300 }} placeholder="请输入金额" />)}
+            </Form.Item>
+            <Form.Item label="状态:">
+              {getFieldDecorator("status", {
+                rules: [{ required: true, message: "请输入状态码" },
+                {
+                  pattern: /^[0-1]?$/,
+                  message: "请输入0或1"
+                },],
+              })(<Input style={{ width: 300 }} placeholder="请输入状态码" />)}
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                提交
+              </Button>
+            </Form.Item>
+          </Form>
+        }
+      >
+        <pre>{JSON.stringify(resMsg)}</pre>
+      </Card >
+      <div style={{ 'fontSize': '16px', padding: 24 }}>
         说明:
         <br />
         1. 本界面仅限极速兑换订单通知onepay使用
