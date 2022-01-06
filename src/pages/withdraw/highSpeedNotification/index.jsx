@@ -8,18 +8,18 @@ const HighSpeedNotification = (props) => {
   const [resMsg, setShowResMsg] = useState()
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    setShowResMsg()
+    e.preventDefault()
     props.form.validateFields(async (err, value) => {
       if (!err) {
-        const res = await sendHighSpeedNotification(value);
+        const res = await sendHighSpeedNotification(value)
+        setShowResMsg(res)
         if (res.status === 0) {
-          message.success("提交成功" + res.msg);
+          message.success("提交成功" + res.msg)
           props.cancel();
           props.form.resetFields();
-          setShowResMsg(res)
         } else {
-          message.info("出错了：" + res.msg);
-          setShowResMsg(res)
+          message.info("出错了：" + res.msg)
         }
       }
     });
