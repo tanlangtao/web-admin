@@ -353,6 +353,12 @@ export default async (record) => {
               ? res.data["大奖池活动增加金币"].totalgold
               : "-"}
           </div>
+          <div>
+            每日流水榜增加金币:
+            {res.data["每日流水榜增加金币"]
+              ? res.data["每日流水榜增加金币"].totalgold
+              : "-"}
+          </div>
           <br />
           <div>
             后台增加：{" "}
