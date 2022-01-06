@@ -240,12 +240,6 @@ export default async (record) => {
               : "-"}
           </div>
           <div>
-            开业注册送增加金币 :
-            {res.data["开业注册送增加金币"]
-              ? res.data["开业注册送增加金币"].totalgold
-              : "-"}
-          </div>
-          <div>
             首充赠金增加金币 :
             {res.data["首充赠金增加金币"]
               ? res.data["首充赠金增加金币"].totalgold
@@ -269,12 +263,6 @@ export default async (record) => {
               ? res.data["红包雨增加金币"].totalgold
               : "-"}
           </div>
-          {/* <div>
-						包赔活动增加金币：
-						{res.data["包赔活动增加金币"]
-							? res.data["包赔活动增加金币"].totalgold
-							: "-"}
-					</div> */}
           <div>
             老用户包赔增加金币：
             {res.data["老用户包赔增加金币"]
@@ -309,30 +297,6 @@ export default async (record) => {
             老用户首存活动余额清空
             {res.data["老用户首存活动余额清空"]
               ? res.data["老用户首存活动余额清空"].totalgold
-              : "-"}
-          </div>
-          <div>
-            HNFFC包赔增加金币：
-            {res.data["HNFFC包赔增加金币"]
-              ? res.data["HNFFC包赔增加金币"].totalgold
-              : "-"}
-          </div>
-          <div>
-            PTXFFC包赔增加金币:
-            {res.data["PTXFFC包赔增加金币"]
-              ? reverseNumber(res.data["PTXFFC包赔增加金币"].totalgold)
-              : "-"}
-          </div>
-          <div>
-            奇趣连赢活动10增加金币：
-            {res.data["奇趣连赢活动10增加金币"]
-              ? res.data["奇趣连赢活动10增加金币"].totalgold
-              : "-"}
-          </div>
-          <div>
-            河内连赢活动10增加金币：
-            {res.data["河内连赢活动10增加金币"]
-              ? res.data["河内连赢活动10增加金币"].totalgold
               : "-"}
           </div>
           <div>
@@ -389,12 +353,6 @@ export default async (record) => {
               ? res.data["大奖池活动增加金币"].totalgold
               : "-"}
           </div>
-          {/* <div>
-					每周佣金奖励领取增加金币：
-                        {res.data["每周佣金奖励领取增加金币"]
-                            ? res.data["每周佣金奖励领取增加金币"].totalgold
-                            : "-"}
-                    </div> */}
           <br />
           <div>
             后台增加：{" "}
@@ -427,7 +385,6 @@ export default async (record) => {
         <Table
           bordered
           rowKey={(record, index) => `${index}`}
-          // dataSource={riskData}
           columns={columns}
           size="small"
           pagination={false}
@@ -473,142 +430,43 @@ export default async (record) => {
         <div>渠道充值增加金币:{"-"}</div>
         <div>渠道充值订单补单增加金币:{"-"}</div>
         <div>极速支付增加金币:{"-"}</div>
-        <div>
-          不同名笔数:
-          {"-"}
-        </div>
-        <div>
-          不同名金额:
-          {"-"}
-        </div>
-        <div>
-          同名笔数:
-          {"-"}
-        </div>
-        <div>
-          同名金额:
-          {"-"}
-        </div>
+        <div>不同名笔数:{"-"}</div>
+        <div>不同名金额:{"-"}</div>
+        <div>同名笔数:{"-"}</div>
+        <div>同名金额:{"-"}</div>
         <br />
         <div>提现：</div>
-        <div>
-          提现扣减金币:
-          {"-"}
-        </div>
-        <div>
-          提现拒绝增加金币:
-          {"-"}
-        </div>
-        <div>
-          极速兑换拒绝保证金退回:
-          {"-"}
-        </div>
-        <div>
-          极速兑换保证金扣除:
-          {"-"}
-        </div>
-        <div>
-          极速兑换保证金退回:
-          {"-"}
-        </div>
-        <div>
-          极速兑换红利增加金币:
-          {"-"}
-        </div>
+        <div>提现扣减金币:{"-"}</div>
+        <div>提现拒绝增加金币:{"-"}</div>
+        <div>极速兑换拒绝保证金退回:{"-"}</div>
+        <div>极速兑换保证金扣除:{"-"}</div>
+        <div>极速兑换保证金退回:{"-"}</div>
+        <div>极速兑换红利增加金币:{"-"}</div>
         <div>代理提现： {"-"}</div>
         <br />
         <div>每日任务 :{"-"}</div>
         <div>流水闯关 :{"-"}</div>
         <div>USDT存款赠金增加金币 :{"-"}</div>
-        <div>开业注册送增加金币 :{"-"}</div>
         <div>首充赠金增加金币 :{"-"}</div>
-        <div>
-          每日任务增加金币：
-          {"-"}
-        </div>
-        <div>
-          积分抽奖增加金币：
-          {"-"}
-        </div>
-        <div>
-          红包雨增加金币：
-          {"-"}
-        </div>
-        <div>
-          老用户包赔增加金币：
-          {"-"}
-        </div>
-        <div>
-          新用户包赔增加金币：
-          {"-"}
-        </div>
-        <div>
-          老用户当日充值赠金增加金币：
-          {"-"}
-        </div>
-        <div>
-          活动余额清空：
-          {"-"}
-        </div>
-        <div>
-          新用户首存活动余额清空：
-          {"-"}
-        </div>
-        <div>
-          老用户首存活动余额清空
-          {"-"}
-        </div>
-        <div>
-          HNFFC包赔增加金币：
-          {"-"}
-        </div>
-        <div>
-          PTXFFC包赔增加金币:
-          {"-"}
-        </div>
-        <div>
-          奇趣连赢活动10增加金币：
-          {"-"}
-        </div>
-        <div>
-          河内连赢活动10增加金币：
-          {"-"}
-        </div>
-        <div>
-          日业绩活动领取增加金币：
-          {"-"}
-        </div>
-        <div>
-          百万扶持奖励领取增加金币：
-          {"-"}
-        </div>
-        <div>
-          捕鱼通关豪礼领取增加金币：
-          {"-"}
-        </div>
-        <div>
-          豪礼流水活动发放奖金:
-          {"-"}
-        </div>
-        <div>
-          昨日赢金榜增加金币:
-          {"-"}
-        </div>
-        <div>
-          新增有效代理排行榜增加金币:
-          {"-"}
-        </div>
-        <div>
-          每日免费礼金增加金币:
-          {"-"}
-        </div>
-
+        <div>每日任务增加金币：{"-"}</div>
+        <div>积分抽奖增加金币：{"-"}</div>
+        <div>红包雨增加金币：{"-"}</div>
+        <div>老用户包赔增加金币：{"-"}</div>
+        <div>新用户包赔增加金币：{"-"}</div>
+        <div>老用户当日充值赠金增加金币：{"-"}</div>
+        <div>活动余额清空：{"-"}</div>
+        <div>新用户首存活动余额清空：{"-"}</div>
+        <div>老用户首存活动余额清空{"-"}</div>
+        <div>日业绩活动领取增加金币：{"-"}</div>
+        <div>百万扶持奖励领取增加金币：{"-"}</div>
+        <div>捕鱼通关豪礼领取增加金币：{"-"}</div>
+        <div>豪礼流水活动发放奖金:{"-"}</div>
+        <div>昨日赢金榜增加金币:{"-"}</div>
+        <div>新增有效代理排行榜增加金币:{"-"}</div>
+        <div>每日免费礼金增加金币:{"-"}</div>
         <br />
         <div>后台增加： {"-"}</div>
-        <div>
-          后台减少：
-          {"-"}
-        </div>
+        <div>后台减少：{"-"}</div>
       </React.Fragment>
     );
     Modal.info({
