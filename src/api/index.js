@@ -1630,13 +1630,7 @@ export const withDraw = (page, limit, data) => {
 		"POST",
 	);
 };
-// export const withdrawClaim = () => {
-// 	return ajax(
-// 		BASE + "/api/with_draw/WithdrawClaim",
-// 		{},
-// 		"GET",
-// 	);
-// };
+
 export const reviewInfo = (page, limit, id) => {
 	return ajax(
 		BASE + "/order/reviewInfo",
@@ -2085,14 +2079,27 @@ export const getGamelistInfo = (reqData) => {
 }
 
 // updateAG电子游戏清单
-export const updateGamelistInfo = (reqData) =>{
-	return ajax (
+export const updateGamelistInfo = (reqData) => {
+	return ajax(
 		process.env.REACT_APP_GAME_HOST + `/ag/api/updateGamelistInfo`,
 		{
 			...reqData,
-			game_id:"5b1f3a3cb76a591e7f251736"
+			game_id: "5b1f3a3cb76a591e7f251736"
 		},
 		"POST",
 		{ needAuth: false, content_type_is_formdata: true },
+	)
+}
+
+//官方兑换-极速兑换通知
+export const sendHighSpeedNotification = (reqData) => {
+	return ajax(
+		BASE + `/api/with_draw/notifyHighSpeedWithdraw`,
+		{
+			...reqData,
+			token: "e40f01afbb1b9ae3dd6747ced5bca532"
+		},
+		"POST",
+		{ content_type_is_formdata: true },
 	)
 }

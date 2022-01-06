@@ -61,13 +61,6 @@ import Profitpoolsetting from "../gameSetting/profit_pool";
 import B2bConfig from "../b2b/config";
 import B2bRegister from "../b2b/register";
 import ZRSX from "../gameData/ZRSX";
-// import PCCP from "../gameData/PCCP";
-// import Agadmin from "../gameData/ag-admin";
-// import Sbadmin from "../gameData/sb-admin";
-// import Cyadmin from "../gameData/cy-admin";
-// import Cqgame from "../gameData/cqgame";
-// import { PTadmin } from "../gameData/otherAdmins";
-// import PGgame from "../gameData/pggame";
 import MoneyFloatDetail from "../customer_service/moneyfloat_detail";
 import BankCardCheck from "../user/bank_check";
 import GetAmmountbyPhone from "../user/getAmmountbyPhone";
@@ -121,22 +114,15 @@ import GetBaseDividendRule1 from "../proxy/newBaseDividend/GetBaseDividentRule1"
 import GetBaseDividendRule2 from "../proxy/secondBaseDividend/GetBaseDividentRule2";
 import ProxyBaseDividend1 from "../proxy/newBaseDividend/Details";
 import ProxyBaseDividend2 from "../proxy/secondBaseDividend/Details2";
-
 import GetProxyGetGlobal from "../proxy/baseDividend/GetProxyGetGlobal";
 import DonateList from "../liveStream/donateList";
 import LiveReport from "../liveStream/liveReport";
 import LiveBlackList from "../liveStream/blackList";
+import HighSpeedNotification from "../withdraw/highSpeedNotification";
 
 const { Sider, Content } = Layout;
-
 const history = createHashHistory();
-// let is_ag_load = false;
-// let is_sb_load = false;
-// let is_cy_load = false;
-// let is_pccp_load = false;
-// let is_cqgame_load = false;
-// let is_PTadmin_load = false;
-// let is_pggame_load = false;
+
 
 //后台管理的路由组件
 export default class Admin extends Component {
@@ -150,20 +136,6 @@ export default class Admin extends Component {
     if (!token) {
       return <Redirect to="/login" />;
     }
-    //如果内存中存储的token超过24小时，需要验证token，如果已经延期更新时间戳，如果未延期，更新token
-    // const timeStamp = new Date().getTime();
-    // const tokenTimeStamp = localStorage.tokenTimeStamp;
-    // let time = timeStamp - tokenTimeStamp;
-    // if (time > 24 * 3600 * 1000) {
-    //   const res = reqUsers(1, 20);
-    //   if (res.status !== 0) {
-    //     localStorage.removeItem("menuList");
-    //     localStorage.removeItem("token");
-    //     localStorage.removeItem("name");
-    //     localStorage.removeItem("tokenTimeStamp");
-    //     return <Redirect to="/login" />;
-    //   }
-    // }
     return (
       <Layout style={{ minHeight: "100%" }}>
         <Sider
@@ -195,168 +167,6 @@ export default class Admin extends Component {
                   height: "100%",
                 }}
               >
-                {/* 不卸载agadmin组件,只是在路由切换的时候隐藏,注意这里Route的位置,不能放在switch中,参考https://blog.csdn.net/weixin_33713350/article/details/91367938 */}
-                {/* <Route
-									path="/gameData/Agadmin"
-									exact
-									children={props => {
-										if (props.location.pathname === "/gameData/Agadmin") {
-											is_ag_load = true;
-										}
-										return is_ag_load ? (
-											<div
-												style={{
-													height: "100%",
-													display:
-														props.location.pathname !==
-															"/gameData/Agadmin"
-															? "none"
-															: "block",
-												}}
-											>
-												<Agadmin />
-											</div>
-										) : null;
-									}}
-								/>
-								<Route
-									path="/gameData/Sbadmin"
-									exact
-									children={props => {
-										if (props.location.pathname === "/gameData/Sbadmin") {
-											is_sb_load = true;
-										}
-										return is_sb_load ? (
-											<div
-												style={{
-													height: "100%",
-													display:
-														props.location.pathname !==
-															"/gameData/Sbadmin"
-															? "none"
-															: "block",
-												}}
-											>
-												<Sbadmin />
-											</div>
-										) : null;
-									}}
-								/>
-								<Route
-									path="/gameData/Cyadmin"
-									exact
-									children={props => {
-										if (props.location.pathname === "/gameData/Cyadmin") {
-											is_cy_load = true;
-										}
-										return is_cy_load ? (
-											<div
-												style={{
-													height: "100%",
-													display:
-														props.location.pathname !==
-															"/gameData/Cyadmin"
-															? "none"
-															: "block",
-												}}
-											>
-												<Cyadmin />
-											</div>
-										) : null;
-									}}
-								/>
-
-								<Route
-									path="/gameData/PCCP"
-									exact
-									children={props => {
-										if (props.location.pathname === "/gameData/PCCP") {
-											is_pccp_load = true;
-										}
-										return is_pccp_load ? (
-											<div
-												style={{
-													height: "100%",
-													display:
-														props.location.pathname !== "/gameData/PCCP"
-															? "none"
-															: "block",
-												}}
-											>
-												<PCCP />
-											</div>
-										) : null;
-									}}
-								/>
-								<Route
-									path="/gameData/Cqgame"
-									exact
-									children={props => {
-										if (props.location.pathname === "/gameData/Cqgame") {
-											is_cqgame_load = true;
-										}
-										return is_cqgame_load ? (
-											<div
-												style={{
-													height: "100%",
-													display:
-														props.location.pathname !==
-															"/gameData/Cqgame"
-															? "none"
-															: "block",
-												}}
-											>
-												<Cqgame />
-											</div>
-										) : null;
-									}}
-								/>
-								<Route
-									path="/gameData/PTadmin"
-									exact
-									children={props => {
-										if (props.location.pathname === "/gameData/PTadmin") {
-											is_PTadmin_load = true;
-										}
-										return is_PTadmin_load ? (
-											<div
-												style={{
-													height: "100%",
-													display:
-														props.location.pathname !==
-															"/gameData/PTadmin"
-															? "none"
-															: "block",
-												}}
-											>
-												<PTadmin />
-											</div>
-										) : null;
-									}}
-								/>
-								<Route
-									path="/gameData/Pggame"
-									exact
-									children={props => {
-										if (props.location.pathname === "/gameData/Pggame") {
-											is_pggame_load = true;
-										}
-										return is_pggame_load ? (
-											<div
-												style={{
-													height: "100%",
-													display:
-														props.location.pathname !==
-															"/gameData/Pggame"
-															? "none"
-															: "block",
-												}}
-											>
-												<PGgame />
-											</div>
-										) : null;
-									}}
-								/> */}
                 <Switch>
                   <Redirect from="/" exact to="/home" />
                   <Route path="/home" exact component={Home} />
@@ -893,14 +703,11 @@ export default class Admin extends Component {
                       <LiveBlackList />
                     </KeepAlive>
                   </Route>
-                  {/* 改成點擊菜單另開新分頁 */}
-                  {/* <Route path="/gameData/PCCP" exact />
-									<Route path="/gameData/Agadmin" exact />
-									<Route path="/gameData/Sbadmin" exact />
-									<Route path="/gameData/Cyadmin" exact />
-									<Route path="/gameData/Cqgame" exact />
-									<Route path="/gameData/PTadmin" exact />
-									<Route path="/gameData/pggame" exact /> */}
+                  <Route path="/withdraw/highSpeedNotification" exact>
+                    <KeepAlive name="highSpeedNotification">
+                      <HighSpeedNotification />
+                    </KeepAlive>
+                  </Route>
                   <Route component={NotFound} />
                 </Switch>
               </div>
