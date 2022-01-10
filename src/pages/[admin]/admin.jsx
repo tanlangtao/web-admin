@@ -99,6 +99,7 @@ import {
   SwitchChouFang,
 } from "../gameSetting/subGameSetting/xwby";
 import GetGamelistInfo from "../gameSetting/subGameSetting/agGetGamelistInfo";
+import GetGamelistInfojdb from "../gameSetting/subGameSetting/jdbGetGamelistInfo";
 import ProxyUserGold from "../proxy/baseDividend/UserGold";
 import GetUserSortByGameTag from "../proxy/baseDividend/GetUserSortByGameTag";
 import GetProxyUserInductionsSortByGameTag from "../proxy/baseDividend/GetProxyUserInductionsSortByGameTag";
@@ -122,7 +123,6 @@ import HighSpeedNotification from "../withdraw/highSpeedNotification";
 
 const { Sider, Content } = Layout;
 const history = createHashHistory();
-
 
 //后台管理的路由组件
 export default class Admin extends Component {
@@ -366,6 +366,11 @@ export default class Admin extends Component {
                   <Route path="/gameSetting/subGame/agGetGamelistInfo" exact>
                     <KeepAlive name="agGetGamelistInfo">
                       <GetGamelistInfo />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/gameSetting/subGame/jdbGetGamelistInfo" exact>
+                    <KeepAlive name="jdbGetGamelistInfo">
+                      <GetGamelistInfojdb />
                     </KeepAlive>
                   </Route>
                   <Route path="/proxy/setting" exact>

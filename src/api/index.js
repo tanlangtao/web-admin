@@ -2091,6 +2091,31 @@ export const updateGamelistInfo = (reqData) => {
 	)
 }
 
+//新增jdb电子游戏开启与关闭界面
+export const getjdbGamelistInfo = (reqData) => {
+	return ajax(
+		process.env.REACT_APP_GAME_HOST + `/jdb/api/getGamelistInfo`,
+		{
+			...reqData
+		},
+		"GET",
+		{ needAuth: false, content_type_is_formdata: true },
+	)
+}
+
+// updatejdb电子游戏清单
+export const updatejdbGamelistInfo = (reqData) => {
+	return ajax(
+		process.env.REACT_APP_GAME_HOST + `/jdb/api/updateGamelistInfo`,
+		{
+			...reqData,
+			game_id: "5b1f3a3cb76a451e7f251739"
+		},
+		"POST",
+		{ needAuth: false, content_type_is_formdata: true },
+	)
+}
+
 //官方兑换-极速兑换通知
 export const sendHighSpeedNotification = (reqData) => {
 	return ajax(

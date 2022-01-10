@@ -5,7 +5,7 @@ import {
   getAIList,
   reqLoadGold,
   setGameUserNickName,
-  changeInternalUserBalance
+  changeInternalUserBalance,
 } from "../../../api";
 
 class Withdraw_list extends Component {
@@ -15,24 +15,24 @@ class Withdraw_list extends Component {
       data: [],
       count: 0,
       minGold: "",
-      maxGold: ""
+      maxGold: "",
     };
   }
   getUsers = async (page, limit) => {
     const result = await getAIList(page, limit, 5);
     this.setState({
       data: result.data.game_user,
-      count: parseInt(result.data&&result.data.count)
+      count: parseInt(result.data && result.data.count),
     });
   };
   onSearchData = async () => {
     let value = {
-      [this.filed]: this.input.input.value
+      [this.filed]: this.input.input.value,
     };
     const result = await getAIList(1, 20, 5, value);
     this.setState({
       data: result.data.game_user,
-      count: parseInt(result.count)
+      count: parseInt(result.count),
     });
   };
   componentDidMount() {
@@ -46,7 +46,7 @@ class Withdraw_list extends Component {
             <Select
               placeholder="请选择"
               style={{ width: 150 }}
-              onSelect={value => (this.filed = value)}
+              onSelect={(value) => (this.filed = value)}
             >
               <Select.Option value="game_nick">昵称</Select.Option>
               <Select.Option value="user_id">user_id</Select.Option>
@@ -56,7 +56,7 @@ class Withdraw_list extends Component {
               type="text"
               placeholder="请输入关键字"
               style={{ width: 150 }}
-              ref={Input => (this.input = Input)}
+              ref={(Input) => (this.input = Input)}
             />
           </div>
         }
@@ -90,38 +90,38 @@ class Withdraw_list extends Component {
   initColumns = () => [
     {
       title: "user_id",
-      dataIndex: "id"
+      dataIndex: "id",
     },
     {
       title: "昵称",
-      dataIndex: "game_nick"
+      dataIndex: "game_nick",
     },
     {
       title: "账户余额",
-      dataIndex: "game_gold"
+      dataIndex: "game_gold",
     },
     {
       title: "实时余额",
       dataIndex: "",
-      render: record => (
+      render: (record) => (
         <span>
           <LinkButton onClick={() => this.check(record)}>查看</LinkButton>
         </span>
-      )
-    }
+      ),
+    },
   ];
   rowSelection = () => {
     return {
       onChange: (selectedRowKeys, selectedRows) => {
         this.selectedRows = selectedRows;
       },
-      getCheckboxProps: record => ({
+      getCheckboxProps: (record) => ({
         // disabled: record.name === "Disabled User", // Column configuration not to be checked
         // name: record.name
-      })
+      }),
     };
   };
-  check = async record => {
+  check = async (record) => {
     const res = await reqLoadGold(record.id);
     message.info(res.data[0].game_gold);
   };
@@ -158,7 +158,7 @@ class Withdraw_list extends Component {
               // onChange={e => {
               //   this.setState({ minGold: e.target.value });
               // }}
-              onBlur={e => this.setState({ minGold: e.target.value })}
+              onBlur={(e) => this.setState({ minGold: e.target.value })}
               // ref={Input => (this.minInput = Input)}
             />
             --
@@ -166,11 +166,11 @@ class Withdraw_list extends Component {
               type="text"
               style={{ width: "40%" }}
               placeholder="￥最大值"
-              onBlur={e => this.setState({ maxGold: e.target.value })}
+              onBlur={(e) => this.setState({ maxGold: e.target.value })}
               // ref={Input => (this.maxInput = Input)}
             />
           </div>
-        )
+        ),
       });
     }
   };
