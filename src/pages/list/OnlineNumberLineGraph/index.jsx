@@ -4,6 +4,7 @@ import { Card, message, Select, Icon } from "antd";
 import LinkButton from "../../../components/link-button";
 import MyDatePicker from "../../../components/MyDatePickerStartToday";
 import { getOnlineTotalGraph, userPackageList } from "../../../api/index";
+import { switchPackageId } from "../../../utils/switchType";
 
 let initstate = {
   start_time: null,
@@ -85,49 +86,7 @@ const DemoLine = (props) => {
   };
 
   const switchType = (record) => {
-    switch (record) {
-      case "1":
-      case 1:
-        return "特斯特娱乐";
-      case 2:
-      case "2":
-        return "德比游戏";
-      case 3:
-      case "3":
-        return "杏吧娱乐";
-      case 6:
-      case "6":
-        return "91游戏";
-      case 8:
-      case "8":
-        return "大喜发";
-      case 9:
-      case "9":
-        return "新贵游戏";
-      case 10:
-      case "10":
-        return "富鑫II游戏";
-      case 11:
-      case "11":
-        return "新豪游戏";
-      case 12:
-      case "12":
-        return "新隆游戏";
-      case 13:
-      case "13":
-        return "皇室游戏";
-      case 15:
-      case "15":
-        return "聚鼎娱乐";
-      case 16:
-      case "16":
-        return "92游戏";
-      case 18:
-      case "18":
-        return "华兴娱乐";
-      default:
-        return;
-    }
+    return switchPackageId(record);
   };
   var COLOR_PLATE_20 = [
     "#5B8FF9",

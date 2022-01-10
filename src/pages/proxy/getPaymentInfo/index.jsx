@@ -4,6 +4,7 @@ import { getPaymentInfo } from "../../../api";
 import MyDatePicker from "../../../components/MyDatePicker";
 
 import { reverseNumber2 } from "../../../utils/commonFuntion";
+import { switchPackageId } from "../../../utils/switchType";
 
 let initstate = {
   start_time: null,
@@ -29,33 +30,8 @@ export default () => {
     {
       title: "渠道ID",
       dataIndex: "package_id",
-      render: (text) => {
-        switch (text) {
-          case 1:
-            return "特斯特娱乐";
-          case 2:
-            return "德比游戏";
-          case 3:
-            return "杏吧娱乐";
-          case 6:
-            return "91游戏";
-          case 8:
-            return "大喜发";
-          case 9:
-            return "新贵游戏";
-          case 10:
-            return "富鑫II游戏";
-          case 11:
-            return "新豪游戏";
-          case 12:
-            return "新隆游戏";
-          case 13:
-            return "皇室游戏";
-          case 15:
-            return "聚鼎娱乐";
-          default:
-            return "";
-        }
+      render: (record) => {
+        return switchPackageId(record);
       },
     },
     {
