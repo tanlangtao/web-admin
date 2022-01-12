@@ -231,6 +231,7 @@ class Order_list extends Component {
                 <Select.Option value="24">usdt trc20</Select.Option>
                 {/* order list 后端使用key为type 极速充值的value是26 */}
                 <Select.Option value="26">极速充值</Select.Option>
+                <Select.Option value="27">匹配充值</Select.Option>
               </Select>
               &nbsp; &nbsp;
               <LinkButton

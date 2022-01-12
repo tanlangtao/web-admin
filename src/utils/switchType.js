@@ -36,6 +36,9 @@ export function switchChannelType(text, record) {
     case "26":
       word = "UC";
       break;
+    case "30":
+      word = "Qpay";
+      break;
     default:
       word = text;
       break;
@@ -99,6 +102,9 @@ export function switchType(text) {
       break;
     case "26":
       word = "极速充值";
+      break;
+    case "27":
+      word = "匹配充值";
       break;
     default:
       word = "";
