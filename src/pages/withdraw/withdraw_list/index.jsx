@@ -137,7 +137,7 @@ class Withdraw_list extends Component {
         // document.body.scrollTop = document.documentElement.scrollTop = 0;
         this.getUsers(
           previousPage +
-            parseInt((newCount - previousCount + index) / this.state.pageSize),
+          parseInt((newCount - previousCount + index) / this.state.pageSize),
           this.state.pageSize,
           reqData
         );
@@ -218,6 +218,7 @@ class Withdraw_list extends Component {
               <Select.Option value="9">聚鑫ERC20</Select.Option>
               <Select.Option value="10">聚鑫TRC20</Select.Option>
               <Select.Option value="11">jisuwithdraw</Select.Option>
+              <Select.Option value="12">pipeiwithdraw</Select.Option>
             </Select>
             &nbsp; &nbsp;
             <LinkButton
@@ -538,6 +539,10 @@ class Withdraw_list extends Component {
           case "11":
           case 11:
             word = "jisuwithdraw";
+            break;
+          case "12":
+          case 12:
+            word = "pipeiwithdraw";
             break;
           default:
             word = "";
