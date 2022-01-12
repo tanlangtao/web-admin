@@ -37,7 +37,7 @@ export function switchChannelType(text, record) {
       word = "UC";
       break;
     case "30":
-      word = "Qpay";
+      word = "pipeipay";
       break;
     default:
       word = text;
