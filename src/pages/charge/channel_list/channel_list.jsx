@@ -254,6 +254,9 @@ class Channel_list extends Component {
           case "25":
             word = "极速充值";
             break;
+          case "26":
+            word = "匹配充值";
+            break;
           default:
             word = "";
             break;

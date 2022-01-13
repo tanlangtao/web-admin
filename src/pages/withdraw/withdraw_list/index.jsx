@@ -137,7 +137,7 @@ class Withdraw_list extends Component {
         // document.body.scrollTop = document.documentElement.scrollTop = 0;
         this.getUsers(
           previousPage +
-            parseInt((newCount - previousCount + index) / this.state.pageSize),
+          parseInt((newCount - previousCount + index) / this.state.pageSize),
           this.state.pageSize,
           reqData
         );
@@ -190,12 +190,12 @@ class Withdraw_list extends Component {
             />
             &nbsp; &nbsp;
             <Select
-              // defaultValue=""
+              defaultValue=""
               style={{ width: 150 }}
               onSelect={(value) => (this.reqData.order_status = value)}
               placeholder="订单状态"
             >
-              {/* <Select.Option value="">订单状态</Select.Option> */}
+              <Select.Option value="">订单状态</Select.Option>
               <Select.Option value="1">待审核</Select.Option>
               <Select.Option value="2">处理中</Select.Option>
               <Select.Option value="3">已提交</Select.Option>
@@ -218,6 +218,7 @@ class Withdraw_list extends Component {
               <Select.Option value="9">聚鑫ERC20</Select.Option>
               <Select.Option value="10">聚鑫TRC20</Select.Option>
               <Select.Option value="11">jisuwithdraw</Select.Option>
+              <Select.Option value="12">pipeiwithdraw</Select.Option>
             </Select>
             &nbsp; &nbsp;
             <LinkButton
@@ -538,6 +539,10 @@ class Withdraw_list extends Component {
           case "11":
           case 11:
             word = "jisuwithdraw";
+            break;
+          case "12":
+          case 12:
+            word = "pipeiwithdraw";
             break;
           default:
             word = "";
