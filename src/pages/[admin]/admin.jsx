@@ -100,6 +100,7 @@ import {
 } from "../gameSetting/subGameSetting/xwby";
 import GetGamelistInfo from "../gameSetting/subGameSetting/agGetGamelistInfo";
 import GetGamelistInfojdb from "../gameSetting/subGameSetting/jdbGetGamelistInfo";
+import GetGamelistInfoqt from "../gameSetting/subGameSetting/qtGetGamelistInfo";
 import ProxyUserGold from "../proxy/baseDividend/UserGold";
 import GetUserSortByGameTag from "../proxy/baseDividend/GetUserSortByGameTag";
 import GetProxyUserInductionsSortByGameTag from "../proxy/baseDividend/GetProxyUserInductionsSortByGameTag";
@@ -371,6 +372,11 @@ export default class Admin extends Component {
                   <Route path="/gameSetting/subGame/jdbGetGamelistInfo" exact>
                     <KeepAlive name="jdbGetGamelistInfo">
                       <GetGamelistInfojdb />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/gameSetting/subGame/qtGetGamelistInfo" exact>
+                    <KeepAlive name="qtGetGamelistInfo">
+                      <GetGamelistInfoqt />
                     </KeepAlive>
                   </Route>
                   <Route path="/proxy/setting" exact>

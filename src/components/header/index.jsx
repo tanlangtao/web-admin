@@ -164,6 +164,9 @@ class Header extends Component {
       if (path.includes("subGame") && path.includes("jdbGetGamelistInfo")) {
         title = "JDB电子游戏开启与关闭";
       }
+      if (path.includes("subGame") && path.includes("qtGetGamelistInfo")) {
+        title = "QT电子游戏开启与关闭";
+      }
       if (path.includes("baseDividend") && path.includes("userGold")) {
         title = "查询代理个人玩家流水";
       }
