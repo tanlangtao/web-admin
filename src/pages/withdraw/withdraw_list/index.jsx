@@ -190,12 +190,12 @@ class Withdraw_list extends Component {
             />
             &nbsp; &nbsp;
             <Select
-              // defaultValue=""
+              defaultValue=""
               style={{ width: 150 }}
               onSelect={(value) => (this.reqData.order_status = value)}
               placeholder="订单状态"
             >
-              {/* <Select.Option value="">订单状态</Select.Option> */}
+              <Select.Option value="">订单状态</Select.Option>
               <Select.Option value="1">待审核</Select.Option>
               <Select.Option value="2">处理中</Select.Option>
               <Select.Option value="3">已提交</Select.Option>
