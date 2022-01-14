@@ -367,6 +367,10 @@ class Withdraw_list extends Component {
           case 6:
             word = "复审拒绝";
             break;
+          case "7":
+          case 7:
+            word = "已匹配";
+            break;
           default:
             word = "";
             break;
