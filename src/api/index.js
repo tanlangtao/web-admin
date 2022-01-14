@@ -2134,75 +2134,22 @@ export const getProxyUserLinkAllInfo = (reqData) => {
   );
 };
 
-//新增AG电子游戏开启与关闭界面
-export const getGamelistInfo = (reqData) => {
+//新增電子游戏开启与关闭界面
+export const getGameListInfo = (reqData, path) => {
   return ajax(
-    process.env.REACT_APP_GAME_HOST + `/ag/api/getGamelistInfo`,
-    {
-      ...reqData,
-    },
+    process.env.REACT_APP_GAME_HOST + path + '/getGamelistInfo',
+    {...reqData },
     "GET",
     { needAuth: false, content_type_is_formdata: true }
   );
 };
 
-// updateAG电子游戏清单
-export const updateGamelistInfo = (reqData) => {
+// update電子游戏清单
+export const updateGameListInfo = (reqData, path) => {
   return ajax(
-    process.env.REACT_APP_GAME_HOST + `/ag/api/updateGamelistInfo`,
+    process.env.REACT_APP_GAME_HOST + path + '/updateGamelistInfo',
     {
       ...reqData,
-      game_id: "5b1f3a3cb76a591e7f251736",
-    },
-    "POST",
-    { needAuth: false, content_type_is_formdata: true }
-  );
-};
-
-//新增jdb电子游戏开启与关闭界面
-export const getjdbGamelistInfo = (reqData) => {
-  return ajax(
-    process.env.REACT_APP_GAME_HOST + `/jdb/api/getGamelistInfo`,
-    {
-      ...reqData,
-    },
-    "GET",
-    { needAuth: false, content_type_is_formdata: true }
-  );
-};
-
-// updatejdb电子游戏清单
-export const updatejdbGamelistInfo = (reqData) => {
-  return ajax(
-    process.env.REACT_APP_GAME_HOST + `/jdb/api/updateGamelistInfo`,
-    {
-      ...reqData,
-      game_id: "5b1f3a3cb76a451e7f251739",
-    },
-    "POST",
-    { needAuth: false, content_type_is_formdata: true }
-  );
-};
-
-//新增qt电子游戏开启与关闭界面
-export const getqtGamelistInfo = (reqData) => {
-  return ajax(
-    process.env.REACT_APP_GAME_HOST + `/qt/api/getGamelistInfo`,
-    {
-      ...reqData,
-    },
-    "GET",
-    { needAuth: false, content_type_is_formdata: true }
-  );
-};
-
-// updateqt电子游戏清单
-export const updateqtGamelistInfo = (reqData) => {
-  return ajax(
-    process.env.REACT_APP_GAME_HOST + `/qt/api/updateGamelistInfo`,
-    {
-      ...reqData,
-      game_id: "5b1f3a3cb76a451e210822",
     },
     "POST",
     { needAuth: false, content_type_is_formdata: true }

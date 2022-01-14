@@ -9,27 +9,30 @@ import {
   Button,
   Form,
 } from "antd";
-import {
-  getjdbGamelistInfo,
-  updatejdbGamelistInfo,
-} from "../../../../api/index";
+import { getGameListInfo, updateGameListInfo } from "../../../../api/index";
 import LinkButton from "../../../../components/link-button";
+import { thirdPartyGameRouter } from "../../../../utils/public_variable";
 
 const GamelistInfoList = (props) => {
+  const { getFieldDecorator } = props.form;
+  const { game_id } = props
+  const path = thirdPartyGameRouter[game_id].path
   const [data, setData] = useState([]);
-  const [pagination, setPagination] = useState(0);
-  const getInitialData = async () => {
-    const res = await getjdbGamelistInfo();
+
+  const getInitialData = async (path) => {
+    const res = await getGameListInfo({}, path);
     if (res.code === 0) {
       setData(res.data);
     } else {
       message.info(res.msg);
     }
   };
+
   useEffect(() => {
-    getInitialData();
+    getInitialData(path);
   }, []);
-  const { getFieldDecorator } = props.form;
+
+
   const initColumns = () => [
     {
       title: "游戏识别码",
@@ -65,6 +68,7 @@ const GamelistInfoList = (props) => {
       ),
     },
   ];
+
   const handleSubmit = (event) => {
     event.preventDefault();
     props.form.validateFields(async (err, value) => {
@@ -74,7 +78,7 @@ const GamelistInfoList = (props) => {
             value[key] = "";
           }
         }
-        const res = await getjdbGamelistInfo(value);
+        const res = await getGameListInfo(value, path);
         if (res.code === 0) {
           message.success(res.msg);
           setData(res.data.length > 1 ? res.data : [res.data]);
@@ -89,11 +93,12 @@ const GamelistInfoList = (props) => {
     let reqData = {
       type: record.type,
       isClose: !record.isclose,
+      game_id
     };
-    let res = await updatejdbGamelistInfo(reqData);
+    let res = await updateGameListInfo(reqData, path);
     if (res.code === 0) {
       message.success(res.msg);
-      getInitialData();
+      getInitialData(path);
     } else {
       message.info("出错了：" + res.msg);
     }
@@ -139,7 +144,6 @@ const GamelistInfoList = (props) => {
           showQuickJumper: true,
           showTotal: (total, range) => `共${total}条`,
           defaultCurrent: 1,
-          total: pagination,
         }}
       />
     </Card>

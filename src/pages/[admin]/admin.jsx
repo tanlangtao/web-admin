@@ -98,9 +98,10 @@ import {
   XWBYcomponent4,
   SwitchChouFang,
 } from "../gameSetting/subGameSetting/xwby";
-import GetGamelistInfo from "../gameSetting/subGameSetting/agGetGamelistInfo";
-import GetGamelistInfojdb from "../gameSetting/subGameSetting/jdbGetGamelistInfo";
-import GetGamelistInfoqt from "../gameSetting/subGameSetting/qtGetGamelistInfo";
+import GamelistAG from "../gameSetting/subGameSetting/ag/GameList";
+import GamelistJDB from "../gameSetting/subGameSetting/jdb/GameList";
+import GamelistQT from "../gameSetting/subGameSetting/qt/GameList";
+import GamelistPP from '../gameSetting/subGameSetting/pp/GameList'
 import ProxyUserGold from "../proxy/baseDividend/UserGold";
 import GetUserSortByGameTag from "../proxy/baseDividend/GetUserSortByGameTag";
 import GetProxyUserInductionsSortByGameTag from "../proxy/baseDividend/GetProxyUserInductionsSortByGameTag";
@@ -121,6 +122,7 @@ import DonateList from "../liveStream/donateList";
 import LiveReport from "../liveStream/liveReport";
 import LiveBlackList from "../liveStream/blackList";
 import HighSpeedNotification from "../withdraw/highSpeedNotification";
+// import PipeiOrderList from "../pipei/OrderList";
 
 const { Sider, Content } = Layout;
 const history = createHashHistory();
@@ -364,19 +366,24 @@ export default class Admin extends Component {
                       <SwitchChouFang />
                     </KeepAlive>
                   </Route>
-                  <Route path="/gameSetting/subGame/agGetGamelistInfo" exact>
-                    <KeepAlive name="agGetGamelistInfo">
-                      <GetGamelistInfo />
+                  <Route path="/gameSetting/subGame/ag/gamelistInfo" exact>
+                    <KeepAlive name="GamelistAG">
+                      <GamelistAG />
                     </KeepAlive>
                   </Route>
-                  <Route path="/gameSetting/subGame/jdbGetGamelistInfo" exact>
-                    <KeepAlive name="jdbGetGamelistInfo">
-                      <GetGamelistInfojdb />
+                  <Route path="/gameSetting/subGame/jdb/gamelistInfo" exact>
+                    <KeepAlive name="GamelistJDB">
+                      <GamelistJDB />
                     </KeepAlive>
                   </Route>
-                  <Route path="/gameSetting/subGame/qtGetGamelistInfo" exact>
-                    <KeepAlive name="qtGetGamelistInfo">
-                      <GetGamelistInfoqt />
+                  <Route path="/gameSetting/subGame/qt/gamelistInfo" exact>
+                    <KeepAlive name="GamelistQT">
+                      <GamelistQT />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/gameSetting/subGame/pp/gameListInfo" exact>
+                    <KeepAlive name="GamelistPP">
+                      <GamelistPP />
                     </KeepAlive>
                   </Route>
                   <Route path="/proxy/setting" exact>
@@ -719,6 +726,11 @@ export default class Admin extends Component {
                       <HighSpeedNotification />
                     </KeepAlive>
                   </Route>
+                  {/* <Route path="/pipei/orderList" exact>
+                    <KeepAlive name="PipeiOrderList">
+                      <PipeiOrderList />
+                    </KeepAlive>
+                  </Route> */}
                   <Route component={NotFound} />
                 </Switch>
               </div>

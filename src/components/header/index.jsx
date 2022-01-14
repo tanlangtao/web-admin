@@ -158,14 +158,17 @@ class Header extends Component {
       if (path.includes("subGame") && path.includes("xwby/switchChouFang")) {
         title = "自动抽水设置";
       }
-      if (path.includes("subGame") && path.includes("agGetGamelistInfo")) {
+      if (path.includes("subGame") && path.includes("ag/gamelistInfo")) {
         title = "AG电子游戏开启与关闭";
       }
-      if (path.includes("subGame") && path.includes("jdbGetGamelistInfo")) {
+      if (path.includes("subGame") && path.includes("jdb/gamelistInfo")) {
         title = "JDB电子游戏开启与关闭";
       }
-      if (path.includes("subGame") && path.includes("qtGetGamelistInfo")) {
+      if (path.includes("subGame") && path.includes("qt/gamelistInfo")) {
         title = "QT电子游戏开启与关闭";
+      }
+      if (path.includes("subGame") && path.includes("pp/gamelistInfo")) {
+        title = "PP电子游戏开启与关闭";
       }
       if (path.includes("baseDividend") && path.includes("userGold")) {
         title = "查询代理个人玩家流水";
