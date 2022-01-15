@@ -173,6 +173,34 @@ export function switchStatus(text) {
   }
   return word;
 }
+/*
+匹配订单状态判别
+*/
+export function switchPipeiStatus(text) {
+  let word;
+  switch (text) {
+    case "1":
+    case 1:
+      word = "已匹配";
+      break;
+    case "2":
+    case 2:
+      word = "已过期";
+      break;
+    case "3":
+    case 3:
+      word = "已失败";
+      break;
+    case "4":
+    case 4:
+      word = "已成功";
+      break;
+    default:
+      word = "";
+      break;
+  }
+  return word;
+}
 
 /*
 渠道组

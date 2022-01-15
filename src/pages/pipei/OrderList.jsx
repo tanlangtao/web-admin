@@ -4,13 +4,14 @@ import { reverseNumber } from "../../utils/commonFuntion";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button";
 import { getJisuOrderList, updateJisuOrderRemark, updateJisuOrderStatus, getBankCardInfo } from "../../api";
-import { switchStatus, switchPackageId } from "../../utils/switchType";
+import { switchStatus, switchPackageId, switchPipeiStatus } from "../../utils/switchType";
 import { useEffect } from "react";
 const { TextArea } = Input;
 
 const initRemark = {
   id: '', content: ''
 }
+
 const PipeiOrderList = () => {
   const [data, setData] = useState([])
   const [count, setCount] = useState(0)
@@ -23,7 +24,7 @@ const PipeiOrderList = () => {
   const [bankCardModal, setBankCardModal] = useState(null)
 
   const initStates = useRef({
-    order_status: "",
+    status: "",
     start_time: "",
     end_time: "",
     limit: 20,
@@ -32,12 +33,12 @@ const PipeiOrderList = () => {
 
   //搜尋
   const orderSearch = () => {
-    let { start_time, end_time, order_status, limit, page } = initStates.current
+    let { start_time, end_time, status, limit, page } = initStates.current
     let reqData = {
       [inputKey]: inputVal,
       start_time,
       end_time,
-      order_status,
+      status,
       limit,
       page
     }
@@ -50,8 +51,8 @@ const PipeiOrderList = () => {
     //状态码，0： 成功；-1：失败
     if (res.status === 0) {
       message.success(res.msg)
-      console.log(res.data)
-      setData(res.data || [])
+      setData(res.data.list || [])
+      setCount(res.data.count)
     } else {
       message.info(res.msg || JSON.stringify(res));
     }
@@ -169,6 +170,11 @@ const PipeiOrderList = () => {
       render: switchStatus,
     },
     {
+      title: "交易订单状态",
+      dataIndex: "status",
+      render: switchPipeiStatus,
+    },
+    {
       title: "备注",
       dataIndex: "remark",
     },
@@ -186,17 +192,21 @@ const PipeiOrderList = () => {
       dataIndex: "",
       render: (record) => (
         <span>
-          <LinkButton onClick={() => updateOrderStatus("approve", record.id)}>成功</LinkButton>
-          <LinkButton type="danger" onClick={() => updateOrderStatus("reject", record.id)}>失败</LinkButton>
+          {record.status == 1 &&
+            <>
+              <LinkButton onClick={() => updateOrderStatus("approve", record.id)}>成功</LinkButton>
+              <LinkButton type="danger" onClick={() => updateOrderStatus("reject", record.id)}>失败</LinkButton>
+            </>
+          }
           <LinkButton type="default" onClick={() => handleRemark(record.id, record.remark)}>编辑备注</LinkButton>
         </span>
       ),
     },
   ]
 
-  useEffect(()=>{
+  useEffect(() => {
     orderSearch()
-  },[])
+  }, [])
 
   return (
     <Card
@@ -234,20 +244,14 @@ const PipeiOrderList = () => {
           <Select
             style={{ width: 150 }}
             defaultValue=""
-            onSelect={(value) => initStates.current.order_status = value}
+            onSelect={(value) => initStates.current.status = value}
           >
-            <Select.Option value="">订单状态</Select.Option>
-            <Select.Option value="0">全部</Select.Option>
-            <Select.Option value="1">未支付</Select.Option>
-            <Select.Option value="3">已分配</Select.Option>
-            <Select.Option value="4">已撤销</Select.Option>
-            <Select.Option value="5">已支付</Select.Option>
-            <Select.Option value="6">已完成</Select.Option>
-            <Select.Option value="7">补单初审通过</Select.Option>
-            <Select.Option value="8">补单初审拒绝</Select.Option>
-            <Select.Option value="9">补单复审通过</Select.Option>
-            <Select.Option value="10">补单复审拒绝</Select.Option>
-            <Select.Option value="11">充值失败</Select.Option>
+            <Select.Option value="">交易订单状态</Select.Option>
+            <Select.Option value="1">已匹配</Select.Option>
+            <Select.Option value="2">已过期</Select.Option>
+            <Select.Option value="3">已失败</Select.Option>
+            <Select.Option value="4">已成功</Select.Option>
+
           </Select>
           &nbsp; &nbsp;
           <LinkButton onClick={() => orderSearch()} size="default">
