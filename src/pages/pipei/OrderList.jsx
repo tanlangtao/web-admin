@@ -275,10 +275,12 @@ const PipeiOrderList = () => {
           defaultCurrent: 1,
           total: count,
           onChange: (page, pageSize) => {
-            fetchData(page, pageSize);
+            initStates.current.page = page
+            orderSearch()
           },
           onShowSizeChange: (current, size) => {
-            fetchData(current, size);
+            initStates.current.limit = size
+            orderSearch()
           },
         }}
         scroll={{ x: "max-content" }}
