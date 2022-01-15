@@ -122,7 +122,7 @@ import DonateList from "../liveStream/donateList";
 import LiveReport from "../liveStream/liveReport";
 import LiveBlackList from "../liveStream/blackList";
 import HighSpeedNotification from "../withdraw/highSpeedNotification";
-// import PipeiOrderList from "../pipei/OrderList";
+import PipeiOrderList from "../pipei/OrderList";
 
 const { Sider, Content } = Layout;
 const history = createHashHistory();
@@ -726,11 +726,11 @@ export default class Admin extends Component {
                       <HighSpeedNotification />
                     </KeepAlive>
                   </Route>
-                  {/* <Route path="/pipei/orderList" exact>
+                  <Route path="/pipei/orderList" exact>
                     <KeepAlive name="PipeiOrderList">
                       <PipeiOrderList />
                     </KeepAlive>
-                  </Route> */}
+                  </Route>
                   <Route component={NotFound} />
                 </Switch>
               </div>

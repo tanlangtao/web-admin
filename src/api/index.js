@@ -2168,3 +2168,55 @@ export const sendHighSpeedNotification = (reqData) => {
     { content_type_is_formdata: true }
   );
 };
+
+// 查询匹配充值订单
+export const getJisuOrderList = (reqData) => {
+  return ajax(
+    BASE + `/api/jisu/order/list`,
+    {
+      ...reqData,
+      token: "e40f01afbb1b9ae3dd6747ced5bca532",
+    },
+    "POST",
+    { content_type_is_formdata: true }
+  );
+};
+
+// 修改订单备注
+export const updateJisuOrderRemark = (reqData) => {
+  return ajax(
+    BASE + `/api/jisu/order/update`,
+    {
+      ...reqData,
+      token: "e40f01afbb1b9ae3dd6747ced5bca532",
+    },
+    "POST",
+    { content_type_is_formdata: true }
+  );
+};
+
+// 修改订单状态
+export const updateJisuOrderStatus = (reqData) => {
+  return ajax(
+    BASE + `/api/jisu/status/update`,
+    {
+      ...reqData,
+      token: "e40f01afbb1b9ae3dd6747ced5bca532",
+    },
+    "POST",
+    { content_type_is_formdata: true }
+  );
+};
+
+// 查询银行卡
+export const getBankCardInfo = (reqData) => {
+  return ajax(
+    BASE + `/api/user/bankCard/info`,
+    {
+      ...reqData,
+      token: "e40f01afbb1b9ae3dd6747ced5bca532",
+    },
+    "POST",
+    { content_type_is_formdata: true }
+  );
+};

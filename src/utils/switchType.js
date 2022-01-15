@@ -120,39 +120,51 @@ export function switchStatus(text) {
   let word;
   switch (text) {
     case "1":
+    case 1:
       word = "未支付";
       break;
     case "2":
+    case 2:
       word = "已过期";
       break;
     case "3":
+    case 3:
       word = "已分配";
       break;
     case "4":
+    case 4:
       word = "已撤销";
       break;
     case "5":
+    case 5:
       word = "已支付";
       break;
     case "6":
+    case 6:
       word = "已完成";
       break;
     case "7":
+    case 7:
       word = "补单初审通过";
       break;
     case "8":
+    case 8:
       word = "初审拒绝";
       break;
     case "9":
+    case 9:
       word = "补单复审通过";
       break;
     case "10":
+    case 10:
       word = "复审拒绝";
       break;
     case "11":
+    case 11:
       word = "充值失败";
       break;
     case "12":
+    case 12:
       word = "客服拒绝";
       break;
     default:
