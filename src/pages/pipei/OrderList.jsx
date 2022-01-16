@@ -4,7 +4,7 @@ import { reverseNumber } from "../../utils/commonFuntion";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button";
 import { getJisuOrderList, updateJisuOrderRemark, updateJisuOrderStatus, getBankCardInfo, packageList as getPackageList } from "../../api";
-import { switchStatus, switchPackageId, switchPipeiStatus } from "../../utils/switchType";
+import { switchStatus, switchWithdrawStatus, switchPackageId, switchPipeiStatus } from "../../utils/switchType";
 import { useEffect } from "react";
 const { TextArea } = Input;
 
@@ -165,7 +165,7 @@ const PipeiOrderList = () => {
     {
       title: "兑换订单状态",
       dataIndex: "withdraw_status",
-      render: switchStatus,
+      render: switchWithdrawStatus,
     },
     {
       title: "充值订单号",

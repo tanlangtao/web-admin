@@ -114,7 +114,7 @@ export function switchType(text) {
 }
 
 /*
-订单状态判别
+充值订单状态判别
 */
 export function switchStatus(text) {
   let word;
@@ -166,6 +166,46 @@ export function switchStatus(text) {
     case "12":
     case 12:
       word = "客服拒绝";
+      break;
+    default:
+      word = "";
+      break;
+  }
+  return word;
+}
+/*
+兑换订单状态判别
+*/
+export function switchWithdrawStatus(text) {
+  let word;
+  switch (text) {
+    case "1":
+    case 1:
+      word = "待审核";
+      break;
+    case "2":
+    case 2:
+      word = "处理中";
+      break;
+    case "3":
+    case 3:
+      word = "已提交";
+      break;
+    case "4":
+    case 4:
+      word = "已成功";
+      break;
+    case "5":
+    case 5:
+      word = "已失败";
+      break;
+    case "6":
+    case 6:
+      word = "复审拒绝";
+      break;
+    case "7":
+    case 7:
+      word = "已匹配";
       break;
     default:
       word = "";
