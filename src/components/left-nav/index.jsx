@@ -30,7 +30,6 @@ class LeftNav extends Component {
   使用reduce() + 递归调用
   */
   getMenuNodes = (menuList) => {
-    console.log(123);
     // 得到当前请求的路由路径
     const path = this.props.location.pathname;
     console.log(path);
@@ -134,7 +133,7 @@ class LeftNav extends Component {
           }
           pre.push(
             <SubMenu
-              key={item.key}
+              key={item.key || item.id}
               title={
                 <span>
                   <span>{item.title}</span>

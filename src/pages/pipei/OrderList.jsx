@@ -3,7 +3,7 @@ import { Card, message, Input, Table, Select, Modal, Button, Icon } from "antd";
 import { reverseNumber } from "../../utils/commonFuntion";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button";
-import { getJisuOrderList, updateJisuOrderRemark, updateJisuOrderStatus, getBankCardInfo } from "../../api";
+import { getJisuOrderList, updateJisuOrderRemark, updateJisuOrderStatus, getBankCardInfo, packageList as getPackageList } from "../../api";
 import { switchStatus, switchPackageId, switchPipeiStatus } from "../../utils/switchType";
 import { useEffect } from "react";
 const { TextArea } = Input;
@@ -15,9 +15,13 @@ const initRemark = {
 const PipeiOrderList = () => {
   const [data, setData] = useState([])
   const [count, setCount] = useState(0)
+  const [packageList, setPackageList] = useState()
+
+  // 关键字查询
+  // withdraw_user_id, withdraw_order_id, payment_user_id, payment_user_id
   const [inputKey, setInputKey] = useState("withdraw_user_id")
-  // withdraw_user_id, withdraw_package_id, withdraw_order_id, payment_user_id
   const [inputVal, setInputVal] = useState('')
+
   // 备注弹窗
   const [remarkModal, setRemarkModal] = useState(initRemark)
   // 银行卡弹窗
@@ -27,17 +31,33 @@ const PipeiOrderList = () => {
     status: "",
     start_time: "",
     end_time: "",
+    withdraw_package_id: "",
+    payment_package_id: "",
     limit: 20,
     page: 1
   })
 
+  // 捞取品牌资讯
+  const fetchPackageList = async () => {
+    let res = await getPackageList([]);
+    if (res.status === 0 && res.data) {
+      let arr = [];
+      res.data.list.forEach((element) => {
+        arr.push({ label: element.name, value: element.id });
+      });
+      setPackageList(arr);
+    }
+  };
+
   //搜尋
   const orderSearch = () => {
-    let { start_time, end_time, status, limit, page } = initStates.current
+    let { start_time, end_time, withdraw_package_id, payment_package_id, status, limit, page } = initStates.current
     let reqData = {
       [inputKey]: inputVal,
       start_time,
       end_time,
+      withdraw_package_id,
+      payment_package_id,
       status,
       limit,
       page
@@ -57,6 +77,11 @@ const PipeiOrderList = () => {
       message.info(res.msg || JSON.stringify(res));
     }
   }
+
+  useEffect(() => {
+    fetchPackageList()
+    orderSearch()
+  }, [])
 
   //编辑订单状态
   const updateOrderStatus = async (action, id) => {
@@ -204,10 +229,6 @@ const PipeiOrderList = () => {
     },
   ]
 
-  useEffect(() => {
-    orderSearch()
-  }, [])
-
   return (
     <Card
       title={
@@ -220,8 +241,6 @@ const PipeiOrderList = () => {
           >
             <Select.Option value="withdraw_user_id">兑换玩家ID</Select.Option>
             <Select.Option value="payment_user_id">充值玩家ID</Select.Option>
-            <Select.Option value="withdraw_package_id">兑换玩家品牌</Select.Option>
-            <Select.Option value="payment_package_id">充值玩家品牌</Select.Option>
             <Select.Option value="withdraw_order_id">兑换订单号</Select.Option>
             <Select.Option value="payment_order_id">充值订单号</Select.Option>
           </Select>
@@ -254,11 +273,42 @@ const PipeiOrderList = () => {
 
           </Select>
           &nbsp; &nbsp;
+          <Select
+            style={{ width: 150 }}
+            defaultValue=""
+            onSelect={(value) => initStates.current.withdraw_package_id = value}
+          >
+            <Select.Option value="">兑换玩家品牌</Select.Option>
+            {packageList &&
+              packageList.map((ele) => {
+                return (
+                  <Select.Option key={ele.value} value={`${ele.value}`}>
+                    {ele.label}
+                  </Select.Option>
+                );
+              })}
+          </Select>
+          &nbsp; &nbsp;
+          <Select
+            style={{ width: 150 }}
+            defaultValue=""
+            onSelect={(value) => initStates.current.payment_package_id = value}
+          >
+            <Select.Option value="">充值玩家品牌</Select.Option>
+            {packageList &&
+              packageList.map((ele) => {
+                return (
+                  <Select.Option key={ele.value} value={`${ele.value}`}>
+                    {ele.label}
+                  </Select.Option>
+                );
+              })}
+          </Select>
+          &nbsp; &nbsp;
           <LinkButton onClick={() => orderSearch()} size="default">
             <Icon type="search" />
           </LinkButton>
-
-        </div>
+        </div >
       }
     >
       <Table
@@ -285,34 +335,38 @@ const PipeiOrderList = () => {
         }}
         scroll={{ x: "max-content" }}
       />
-      {remarkModal && remarkModal.id && (
-        <Modal
-          title="编辑备注"
-          visible={Boolean(remarkModal.id)}
-          onCancel={() => setRemarkModal(initRemark)}
-          footer={null}
-          width="50%"
-        >
-          <TextArea rows={4} defaultValue={remarkModal.content} onChange={(e) => setRemarkModal({ ...remarkModal, content: e.target.value })}></TextArea>
-          <Button type="primary" style={{ 'marginTop': '16px' }} onClick={updateOrderRemark}>
-            提交
-          </Button>
-        </Modal>
-      )}
-      {bankCardModal && (
-        <Modal
-          title="银行卡信息"
-          visible={Boolean(bankCardModal)}
-          onCancel={() => setBankCardModal(null)}
-          footer={null}
-          width="50%"
-        >
-          <p>银行名称：{bankCardModal.bank_name}</p>
-          <p>银行卡姓名：{bankCardModal.card_name}</p>
-          <p>银行卡号：{bankCardModal.card_num}</p>
-        </Modal>
-      )}
-    </Card>
+      {
+        remarkModal && remarkModal.id && (
+          <Modal
+            title="编辑备注"
+            visible={Boolean(remarkModal.id)}
+            onCancel={() => setRemarkModal(initRemark)}
+            footer={null}
+            width="50%"
+          >
+            <TextArea rows={4} defaultValue={remarkModal.content} onChange={(e) => setRemarkModal({ ...remarkModal, content: e.target.value })}></TextArea>
+            <Button type="primary" style={{ 'marginTop': '16px' }} onClick={updateOrderRemark}>
+              提交
+            </Button>
+          </Modal>
+        )
+      }
+      {
+        bankCardModal && (
+          <Modal
+            title="银行卡信息"
+            visible={Boolean(bankCardModal)}
+            onCancel={() => setBankCardModal(null)}
+            footer={null}
+            width="50%"
+          >
+            <p>银行名称：{bankCardModal.bank_name}</p>
+            <p>银行卡姓名：{bankCardModal.card_name}</p>
+            <p>银行卡号：{bankCardModal.card_num}</p>
+          </Modal>
+        )
+      }
+    </Card >
   )
 }
 

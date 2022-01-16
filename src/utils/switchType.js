@@ -252,6 +252,9 @@ export function switchPackageId(record) {
     case 20:
     case "20":
       return "万盛娱乐";
+    case 21:
+    case "21":
+      return "天启游戏";
     case 22:
     case "22":
       return "嘉兴娱乐";

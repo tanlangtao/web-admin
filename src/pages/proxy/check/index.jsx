@@ -50,7 +50,7 @@ export default () => {
 
     const fetchData3 = async (value, start_time, end_time) => {
         if (!value) {
-            return message.info("請輸入玩家ID");
+            return message.info("请输入玩家ID");
         }
         const res = await getProxyLinkPayLeaderboard(
             value,

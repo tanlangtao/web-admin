@@ -8,10 +8,10 @@ export default () => {
   const proxySearch = async (value) => {
     let reg = new RegExp("^[0-9]*$");
     if (!value) {
-      message.info("請輸入玩家ID");
+      message.info("请输入玩家ID");
       return;
     } else if (!reg.test(value)) {
-      message.info("請輸入有效ID");
+      message.info("请输入有效ID");
       return;
     }
     let reqData = {
@@ -33,7 +33,7 @@ export default () => {
         <div>
           <Input.Search
             style={{ width: 200 }}
-            placeholder="請輸入玩家ID"
+            placeholder="请输入玩家ID"
             enterButton
             onSearch={(value) => {
               proxySearch(value);
