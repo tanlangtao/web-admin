@@ -2169,6 +2169,19 @@ export const sendHighSpeedNotification = (reqData) => {
   );
 };
 
+//官方兑换-极速兑换2通知
+export const sendHighSpeedTwoNotification = (reqData) => {
+  return ajax(
+    BASE + `/api/with_draw/confirmHighSpeedWithdrawTwo`,
+    {
+      ...reqData,
+      token: "e40f01afbb1b9ae3dd6747ced5bca532",
+    },
+    "POST",
+    { content_type_is_formdata: true }
+  );
+};
+
 // 查询匹配充值订单
 export const getJisuOrderList = (reqData) => {
   return ajax(

@@ -121,7 +121,8 @@ import GetProxyGetGlobal from "../proxy/baseDividend/GetProxyGetGlobal";
 import DonateList from "../liveStream/donateList";
 import LiveReport from "../liveStream/liveReport";
 import LiveBlackList from "../liveStream/blackList";
-import HighSpeedNotification from "../withdraw/highSpeedNotification";
+import HighSpeedNotificationOne from "../withdraw/highSpeedNotification/HighSpeedOne";
+import HighSpeedNotificationTwo from "../withdraw/highSpeedNotification/HighSpeedTwo";
 import PipeiOrderList from "../pipei/OrderList";
 
 const { Sider, Content } = Layout;
@@ -721,9 +722,14 @@ export default class Admin extends Component {
                       <LiveBlackList />
                     </KeepAlive>
                   </Route>
-                  <Route path="/withdraw/highSpeedNotification" exact>
-                    <KeepAlive name="highSpeedNotification">
-                      <HighSpeedNotification />
+                  <Route path="/withdraw/highSpeedNotification1" exact>
+                    <KeepAlive name="HighSpeedNotificationOne">
+                      <HighSpeedNotificationOne />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/withdraw/highSpeedNotification2" exact>
+                    <KeepAlive name="HighSpeedNotificationTwo">
+                      <HighSpeedNotificationTwo />
                     </KeepAlive>
                   </Route>
                   <Route path="/pipei/orderList" exact>
