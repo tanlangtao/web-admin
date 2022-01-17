@@ -106,6 +106,9 @@ export function switchType(text) {
     case "27":
       word = "匹配充值";
       break;
+    case "28":
+      word = "极速充值2";
+      break;
     default:
       word = "";
       break;

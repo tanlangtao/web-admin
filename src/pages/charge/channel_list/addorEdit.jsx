@@ -106,6 +106,7 @@ class AddDataForm extends Component {
                             {/* channel list 后端使用key为pay_type 极速充值的value是25 */}
                             <Select.Option value="25">极速充值</Select.Option>
                             <Select.Option value="26">匹配充值</Select.Option>
+                            <Select.Option value="27">极速充值2</Select.Option>
                         </Select>,
                     )}
                 </Form.Item>
