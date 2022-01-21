@@ -9,7 +9,7 @@ export default class Home extends Component {
     };
     this.i = 0;
     this.timer = 0;
-    this.str = "欢迎您来到QGame后台管理系统";
+    this.str = "欢迎您来到后台管理系统";
   }
   typing = () => {
     if (this.i <= this.str.length) {
