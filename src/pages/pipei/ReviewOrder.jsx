@@ -63,6 +63,7 @@ const ReviewOrder = ({ onClose }) => {
       title: "操作",
       dataIndex: "status",
       render: (text, record, index) => (
+        record.status == 1 &&
         <span>
           <Button
             size="small"
