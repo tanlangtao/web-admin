@@ -19,7 +19,7 @@ class ElasticText extends React.Component {
     const _this = this;
     // WRITTEN BY TRUMAN HEBERLE
     const COLOR = "black";
-    const MESSAGE = "欢迎您来到QGame后台管理系统";
+    const MESSAGE = "欢迎您来到后台管理系统";
 
     const FONT_SIZE = 100;
     const AMOUNT = 3000;

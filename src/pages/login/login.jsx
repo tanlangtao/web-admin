@@ -127,7 +127,7 @@ class Login extends Component {
     return (
       <div className="login">
         <header className="login-header">
-          <h1>QGame: 后台管理系统</h1>
+          <h1>后台管理系统</h1>
         </header>
         <section className="login-content">
           <h2>用户登陆</h2>

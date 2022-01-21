@@ -220,19 +220,11 @@ class LeftNav extends Component {
     let path = this.props.location.pathname;
     return (
       <div className="left-nav">
-        {/* <Link
-          to="/home"
-          className="left-nav-header"
-          style={{ justifyContent: "center" }}
-          // onClick={() => window.location.reload()}
-        >
-          <h1>QGame后台管理</h1>
-        </Link> */}
         <div
           className="left-nav-header"
           onClick={() => (window.location.href = "/")}
         >
-          <h1>QGame后台管理</h1>
+          <h1>后台管理</h1>
           <h4>V:1.0.9</h4>
         </div>
         <Menu
