@@ -2208,6 +2208,18 @@ export const updateJisuOrderRemark = (reqData) => {
   );
 };
 
+// 審核機制
+export const updateJisuOrderReview = (reqData) => {
+  return ajax(
+    BASE + `/api/jisu/order/review`,
+    {
+      ...reqData,
+      token: "e40f01afbb1b9ae3dd6747ced5bca532",
+    },
+    "POST",
+  );
+};
+
 // 修改订单状态
 export const updateJisuOrderStatus = (reqData) => {
   return ajax(

@@ -239,6 +239,10 @@ export function switchPipeiStatus(text) {
     case 4:
       word = "已成功";
       break;
+    case "5":
+    case 5:
+      word = "审核中";
+      break;
     default:
       word = "";
       break;

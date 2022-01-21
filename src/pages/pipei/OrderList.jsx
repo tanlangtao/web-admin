@@ -1,11 +1,12 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Card, message, Input, Table, Select, Modal, Button, Icon } from "antd";
 import { reverseNumber } from "../../utils/commonFuntion";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button";
-import { getJisuOrderList, updateJisuOrderRemark, updateJisuOrderStatus, getBankCardInfo, packageList as getPackageList } from "../../api";
+import ReviewOrder from "./ReviewOrder";
+import { getJisuOrderList, updateJisuOrderRemark, updateJisuOrderReview, updateJisuOrderStatus, getBankCardInfo, packageList as getPackageList } from "../../api";
 import { switchStatus, switchWithdrawStatus, switchPackageId, switchPipeiStatus } from "../../utils/switchType";
-import { useEffect } from "react";
+
 const { TextArea } = Input;
 
 const initRemark = {
@@ -22,6 +23,15 @@ const PipeiOrderList = () => {
   const [inputKey, setInputKey] = useState("withdraw_user_id")
   const [inputVal, setInputVal] = useState('')
 
+  // 初审弹窗
+  const [reviewOrderModal, setReviewOrderModal] = useState(false)
+  // 复审弹窗
+  const [editOrderModal, setEditOrderModal] = useState(false)
+  const [editData, setEditData] = useState({
+    id: '',
+    amount: 0,
+    statue: 1,
+  })
   // 备注弹窗
   const [remarkModal, setRemarkModal] = useState(initRemark)
   // 银行卡弹窗
@@ -83,23 +93,48 @@ const PipeiOrderList = () => {
     orderSearch()
   }, [])
 
+  // 打开编辑弹窗
+  const handleEdit = (record) => {
+    let data = {
+      id: record.id,
+      amount: record.amount,
+      reviewStatus: record.review_status,
+    }
+    setEditOrderModal(true)
+    setEditData(data)
+  }
+
   //编辑订单状态
   const updateOrderStatus = async (action, id) => {
-    let reqData = {
+    let reqReviewData = {
       match_id: id,
-      status: action == "approve" ? 1 : 2,
+      review_type: 2,
+      review_status: action,
     }
-    const res = await updateJisuOrderStatus(reqData)
-    if (res.status === 0) {
-      message.success(res.msg)
-      orderSearch()
+    let reqUpdateData = {
+      match_id: id,
+      status: action,
+    }
+    // 第一階段先進行複審
+    const res1 = await updateJisuOrderReview(reqReviewData)
+    if (res1.status === 0) {
+      message.success(res1.msg)
+      // 複審通過，才確認修改訂單狀態
+      const res2 = await updateJisuOrderStatus(reqUpdateData)
+      if (res2.status === 0) {
+        message.success(res2.msg)
+        setEditOrderModal(false)
+        orderSearch()
+      } else {
+        message.info(res2.msg || JSON.stringify(res2));
+      }
     } else {
-      message.info(res.msg || JSON.stringify(res));
+      message.info(res1.msg || JSON.stringify(res1));
     }
   }
 
   // 备注弹窗開關
-  const handleRemark = async (id, content) => {
+  const handleRemark = (id, content) => {
     setRemarkModal({ id, content })
   }
 
@@ -217,11 +252,8 @@ const PipeiOrderList = () => {
       dataIndex: "",
       render: (record) => (
         <span>
-          {record.status == 1 &&
-            <>
-              <LinkButton onClick={() => updateOrderStatus("approve", record.id)}>成功</LinkButton>
-              <LinkButton type="danger" onClick={() => updateOrderStatus("reject", record.id)}>失败</LinkButton>
-            </>
+          {record.status == 5 &&
+            <LinkButton type="default" onClick={() => handleEdit(record)}>编辑</LinkButton>
           }
           <LinkButton type="default" onClick={() => handleRemark(record.id, record.remark)}>编辑备注</LinkButton>
         </span>
@@ -233,82 +265,91 @@ const PipeiOrderList = () => {
     <Card
       title={
         <div>
-          <Select
-            placeholder="请选择"
-            style={{ width: 150 }}
-            defaultValue={inputKey}
-            onSelect={(value) => setInputKey(value)}
-          >
-            <Select.Option value="withdraw_user_id">兑换玩家ID</Select.Option>
-            <Select.Option value="payment_user_id">充值玩家ID</Select.Option>
-            <Select.Option value="withdraw_order_id">兑换订单号</Select.Option>
-            <Select.Option value="payment_order_id">充值订单号</Select.Option>
-          </Select>
-          &nbsp; &nbsp;
-          <Input
-            type="text"
-            placeholder="请输入关键字"
-            style={{ width: 200 }}
-            onChange={e => setInputVal(e.target.value)
-            }
-          />
-          &nbsp; &nbsp;
-          <MyDatePicker
-            handleValue={(date, val) => {
-              initStates.current.start_time = date[0] ? date[0].valueOf() / 1000 : '';
-              initStates.current.end_time = date[1] ? Math.ceil(date[1].valueOf() / 1000) : '';
-            }}
-          />
-          &nbsp; &nbsp;
-          <Select
-            style={{ width: 150 }}
-            defaultValue=""
-            onSelect={(value) => initStates.current.status = value}
-          >
-            <Select.Option value="">交易订单状态</Select.Option>
-            <Select.Option value="1">已匹配</Select.Option>
-            <Select.Option value="2">已过期</Select.Option>
-            <Select.Option value="3">已失败</Select.Option>
-            <Select.Option value="4">已成功</Select.Option>
+          <div>
+            <Select
+              placeholder="请选择"
+              style={{ width: 150 }}
+              defaultValue={inputKey}
+              onSelect={(value) => setInputKey(value)}
+            >
+              <Select.Option value="withdraw_user_id">兑换玩家ID</Select.Option>
+              <Select.Option value="payment_user_id">充值玩家ID</Select.Option>
+              <Select.Option value="withdraw_order_id">兑换订单号</Select.Option>
+              <Select.Option value="payment_order_id">充值订单号</Select.Option>
+            </Select>
+            &nbsp; &nbsp;
+            <Input
+              type="text"
+              placeholder="请输入关键字"
+              style={{ width: 200 }}
+              onChange={e => setInputVal(e.target.value)
+              }
+            />
+            &nbsp; &nbsp;
+            <MyDatePicker
+              handleValue={(date, val) => {
+                initStates.current.start_time = date[0] ? date[0].valueOf() / 1000 : '';
+                initStates.current.end_time = date[1] ? Math.ceil(date[1].valueOf() / 1000) : '';
+              }}
+            />
+            &nbsp; &nbsp;
+            <Select
+              style={{ width: 150 }}
+              defaultValue=""
+              onSelect={(value) => initStates.current.status = value}
+            >
+              <Select.Option value="">交易订单状态</Select.Option>
+              <Select.Option value="1">已匹配</Select.Option>
+              <Select.Option value="2">已过期</Select.Option>
+              <Select.Option value="3">已失败</Select.Option>
+              <Select.Option value="4">已成功</Select.Option>
+              <Select.Option value="5">审核中</Select.Option>
 
-          </Select>
-          &nbsp; &nbsp;
-          <Select
-            style={{ width: 150 }}
-            defaultValue=""
-            onSelect={(value) => initStates.current.withdraw_package_id = value}
-          >
-            <Select.Option value="">兑换玩家品牌</Select.Option>
-            {packageList &&
-              packageList.map((ele) => {
-                return (
-                  <Select.Option key={ele.value} value={`${ele.value}`}>
-                    {ele.label}
-                  </Select.Option>
-                );
-              })}
-          </Select>
-          &nbsp; &nbsp;
-          <Select
-            style={{ width: 150 }}
-            defaultValue=""
-            onSelect={(value) => initStates.current.payment_package_id = value}
-          >
-            <Select.Option value="">充值玩家品牌</Select.Option>
-            {packageList &&
-              packageList.map((ele) => {
-                return (
-                  <Select.Option key={ele.value} value={`${ele.value}`}>
-                    {ele.label}
-                  </Select.Option>
-                );
-              })}
-          </Select>
-          &nbsp; &nbsp;
-          <LinkButton onClick={() => orderSearch()} size="default">
-            <Icon type="search" />
-          </LinkButton>
-        </div >
+            </Select>
+            &nbsp; &nbsp;
+            <Select
+              style={{ width: 150 }}
+              defaultValue=""
+              onSelect={(value) => initStates.current.withdraw_package_id = value}
+            >
+              <Select.Option value="">兑换玩家品牌</Select.Option>
+              {packageList &&
+                packageList.map((ele) => {
+                  return (
+                    <Select.Option key={ele.value} value={`${ele.value}`}>
+                      {ele.label}
+                    </Select.Option>
+                  );
+                })}
+            </Select>
+            &nbsp; &nbsp;
+            <Select
+              style={{ width: 150 }}
+              defaultValue=""
+              onSelect={(value) => initStates.current.payment_package_id = value}
+            >
+              <Select.Option value="">充值玩家品牌</Select.Option>
+              {packageList &&
+                packageList.map((ele) => {
+                  return (
+                    <Select.Option key={ele.value} value={`${ele.value}`}>
+                      {ele.label}
+                    </Select.Option>
+                  );
+                })}
+            </Select>
+            &nbsp; &nbsp;
+            <LinkButton onClick={() => orderSearch()} size="default">
+              <Icon type="search" />
+            </LinkButton>
+          </div >
+          <div style={{ marginTop: 10 }}>
+            <LinkButton onClick={() => setReviewOrderModal(true)} size="default">
+              <Icon type="search" />
+              匹配订单状态修改
+            </LinkButton>
+          </div>
+        </div>
       }
     >
       <Table
@@ -335,37 +376,71 @@ const PipeiOrderList = () => {
         }}
         scroll={{ x: "max-content" }}
       />
-      {
-        remarkModal && remarkModal.id && (
-          <Modal
-            title="编辑备注"
-            visible={Boolean(remarkModal.id)}
-            onCancel={() => setRemarkModal(initRemark)}
-            footer={null}
-            width="50%"
-          >
-            <TextArea rows={4} defaultValue={remarkModal.content} onChange={(e) => setRemarkModal({ ...remarkModal, content: e.target.value })}></TextArea>
-            <Button type="primary" style={{ 'marginTop': '16px' }} onClick={updateOrderRemark}>
-              提交
+      {remarkModal && remarkModal.id && (
+        <Modal
+          title="编辑备注"
+          visible={Boolean(remarkModal.id)}
+          onCancel={() => setRemarkModal(initRemark)}
+          footer={null}
+          width="50%"
+        >
+          <TextArea rows={4} defaultValue={remarkModal.content} onChange={(e) => setRemarkModal({ ...remarkModal, content: e.target.value })}></TextArea>
+          <Button type="primary" style={{ 'marginTop': '16px' }} onClick={updateOrderRemark}>
+            提交
+          </Button>
+        </Modal>
+      )
+      }
+      {bankCardModal && (
+        <Modal
+          title="银行卡信息"
+          visible={Boolean(bankCardModal)}
+          onCancel={() => setBankCardModal(null)}
+          footer={null}
+          width="50%"
+        >
+          <p>银行名称：{bankCardModal.bank_name}</p>
+          <p>银行卡姓名：{bankCardModal.card_name}</p>
+          <p>银行卡号：{bankCardModal.card_num}</p>
+        </Modal>
+      )}
+      <Modal
+        title="匹配订单状态修改"
+        visible={reviewOrderModal}
+        onCancel={() => setReviewOrderModal(false)}
+        footer={null}
+        width="70%"
+      >
+        <ReviewOrder onClose={() => {
+          setReviewOrderModal(false)
+          orderSearch()
+        }} />
+      </Modal>
+      <Modal
+        title="编辑"
+        visible={editOrderModal}
+        onCancel={() => setEditOrderModal(false)}
+        footer={null}
+        width="50%">
+        <div>
+          <div>订单流水号：{editData.id}</div>
+          <br />
+          <div>订单金额：{editData.amount}</div>
+          <br />
+          <div>状态：{editData.reviewStatus == 1 ? '成功' : '失败'}</div>
+          <br />
+          <div>
+            状态修改确认：
+            <Button type="primary" onClick={() => updateOrderStatus(1, editData.id)}>
+              通过
             </Button>
-          </Modal>
-        )
-      }
-      {
-        bankCardModal && (
-          <Modal
-            title="银行卡信息"
-            visible={Boolean(bankCardModal)}
-            onCancel={() => setBankCardModal(null)}
-            footer={null}
-            width="50%"
-          >
-            <p>银行名称：{bankCardModal.bank_name}</p>
-            <p>银行卡姓名：{bankCardModal.card_name}</p>
-            <p>银行卡号：{bankCardModal.card_num}</p>
-          </Modal>
-        )
-      }
+            &nbsp;&nbsp;&nbsp;
+            <Button type="danger" onClick={() => updateOrderStatus(0, editData.id)}>
+              拒绝
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </Card >
   )
 }
