@@ -7,7 +7,7 @@ import {
   GoldDetailorRiskControlSUMdata,
   getProxyUserLink,
 } from "../api";
-import { reverseNumber } from "../utils/commonFuntion";
+import { reverseNumber, reverseNumber2 } from "../utils/commonFuntion";
 
 const columns = [
   {
@@ -84,8 +84,8 @@ export default async (record) => {
           sumgold + (value.wingold || 0) + (Math.abs(value.losegold) || 0);
       });
       let charge = [
-        res.data["人工充值订单增加金币"]?.totalgold,
-        res.data["人工充值订单补单增加金币"]?.totalgold,
+        reverseNumber2(res.data["赠送增加金币"]?.totalgold),
+        reverseNumber2(res.data["赠送减少金币"]?.totalgold),
         res.data["银行卡充值增加金币"]?.totalgold,
         res.data["银行卡充值订单补单增加金币"]?.totalgold,
         res.data["渠道充值增加金币"]?.totalgold,
@@ -125,9 +125,9 @@ export default async (record) => {
             充值兑换差:
             {userStatistics.data
               ? reverseNumber(
-                userStatistics.data.total_payment_arrival_amount -
-                userStatistics.data.total_with_draw_amount
-              )
+                  userStatistics.data.total_payment_arrival_amount -
+                    userStatistics.data.total_with_draw_amount
+                )
               : "-"}
           </div>
           <div>总流水:{reverseNumber(sumgold)}</div>
@@ -143,8 +143,8 @@ export default async (record) => {
           </div>
           <br />
           <div>总充值:{sumcharge || "-"}</div>
-          <div>人工充值订单增加金币:{charge[0] || "-"}</div>
-          <div>人工充值订单补单增加金币:{charge[1] || "-"}</div>
+          <div>赠送增加金币:{charge[0] || "-"}</div>
+          <div>赠送减少金币:{charge[1] || "-"}</div>
           <div>银行卡充值增加金币:{charge[2] || "-"}</div>
           <div>银行卡充值订单补单增加金币:{charge[3] || "-"}</div>
           <div>渠道充值增加金币:{charge[4] || "-"}</div>
@@ -414,9 +414,9 @@ export default async (record) => {
           充值兑换差:
           {userStatistics.data
             ? reverseNumber(
-              userStatistics.data.total_payment_arrival_amount -
-              userStatistics.data.total_with_draw_amount
-            )
+                userStatistics.data.total_payment_arrival_amount -
+                  userStatistics.data.total_with_draw_amount
+              )
             : "-"}
         </div>
         <div>总流水:"-"</div>
@@ -429,8 +429,8 @@ export default async (record) => {
         </div>
         <br />
         <div>总充值:{"-"}</div>
-        <div>人工充值订单增加金币:{"-"}</div>
-        <div>人工充值订单补单增加金币:{"-"}</div>
+        <div>赠送增加金币:{"-"}</div>
+        <div>赠送减少金币:{"-"}</div>
         <div>银行卡充值增加金币:{"-"}</div>
         <div>银行卡充值订单补单增加金币:{"-"}</div>
         <div>渠道充值增加金币:{"-"}</div>
