@@ -2246,7 +2246,7 @@ export const getBankCardInfo = (reqData) => {
   );
 };
 
-//
+//赠送详情
 export const sendMoneyHistory = (reqData) => {
   return ajax(
     BASE + `/api/with_draw/sendMoneyHistory`,
