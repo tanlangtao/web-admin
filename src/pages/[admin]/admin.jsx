@@ -48,6 +48,7 @@ import GetProxyUserLinkAllInfo from "../proxy/getProxyUserLinkAllInfo";
 import DaitiList from "../withdraw/Daiti_list";
 import Channel from "../withdraw/Channel";
 import WithdrawBankBindList from "../withdraw/WithdrawBankBindList";
+import WithdrawComplimentAwayList from "../withdraw/WithdrawComplimentAwayList";
 import NotFound from "../not-found/not-found";
 import DailyReport from "../list/DailyReport";
 import GameDataList from "../list/gamedatalist";
@@ -101,7 +102,7 @@ import {
 import GamelistAG from "../gameSetting/subGameSetting/ag/GameList";
 import GamelistJDB from "../gameSetting/subGameSetting/jdb/GameList";
 import GamelistQT from "../gameSetting/subGameSetting/qt/GameList";
-import GamelistPP from '../gameSetting/subGameSetting/pp/GameList'
+import GamelistPP from "../gameSetting/subGameSetting/pp/GameList";
 import ProxyUserGold from "../proxy/baseDividend/UserGold";
 import GetUserSortByGameTag from "../proxy/baseDividend/GetUserSortByGameTag";
 import GetProxyUserInductionsSortByGameTag from "../proxy/baseDividend/GetProxyUserInductionsSortByGameTag";
@@ -660,6 +661,11 @@ export default class Admin extends Component {
                   <Route path="/withdraw/bankBindList" exact>
                     <KeepAlive name="WithdrawBankBindList">
                       <WithdrawBankBindList />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/withdraw/ComplimentAwayList" exact>
+                    <KeepAlive name="WithdrawComplimentAwayList">
+                      <WithdrawComplimentAwayList />
                     </KeepAlive>
                   </Route>
                   <Route path="/artificialWithdraw/order" exact>

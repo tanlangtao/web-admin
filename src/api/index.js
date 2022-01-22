@@ -2137,8 +2137,8 @@ export const getProxyUserLinkAllInfo = (reqData) => {
 //新增電子游戏开启与关闭界面
 export const getGameListInfo = (reqData, path) => {
   return ajax(
-    process.env.REACT_APP_GAME_HOST + path + '/getGamelistInfo',
-    {...reqData },
+    process.env.REACT_APP_GAME_HOST + path + "/getGamelistInfo",
+    { ...reqData },
     "GET",
     { needAuth: false, content_type_is_formdata: true }
   );
@@ -2147,7 +2147,7 @@ export const getGameListInfo = (reqData, path) => {
 // update電子游戏清单
 export const updateGameListInfo = (reqData, path) => {
   return ajax(
-    process.env.REACT_APP_GAME_HOST + path + '/updateGamelistInfo',
+    process.env.REACT_APP_GAME_HOST + path + "/updateGamelistInfo",
     {
       ...reqData,
     },
@@ -2216,7 +2216,7 @@ export const updateJisuOrderReview = (reqData) => {
       ...reqData,
       token: "e40f01afbb1b9ae3dd6747ced5bca532",
     },
-    "POST",
+    "POST"
   );
 };
 
@@ -2237,6 +2237,19 @@ export const updateJisuOrderStatus = (reqData) => {
 export const getBankCardInfo = (reqData) => {
   return ajax(
     BASE + `/api/user/bankCard/info`,
+    {
+      ...reqData,
+      token: "e40f01afbb1b9ae3dd6747ced5bca532",
+    },
+    "POST",
+    { content_type_is_formdata: true }
+  );
+};
+
+//
+export const sendMoneyHistory = (reqData) => {
+  return ajax(
+    BASE + `/api/with_draw/sendMoneyHistory`,
     {
       ...reqData,
       token: "e40f01afbb1b9ae3dd6747ced5bca532",

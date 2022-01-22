@@ -15,8 +15,8 @@ import { thirdPartyGameRouter } from "../../../../utils/public_variable";
 
 const GamelistInfoList = (props) => {
   const { getFieldDecorator } = props.form;
-  const { game_id } = props
-  const path = thirdPartyGameRouter[game_id].path
+  const { game_id } = props;
+  const path = thirdPartyGameRouter[game_id].path;
   const [data, setData] = useState([]);
 
   const getInitialData = async (path) => {
@@ -31,7 +31,6 @@ const GamelistInfoList = (props) => {
   useEffect(() => {
     getInitialData(path);
   }, []);
-
 
   const initColumns = () => [
     {
@@ -93,7 +92,7 @@ const GamelistInfoList = (props) => {
     let reqData = {
       type: record.type,
       isClose: !record.isclose,
-      game_id
+      game_id,
     };
     let res = await updateGameListInfo(reqData, path);
     if (res.code === 0) {
