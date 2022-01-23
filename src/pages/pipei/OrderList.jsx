@@ -6,6 +6,9 @@ import LinkButton from "../../components/link-button";
 import ReviewOrder from "./ReviewOrder";
 import { getJisuOrderList, updateJisuOrderRemark, updateJisuOrderReview, updateJisuOrderStatus, getBankCardInfo, packageList as getPackageList } from "../../api";
 import { switchStatus, switchWithdrawStatus, switchPackageId, switchPipeiStatus } from "../../utils/switchType";
+import { toDecimal } from "../../utils/commonFuntion";
+import ExportJsonExcel from "js-export-excel";
+import moment from "moment";
 
 const { TextArea } = Input;
 
@@ -15,6 +18,7 @@ const initRemark = {
 
 const PipeiOrderList = () => {
   const [data, setData] = useState([])
+  const [printData, setPrintData] = useState([])
   const [count, setCount] = useState(0)
   const [packageList, setPackageList] = useState()
 
@@ -168,6 +172,86 @@ const PipeiOrderList = () => {
     } else {
       message.info(res.msg || JSON.stringify(res));
     }
+  }
+
+  const handle_download = async () => {
+    let { start_time, end_time, withdraw_package_id, payment_package_id, status } = initStates.current
+    let reqData = {
+      [inputKey]: inputVal,
+      start_time,
+      end_time,
+      withdraw_package_id,
+      payment_package_id,
+      status,
+      limit: count,
+      page: 1,
+    }
+
+    const res = await getJisuOrderList(reqData)
+    if (res.status === 0) {
+      message.success(res.msg)
+      download(res.data.list)
+    } else {
+      setPrintData([])
+      message.info(res.msg || JSON.stringify(res))
+    }
+  }
+
+  const download = (downloadData) => {
+    console.log('download')
+    let option = {}
+    let dataTable = []
+    if (downloadData.length > 0) {
+      downloadData.forEach((ele) => {
+        let obj = {
+          订单流水号: ele.id,
+          兑换订单号: ele.withdraw_order_id,
+          兑换订单创建时间: ele.withdraw_created_at,
+          兑换订单金额: toDecimal(ele.amount),
+          兑换玩家ID: ele.withdraw_user_id,
+          兑换玩家品牌: switchPackageId(ele.withdraw_package_id),
+          兑换订单状态: switchWithdrawStatus(ele.withdraw_status),
+          充值订单号: ele.payment_order_id,
+          充值订单创建时间: ele.payment_created_at,
+          充值订单金额: toDecimal(ele.amount),
+          充值玩家ID: ele.payment_user_id,
+          充值玩家品牌: switchPackageId(ele.payment_package_id),
+          充值订单状态: switchStatus(ele.payment_status),
+          交易订单状态: switchPipeiStatus(ele.status),
+          备注: ele.remark,
+        }
+        dataTable.push(obj)
+      })
+    }
+
+    let current = moment().format("YYYYMMDDHHmm")
+    option.fileName = `匹配订单${current}`
+    option.datas = [
+      {
+        sheetData: dataTable,
+        sheetName: "sheet",
+        sheetHeader: [
+          "订单流水号",
+          "兑换订单号",
+          "兑换订单创建时间",
+          "兑换订单金额",
+          "兑换玩家ID",
+          "兑换玩家品牌",
+          "兑换订单状态",
+          "充值订单号",
+          "充值订单创建时间",
+          "充值订单金额",
+          "充值玩家ID",
+          "充值玩家品牌",
+          "创建时间充值订单状态",
+          "交易订单状态",
+          "备注"
+        ],
+      },
+    ];
+
+    const toExcel = new ExportJsonExcel(option) //new
+    toExcel.saveExcel()
   }
 
   const initColumns = [
@@ -350,6 +434,16 @@ const PipeiOrderList = () => {
             </LinkButton>
           </div>
         </div>
+      }
+      extra={
+        <span>
+          <LinkButton
+            size="default"
+            style={{ float: "right" }}
+            onClick={handle_download}
+            icon="download"
+          />
+        </span>
       }
     >
       <Table
