@@ -115,8 +115,8 @@ const WithDrawComplimentAwayList = () => {
       user_id,
       package_id,
       receive_user_id,
-      page,
-      page_set,
+      page: 1,
+      page_set: count,
     });
     if (res.status === 0) {
       message.success(res.msg);
