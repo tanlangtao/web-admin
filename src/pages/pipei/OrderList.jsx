@@ -4,8 +4,20 @@ import { reverseNumber } from "../../utils/commonFuntion";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button";
 import ReviewOrder from "./ReviewOrder";
-import { getJisuOrderList, updateJisuOrderRemark, updateJisuOrderReview, updateJisuOrderStatus, getBankCardInfo, packageList as getPackageList } from "../../api";
-import { switchStatus, switchWithdrawStatus, switchPackageId, switchPipeiStatus } from "../../utils/switchType";
+import {
+  getJisuOrderList,
+  updateJisuOrderRemark,
+  updateJisuOrderReview,
+  updateJisuOrderStatus,
+  getBankCardInfo,
+  packageList as getPackageList,
+} from "../../api";
+import {
+  switchStatus,
+  switchWithdrawStatus,
+  switchPackageId,
+  switchPipeiStatus,
+} from "../../utils/switchType";
 import { toDecimal } from "../../utils/commonFuntion";
 import ExportJsonExcel from "js-export-excel";
 import moment from "moment";
@@ -13,33 +25,34 @@ import moment from "moment";
 const { TextArea } = Input;
 
 const initRemark = {
-  id: '', content: ''
-}
+  id: "",
+  content: "",
+};
 
 const PipeiOrderList = () => {
-  const [data, setData] = useState([])
-  const [printData, setPrintData] = useState([])
-  const [count, setCount] = useState(0)
-  const [packageList, setPackageList] = useState()
+  const [data, setData] = useState([]);
+  const [printData, setPrintData] = useState([]);
+  const [count, setCount] = useState(0);
+  const [packageList, setPackageList] = useState();
 
   // 关键字查询
   // withdraw_user_id, withdraw_order_id, payment_user_id, payment_user_id
-  const [inputKey, setInputKey] = useState("withdraw_user_id")
-  const [inputVal, setInputVal] = useState('')
+  const [inputKey, setInputKey] = useState("withdraw_user_id");
+  const [inputVal, setInputVal] = useState("");
 
   // 初审弹窗
-  const [reviewOrderModal, setReviewOrderModal] = useState(false)
+  const [reviewOrderModal, setReviewOrderModal] = useState(false);
   // 复审弹窗
-  const [editOrderModal, setEditOrderModal] = useState(false)
+  const [editOrderModal, setEditOrderModal] = useState(false);
   const [editData, setEditData] = useState({
-    id: '',
+    id: "",
     amount: 0,
     statue: 1,
-  })
+  });
   // 备注弹窗
-  const [remarkModal, setRemarkModal] = useState(initRemark)
+  const [remarkModal, setRemarkModal] = useState(initRemark);
   // 银行卡弹窗
-  const [bankCardModal, setBankCardModal] = useState(null)
+  const [bankCardModal, setBankCardModal] = useState(null);
 
   const initStates = useRef({
     status: "",
@@ -48,8 +61,8 @@ const PipeiOrderList = () => {
     withdraw_package_id: "",
     payment_package_id: "",
     limit: 20,
-    page: 1
-  })
+    page: 1,
+  });
 
   // 捞取品牌资讯
   const fetchPackageList = async () => {
@@ -65,7 +78,15 @@ const PipeiOrderList = () => {
 
   //搜尋
   const orderSearch = () => {
-    let { start_time, end_time, withdraw_package_id, payment_package_id, status, limit, page } = initStates.current
+    let {
+      start_time,
+      end_time,
+      withdraw_package_id,
+      payment_package_id,
+      status,
+      limit,
+      page,
+    } = initStates.current;
     let reqData = {
       [inputKey]: inputVal,
       start_time,
@@ -74,28 +95,28 @@ const PipeiOrderList = () => {
       payment_package_id,
       status,
       limit,
-      page
-    }
-    fetchData(reqData)
-  }
+      page,
+    };
+    fetchData(reqData);
+  };
 
   //向后端请求资料
   const fetchData = async (reqData) => {
-    const res = await getJisuOrderList(reqData)
+    const res = await getJisuOrderList(reqData);
     //状态码，0： 成功；-1：失败
     if (res.status === 0) {
-      message.success(res.msg)
-      setData(res.data.list || [])
-      setCount(res.data.count)
+      message.success(res.msg);
+      setData(res.data.list || []);
+      setCount(res.data.count);
     } else {
       message.info(res.msg || JSON.stringify(res));
     }
-  }
+  };
 
   useEffect(() => {
-    fetchPackageList()
-    orderSearch()
-  }, [])
+    fetchPackageList();
+    orderSearch();
+  }, []);
 
   // 打开编辑弹窗
   const handleEdit = (record) => {
@@ -103,10 +124,10 @@ const PipeiOrderList = () => {
       id: record.id,
       amount: record.amount,
       reviewStatus: record.review_status,
-    }
-    setEditOrderModal(true)
-    setEditData(data)
-  }
+    };
+    setEditOrderModal(true);
+    setEditData(data);
+  };
 
   //编辑订单状态
   const updateOrderStatus = async (action, id) => {
@@ -114,68 +135,74 @@ const PipeiOrderList = () => {
       match_id: id,
       review_type: 2,
       review_status: action,
-    }
+    };
     let reqUpdateData = {
       match_id: id,
       status: action,
-    }
+    };
     // 第一階段先進行複審
-    const res1 = await updateJisuOrderReview(reqReviewData)
+    const res1 = await updateJisuOrderReview(reqReviewData);
     if (res1.status === 0) {
-      message.success(res1.msg)
+      message.success(res1.msg);
       // 複審通過，才確認修改訂單狀態
-      const res2 = await updateJisuOrderStatus(reqUpdateData)
+      const res2 = await updateJisuOrderStatus(reqUpdateData);
       if (res2.status === 0) {
-        message.success(res2.msg)
-        setEditOrderModal(false)
-        orderSearch()
+        message.success(res2.msg);
+        setEditOrderModal(false);
+        orderSearch();
       } else {
         message.info(res2.msg || JSON.stringify(res2));
       }
     } else {
       message.info(res1.msg || JSON.stringify(res1));
     }
-  }
+  };
 
   // 备注弹窗開關
   const handleRemark = (id, content) => {
-    setRemarkModal({ id, content })
-  }
+    setRemarkModal({ id, content });
+  };
 
   // 编辑备注内容
   const updateOrderRemark = async () => {
-    const { id, content } = remarkModal
+    const { id, content } = remarkModal;
     let reqData = {
       match_id: id,
       remark: content,
-    }
-    const res = await updateJisuOrderRemark(reqData)
+    };
+    const res = await updateJisuOrderRemark(reqData);
     if (res.status === 0) {
-      message.success(res.msg)
-      setRemarkModal({})
-      orderSearch()
+      message.success(res.msg);
+      setRemarkModal({});
+      orderSearch();
     } else {
       message.info(res.msg || JSON.stringify(res));
     }
-  }
+  };
 
   //查询银行卡资讯
   const showBankCard = async (user_id, package_id) => {
     let reqData = {
       user_id,
       package_id,
-    }
-    const res = await getBankCardInfo(reqData)
+    };
+    const res = await getBankCardInfo(reqData);
     if (res.status === 0) {
-      message.success(res.msg)
-      setBankCardModal(res.data)
+      message.success(res.msg);
+      setBankCardModal(res.data);
     } else {
       message.info(res.msg || JSON.stringify(res));
     }
-  }
+  };
 
   const handle_download = async () => {
-    let { start_time, end_time, withdraw_package_id, payment_package_id, status } = initStates.current
+    let {
+      start_time,
+      end_time,
+      withdraw_package_id,
+      payment_package_id,
+      status,
+    } = initStates.current;
     let reqData = {
       [inputKey]: inputVal,
       start_time,
@@ -185,22 +212,22 @@ const PipeiOrderList = () => {
       status,
       limit: count,
       page: 1,
-    }
+    };
 
-    const res = await getJisuOrderList(reqData)
+    const res = await getJisuOrderList(reqData);
     if (res.status === 0) {
-      message.success(res.msg)
-      download(res.data.list)
+      message.success(res.msg);
+      download(res.data.list);
     } else {
-      setPrintData([])
-      message.info(res.msg || JSON.stringify(res))
+      setPrintData([]);
+      message.info(res.msg || JSON.stringify(res));
     }
-  }
+  };
 
   const download = (downloadData) => {
-    console.log('download')
-    let option = {}
-    let dataTable = []
+    console.log("download");
+    let option = {};
+    let dataTable = [];
     if (downloadData.length > 0) {
       downloadData.forEach((ele) => {
         let obj = {
@@ -219,13 +246,13 @@ const PipeiOrderList = () => {
           充值订单状态: switchStatus(ele.payment_status),
           交易订单状态: switchPipeiStatus(ele.status),
           备注: ele.remark,
-        }
-        dataTable.push(obj)
-      })
+        };
+        dataTable.push(obj);
+      });
     }
 
-    let current = moment().format("YYYYMMDDHHmm")
-    option.fileName = `匹配订单${current}`
+    let current = moment().format("YYYYMMDDHHmm");
+    option.fileName = `匹配订单${current}`;
     option.datas = [
       {
         sheetData: dataTable,
@@ -245,14 +272,14 @@ const PipeiOrderList = () => {
           "充值玩家品牌",
           "充值订单状态",
           "交易订单状态",
-          "备注"
+          "备注",
         ],
       },
     ];
 
-    const toExcel = new ExportJsonExcel(option) //new
-    toExcel.saveExcel()
-  }
+    const toExcel = new ExportJsonExcel(option); //new
+    toExcel.saveExcel();
+  };
 
   const initColumns = [
     {
@@ -327,7 +354,13 @@ const PipeiOrderList = () => {
       dataIndex: "",
       render: (record) => (
         <span>
-          <LinkButton onClick={() => showBankCard(record.withdraw_user_id, record.withdraw_package_id)}>查看详情</LinkButton>
+          <LinkButton
+            onClick={() =>
+              showBankCard(record.withdraw_user_id, record.withdraw_package_id)
+            }
+          >
+            查看详情
+          </LinkButton>
         </span>
       ),
     },
@@ -336,14 +369,21 @@ const PipeiOrderList = () => {
       dataIndex: "",
       render: (record) => (
         <span>
-          {record.status == 5 &&
-            <LinkButton type="default" onClick={() => handleEdit(record)}>编辑</LinkButton>
-          }
-          <LinkButton type="default" onClick={() => handleRemark(record.id, record.remark)}>编辑备注</LinkButton>
+          {record.status == 5 && (
+            <LinkButton type="default" onClick={() => handleEdit(record)}>
+              编辑
+            </LinkButton>
+          )}
+          <LinkButton
+            type="default"
+            onClick={() => handleRemark(record.id, record.remark)}
+          >
+            编辑备注
+          </LinkButton>
         </span>
       ),
     },
-  ]
+  ];
 
   return (
     <Card
@@ -358,7 +398,9 @@ const PipeiOrderList = () => {
             >
               <Select.Option value="withdraw_user_id">兑换玩家ID</Select.Option>
               <Select.Option value="payment_user_id">充值玩家ID</Select.Option>
-              <Select.Option value="withdraw_order_id">兑换订单号</Select.Option>
+              <Select.Option value="withdraw_order_id">
+                兑换订单号
+              </Select.Option>
               <Select.Option value="payment_order_id">充值订单号</Select.Option>
             </Select>
             &nbsp; &nbsp;
@@ -366,21 +408,24 @@ const PipeiOrderList = () => {
               type="text"
               placeholder="请输入关键字"
               style={{ width: 200 }}
-              onChange={e => setInputVal(e.target.value)
-              }
+              onChange={(e) => setInputVal(e.target.value)}
             />
             &nbsp; &nbsp;
             <MyDatePicker
               handleValue={(date, val) => {
-                initStates.current.start_time = date[0] ? date[0].valueOf() / 1000 : '';
-                initStates.current.end_time = date[1] ? Math.ceil(date[1].valueOf() / 1000) : '';
+                initStates.current.start_time = date[0]
+                  ? date[0].valueOf() / 1000
+                  : "";
+                initStates.current.end_time = date[1]
+                  ? Math.ceil(date[1].valueOf() / 1000)
+                  : "";
               }}
             />
             &nbsp; &nbsp;
             <Select
               style={{ width: 150 }}
               defaultValue=""
-              onSelect={(value) => initStates.current.status = value}
+              onSelect={(value) => (initStates.current.status = value)}
             >
               <Select.Option value="">交易订单状态</Select.Option>
               <Select.Option value="1">已匹配</Select.Option>
@@ -388,13 +433,14 @@ const PipeiOrderList = () => {
               <Select.Option value="3">已失败</Select.Option>
               <Select.Option value="4">已成功</Select.Option>
               <Select.Option value="5">审核中</Select.Option>
-
             </Select>
             &nbsp; &nbsp;
             <Select
               style={{ width: 150 }}
               defaultValue=""
-              onSelect={(value) => initStates.current.withdraw_package_id = value}
+              onSelect={(value) =>
+                (initStates.current.withdraw_package_id = value)
+              }
             >
               <Select.Option value="">兑换玩家品牌</Select.Option>
               {packageList &&
@@ -410,7 +456,9 @@ const PipeiOrderList = () => {
             <Select
               style={{ width: 150 }}
               defaultValue=""
-              onSelect={(value) => initStates.current.payment_package_id = value}
+              onSelect={(value) =>
+                (initStates.current.payment_package_id = value)
+              }
             >
               <Select.Option value="">充值玩家品牌</Select.Option>
               {packageList &&
@@ -426,9 +474,12 @@ const PipeiOrderList = () => {
             <LinkButton onClick={() => orderSearch()} size="default">
               <Icon type="search" />
             </LinkButton>
-          </div >
+          </div>
           <div style={{ marginTop: 10 }}>
-            <LinkButton onClick={() => setReviewOrderModal(true)} size="default">
+            <LinkButton
+              onClick={() => setReviewOrderModal(true)}
+              size="default"
+            >
               <Icon type="search" />
               匹配订单状态修改
             </LinkButton>
@@ -460,12 +511,13 @@ const PipeiOrderList = () => {
           defaultCurrent: 1,
           total: count,
           onChange: (page, pageSize) => {
-            initStates.current.page = page
-            orderSearch()
+            initStates.current.page = page;
+            orderSearch();
           },
           onShowSizeChange: (current, size) => {
-            initStates.current.limit = size
-            orderSearch()
+            initStates.current.page = current;
+            initStates.current.limit = size;
+            orderSearch();
           },
         }}
         scroll={{ x: "max-content" }}
@@ -478,13 +530,22 @@ const PipeiOrderList = () => {
           footer={null}
           width="50%"
         >
-          <TextArea rows={4} defaultValue={remarkModal.content} onChange={(e) => setRemarkModal({ ...remarkModal, content: e.target.value })}></TextArea>
-          <Button type="primary" style={{ 'marginTop': '16px' }} onClick={updateOrderRemark}>
+          <TextArea
+            rows={4}
+            defaultValue={remarkModal.content}
+            onChange={(e) =>
+              setRemarkModal({ ...remarkModal, content: e.target.value })
+            }
+          ></TextArea>
+          <Button
+            type="primary"
+            style={{ marginTop: "16px" }}
+            onClick={updateOrderRemark}
+          >
             提交
           </Button>
         </Modal>
-      )
-      }
+      )}
       {bankCardModal && (
         <Modal
           title="银行卡信息"
@@ -505,38 +566,47 @@ const PipeiOrderList = () => {
         footer={null}
         width="70%"
       >
-        <ReviewOrder onClose={() => {
-          setReviewOrderModal(false)
-          orderSearch()
-        }} />
+        <ReviewOrder
+          onClose={() => {
+            setReviewOrderModal(false);
+            orderSearch();
+          }}
+        />
       </Modal>
       <Modal
         title="编辑"
         visible={editOrderModal}
         onCancel={() => setEditOrderModal(false)}
         footer={null}
-        width="50%">
+        width="50%"
+      >
         <div>
           <div>订单流水号：{editData.id}</div>
           <br />
           <div>订单金额：{editData.amount}</div>
           <br />
-          <div>状态：{editData.reviewStatus == 1 ? '成功' : '失败'}</div>
+          <div>状态：{editData.reviewStatus == 1 ? "成功" : "失败"}</div>
           <br />
           <div>
             状态修改确认：
-            <Button type="primary" onClick={() => updateOrderStatus(1, editData.id)}>
+            <Button
+              type="primary"
+              onClick={() => updateOrderStatus(1, editData.id)}
+            >
               通过
             </Button>
             &nbsp;&nbsp;&nbsp;
-            <Button type="danger" onClick={() => updateOrderStatus(0, editData.id)}>
+            <Button
+              type="danger"
+              onClick={() => updateOrderStatus(0, editData.id)}
+            >
               拒绝
             </Button>
           </div>
         </div>
       </Modal>
-    </Card >
-  )
-}
+    </Card>
+  );
+};
 
-export default PipeiOrderList
+export default PipeiOrderList;

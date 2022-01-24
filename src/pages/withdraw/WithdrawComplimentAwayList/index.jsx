@@ -6,14 +6,17 @@ import LinkButton from "../../../components/link-button/index";
 import { reverseNumber } from "../../../utils/commonFuntion";
 import { switchPackageId } from "../../../utils/switchType";
 import { formateDate } from "../../../utils/dateUtils";
-
+import ExportJsonExcel from "js-export-excel";
+import moment from "moment";
 const WithDrawComplimentAwayList = () => {
   const initStates = useRef({
     user_id: "",
     package_id: "",
     receive_user_id: "",
+    page_set: 20,
+    page: 1,
   });
-  const [current, setCurrent] = useState(1);
+  const [count, setCount] = useState(0);
   const [nodedata, setNode] = useState();
   const [complimentData, setComplimentData] = useState([]);
   const getInitialData = async () => {
@@ -86,13 +89,9 @@ const WithDrawComplimentAwayList = () => {
       },
     },
   ];
-  const onSearchData = () => {
-    setCurrent(1);
-    fetchData(1, 50);
-  };
-  const fetchData = async (page, page_set) => {
-    let { user_id, package_id, receive_user_id } = initStates.current;
-
+  const fetchData = async () => {
+    let { user_id, package_id, receive_user_id, page, page_set } =
+      initStates.current;
     const res = await sendMoneyHistory({
       user_id,
       package_id,
@@ -102,11 +101,71 @@ const WithDrawComplimentAwayList = () => {
     });
     if (res.status === 0 && res.data) {
       message.success(res.msg || "请求成功");
+      setCount(res.data.count);
       setComplimentData(res.data.list);
     } else {
       message.info(res.msg || JSON.stringify(res));
     }
   };
+  //
+  const handle_download = async () => {
+    let { user_id, package_id, receive_user_id, page, page_set } =
+      initStates.current;
+    const res = await sendMoneyHistory({
+      user_id,
+      package_id,
+      receive_user_id,
+      page,
+      page_set,
+    });
+    if (res.status === 0) {
+      message.success(res.msg);
+      download(res.data.list);
+    } else {
+      message.info(res.msg || JSON.stringify(res));
+    }
+  };
+
+  const download = (downloadData) => {
+    let option = {};
+    let dataTable = [];
+    if (downloadData.length > 0) {
+      downloadData.forEach((ele) => {
+        let obj = {
+          赠送流水号: ele.id,
+          所属品牌: switchPackageId(ele.PackageId),
+          赠送玩家ID: ele.UserId,
+          被赠送玩家ID: ele.ReceiveUserId,
+          赠送金额: ele.Amount,
+          交易时间: formateDate(ele.created_at),
+          状态: ele.status === 4 ? "成功" : "",
+        };
+        dataTable.push(obj);
+      });
+    }
+
+    let current = moment().format("YYYYMMDDHHmm");
+    option.fileName = `赠送详情${current}`;
+    option.datas = [
+      {
+        sheetData: dataTable,
+        sheetName: "sheet",
+        sheetHeader: [
+          "赠送流水号",
+          "所属品牌",
+          "赠送玩家ID",
+          "被赠送玩家ID",
+          "赠送金额",
+          "交易时间",
+          "状态",
+        ],
+      },
+    ];
+
+    const toExcel = new ExportJsonExcel(option); //new
+    toExcel.saveExcel();
+  };
+  //
   return (
     <Card
       title={
@@ -144,7 +203,7 @@ const WithDrawComplimentAwayList = () => {
               }}
             />
             &nbsp; &nbsp;
-            <LinkButton onClick={onSearchData} size="default">
+            <LinkButton onClick={fetchData} size="default">
               <Icon type="search" />
             </LinkButton>
             &nbsp; &nbsp;
@@ -161,6 +220,14 @@ const WithDrawComplimentAwayList = () => {
             icon="reload"
             size="default"
           />
+          <br />
+          <br />
+          <LinkButton
+            size="default"
+            style={{ float: "right" }}
+            onClick={handle_download}
+            icon="download"
+          />
         </span>
       }
     >
@@ -170,25 +237,21 @@ const WithDrawComplimentAwayList = () => {
         rowKey={(record, index) => `${index}`}
         dataSource={complimentData}
         columns={initColumns()}
-        // loading={loading}
         pagination={{
-          current: current,
-          defaultCurrent: 1,
-          defaultPageSize: 50,
+          defaultPageSize: 20,
           showSizeChanger: true,
           showQuickJumper: true,
-          total: complimentData.count,
+          total: count,
           showTotal: (total) => `共${total}条`,
           onChange: (page, pageSize) => {
-            setCurrent(page);
-            fetchData(page, pageSize);
+            initStates.current.page = page;
+            fetchData();
           },
-          // onShowSizeChange: (current, size) => {
-          //     this.setState({
-          //         pageSize: size,
-          //     });
-          //     this.getInitialData(current, size);
-          // },
+          onShowSizeChange: (current, size) => {
+            initStates.current.page = current;
+            initStates.current.page_set = size;
+            fetchData();
+          },
         }}
       />
     </Card>
