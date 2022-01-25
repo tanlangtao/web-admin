@@ -55,6 +55,33 @@ export default function B2bconfig(props) {
 			dataIndex: "superior_agent"
 		},
 		{
+			title: "充值开关",
+			dataIndex: ["item_status", "open_chongzhi"],
+			render: (text, record) => text == 1 ? '开' : '关'
+		},
+		{
+			title: "提现开关",
+			dataIndex: ["item_status", "open_tixian"],
+			render: (text, record) => text == 1 ? '开' : '关'
+		},
+		{
+			title: "返回大厅开关",
+			dataIndex: ["item_status", "open_tixian"],
+
+			dataIndex: "open_back_hall",
+			render: (text, record) => text == 1 ? '开' : '关'
+		},
+		{
+			title: "客服开关",
+			dataIndex: ["item_status", "open_im"],
+			render: (text, record) => text == 1 ? '开' : '关'
+		},
+		{
+			title: "代理系统开关",
+			dataIndex: ["item_status", "open_proxyor_agent"],
+			render: (text, record) => text == 1 ? '开' : '关'
+		},
+		{
 			title: "创建时间",
 			dataIndex: "create_time",
 			render: (text, record, index) => formateDate(text / 1000)

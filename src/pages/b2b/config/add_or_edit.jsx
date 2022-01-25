@@ -32,7 +32,7 @@ function dataForm({ data, action, form, cancel }) {
 						}
 					],
 					initialValue: action === "upt" ? data.platform_code : ""
-				})(<Input style={{ width: "60%" }} />)}
+				})(<Input disabled={Boolean(action === "upt")} style={{ width: "60%" }} />)}
 			</Form.Item>
 			<Form.Item label="平台验证token">
 				{getFieldDecorator("platform_token", {
@@ -78,22 +78,6 @@ function dataForm({ data, action, form, cancel }) {
 					initialValue: action === "upt" ? data.superior_agent : ""
 				})(<Input style={{ width: "60%" }} />)}
 			</Form.Item>
-			{/* <Form.Item label="用途">
-				{getFieldDecorator("type", {
-					rules        : [
-						{
-							required : true,
-							message  : "该项不能为空"
-						}
-					],
-					initialValue : action==="upt" && data.platform_code
-				})(
-					<Radio.Group>
-						<Radio value={1}>收款卡</Radio>
-						<Radio value={2}>出款卡</Radio>
-					</Radio.Group>
-				)}
-			</Form.Item> */}
 			<Form.Item wrapperCol={{ offset: 4 }}>
 				<Button type="primary" htmlType="submit">
 					提交
