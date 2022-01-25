@@ -220,6 +220,7 @@ class Withdraw_list extends Component {
               <Select.Option value="11">jisuwithdraw</Select.Option>
               <Select.Option value="12">pipeiwithdraw</Select.Option>
               <Select.Option value="13">jisuwithdraw2</Select.Option>
+              <Select.Option value="14">UC代付</Select.Option>
             </Select>
             &nbsp; &nbsp;
             <LinkButton
@@ -552,6 +553,10 @@ class Withdraw_list extends Component {
           case "13":
           case 13:
             word = "jisuwithdraw2";
+            break;
+          case "14":
+          case 14:
+            word = "UC代付";
             break;
           default:
             word = "";
