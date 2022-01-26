@@ -66,9 +66,7 @@ export default function B2bconfig(props) {
 		},
 		{
 			title: "返回大厅开关",
-			dataIndex: ["item_status", "open_tixian"],
-
-			dataIndex: "open_back_hall",
+			dataIndex: ["item_status", "open_back_hall"],
 			render: (text, record) => text == 1 ? '开' : '关'
 		},
 		{
@@ -78,7 +76,7 @@ export default function B2bconfig(props) {
 		},
 		{
 			title: "代理系统开关",
-			dataIndex: ["item_status", "open_proxyor_agent"],
+			dataIndex: ["item_status", "open_proxy"],
 			render: (text, record) => text == 1 ? '开' : '关'
 		},
 		{

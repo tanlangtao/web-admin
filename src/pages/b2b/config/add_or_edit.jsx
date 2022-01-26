@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, Button, message, Radio } from "antd";
 import { postb2bconfig } from "../../../api";
 
 function dataForm({ data, action, form, cancel }) {
@@ -77,6 +77,61 @@ function dataForm({ data, action, form, cancel }) {
 					],
 					initialValue: action === "upt" ? data.superior_agent : ""
 				})(<Input style={{ width: "60%" }} />)}
+			</Form.Item>
+			<Form.Item label="充值开关">
+				{getFieldDecorator("open_chongzhi", {
+					rules: [{ required: true }],
+					initialValue: action === "add" ? "" : data.item_status.open_chongzhi,
+				})(
+					<Radio.Group>
+						<Radio value={0}>关闭</Radio>
+						<Radio value={1}>开启</Radio>
+					</Radio.Group>,
+				)}
+			</Form.Item>
+			<Form.Item label="提现开关">
+				{getFieldDecorator("open_tixian", {
+					rules: [{ required: true }],
+					initialValue: action === "add" ? "" : data.item_status.open_tixian,
+				})(
+					<Radio.Group>
+						<Radio value={0}>关闭</Radio>
+						<Radio value={1}>开启</Radio>
+					</Radio.Group>,
+				)}
+			</Form.Item>
+			<Form.Item label="返回大厅开关">
+				{getFieldDecorator("open_back_hall", {
+					rules: [{ required: true }],
+					initialValue: action === "add" ? "" : data.item_status.open_back_hall,
+				})(
+					<Radio.Group>
+						<Radio value={0}>关闭</Radio>
+						<Radio value={1}>开启</Radio>
+					</Radio.Group>,
+				)}
+			</Form.Item>
+			<Form.Item label="客服开关">
+				{getFieldDecorator("open_im", {
+					rules: [{ required: true }],
+					initialValue: action === "add" ? "" : data.item_status.open_im,
+				})(
+					<Radio.Group>
+						<Radio value={0}>关闭</Radio>
+						<Radio value={1}>开启</Radio>
+					</Radio.Group>,
+				)}
+			</Form.Item>
+			<Form.Item label="代理系统开关">
+				{getFieldDecorator("open_proxy", {
+					rules: [{ required: true }],
+					initialValue: action === "add" ? "" : data.item_status.open_proxy,
+				})(
+					<Radio.Group>
+						<Radio value={0}>关闭</Radio>
+						<Radio value={1}>开启</Radio>
+					</Radio.Group>,
+				)}
 			</Form.Item>
 			<Form.Item wrapperCol={{ offset: 4 }}>
 				<Button type="primary" htmlType="submit">
