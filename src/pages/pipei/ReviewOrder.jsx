@@ -66,24 +66,25 @@ const ReviewOrder = ({ onClose }) => {
         (
           record.status == 1 ||
           record.status == 2
-        ) &&
-        <span>
-          <Button
-            size="small"
-            type='primary'
-            onClick={() => orderReview(record, 1)}
-          >
-            成功
-          </Button>
-          &nbsp; &nbsp;
-          <Button
-            size="small"
-            type='danger'
-            onClick={() => orderReview(record, 0)}
-          >
-            失败
-          </Button>
-        </span>
+        ) ?
+          <span>
+            <Button
+              size="small"
+              type='primary'
+              onClick={() => orderReview(record, 1)}
+            >
+              成功
+            </Button>
+            &nbsp; &nbsp;
+            <Button
+              size="small"
+              type='danger'
+              onClick={() => orderReview(record, 0)}
+            >
+              失败
+            </Button>
+          </span>
+          : null
       )
     }
   ];
