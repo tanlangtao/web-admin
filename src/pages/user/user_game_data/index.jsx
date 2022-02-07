@@ -88,6 +88,7 @@ export default () => {
                 res.data["渠道充值增加金币"]?.totalgold,
                 res.data["渠道充值订单补单增加金币"]?.totalgold,
                 res.data["极速支付增加金币"]?.totalgold,
+                res.data["匹配充值增加金币"]?.totalgold,
             ];
             var afterdeal_charge = _.compact(charge);
             let sumcharge = _.sumBy(afterdeal_charge, _.toNumber);
@@ -168,6 +169,10 @@ export default () => {
                 <div>
                     极速支付增加金币:
                     {other_data?.["极速支付增加金币"]?.totalgold || "-"}
+                </div>
+                <div>
+                    匹配充值增加金币:
+                    {other_data?.["匹配充值增加金币"]?.totalgold || "-"}
                 </div>
                 <br />
                 <div>后台增加:{other_data?.["运营后台用户增加金币"]?.totalgold || "-"}</div>

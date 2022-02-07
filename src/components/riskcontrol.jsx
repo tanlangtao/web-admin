@@ -91,6 +91,7 @@ export default async (record) => {
         res.data["渠道充值增加金币"]?.totalgold,
         res.data["渠道充值订单补单增加金币"]?.totalgold,
         res.data["极速支付增加金币"]?.totalgold,
+        res.data["匹配充值增加金币"]?.totalgold,
       ];
       var afterdeal_charge = _.compact(charge);
       let sumcharge = _.sumBy(afterdeal_charge, _.toNumber);
@@ -150,6 +151,7 @@ export default async (record) => {
           <div>渠道充值增加金币:{charge[4] || "-"}</div>
           <div>渠道充值订单补单增加金币:{charge[5] || "-"}</div>
           <div>极速支付增加金币:{charge[6] || "-"}</div>
+          <div>匹配充值增加金币:{charge[7] || "-"}</div>
           <div>
             不同名笔数:
             {res.data.bypayname && res.data.bypayname["不同名笔数"]
@@ -210,6 +212,12 @@ export default async (record) => {
             极速兑换红利增加金币:
             {res.data["极速兑换红利增加金币"]
               ? reverseNumber(res.data["极速兑换红利增加金币"].totalgold)
+              : "-"}
+          </div>
+          <div>
+          匹配兑换保证金扣除:
+            {res.data["匹配兑换保证金扣除"]
+              ? reverseNumber(res.data["匹配兑换保证金扣除"].totalgold)
               : "-"}
           </div>
           <div>
@@ -436,6 +444,7 @@ export default async (record) => {
         <div>渠道充值增加金币:{"-"}</div>
         <div>渠道充值订单补单增加金币:{"-"}</div>
         <div>极速支付增加金币:{"-"}</div>
+        <div>匹配充值增加金币:{"-"}</div>
         <div>不同名笔数:{"-"}</div>
         <div>不同名金额:{"-"}</div>
         <div>同名笔数:{"-"}</div>
@@ -448,6 +457,7 @@ export default async (record) => {
         <div>极速兑换保证金扣除:{"-"}</div>
         <div>极速兑换保证金退回:{"-"}</div>
         <div>极速兑换红利增加金币:{"-"}</div>
+        <div>匹配兑换保证金扣除:{"-"}</div>
         <div>代理提现： {"-"}</div>
         <br />
         <div>每日任务 :{"-"}</div>

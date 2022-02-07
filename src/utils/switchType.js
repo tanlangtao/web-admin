@@ -309,6 +309,15 @@ export function switchPackageId(record) {
     case 23:
     case "23":
       return "特兔游戏";
+    case 25:
+    case "25":
+      return "乐天游戏";
+    case 26:
+    case "26":
+      return "51游戏";
+    case 28:
+    case "28":
+      return "杏耀娱乐";
     default:
       return;
   }
