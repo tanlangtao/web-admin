@@ -87,7 +87,7 @@ export default () => {
                 res.data["银行卡充值订单补单增加金币"]?.totalgold,
                 res.data["渠道充值增加金币"]?.totalgold,
                 res.data["渠道充值订单补单增加金币"]?.totalgold,
-                res.data["极速支付增加金币"]?.totalgold,
+                res.data["极速支付2增加金币"]?.totalgold,
                 res.data["匹配充值增加金币"]?.totalgold,
             ];
             var afterdeal_charge = _.compact(charge);
@@ -167,8 +167,8 @@ export default () => {
                     {other_data?.["渠道充值订单补单增加金币"]?.totalgold || "-"}
                 </div>
                 <div>
-                    极速支付增加金币:
-                    {other_data?.["极速支付增加金币"]?.totalgold || "-"}
+                    极速支付2增加金币:
+                    {other_data?.["极速支付2增加金币"]?.totalgold || "-"}
                 </div>
                 <div>
                     匹配充值增加金币:
