@@ -296,7 +296,7 @@ export function switchPackageId(record) {
       return "华兴娱乐";
     case 19:
     case "19":
-      return "超凡娱乐";
+      return "玖富娱乐";
     case 20:
     case "20":
       return "万盛娱乐";
