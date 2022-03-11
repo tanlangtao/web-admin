@@ -2258,3 +2258,14 @@ export const sendMoneyHistory = (reqData) => {
     { content_type_is_formdata: true }
   );
 };
+
+// 用戶 - 用户盈亏数据
+export const getStatementTotalByID = (reqData) => {
+  return ajax(
+    BASE + "/proxy/user/GetStatementTotalByID",
+    {
+      ...reqData,
+    },
+    "GET"
+  );
+};

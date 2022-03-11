@@ -66,6 +66,7 @@ import MoneyFloatDetail from "../customer_service/moneyfloat_detail";
 import BankCardCheck from "../user/bank_check";
 import GetAmmountbyPhone from "../user/getAmmountbyPhone";
 import GetBlackProxyUserList from "../user/getBlackProxyUserList";
+import GetStatementTotalByID from "../user/getStatementTotalByID";
 import { Provider, KeepAlive } from "react-keep-alive";
 import { History } from "../customer_service/history";
 import {
@@ -208,6 +209,11 @@ export default class Admin extends Component {
                   <Route path="/user/getBlackProxyUserList" exact>
                     <KeepAlive name="getBlackProxyUserList">
                       <GetBlackProxyUserList />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/user/getStatementTotalByID" exact>
+                    <KeepAlive name="getStatementTotalByID">
+                      <GetStatementTotalByID />
                     </KeepAlive>
                   </Route>
                   <Route path="/customer_service/notice_list" exact>
