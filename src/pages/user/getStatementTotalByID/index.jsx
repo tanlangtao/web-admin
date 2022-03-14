@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Card, message, Input, Table, Button, Select, Icon } from "antd";
 import { getStatementTotalByID, queryAccount } from "../../../api/";
-import { formateDate } from "../../../utils/dateUtils";
+import { formateDate, formatDateYMD } from "../../../utils/dateUtils";
 import MyDatePicker from "../../../components/MyDatePicker";
 import LinkButton from "../../../components/link-button/index";
 import { getStatementGameID } from "../../../../src/utils/public_variable";
@@ -9,7 +9,6 @@ import {
   reverseNumber,
   reversePercent,
   reverseNumberforExcelDownLoad,
-  reverseDecimal,
 } from "../../../utils/commonFuntion";
 const { Option } = Select;
 
@@ -110,8 +109,8 @@ export default () => {
         handleValue={(data, dateString) => {
           initstates.current = {
             ...initstates.current,
-            start_date: dateString[0],
-            end_date: dateString[1],
+            start_date: formatDateYMD(dateString[0]),
+            end_date: formatDateYMD(dateString[1]),
           };
         }}
       />
