@@ -38,6 +38,11 @@ const DateGameReport = (props) => {
         (Math.abs(b.win_statement_total || 0) +
           Math.abs(b.lose_statement_total || 0)),
     },
+    {
+      title: "有效投注",
+      dataIndex: "bet_money_total",
+      render: reverseNumber,
+    },
   ];
   const footerDetail = (details) => {
     const footercolumns = [
@@ -166,7 +171,7 @@ const DateGameReport = (props) => {
       render: reverseNumber,
     },
     {
-      title: "bet_money_total",
+      title: "有效投注",
       dataIndex: "bet_money_total",
       render: reverseNumber,
     },
@@ -186,6 +191,7 @@ const DateGameReport = (props) => {
             Math.abs(ele.lose_statement_total) - ele.win_statement_total,
           玩家总流水: ele.statement_total,
           盈亏比: ele.statement_ratio,
+          有效投注: ele.bet_money_total,
         };
         dataTable.push(obj);
       });
@@ -204,6 +210,7 @@ const DateGameReport = (props) => {
           "玩家输赢差",
           "玩家总流水",
           "盈亏比",
+          "有效投注",
         ],
         sheetHeader: [
           "游戏",
@@ -213,6 +220,7 @@ const DateGameReport = (props) => {
           "玩家输赢差",
           "玩家总流水",
           "盈亏比",
+          "有效投注",
         ],
       },
     ];

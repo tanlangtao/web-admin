@@ -259,7 +259,7 @@ class DailyReport extends Component {
       render: (text) => reverseNumber(text) || 0,
     },
     {
-      title: "bet_money_total",
+      title: "有效投注",
       dataIndex: "bet_money_total",
       render: (text) => reverseNumber(text) || 0,
     },
@@ -300,6 +300,7 @@ class DailyReport extends Component {
         package_id: parseInt(e.id),
         win_statement_total: 0,
         lose_statement_total: 0,
+        bet_money_total: 0,
       };
     });
     if (res?.data?.game) {
@@ -309,13 +310,13 @@ class DailyReport extends Component {
             if (e2.package_id === target_e.package_id) {
               target_e.win_statement_total += e2.win_statement_total;
               target_e.lose_statement_total += e2.lose_statement_total;
+              target_e.bet_money_total += e2.bet_money_total;
             }
           });
         });
       });
       res.data.game = newGameData;
     }
-    // console.log(res.data.game);
     const newRes = this.parseData(res);
     this.setState({
       data: newRes.data || [],
@@ -377,7 +378,8 @@ class DailyReport extends Component {
           .filter((e) => e && e.package_id)
           .map(
             (e) => (
-              (e.statement_ratio = ( // eslint-disable-next-line
+              (e.statement_ratio = // eslint-disable-next-line
+              (
                 (Math.abs(e.lose_statement_total) - e.win_statement_total) /
                 (e.win_statement_total + Math.abs(e.lose_statement_total))
               )
@@ -397,7 +399,6 @@ class DailyReport extends Component {
               //delete e._id
             )
           );
-
         // 合并
         res.data.order.forEach((e) => {
           Object.assign(
@@ -573,19 +574,27 @@ class DailyReport extends Component {
             data.lose_statement_total;
           summary[data.game_id]["count"] += data.count;
           summary[data.game_id]["game_name"] = data.game_name;
+          summary[data.game_id]["bet_money_total"] += data.bet_money_total;
         } else {
           summary[data.game_id] = {
             win_statement_total: data.win_statement_total,
             lose_statement_total: data.lose_statement_total,
             count: data.count,
             game_name: data.game_name,
+            bet_money_total: data.bet_money_total,
           };
         }
       });
       const newData = Object.entries(summary).map(
         ([
           game_id,
-          { win_statement_total, lose_statement_total, count, game_name },
+          {
+            win_statement_total,
+            lose_statement_total,
+            count,
+            game_name,
+            bet_money_total,
+          },
         ]) => {
           return {
             game_id,
@@ -593,6 +602,7 @@ class DailyReport extends Component {
             lose_statement_total,
             count,
             game_name,
+            bet_money_total,
           };
         }
       );
