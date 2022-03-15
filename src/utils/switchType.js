@@ -110,6 +110,10 @@ export function switchType(text) {
     case "28":
       word = "极速充值2";
       break;
+    case "29":
+      word = "极速充值Iframe";
+      break;
+
     default:
       word = "";
       break;

@@ -260,6 +260,9 @@ class Channel_list extends Component {
           case "27":
             word = "极速充值2";
             break;
+          case "28":
+            word = "极速充值Iframe";
+            break;
           default:
             word = "";
             break;

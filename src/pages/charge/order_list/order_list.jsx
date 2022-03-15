@@ -233,6 +233,7 @@ class Order_list extends Component {
                 <Select.Option value="26">极速充值</Select.Option>
                 <Select.Option value="27">匹配充值</Select.Option>
                 <Select.Option value="28">极速充值2</Select.Option>
+                <Select.Option value="29">极速充值Iframe</Select.Option>
               </Select>
               &nbsp; &nbsp;
               <LinkButton
@@ -356,7 +357,7 @@ class Order_list extends Component {
                 type="primary"
                 onClick={
                   this.state.pay_name.length !== 0 &&
-                    /^\d{16,19}$/.test(this.state.pay_account)
+                  /^\d{16,19}$/.test(this.state.pay_account)
                     ? this.sendChangepayAccountReadOnly
                     : this.sendChangepayAccount
                 }
@@ -431,7 +432,7 @@ class Order_list extends Component {
       title: "支付类型",
       dataIndex: "type",
       render: (text, record, index) => {
-        const word = switchType(text)
+        const word = switchType(text);
         return <span>{word}</span>;
       },
     },
