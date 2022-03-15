@@ -259,6 +259,11 @@ class DailyReport extends Component {
       render: (text) => reverseNumber(text) || 0,
     },
     {
+      title: "bet_money_total",
+      dataIndex: "bet_money_total",
+      render: (text) => reverseNumber(text) || 0,
+    },
+    {
       title: "操作",
       dataIndex: "",
       render: (text, record, index) => (
@@ -386,7 +391,7 @@ class DailyReport extends Component {
               (e.statement_total =
                 Math.round(
                   (e.win_statement_total + Math.abs(e.lose_statement_total)) *
-                  10000
+                    10000
                 ) / 10000)
               //(e.package_id = parseInt(e._id.package_id)),
               //delete e._id
@@ -510,7 +515,7 @@ class DailyReport extends Component {
             (e.statement_total =
               Math.round(
                 (e.win_statement_total + Math.abs(e.lose_statement_total)) *
-                10000
+                  10000
               ) / 10000),
             (e.date = e.create_time)
             //delete e._id
