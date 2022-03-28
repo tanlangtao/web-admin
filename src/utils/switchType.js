@@ -10,6 +10,7 @@ export function switchChannelType(text, record) {
     case "12":
     case "29":
     case "31":
+    case "32":
       word = "onePay";
       break;
     case "11":
