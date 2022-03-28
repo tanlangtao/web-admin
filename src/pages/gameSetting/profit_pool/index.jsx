@@ -145,7 +145,8 @@ const Profit_pool = (props) => {
     props.form.validateFields(async (err, value) => {
       if (!err) {
         let newvalue = _.omitBy(value, _.isNil);
-        let reqStr = `${new_gameRouter[game_id].path}/uptSurplusConf`;
+        // let reqStr = `${new_gameRouter[game_id].path}/uptSurplusConf`;
+        let reqStr = `/game${new_gameRouter[game_id].path}/uptSurplusConf`;
         let formdata = { game_id, ...newvalue };
         // go-admin 检查可更新的权限
         const res = await uptprofitpool(reqStr, formdata);

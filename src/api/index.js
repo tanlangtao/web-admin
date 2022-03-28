@@ -700,13 +700,14 @@ export const uptprofitpool = (str, formdata) => {
 		content_type_is_formdata: true,
 	});*/
   return ajax(
-    process.env.REACT_APP_GAME_HOST + str,
+    // process.env.REACT_APP_GAME_HOST + str,
+    BASE + str,
     {
       ...formdata,
     },
     "POST",
     {
-      needAuth: false,
+      // needAuth: false,
       content_type_is_formdata: true,
     }
   );
