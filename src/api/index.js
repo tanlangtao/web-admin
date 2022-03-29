@@ -689,9 +689,15 @@ export const saveConf = (value, action) => {
   );
 };
 export const getprofitpool = (str) => {
-  return ajax(process.env.REACT_APP_GAME_HOST + str, {}, "GET", {
-    needAuth: false,
-  });
+  return ajax(
+    BASE + str,
+    // process.env.REACT_APP_GAME_HOST + str
+    {},
+    "GET"
+    // {
+    //   needAuth: false,
+    // }
+  );
 };
 //更新盈余池 -> go-admin -> 控制角色权限
 export const uptprofitpool = (str, formdata) => {

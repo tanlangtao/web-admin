@@ -109,7 +109,8 @@ const Profit_pool = (props) => {
       message.info("请选择子游戏");
       return;
     }
-    let reqStr = `${new_gameRouter[game_id].path}/getSurplusOne?game_id=${game_id}`;
+    let reqStr = `/game${new_gameRouter[game_id].path}/getSurplusOne?game_id=${game_id}`;
+    // https://admin.lymrmfyp.com/admin/game/baijl/api/getSurplusOne?game_id=5c6a62be56209ac117d446aa
     const res = await getprofitpool(reqStr);
     if (res.code === 0 && res.data) {
       message.success(res.msg || "查询成功");
