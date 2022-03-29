@@ -109,8 +109,7 @@ const Profit_pool = (props) => {
       message.info("请选择子游戏");
       return;
     }
-    let reqStr = `/game${new_gameRouter[game_id].path}/getSurplusOne?game_id=${game_id}`;
-    // https://admin.lymrmfyp.com/admin/game/baijl/api/getSurplusOne?game_id=5c6a62be56209ac117d446aa
+    let reqStr = `${new_gameRouter[game_id].path}/getSurplusOne?game_id=${game_id}`;
     const res = await getprofitpool(reqStr);
     if (res.code === 0 && res.data) {
       message.success(res.msg || "查询成功");
@@ -147,7 +146,7 @@ const Profit_pool = (props) => {
       if (!err) {
         let newvalue = _.omitBy(value, _.isNil);
         // let reqStr = `${new_gameRouter[game_id].path}/uptSurplusConf`;
-        let reqStr = `/game${new_gameRouter[game_id].path}/uptSurplusConf`;
+        let reqStr = `${new_gameRouter[game_id].path}/uptSurplusConf`;
         let formdata = { game_id, ...newvalue };
         // go-admin 检查可更新的权限
         const res = await uptprofitpool(reqStr, formdata);

@@ -689,15 +689,9 @@ export const saveConf = (value, action) => {
   );
 };
 export const getprofitpool = (str) => {
-  return ajax(
-    BASE + str,
-    // process.env.REACT_APP_GAME_HOST + str
-    {},
-    "GET"
-    // {
-    //   needAuth: false,
-    // }
-  );
+  return ajax(process.env.REACT_APP_GAME_HOST + str, {}, "GET", {
+    needAuth: false,
+  });
 };
 //更新盈余池 -> go-admin -> 控制角色权限
 export const uptprofitpool = (str, formdata) => {
@@ -706,14 +700,13 @@ export const uptprofitpool = (str, formdata) => {
 		content_type_is_formdata: true,
 	});*/
   return ajax(
-    // process.env.REACT_APP_GAME_HOST + str,
-    BASE + str,
+    process.env.REACT_APP_GAME_HOST + str,
     {
       ...formdata,
     },
     "POST",
     {
-      // needAuth: false,
+      needAuth: false,
       content_type_is_formdata: true,
     }
   );
