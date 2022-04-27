@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./home.less";
 // import ElasticText from "../../components/elasticText";
 // import { Icon} from "antd";
 export default class Home extends Component {
@@ -9,7 +10,7 @@ export default class Home extends Component {
     };
     this.i = 0;
     this.timer = 0;
-    this.str = "欢迎您来到后台管理系统";
+    this.str = "您好，欢迎您使用后台管理系统";
   }
   typing = () => {
     if (this.i <= this.str.length) {

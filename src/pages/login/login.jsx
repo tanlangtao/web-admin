@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Icon, Input, Button, Modal, message } from "antd";
@@ -127,10 +128,14 @@ class Login extends Component {
     return (
       <div className="login">
         <header className="login-header">
-          <h1>后台管理系统</h1>
+          <h1></h1>
         </header>
         <section className="login-content">
-          <h2>用户登陆</h2>
+          <dev id='bg_bg'>
+            <dev id='bg_text'>
+            </dev>
+          </dev>
+          <h2></h2>
           <Form onSubmit={this.handleSubmit} className="login-form">
             <Item>
               {/*
@@ -210,6 +215,7 @@ class Login extends Component {
                 type="primary"
                 htmlType="submit"
                 className="login-form-button"
+
               >
                 登陆
               </Button>

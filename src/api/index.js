@@ -19,10 +19,10 @@ export const raceURL = (username, password) => {
   });
   // axios.defaults.headers.post["Content-Type"] = "application/json";
   let URLs = process.env.REACT_APP_HOST.split(",");
-  console.log(URLs);
+  console.log("urls=========",URLs);
   let promises = URLs.map((value) => {
     return instance2.get(value + "/api/check");
-  });
+  })
   Promise_any(promises)
     .then((result) => {
       localStorage.BASE = result.config.url.replace("/api/check", "/admin");

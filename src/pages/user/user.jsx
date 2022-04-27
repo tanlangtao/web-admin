@@ -369,6 +369,7 @@ export default class User extends Component {
       this.state.inputKey,
       this.state.inputValue
     );
+    console.log("getUsers",result)
     if (result.status === 0) {
       const { game_user, proxy_user } = result.data;
       game_user.forEach((element) => {

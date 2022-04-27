@@ -162,7 +162,11 @@ class LeftNav extends Component {
                     cpre.push(
                       //不在後台操作，瀏覽器打開新分頁訪問三方後台
                       <Menu.Item key={ele.key}>
-                        <a href={ele.key} target="_blank" rel="noreferrer noopener">
+                        <a
+                          href={ele.key}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                        >
                           <span>{ele.title}</span>
                         </a>
                       </Menu.Item>
@@ -224,13 +228,14 @@ class LeftNav extends Component {
           className="left-nav-header"
           onClick={() => (window.location.href = "/")}
         >
-          <h1>后台管理</h1>
-          <h4>V:1.0.9</h4>
+          <h1>棋牌游戏中心</h1>
+          {/* <h4>V:1.0.9</h4> */}
         </div>
         <Menu
           mode="inline"
           theme="dark"
-          selectedKeys={[path]}
+          
+          // selectedKeys={[path]}
           // defaultOpenKeys={[this.openKey]}
           onOpenChange={(key) => {
             console.log(key, this.state.openKey);
