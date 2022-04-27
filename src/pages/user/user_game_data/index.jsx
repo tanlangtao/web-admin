@@ -144,7 +144,8 @@ export default () => {
                 size="small"
                 pagination={false}
             />
-            <div style={{ fontSize: 16, marginTop: 20 }}>
+            {/* 此处为原用户界面显示的详情 要显示的话 display:"none" 干掉即可*/}
+            <div style={{ fontSize: 16, marginTop: 20 ,display:"none"}}>
                 <div>总流水:{other_data?.sumgold || "-"}</div>
                 <div>总盈亏:{other_data?.sumincome || "-"}</div>
                 <br />

@@ -301,16 +301,14 @@ export default class Admin extends Component {
                       <Profitpoolsetting isAuthed={true} />
                     </KeepAlive>
                   </Route>
-                  <Route
-                    path="/gameSetting/subGame/cylhd/changeRoomStatus"
+                  <Route path="/gameSetting/subGame/cylhd/changeRoomStatus"
                     exact
                   >
                     <KeepAlive name="ChangeRoomStatus">
                       <ChangeRoomStatus />
                     </KeepAlive>
                   </Route>
-                  <Route
-                    path="/gameSetting/subGame/cylhd/UserLimitRangeBet"
+                  <Route path="/gameSetting/subGame/cylhd/UserLimitRangeBet"
                     exact
                   >
                     <KeepAlive name="setUserLimitRangeBet">
@@ -325,24 +323,21 @@ export default class Admin extends Component {
                       <RoomLimitRangeBet />
                     </KeepAlive>
                   </Route>
-                  <Route
-                    path="/gameSetting/subGame/cycdx/changeRoomStatus"
+                  <Route path="/gameSetting/subGame/cycdx/changeRoomStatus"
                     exact
                   >
                     <KeepAlive name="CycdxChangeRoomStatus">
                       <CycdxChangeRoomStatus />
                     </KeepAlive>
                   </Route>
-                  <Route
-                    path="/gameSetting/subGame/cycdx/UserLimitRangeBet"
+                  <Route  path="/gameSetting/subGame/cycdx/UserLimitRangeBet"
                     exact
                   >
                     <KeepAlive name="CycdxUserLimitRangeBet">
                       <CycdxUserLimitRangeBet />
                     </KeepAlive>
                   </Route>
-                  <Route
-                    path="/gameSetting/subGame/cycdx/RoomLimitRangeBet"
+                  <Route path="/gameSetting/subGame/cycdx/RoomLimitRangeBet"
                     exact
                   >
                     <KeepAlive name="CycdxRoomLimitRangeBet">
@@ -450,8 +445,7 @@ export default class Admin extends Component {
                       <GetUserSortByGameTag />
                     </KeepAlive>
                   </Route>
-                  <Route
-                    path="/proxy/baseDividend/getUserInductionsSortByGameTag"
+                  <Route path="/proxy/baseDividend/getUserInductionsSortByGameTag"
                     exact
                   >
                     <KeepAlive name="getUserInductionsSortByGameTag">
@@ -488,16 +482,14 @@ export default class Admin extends Component {
                       <GetProxyGetGlobal />
                     </KeepAlive>
                   </Route>
-                  <Route
-                    path="/proxy/baseDividendNew/GetBaseDividendRule"
+                  <Route   path="/proxy/baseDividendNew/GetBaseDividendRule"
                     exact
                   >
                     <KeepAlive name="GetBaseDividendRule1">
                       <GetBaseDividendRule1 />
                     </KeepAlive>
                   </Route>
-                  <Route
-                    path="/proxy/baseDividendsecond/GetBaseDividendRule"
+                  <Route path="/proxy/baseDividendsecond/GetBaseDividendRule"
                     exact
                   >
                     <KeepAlive name="GetBaseDividendRule2">

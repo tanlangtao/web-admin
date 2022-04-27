@@ -71,14 +71,14 @@ export default class User extends Component {
 
   initColumns = () => [
     {
-      title: "user_id",
+      title: "玩家ID",
       dataIndex: "id",
       key: "id",
       fixed: "left",
       width: 100,
     },
     {
-      title: "昵称",
+      title: "玩家昵称",
       dataIndex: "game_nick",
       key: "game_nick",
       fixed: "left",
@@ -102,7 +102,18 @@ export default class User extends Component {
         };
       },
     },
-
+    {
+      title: "推广员ID",
+      dataIndex: "proxy_nick",
+      key: "proxy_nick",
+      // width: 150,
+    },
+    {
+      title: "所属品牌",
+      dataIndex: "package_nick",
+      key: "package_nick",
+      // width: 100,
+    },
     {
       title: "账户余额",
       dataIndex: "game_gold",
@@ -134,18 +145,8 @@ export default class User extends Component {
         return (Math.round(sum * 1000000) / 1000000).toFixed();
       },
     },
-    {
-      title: "所属品牌",
-      dataIndex: "package_nick",
-      key: "package_nick",
-      // width: 100,
-    },
-    {
-      title: "所属代理",
-      dataIndex: "proxy_nick",
-      key: "proxy_nick",
-      // width: 150,
-    },
+  
+ 
     {
       title: "手机",
       dataIndex: "phone_number",
@@ -162,56 +163,56 @@ export default class User extends Component {
         };
       },
     },
-    {
-      title: "手机归属地",
-      dataIndex: "phone_number_detail",
-      // width: 120,
-      render: (text, record, index) => {
-        if (!text && record.phone_number) {
-          return (
-            <Button
-              size="small"
-              onClick={() => this.check_tel_detail(record, index)}
-            >
-              点击查看
-            </Button>
-          );
-        } else {
-          return text;
-        }
-      },
-    },
-    {
-      title: "账号",
-      dataIndex: "role_name",
-      key: "role_name",
-      // width: 150,
-    },
+    // {
+    //   title: "手机归属地",
+    //   dataIndex: "phone_number_detail",
+    //   // width: 120,
+    //   render: (text, record, index) => {
+    //     if (!text && record.phone_number) {
+    //       return (
+    //         <Button
+    //           size="small"
+    //           onClick={() => this.check_tel_detail(record, index)}
+    //         >
+    //           点击查看
+    //         </Button>
+    //       );
+    //     } else {
+    //       return text;
+    //     }
+    //   },
+    // },
+    // {
+    //   title: "账号",
+    //   dataIndex: "role_name",
+    //   key: "role_name",
+    //   // width: 150,
+    // },
     {
       title: "注册IP",
       dataIndex: "regin_ip",
       key: "regin_ip",
       // width: 150,
     },
-    {
-      title: "注册IP区域",
-      dataIndex: "regin_ip_area",
-      // width: 200,
-      render: (text, record, index) => {
-        if (!text) {
-          return (
-            <Button
-              size="small"
-              onClick={() => this.check_ip_detail(record, index, "regin_ip")}
-            >
-              点击查看
-            </Button>
-          );
-        } else {
-          return text;
-        }
-      },
-    },
+    // {
+    //   title: "注册IP区域",
+    //   dataIndex: "regin_ip_area",
+    //   // width: 200,
+    //   render: (text, record, index) => {
+    //     if (!text) {
+    //       return (
+    //         <Button
+    //           size="small"
+    //           onClick={() => this.check_ip_detail(record, index, "regin_ip")}
+    //         >
+    //           点击查看
+    //         </Button>
+    //       );
+    //     } else {
+    //       return text;
+    //     }
+    //   },
+    // },
     {
       title: "注册时间",
       dataIndex: "regin_time",
@@ -226,25 +227,25 @@ export default class User extends Component {
       key: "login_ip",
       // width: 200,
     },
-    {
-      title: "登录IP区域",
-      dataIndex: "login_ip_area",
-      // width: 200,
-      render: (text, record, index) => {
-        if (!text) {
-          return (
-            <Button
-              size="small"
-              onClick={() => this.check_ip_detail(record, index, "login_ip")}
-            >
-              点击查看
-            </Button>
-          );
-        } else {
-          return text;
-        }
-      },
-    },
+    // {
+    //   title: "登录IP区域",
+    //   dataIndex: "login_ip_area",
+    //   // width: 200,
+    //   render: (text, record, index) => {
+    //     if (!text) {
+    //       return (
+    //         <Button
+    //           size="small"
+    //           onClick={() => this.check_ip_detail(record, index, "login_ip")}
+    //         >
+    //           点击查看
+    //         </Button>
+    //       );
+    //     } else {
+    //       return text;
+    //     }
+    //   },
+    // },
     {
       title: "登陆时间",
       dataIndex: "login_time",
@@ -253,46 +254,47 @@ export default class User extends Component {
       // width: 200,
     },
     {
-      title: "操作",
-      dataIndex: "",
-      // width: 200,
-      render: (record) => (
-        <span>
-          <LinkButton onClick={() => this.getGoldDetail(record)} type="default">
-            资金明细
-          </LinkButton>
-          <LinkButton onClick={() => this.getMoreDetail(record)}>
-            更多
-          </LinkButton>
-        </span>
-      ),
-    },
-    {
-      title: "实时余额",
-      // width: 100,
-      render: (record) => (
-        <span>
-          <LinkButton type="default" onClick={() => this.getLoadGold(record)}>
-            查看
-          </LinkButton>
-        </span>
-      ),
-    },
-    {
-      title: "是否为客服账号",
-      dataIndex: "game_user_type",
-      // width: 150,
-      render: (text, record, index) => (
-        <span>{parseInt(text) === 4 ? "是" : ""}</span>
-      ),
-    },
-    {
       title: "是否被限制登录",
       dataIndex: "status",
       render: (text, record, index) => (
         <span>{parseInt(text) === 0 ? "是" : ""}</span>
       ),
     },
+    {
+      title: "操作",
+      dataIndex: "",
+      // width: 200,
+      render: (record) => (
+        <span>
+          {/* <LinkButton onClick={() => this.getGoldDetail(record)} type="default">
+            资金明细
+          </LinkButton> */}
+          <LinkButton onClick={() => this.getMoreDetail(record)}>
+            查看
+          </LinkButton>
+        </span>
+      ),
+    },
+    // {
+    //   title: "实时余额",
+    //   // width: 100,
+    //   render: (record) => (
+    //     <span>
+    //       <LinkButton type="default" onClick={() => this.getLoadGold(record)}>
+    //         查看
+    //       </LinkButton>
+    //     </span>
+    //   ),
+    // },
+    // {
+    //   title: "是否为客服账号",
+    //   dataIndex: "game_user_type",
+    //   // width: 150,
+    //   render: (text, record, index) => (
+    //     <span>{parseInt(text) === 4 ? "是" : ""}</span>
+    //   ),
+    // },
+
   ];
   check_ip_detail = async (record, i, type) => {
     this.setState({ loading: true });
@@ -369,7 +371,6 @@ export default class User extends Component {
       this.state.inputKey,
       this.state.inputValue
     );
-    console.log("getUsers",result)
     if (result.status === 0) {
       const { game_user, proxy_user } = result.data;
       game_user.forEach((element) => {
@@ -603,11 +604,11 @@ export default class User extends Component {
             this.setState({ inputKey: val });
           }}
         >
-          <Option value="id">user_id</Option>
-          <Option value="game_nick">昵称</Option>
+          <Option value="id">玩家ID</Option>
+          <Option value="game_nick">玩家昵称</Option>
           <Option value="phone_number">手机号</Option>
           <Option value="role_name">账号</Option>
-          <Option value="proxy_pid">所属代理</Option>
+          <Option value="proxy_pid">推广员ID</Option>
           <Option value="package_nick">所属品牌</Option>
           <Option value="regin_ip">注册IP</Option>
           <Option value="login_ip">登陆IP</Option>
