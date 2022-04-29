@@ -284,15 +284,12 @@ class GoldDetail extends Component {
 			{
 				title: "支付宝账号",
 				dataIndex: "account_card",
+				align: 'center',
 				render: (text, record) => {
 					if (text) {
 						return (
 							<div>
-								{text[0] +
-									text[1] +
-									"*******" +
-									text[text.length - 2] +
-									text[text.length - 1]}
+								{text}
 							</div>
 						);
 					} else {
@@ -303,10 +300,12 @@ class GoldDetail extends Component {
 			{
 				title: "绑定支付宝时间",
 				dataIndex: "alipay_created_at",
+				align: 'center',
 			},
 			{
 				title: "USDT钱包地址",
 				dataIndex: "wallet_addr",
+				align: 'center',
 				width: 120,
 				render: (text, record) => (
 					<div style={{ wordWrap: "break-word", wordBreak: "break-word" }}>{text}</div>
@@ -315,13 +314,15 @@ class GoldDetail extends Component {
 			{
 				title: "USDT协议",
 				dataIndex: "protocol",
+				align: 'center',
 			},
 			{
 				title: "开户人姓名",
 				dataIndex: "card_name",
+				align: 'center',
 				render: (text, record) => {
 					if (text) {
-						return <div>{text[0] + "**"}</div>;
+						return <div>{text}</div>;
 					} else {
 						return <div />;
 					}
@@ -330,22 +331,17 @@ class GoldDetail extends Component {
 			{
 				title: "银行名称",
 				dataIndex: "bank_name",
+				align: 'center',
 			},
 			{
 				title: "银行卡号",
 				dataIndex: "card_num",
+				align: 'center',
 				render: (text, record) => {
 					if (text) {
 						return (
 							<div>
-								{text[0] +
-									text[1] +
-									text[2] +
-									"*******" +
-									text[text.length - 4] +
-									text[text.length - 3] +
-									text[text.length - 2] +
-									text[text.length - 1]}
+								{text}
 							</div>
 						);
 					} else {
@@ -356,19 +352,21 @@ class GoldDetail extends Component {
 			{
 				title: "绑定银行卡时间",
 				dataIndex: "bankcard_created_at",
+				align: 'center',
 			},
-			{
-				title: "是否灰名单",
-				dataIndex: "is_gray",
-			},
-			{
-				title: "灰名单备注",
-				dataIndex: "black_remark",
-			},
+			// {
+			// 	title: "是否灰名单",
+			// 	dataIndex: "is_gray",
+			// },
+			// {
+			// 	title: "灰名单备注",
+			// 	dataIndex: "black_remark",
+			// },
 			{
 				title: "开户省",
 				dataIndex: "info",
 				key: "info1",
+				align: 'center',
 				render: text => {
 					console.log(JSON.parse(text));
 					return JSON.parse(text)?.bank_province;
@@ -378,22 +376,24 @@ class GoldDetail extends Component {
 				title: "开户市",
 				dataIndex: "info",
 				key: "info2",
+				align: 'center',
 				render: text => {
 					console.log(JSON.parse(text));
 					return JSON.parse(text)?.bank_city;
 				},
 			},
-			{
-				title: "备注人",
-				dataIndex: "remark_name",
-			},
-			{
-				title: "备注时间",
-				dataIndex: "remark_at",
-			},
+			// {
+			// 	title: "备注人",
+			// 	dataIndex: "remark_name",
+			// },
+			// {
+			// 	title: "备注时间",
+			// 	dataIndex: "remark_at",
+			// },
 			{
 				title: "操作",
 				dataIndex: "option",
+				align: 'center',
 				render: (text, record) => (
 					<span>
 						<LinkButton type="default" onClick={() => this.reset(record, "2")}>

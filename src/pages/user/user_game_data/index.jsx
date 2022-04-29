@@ -6,7 +6,6 @@ import _ from "lodash-es";
 import MyDatePicker from "../../../components/MyDatePicker";
 import { getriskcontrol } from "../../../api";
 import { reverseNumber } from "../../../utils/commonFuntion";
-
 export default () => {
     const [table_data, set_table_data] = useState([]);
     const [other_data, set_other_data] = useState({});

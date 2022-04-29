@@ -2715,16 +2715,19 @@ async function check_game_data(record) {
 }
 const initColumns = [
   {
-    title: "user_id",
+    title: "玩家ID",
     dataIndex: "id",
+    align: 'center',
   },
   {
     title: "产生来源",
     dataIndex: "pay_account_name",
+    align: 'center',
   },
   {
     title: "余额(变动前)",
     dataIndex: "total_balance",
+    align: 'center',
     render: (text, record) => {
       if (record) {
         return <div>{(record.balance + record.banker_balance).toFixed(6)}</div>;
@@ -2736,6 +2739,7 @@ const initColumns = [
   {
     title: "变动金额",
     dataIndex: "final_pay",
+    align: 'center',
     render: (text, record) => {
       return <span>{text.toFixed(6)}</span>;
     },
@@ -2743,6 +2747,7 @@ const initColumns = [
   {
     title: "税收",
     dataIndex: "tax",
+    align: 'center',
     render: (text, record) => {
       return <span>{record.final_pay > 0 ? text.toFixed(6) : ""}</span>;
     },
@@ -2750,6 +2755,7 @@ const initColumns = [
   {
     title: "余额(变动后)",
     dataIndex: "total_final_balance",
+    align: 'center',
     render: (text, record) => {
       if (record) {
         return (
@@ -2765,16 +2771,19 @@ const initColumns = [
   {
     title: "备注",
     dataIndex: "pay_reason",
+    align: 'center',
     width: "15%",
   },
   {
     title: "创建时间",
     dataIndex: "create_time",
+    align: 'center',
     render: formateDate,
   },
   {
     title: "游戏数据",
     dataIndex: "",
+    align: 'center',
     render: (text, record) => (
       <LinkButton onClick={() => check_game_data(record)}>游戏数据</LinkButton>
     ),
@@ -2782,6 +2791,7 @@ const initColumns = [
   {
     title: "有效投注",
     dataIndex: "bet_money",
+    align: 'center',
     render: (text, record) => {
       return <span>{text && text.toFixed(6)}</span>;
     },

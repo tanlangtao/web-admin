@@ -28,12 +28,16 @@ import {
   setGameUserPhone,
   getipdetail,
   getteldetail,
+  changeProxyUserProxyPid
 } from "../../api/index";
 import WrappedNormalLoginForm from "././user-nick";
 import WrappedComponent from "./gold_details";
 import MyDatePicker from "../../components/MyDatePicker";
 import Mytable from "../../components/MyTable";
+import PopUserGameData from "./pop_user_game_data";
+import ProxySetting from "../proxy/setting/index";
 import { throttle } from "../../utils/commonFuntion";
+import PopProxySetting from "./pop_user_proxy_setting";
 
 const { Option } = Select;
 
@@ -48,6 +52,8 @@ const init_state = {
   isBindInfoShow: false,
   isResetPwdShow: false,
   isResetSavePwdShow: false,
+  isShowUserGameData: false,
+  isShowProxySetting:false,
   resetpwd: "",
   resetSavePwd: "",
   game_nick: "",
@@ -61,6 +67,7 @@ const init_state = {
   new_phone_number: "",
   changeGoldButtonLoading: false,
   packages: "",
+  new_proxy_user_id:""
 };
 export default class User extends Component {
   constructor(props) {
@@ -75,6 +82,7 @@ export default class User extends Component {
       dataIndex: "id",
       key: "id",
       fixed: "left",
+      align: 'center',
       width: 100,
     },
     {
@@ -82,6 +90,7 @@ export default class User extends Component {
       dataIndex: "game_nick",
       key: "game_nick",
       fixed: "left",
+      align: 'center',
       width: 100,
       onCell: (record, rowIndex) => {
         return {
@@ -106,18 +115,21 @@ export default class User extends Component {
       title: "推广员ID",
       dataIndex: "proxy_nick",
       key: "proxy_nick",
+      align: 'center',
       // width: 150,
     },
     {
       title: "所属品牌",
       dataIndex: "package_nick",
       key: "package_nick",
+      align: 'center',
       // width: 100,
     },
     {
       title: "账户余额",
       dataIndex: "game_gold",
       key: "game_gold",
+      align: 'center',
       sorter: (a, b) => a.game_gold - b.game_gold,
       // width: 100,
       onCell: (record, rowIndex) => {
@@ -151,6 +163,7 @@ export default class User extends Component {
       title: "手机",
       dataIndex: "phone_number",
       key: "phone_number",
+      align: 'center',
       // width: 150,
       onCell: (record, rowIndex) => {
         return {
@@ -192,6 +205,7 @@ export default class User extends Component {
       title: "注册IP",
       dataIndex: "regin_ip",
       key: "regin_ip",
+      align: 'center',
       // width: 150,
     },
     // {
@@ -218,6 +232,7 @@ export default class User extends Component {
       dataIndex: "regin_time",
       render: formateDate,
       key: "regin_time",
+      align: 'center',
       sorter: (a, b) => a.regin_time - b.regin_time,
       // width: 200,
     },
@@ -225,6 +240,7 @@ export default class User extends Component {
       title: "登录IP",
       dataIndex: "login_ip",
       key: "login_ip",
+      align: 'center',
       // width: 200,
     },
     // {
@@ -249,6 +265,7 @@ export default class User extends Component {
     {
       title: "登陆时间",
       dataIndex: "login_time",
+      align: 'center',
       render: formateDate,
       sorter: (a, b) => a.login_time - b.login_time,
       // width: 200,
@@ -256,6 +273,7 @@ export default class User extends Component {
     {
       title: "是否被限制登录",
       dataIndex: "status",
+      align: 'center',
       render: (text, record, index) => (
         <span>{parseInt(text) === 0 ? "是" : ""}</span>
       ),
@@ -263,6 +281,7 @@ export default class User extends Component {
     {
       title: "操作",
       dataIndex: "",
+      align: 'center',
       // width: 200,
       render: (record) => (
         <span>
@@ -321,7 +340,7 @@ export default class User extends Component {
     let newdata = this.state.data;
     try {
       const result = await reqLoadGold(record.id);
-      if (result.status === 0 && result.data?.phone_number) {
+      if (result.status === 0 && result.data.phone_number) {
         const res = await getteldetail(result.data.phone_number);
         // let newres = res.replace("__GetZoneResult_ = ", "");
         // console.log(newres);
@@ -491,6 +510,42 @@ export default class User extends Component {
     this.setState({ isResetSavePwdShow: true });
     this.resetSavePwdId = record.id;
   };
+  getProxySetting = (record) => {
+    if (this.moreModal) {
+      this.moreModal.destroy();
+    }
+    this.setState({ isShowProxySetting: true });
+    this.recordID = record.id;
+  };
+  changePid = (record) => {
+    Modal.confirm({
+      title: "代理链转移",
+      content: (
+        <Input
+          onBlur={(e) => this.setState({ new_proxy_user_id: e.target.value })}
+        />
+      ),
+      onOk: async () => {
+        const res = await changeProxyUserProxyPid({
+          id: record.id,
+          proxy_user_id: this.state.new_proxy_user_id,
+        });
+        if (res.status === 0) {
+          message.success(res.msg || "操作成功");
+          this.onSearchData(1, 20);
+        } else {
+          message.info(res.msg || "操作失败");
+        }
+      },
+    });
+  };
+  getUserGameData = (record) => {
+    if (this.moreModal) {
+      this.moreModal.destroy();
+    }
+    this.setState({ isShowUserGameData: true });
+    this.recordID = record.id;
+  };
   handleSaveResetpwd = async () => {
     const res = await updateSavePassword(this.resetSavePwdId);
     // this.state.resetSavePwd
@@ -514,7 +569,7 @@ export default class User extends Component {
           >
             查看绑定信息
           </LinkButton>
-          <Popconfirm
+          {/* <Popconfirm
             title="交易所黑名单"
             onConfirm={() => this.saveUserBlack(record, true)}
             onCancel={() => this.saveUserBlack(record, false)}
@@ -522,18 +577,18 @@ export default class User extends Component {
             cancelText="移除"
           >
             <LinkButton size="small">交易所黑名单</LinkButton>
-          </Popconfirm>
+          </Popconfirm> */}
           <LinkButton onClick={() => this.resetPwd(record)} size="small">
             重置密码
           </LinkButton>
-          <Popconfirm
+          {/* <Popconfirm
             title="确定要设置为客服账号吗？"
             onConfirm={() => this.setCustomerAccount(record)}
             okText="确定"
             cancelText="取消"
           >
             <LinkButton size="small">设置客服账号</LinkButton>
-          </Popconfirm>
+          </Popconfirm> */}
           <Popconfirm
             title="要限制玩家登陆吗"
             onConfirm={() => this.setuserstatus(record, 0)}
@@ -543,8 +598,17 @@ export default class User extends Component {
           >
             <LinkButton size="small">限制玩家登陆</LinkButton>
           </Popconfirm>
-          <LinkButton onClick={() => this.resetSavePwd(record)} size="small">
-            重置安全码
+          <LinkButton onClick={() => this.getProxySetting(record)} size="small">
+            代理链信息
+          </LinkButton>
+          <LinkButton onClick={() => this.changePid(record)} size="small">
+            转移代理链
+          </LinkButton>
+          <LinkButton onClick={() => this.getGoldDetail(record,false)} size="small">
+            资金明细
+          </LinkButton>
+          <LinkButton onClick={() => this.getUserGameData(record)} size="small">
+            游戏数据
           </LinkButton>
         </div>
       ),
@@ -793,8 +857,8 @@ export default class User extends Component {
           <Modal
             title={
               this.isBindInfo
-                ? "查看绑定信息"
-                : `[用户user_id:${this.recordID}]资金明细`
+                ? "绑定信息"
+                : `资金明细`
             }
             visible={this.state.isGoldDetailShow}
             onCancel={() => {
@@ -841,6 +905,42 @@ export default class User extends Component {
               value={this.state.resetSavePwd}
               onChange={(e) => this.setState({ resetSavePwd: e.target.value })}
             /> */}
+          </Modal>
+        )}
+        {this.state.isShowUserGameData&& (
+          <Modal
+            title="游戏数据"
+            visible={this.state.isShowUserGameData}
+            onOk={this.handleSaveResetpwd}
+            onCancel={() => {
+              this.setState({ isShowUserGameData: false });
+            }}
+            footer={null}
+            width="85%"
+            maskClosable={false}
+            style={{ top: 10 }}
+          >
+            <PopUserGameData 
+              recordID={this.recordID}
+            />
+          </Modal>
+        )}
+        {this.state.isShowProxySetting&& (
+          <Modal
+            title="代理链信息"
+            visible={this.state.isShowProxySetting}
+            onOk={this.handleSaveResetpwd}
+            onCancel={() => {
+              this.setState({ isShowProxySetting: false });
+            }}
+            footer={null}
+            width="85%"
+            maskClosable={false}
+            style={{ top: 10 }}
+          >
+            <PopProxySetting 
+              recordID={this.recordID}
+            />
           </Modal>
         )}
       </Card>
