@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { Menu, message ,Icon,} from "antd";
+import { Menu, message, Icon, } from "antd";
 import { navList } from "../../api";
 import "./index.less";
 
@@ -103,11 +103,11 @@ class LeftNav extends Component {
       return target;
     }
     return (
-    
+
       menuList &&
       menuList.reduce((pre, item) => {
 
-       
+
         // 向pre添加<Menu.Item>
         // if (item.key) {
         //按需渲染侧边栏，必须已经在后台-权限管理中设置了路由key才能渲染
@@ -128,92 +128,46 @@ class LeftNav extends Component {
           );
           console.log('item.title====', item.title)
         } else {
-          console.log('2item.title====', item.title)
-          if(item.title !='用户' ){
+          // console.log('2item.title====', item.tittle)
+          if (item.title == '用户' || item.title == '报表') {
+            console.log('2item.title====', item.children)
             //下面代码放入这里即可控制左侧标签渲染数量
-          
-          }else{
+            // 查找一个与当前请求路径匹配的子Item
+            const cItem = item.children.find(
+              (currentValue) =>
+                currentValue.key && path.indexOf(currentValue.key) === 0
+            );
+            //渲染二级菜单
+            // 如果存在, 说明当前item的子列表需要打开
+            console.log('cItem===', cItem);
+            if (cItem && item.key) {
+              this.openKey = [item.key];
+            }
+            if (
+              path.includes("/gameSetting/subGame") &&
+              item.title === "游戏设定"
+            ) {
+              this.openKey = findPathIndex(item);
+              console.log("this.openKey", this.openKey);
+            }
+            pre.push(
+              <SubMenu
+                key={item.key || item.id}
+                title={
+                  // 左侧一级菜单主页按钮渲染type="menu" 
+                  <span>
+                    <Icon id='cicle' />
 
-          }
-          // 查找一个与当前请求路径匹配的子Item
-          const cItem = item.children.find(
-            (currentValue) =>
-              currentValue.key && path.indexOf(currentValue.key) === 0
-          );
-          // 如果存在, 说明当前item的子列表需要打开
-          if (cItem && item.key) {
-            this.openKey = [item.key];
-          }
-          if (
-            path.includes("/gameSetting/subGame") &&
-            item.title === "游戏设定"
-          ) {
-            this.openKey = findPathIndex(item);
-            console.log("this.openKey", this.openKey);
-          }
-          pre.push(
-            <SubMenu
-              key={item.key || item.id}
-              title={
-                // 左侧一级菜单主页按钮渲染type="menu" 
-                <span>
-                         <Icon id='cicle' />
-
-                  <span>{item.title}</span>
-                </span>
-              }
-              onClick={() => {
-                this.openMenu = item.key;
-              }}
-            >
-              {item.title === "第三方游戏数据" &&
-                item.children.reduce((cpre, ele) => {
-                  if (ele.title === "真人视讯") {
-                    cpre.push(
-                      <Menu.Item
-                        key={ele.key}
-                        onClick={() => {
-                          this.props.onClick(ele);
-                        }}
-                      >
-                        
-                        <Link to={ele.key}>
-
-                          <span>{ele.title}</span>
-                        </Link>
-                      </Menu.Item>
-                    );
-                  } else {
-                    cpre.push(
-                      //不在後台操作，瀏覽器打開新分頁訪問三方後台
-                      <Menu.Item key={ele.key}>
-                        <a
-                          href={ele.key}
-                          target="_blank"
-                          rel="noreferrer noopener"
-                        >
-
-                          <span>{ele.title}</span>
-                        </a>
-                      </Menu.Item>
-                    );
-                  }
-                  return cpre;
-                }, [])}
-              {item.title !== "第三方游戏数据" &&
-                item.children.reduce((cpre, ele) => {
-                  //只有"子游戏设定"栏(id=229)需要三级导航栏,由于menulist的特殊性,故不对所有submenu递归
-                  //需要三级导航栏 2021-6-28"无限代保底分红"栏(id=254) 2021-7-4"亏损分红充提差"(id=257)
-                  switch (ele.title) {
-                    case "子游戏设定":
-                    case "无限代保底分红":
-                    case "无限代保底分红1":
-                    case "无限代保底分红2":
-                    case "亏损分红充提差":
-                    case "提现手续费5级分红":
-                      cpre.push(getMoreMenuNodes(ele));
-                      break;
-                    default:
+                    <span>{item.title}</span>
+                  </span>
+                }
+                onClick={() => {
+                  this.openMenu = item.key;
+                }}
+              >
+                {item.title === "第三方游戏数据" &&
+                  item.children.reduce((cpre, ele) => {
+                    if (ele.title === "真人视讯") {
                       cpre.push(
                         <Menu.Item
                           key={ele.key}
@@ -221,19 +175,76 @@ class LeftNav extends Component {
                             this.props.onClick(ele);
                           }}
                         >
-                        {/* 左侧菜单二级菜单按钮渲染图表 type="bug"*/}
+
                           <Link to={ele.key}>
-                             <Icon id='airplane'  />
+
                             <span>{ele.title}</span>
                           </Link>
                         </Menu.Item>
                       );
-                  }
-                  return cpre;
-                }, [])}
-            </SubMenu>
+                    } else {
+                      cpre.push(
+                        //不在後台操作，瀏覽器打開新分頁訪問三方後台
+                        <Menu.Item key={ele.key}>
+                          <a
+                            href={ele.key}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                          >
 
-          );
+                            <span>{ele.title}</span>
+                          </a>
+                        </Menu.Item>
+                      );
+                    }
+                    return cpre;
+                  }, [])}
+                {item.title !== "第三方游戏数据" &&
+                  item.children.reduce((cpre, ele) => {
+                    //只有"子游戏设定"栏(id=229)需要三级导航栏,由于menulist的特殊性,故不对所有submenu递归
+                    //需要三级导航栏 2021-6-28"无限代保底分红"栏(id=254) 2021-7-4"亏损分红充提差"(id=257)
+                    // console.log('ele.title===', ele.title);
+                    //目前只渲染报表 和 用户数据
+                    if (ele.title == "用户列表" || ele.title == "日常运营") {
+                      console.log('渲染===ele.title===',ele.title);
+                      switch (ele.title) {
+                        case "子游戏设定":
+                        case "无限代保底分红":
+                        case "无限代保底分红1":
+                        case "无限代保底分红2":
+                        case "亏损分红充提差":
+                        case "提现手续费5级分红":
+                          cpre.push(getMoreMenuNodes(ele));
+                          break;
+                        default:
+                          cpre.push(
+                            <Menu.Item
+                              key={ele.key}
+                              onClick={() => {
+                                this.props.onClick(ele);
+                              }}
+                            >
+                              {/* 左侧菜单二级菜单按钮渲染图表 type="bug"*/}
+                              <Link to={ele.key}>
+                                <Icon id='airplane' />
+                                <span>{ele.title}</span>
+                              </Link>
+                            </Menu.Item>
+                          );
+                      }
+                    }
+                      
+                      return cpre;
+                    // }
+
+                  }, [])}
+              </SubMenu>
+
+            );
+          } else {
+
+          }
+
 
           //每个item 包含左侧导航栏信息以及二级菜单下级
           // children: Array(7) 0: {id: 26, title: '用户列表', href: '/admin/user/index', key: '/user/user-list', pid: 1, …}
@@ -252,7 +263,7 @@ class LeftNav extends Component {
           // pid: 0
           // spread: false
           // title: "用户"
-         
+
 
         }
         // }
@@ -287,7 +298,7 @@ class LeftNav extends Component {
           // selectedKeys={[path]}
           // defaultOpenKeys={[this.openKey]}
           onOpenChange={(key) => {
-            console.log('key====',key, this.state.openKey);
+            console.log('key====', key, this.state.openKey);
             // if (key[1] && key[0] !== key[1]) {
             // 	this.setState({ openKey: [key[1]] });
             // } else {
