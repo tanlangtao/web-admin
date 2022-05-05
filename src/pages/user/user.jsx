@@ -38,6 +38,7 @@ import PopUserGameData from "./pop_user_game_data";
 import ProxySetting from "../proxy/setting/index";
 import { throttle } from "../../utils/commonFuntion";
 import PopProxySetting from "./pop_user_proxy_setting";
+import UserListRouter from "./userList_router";
 
 const { Option } = Select;
 
@@ -67,7 +68,8 @@ const init_state = {
   new_phone_number: "",
   changeGoldButtonLoading: false,
   packages: "",
-  new_proxy_user_id:""
+  new_proxy_user_id:"",
+  isShowUserListRouter : false
 };
 export default class User extends Component {
   constructor(props) {
@@ -288,7 +290,10 @@ export default class User extends Component {
           {/* <LinkButton onClick={() => this.getGoldDetail(record)} type="default">
             资金明细
           </LinkButton> */}
-          <LinkButton onClick={() => this.getMoreDetail(record)}>
+          {/* <LinkButton onClick={() => this.getMoreDetail(record)}>
+            查看
+          </LinkButton> */}
+           <LinkButton onClick={() => this.getUserListRouter(record)}>
             查看
           </LinkButton>
         </span>
@@ -556,11 +561,18 @@ export default class User extends Component {
       message.success("操作失败:" + res.msg);
     }
   };
+  getUserListRouter = (record) => {
+    if (this.moreModal) {
+      this.moreModal.destroy();
+    }
+    this.setState({ isShowUserListRouter: true });
+    this.recordID = record.id;
+  };
   getMoreDetail = (record) => {
     this.moreModal = Modal.info({
       title: "更多",
       okText: "关闭",
-      width: "70%",
+      width: "85%",
       content: (
         <div>
           <LinkButton
@@ -939,6 +951,26 @@ export default class User extends Component {
             style={{ top: 10 }}
           >
             <PopProxySetting 
+              recordID={this.recordID}
+            />
+          </Modal>
+        )}
+        {this.state.isShowUserListRouter&& (
+          <Modal
+            title="用户列表"
+            visible={this.state.isShowUserListRouter}
+            onOk={()=>{
+              this.setState({ isShowUserListRouter: false })
+            }}
+            onCancel={() => {
+              this.setState({ isShowUserListRouter: false })
+            }}
+            footer={null}
+            width="85%"
+            maskClosable={false}
+            style={{ top: 10 }}
+          >
+            <UserListRouter 
               recordID={this.recordID}
             />
           </Modal>
