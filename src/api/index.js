@@ -2269,3 +2269,12 @@ export const getStatementTotalByID = (reqData) => {
     "GET"
   );
 };
+//用户列表
+export const reqGetCreditDividendInfoList = (page, limit, start, end, id,platform_name) => {
+  return ajax(
+    // BASE + "/proxy/Operation/Api/GetCreditDividendInfoList",
+    "http://proxy.lymrmfyp.com/Operation/Api/GetCreditDividendInfoList",
+    { page, limit, start, end, id,platform_name },
+    "POST"
+  );
+};

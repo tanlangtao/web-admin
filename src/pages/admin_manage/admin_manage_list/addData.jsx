@@ -3,7 +3,12 @@ import {
   Form, Icon, Input, Radio, Select, Checkbox, Button, message, InputNumber
 } from "antd";
 import { addUser, editUser } from "../../../api";
-
+const roleArr = [
+  {id :1,name :"超管"},
+  {id :2,name :"操盘"},
+  {id :3,name :"支付"},
+  {id :4,name :"推广"}
+]
 class AddDataForm extends Component {
   constructor(props) {
     super(props);
@@ -74,11 +79,17 @@ class AddDataForm extends Component {
     const { editDataRecord, isEdit } = this.props;
     console.log("this.props.optionList", this.props.optionList);
 
-    const Option = this.props.optionList.map(item => (
+    // const Option = this.props.optionList.map(item => (
+    //   <Select.Option value={item.id} key={item.id}>
+    //     {item.name}
+    //   </Select.Option>
+    // ));
+    // 先不动态获取，写死
+    const Option = roleArr.map(item => (
       <Select.Option value={item.id} key={item.id}>
         {item.name}
       </Select.Option>
-    ));
+    ))
     return (
       <Form
         labelCol={{ span: 4 }}
@@ -145,37 +156,6 @@ class AddDataForm extends Component {
               style={{ width: "60%" }}
             />
           )}
-        </Form.Item>
-        <Form.Item label="授权代理">
-          {getFieldDecorator("proxy", {
-            rules: [
-              {
-                whitespace: true,
-                message: "多个代理请用英文逗号分隔"
-              }
-            ],
-            initialValue: isEdit ? editDataRecord.proxy : ""
-          })(
-            <Input
-              style={{ width: "60%" }}
-              placeholder="多个代理请用英文逗号分隔"
-            />
-          )}
-        </Form.Item>
-        <Form.Item label="携带金额">
-          {getFieldDecorator("loadGold", {
-            rules: [
-              {
-                required: true,
-                message: "不能为空"
-              },
-              {
-                pattern: /^\d+(\.\d+)?$/,
-                message: "请输入有效数字"
-              }
-            ],
-            initialValue: isEdit && editDataRecord.use_balance
-          })(<InputNumber style={{ width: "60%" }} placeholder="请输入数字" />)}
         </Form.Item>
         <Form.Item label="密码" style={isEdit ? { display: "none" } : {}}>
           {getFieldDecorator("password", {

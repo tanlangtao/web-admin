@@ -733,7 +733,7 @@ export default class User extends Component {
         />
       </span>
     );
-
+    console.log("user-data",data)
     return (
       <Card title={title} extra={extra}>
         <Mytable

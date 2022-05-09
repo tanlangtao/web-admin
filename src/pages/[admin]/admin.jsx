@@ -126,7 +126,18 @@ import LiveBlackList from "../liveStream/blackList";
 import HighSpeedNotificationOne from "../withdraw/highSpeedNotification/HighSpeedOne";
 import HighSpeedNotificationTwo from "../withdraw/highSpeedNotification/HighSpeedTwo";
 import PipeiOrderList from "../pipei/OrderList";
-
+import PersonalDaily from "../ptWorkers/personal-daily";
+import PersonalList from "../ptWorkers/personal-list";
+import TeamDaily from "../ptWorkers/team-daily";
+import TeamList from "../ptWorkers/team-list";
+import AccountDetail from "../accManage/accountDetail";
+import MyAgentRecharge from "../payManage/myAgentRecharge";
+import MyAgentCash from "../payManage/myAgentCash";
+import ServiceRecharge from "../payManage/serviceRecharge";
+import ServiceCash from "../payManage/serviceCash";
+import MyGoldDetail from "../payManage/myGoldDetail";
+import CreateNewService from "../payManage/creditManage/createNewService";
+import ServiceDetail from "../payManage/creditManage/serviceDetail";
 const { Sider, Content } = Layout;
 const history = createHashHistory();
 
@@ -741,8 +752,69 @@ export default class Admin extends Component {
                       <PipeiOrderList />
                     </KeepAlive>
                   </Route>
+                  <Route path="/ptWorkers/personal-daily" exact>
+                    <KeepAlive name="PersonalDaily">
+                      <PersonalDaily />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/ptWorkers/team-daily" exact>
+                    <KeepAlive name="TeamDaily">
+                      <TeamDaily />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/ptWorkers/personal-list" exact>
+                    <KeepAlive name="PersonalList">
+                      <PersonalList />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/ptWorkers/team-list" exact>
+                    <KeepAlive name="TeamList">
+                      <TeamList />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/accManage/accountDetail" exact>
+                    <KeepAlive name="AccountDetail">
+                      <AccountDetail />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/payManage/myAgentRecharge" exact>
+                    <KeepAlive name="MyAgentRecharge">
+                      <MyAgentRecharge />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/payManage/myAgentCash" exact>
+                    <KeepAlive name="MyAgentCash">
+                      <MyAgentCash />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/payManage/serviceRecharge" exact>
+                    <KeepAlive name="ServiceRecharge">
+                      <ServiceRecharge />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/payManage/serviceCash" exact>
+                    <KeepAlive name="ServiceCash">
+                      <ServiceCash />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/payManage/myGoldDetail" exact>
+                    <KeepAlive name="MyGoldDetail">
+                      <MyGoldDetail />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/payManage/creditManage/createNewService" exact>
+                    <KeepAlive name="CreateNewService">
+                      <CreateNewService />
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/payManage/creditManage/serviceDetail" exact>
+                    <KeepAlive name="ServiceDetail">
+                      <ServiceDetail />
+                    </KeepAlive>
+                  </Route>
                   <Route component={NotFound} />
                 </Switch>
+                
               </div>
             </Provider>
           </Content>
