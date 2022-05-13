@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Card, Icon, message, Modal } from "antd";
+import { Table, Card, Icon, message, Modal,Descriptions } from "antd";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button/index";
 import moment from "moment";
@@ -202,6 +202,40 @@ class GoldDetail extends Component {
 	render() {
 		let title;
 		let { data, count, current, sumData } = this.state;
+		
+		let getItem=()=>{
+			if(data){
+				let zfb,yhk,trc,erc = null
+				data.forEach(e=>{
+					if(e.type == 3){
+						yhk = e
+					}else if(e.type == 4){
+						erc = e
+					}else if(e.type == 5){
+						trc = e
+					}else if(e.type == 2){
+						zfb = e
+					}
+				})
+				console.log(zfb,yhk,trc,erc)
+				return <Descriptions bordered size="small" column={1}>
+					<Descriptions.Item label="支付宝"><LinkButton size="small" disabled={!zfb && true } onClick={() => this.reset(zfb, "2")}>解绑支付宝</LinkButton></Descriptions.Item>
+					<Descriptions.Item label="支付宝姓名">{zfb && zfb.account_name}</Descriptions.Item>
+					<Descriptions.Item label="支付宝账号">{zfb && zfb.account_card}</Descriptions.Item>
+					<Descriptions.Item label="银行卡"><LinkButton size="small" disabled={!yhk && true } onClick={() => this.reset(yhk, "3")}>解绑银行卡</LinkButton></Descriptions.Item>
+					<Descriptions.Item label="银行名称" >{yhk && yhk.bank_name}</Descriptions.Item>
+					<Descriptions.Item label="银行卡号">{yhk && yhk.card_num}</Descriptions.Item>
+					<Descriptions.Item label="银行开户人">{yhk && yhk.card_name}</Descriptions.Item>
+					<Descriptions.Item label="USDT-TRC20"><LinkButton size="small" disabled={!trc && true } onClick={() => this.reset(trc, "5")}>解绑USDT-TRC20</LinkButton></Descriptions.Item>
+					<Descriptions.Item label="USDT链类型" >{trc&&trc.protocol}</Descriptions.Item>
+					<Descriptions.Item label="USDT钱包地址">{trc&&trc.wallet_addr}</Descriptions.Item>
+					<Descriptions.Item label="USDT-ERC20"><LinkButton size="small" disabled={!erc && true } onClick={() => this.reset(erc, "4")}>解绑USDT-ERC20</LinkButton></Descriptions.Item>
+					<Descriptions.Item label="USDT链类型" >{erc&&erc.protocol}</Descriptions.Item>
+					<Descriptions.Item label="USDT钱包地址">{erc&&erc.wallet_addr}</Descriptions.Item>
+				</Descriptions>
+			}
+			
+		}
 		if (!this.props.isBindInfo) {
 			title = (
 				<span>
@@ -212,7 +246,7 @@ class GoldDetail extends Component {
 							if (diffDays > 31) {
 								message.info("请选择时间范围不大于31天");
 							} else if (data && data.length !== 0) {
-								start = moment(data[0].valueOf()).format("YYYY-MM-DD HH:mm:ss");
+								start = moment(data.valueOf()).format("YYYY-MM-DD HH:mm:ss");
 								end = moment(data[1].valueOf() - 1).format("YYYY-MM-DD HH:mm:ss");
 								console.log(start, end);
 								this.startTime = start;
@@ -237,6 +271,7 @@ class GoldDetail extends Component {
 				</span>
 			);
 		}
+		
 		return (
 			<Card
 				title={title}
@@ -254,14 +289,7 @@ class GoldDetail extends Component {
 				}
 			>
 				{this.props.isBindInfo && (
-					<Table
-						bordered
-						size="small"
-						rowKey={(record, index) => `${index}`}
-						dataSource={this.state.data}
-						columns={this.initColumns()}
-						scroll={{ x: "max-content" }}
-					/>
+					getItem()
 				)}
 				{!this.props.isBindInfo && (
 					<GoldDetailorRiskControl

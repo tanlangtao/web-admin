@@ -86,7 +86,7 @@ class PopProxySetting extends Component {
   }
   render() {
     return (
-      <Card
+      <div
       >
         <Table
           bordered
@@ -94,14 +94,9 @@ class PopProxySetting extends Component {
           dataSource={this.state.data}
           columns={this.initColumns()}
           size="small"
-          pagination={{
-            defaultPageSize: 20,
-            showTotal: (total, range) => `共${total}条`,
-            defaultCurrent: 1,
-            total: this.state.count,
-          }}
+          pagination={false}
         />
-        <Table
+        {/* <Table
           bordered
           rowKey={(record, index) => `${index}`}
           dataSource={this.state.data2}
@@ -111,8 +106,8 @@ class PopProxySetting extends Component {
             defaultPageSize: 30,
             defaultCurrent: 1,
           }}
-        />
-      </Card>
+        /> */}
+      </div>
     );
   }
   initColumns = () => [
@@ -127,13 +122,8 @@ class PopProxySetting extends Component {
       align: 'center',
     },
     {
-      title: "上级ID",
+      title: "推广员ID",
       dataIndex: "proxy_pid",
-      align: 'center',
-    },
-    {
-      title: "下级人数",
-      dataIndex: "direct_number",
       align: 'center',
     },
     {
@@ -142,7 +132,7 @@ class PopProxySetting extends Component {
       align: 'center',
     },
     {
-      title: "实时余额",
+      title: "佣金余额",
       dataIndex: "",
       align: 'center',
       render: (text, record, index) => (
@@ -280,8 +270,8 @@ class PopProxySetting extends Component {
     const res = await getProxyUser(reqData);
     if (res.status === 0) {
       Modal.success({
-        title: "实时余额",
-        content: `代理${record.id}实时余额是 : ${
+        title: "佣金余额",
+        content: `玩家${record.id}佣金余额是 : ${
           res.data
             ? (Math.floor(res.data.balance * 100) / 100).toFixed(2)
             : "0.00"

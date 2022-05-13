@@ -143,7 +143,7 @@ export default async (record) => {
               : "-"}
           </div>
           <br />
-          <div>总充值:{sumcharge || "-"}</div>
+          {/* <div>总充值:{sumcharge || "-"}</div>
           <div>赠送增加金币:{charge[0] || "-"}</div>
           <div>赠送减少金币:{charge[1] || "-"}</div>
           <div>银行卡充值增加金币:{charge[2] || "-"}</div>
@@ -379,7 +379,7 @@ export default async (record) => {
             {res.data["运营后台用户减少金币"]
               ? res.data["运营后台用户减少金币"].totalgold
               : "-"}
-          </div>
+          </div> */}
         </React.Fragment>
       );
     } catch (error) {

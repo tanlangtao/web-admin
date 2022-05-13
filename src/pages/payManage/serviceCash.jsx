@@ -10,9 +10,13 @@ import {
 import Mytable from "../../components/MyTable";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button/index";
+import riskcontrolfn from "../../components/riskcontrol";
+import { formateDate } from "../../utils/dateUtils";
 import {
-  bindInfo,
-  reqUsers
+  reqUpdateDaiWithdrawID,
+  reqModifyDaiWithdrawID,
+  reqReviewDaiWithdraw,
+  reqDaiWithdrawOrderList
 } from "../../api/index";
 const { Option } = Select;
 const init_state = {
@@ -21,16 +25,13 @@ const init_state = {
   count: 0,
   startTime: '',
   endTime: '',
-  inputKey: "玩家ID",
+  inputKey: "user_id",
   inputValue: "",
-  inputStatus: "未支付",
-  id: 427223993, // id先写死
+  inputStatus: 0,
   loading: false,
   data: [],
   MyDatePickerValue: null,
-  isShowUpdateModal:false,
   isShowChangeModal:false,
-  updateID:"",
   changeID:"",
 
 };
@@ -43,83 +44,106 @@ export default class MyAgentCash extends Component {
   initColumns = () => [
     {
       title: "订单ID",
-      dataIndex: "",
-      key: "",
+      dataIndex: "order_id",
+      key: "order_id",
       fixed: "left",
       align: 'center',
     },
     {
       title: "玩家ID",
-      dataIndex: "",
-      key: "",
+      dataIndex: "user_id",
+      key: "user_id",
       fixed: "left",
       align: 'center',
     },
     {
       title: "玩家昵称",
-      dataIndex: "",
-      key: "",
+      dataIndex: "user_name",
+      key: "user_name",
       align: 'center',
       // width: 150,
     },
     {
       title: "所属品牌",
-      dataIndex: "",
-      key: "",
+      dataIndex: "package_id",
+      key: "package_id",
       align: 'center',
       // width: 100,
     },
     {
       title: "上级代理",
-      dataIndex: "",
-      key: "",
+      dataIndex: "proxy_user_id",
+      key: "proxy_user_id",
       align: 'center',
       width: 100,
     },
     {
       title: "订单金额",
-      dataIndex: "",
-      key: "",
+      dataIndex: "amount",
+      key: "amount",
       align: 'center',
       width: 100,
     },
     {
       title: "创建时间",
-      dataIndex: "",
-      key: "",
+      dataIndex: "created_at",
+      key: "created_at",
       align: 'center',
       width: 120,
+      render:formateDate,
     },
     {
       title: "实际费率",
-      dataIndex: "",
-      key: "",
+      dataIndex: "handling_fee",
+      key: "handling_fee",
       align: 'center',
       // width: 150,
     },
     {
       title: "兑换方式",
-      dataIndex: "",
-      key: "",
+      dataIndex: "type",
+      key: "type",
       align: 'center',
-      // width: 150,
+      render: (text, record) => {
+        let statusStr = ''
+        if (record.type == 12 && record.order_type == 17) {
+          statusStr = "银行卡"
+        } else if (record.type == 12 && record.order_type == 16) {
+          statusStr = "支付宝"
+        }else{
+          statusStr = ""
+        }
+        return statusStr;
+      },
     },
     {
       title: "风控",
       dataIndex: "",
       key: "",
       align: 'center',
+      render: (text, record) => (
+				<span>
+					<LinkButton
+						onClick={() => {
+							riskcontrolfn(record);
+						}}
+						type="default"
+					>
+						风控
+					</LinkButton>
+				</span>
+			),
     },
     {
       title: "代提ID",
-      dataIndex: "",
-      key: "",
+      dataIndex: "replace_id",
+      key: "replace_id",
       align: 'center',
     },
     {
       title: "代提昵称",
-      dataIndex: "",
-      key: "",
+      dataIndex: "replace_name",
+      key: "replace_name",
       align: 'center',
     },
     {
@@ -129,7 +153,7 @@ export default class MyAgentCash extends Component {
       align: 'center',
       render: (text, record) => (
         <span>
-          <LinkButton type="default" onClick={() => this.showUpdateModel(record)}>
+          <LinkButton type="default" onClick={() => this.handleUpdateId(record)}>
             更新代付
               </LinkButton>
           <LinkButton type="default" onClick={() => this.showChangeModel(record)}>
@@ -145,10 +169,10 @@ export default class MyAgentCash extends Component {
       align: 'center',
       render: (text, record) => (
         <span>
-          <LinkButton type="default" onClick={() => this.rejectCheck()}>
+          <LinkButton type="default" onClick={() => this.rejectCheck(record)}>
             拒绝
               </LinkButton>
-          <LinkButton type="default" onClick={() => this.passCheck()}>
+          <LinkButton type="default" onClick={() => this.passCheck(record)}>
             通过
               </LinkButton>
         </span>
@@ -156,15 +180,23 @@ export default class MyAgentCash extends Component {
     },
     {
       title: "到账金额",
-      dataIndex: "",
-      key: "",
+      dataIndex: "arrival_amount",
+      key: "arrival_amount",
       align: 'center',
+      render: (text, record) => {
+        let arrival_amount = 0
+        if (record.arrival_at != 0) {
+          arrival_amount = record.arrival_amount
+        }
+        return arrival_amount;
+      },
     },
     {
       title: "到账时间",
-      dataIndex: "",
-      key: "",
+      dataIndex: "arrival_at",
+      key: "arrival_at",
       align: 'center',
+      render:formateDate,
     },
     {
       title: "状态",
@@ -173,75 +205,119 @@ export default class MyAgentCash extends Component {
       align: 'center',
       render: (text, record) => {
         let statusStr = ''
-        if (record.status == 0) {
-          statusStr = "未完成"
-        } else if (record.status == 1) {
-          statusStr = "已完成"
+        if (record.status == 1) {
+          statusStr = "待审核"
+        } else if (record.status == 2) {
+          statusStr = "处理中"
+        }else if (record.status == 3) {
+          statusStr = "已提交"
+        }else if (record.status == 4 ) {
+          statusStr = "已成功"
+        }else if (record.status == 5 ) {
+          statusStr = "已失败"
         }
         return statusStr;
       },
     },
 
   ];
-  getUsers = async (page, limit) => {
-    this.setState({ loading: true });
-    const result = await reqUsers(
-      page,
-      limit,
-      this.state.startTime,
-      this.state.endTime,
-      this.state.inputKey,
-      this.state.inputValue
-    );
-    if (result.status === 0) {
-      const { game_user, proxy_user } = result.data;
-      game_user.forEach((element) => {
-        proxy_user.forEach((item) => {
-          if (element.id === item.id) {
-            element.proxy_nick = item.proxy_pid;
-          }
-        });
-      });
-      this.setState({
-        data: game_user,
-        count: result.data && result.data.count,
-        loading: false,
-        packages: result.data && result.data.packages,
-      });
-    } else {
-      message.info(result.msg || "未检索到数据");
-    }
-  };
-  showUpdateModel = (record)=>{
-    this.setState({
-      isShowUpdateModal:true
+  getReqDaiWithdrawOrderList = async (page,limit)=>{
+    const result = await reqDaiWithdrawOrderList({
+        proxy_pid:this.state.proxy_pid,
+        start_time:this.state.startTime,
+        end_time:this.state.endTime,
+        export:1,
+        page:page,
+        limit:limit,
+        package_id:this.props.package_id,
+        flag:3,
+        [this.state.inputKey]:Number(this.state.inputValue),
+        order_status:Number(this.state.inputStatus),
     })
-    this.recordID = record.id
+    if(result.status === 0) {
+      let data =result.data && JSON.parse(result.data)
+      console.log(data)
+      this.setState({
+        data: data,
+        count: data.length,
+        loading: false,
+      });
+    }else{
+      message.error(`操作失败！${result.data}`)
+    }
   }
   showChangeModel = (record)=>{
     this.setState({
       isShowChangeModal:true
     })
     this.recordID = record.id
+    this.package_id = record.package_id
+    this.order_id = record.order_id
   }
   // 更新代付ID
-  handleUpdateId = async ()=>{
-    
+  handleUpdateId = async (record)=>{
+    this.package_id = record.package_id
+    this.order_id = record.order_id
+    const result = await reqUpdateDaiWithdrawID(
+      this.package_id,
+      this.order_id,
+    )
+    if (result.status === 0) {
+      message.success("操作成功！")
+      this.getReqDaiWithdrawOrderList()
+    }else{
+      message.error(`操作失败！${result.data}`)
+    }
   }
   // 修改代付
   handleChange=  async ()=>{
-    
+    const result = await reqModifyDaiWithdrawID(
+      Number(this.state.changeID),
+      this.package_id,
+      this.order_id,
+    )
+    if (result.status === 0) {
+      message.success("操作成功！")
+      this.getReqDaiWithdrawOrderList()
+    }else{
+      message.error(`操作失败！${result.data}`)
+    }
+    this.setState({
+      isShowChangeModal :false
+    })
   }
   // 审核-拒绝
-  rejectCheck=  async ()=>{
-    
+  rejectCheck=  async (record)=>{
+    const result = await reqReviewDaiWithdraw(
+      record.order_id,
+      3,
+      this.props.admin_user_id, //运营后台绑定id
+      record.package_id,
+    )
+    if (result.status === 0) {
+      message.success("操作成功！")
+      this.getReqDaiWithdrawOrderList()
+    }else{
+      message.error(`操作失败！${result.data}`)
+    }
   }
   // 审核-通过
-  passCheck=  async ()=>{
-    
+  passCheck=  async (record)=>{
+    const result = await reqReviewDaiWithdraw(
+      record.order_id,
+      1,
+      this.props.admin_user_id,
+      record.package_id,
+    )
+    if (result.status === 0) {
+      message.success("操作成功！")
+      this.getReqDaiWithdrawOrderList()
+    }else{
+      message.error(`操作失败！${result.data}`)
+    }
   }
   componentDidMount() {
-    this.getUsers(1, 20)
+    this.getReqDaiWithdrawOrderList(1, 20)
   }
   render() {
     const { data, count, current, pageSize, loading } = this.state;
@@ -266,8 +342,11 @@ export default class MyAgentCash extends Component {
             this.setState({ inputKey: val });
           }}
         >
-          <Option value="id">玩家ID</Option>
-          <Option value="game_nick">代充ID</Option>
+          <Option value="user_id">玩家ID</Option>
+          <Option value="proxy_user_id">上级ID</Option>
+          <Option value="order_id">订单ID</Option>
+          {/* <Option value="start_time">创建时间</Option> */}
+          {/* <Option value="game_nick">金额区间</Option> */}
         </Select>
         &nbsp; &nbsp;
               <Input
@@ -283,19 +362,20 @@ export default class MyAgentCash extends Component {
               <Select
           style={{ width: 200 }}
           placeholder="Select a person"
-          value={this.state.inputStatus}
+          value={this.state.inputStatus == 0 ? "全部":(this.state.inputStatus == 4 ? "已完成":"未支付")}
           onChange={(val) => {
             this.setState({ inputStatus: val });
           }}
         >
-          <Option value="1">未支付</Option>
-          <Option value="2">已完成</Option>
+          <Option value="0">全部</Option>
+          <Option value="1">未完成</Option>
+          <Option value="4">已完成</Option>
         </Select>
         &nbsp; &nbsp;
               <LinkButton
           onClick={() => {
             this.setState({ current: 1 });
-            this.getUsers(1, this.state.pageSize);
+            this.getReqDaiWithdrawOrderList(1, this.state.pageSize);
           }}
           size="default"
         >
@@ -316,20 +396,6 @@ export default class MyAgentCash extends Component {
           loading,
         }}
       />
-      <Modal
-        title="更新代付"
-        visible={this.state.isShowUpdateModal}
-        onOk={this.handleUpdateId}
-        onCancel={() => {
-          this.setState({ isShowUpdateModal: false });
-        }}
-      >
-        <Input
-          value={this.state.updateID}
-          onChange={(e) => this.setState({ updateID: e.target.value })}
-        />
-      </Modal>
-      )}
       {this.state.isShowChangeModal && (
         <Modal
           title="修改代付"

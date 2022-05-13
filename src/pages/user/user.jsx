@@ -94,24 +94,24 @@ export default class User extends Component {
       fixed: "left",
       align: 'center',
       width: 100,
-      onCell: (record, rowIndex) => {
-        return {
-          onClick: (event) => {
-            this.game_nick = record.game_nick;
-            this.id = record.id;
-            this.rowIndex = rowIndex;
-            this.setState({
-              isNickShow: true,
-            });
-          }, // 点击行
-          onDoubleClick: (event) => {},
-          onContextMenu: (event) => {},
-          onMouseEnter: (event) => {
-            event.target.style.cursor = "pointer";
-          }, // 鼠标移入行
-          onMouseLeave: (event) => {},
-        };
-      },
+      // onCell: (record, rowIndex) => {
+      //   return {
+      //     onClick: (event) => {
+      //       this.game_nick = record.game_nick;
+      //       this.id = record.id;
+      //       this.rowIndex = rowIndex;
+      //       this.setState({
+      //         isNickShow: true,
+      //       });
+      //     }, // 点击行
+      //     onDoubleClick: (event) => {},
+      //     onContextMenu: (event) => {},
+      //     onMouseEnter: (event) => {
+      //       event.target.style.cursor = "pointer";
+      //     }, // 鼠标移入行
+      //     onMouseLeave: (event) => {},
+      //   };
+      // },
     },
     {
       title: "推广员ID",
@@ -134,22 +134,22 @@ export default class User extends Component {
       align: 'center',
       sorter: (a, b) => a.game_gold - b.game_gold,
       // width: 100,
-      onCell: (record, rowIndex) => {
-        return {
-          onClick: (event) => {
-            this.goldRecord = record;
-            this.setState({
-              isGoldShow: true,
-            });
-          }, // 点击行
-          onDoubleClick: (event) => {},
-          onContextMenu: (event) => {},
-          onMouseEnter: (event) => {
-            event.target.style.cursor = "pointer";
-          }, // 鼠标移入行
-          onMouseLeave: (event) => {},
-        };
-      },
+      // onCell: (record, rowIndex) => {
+      //   return {
+      //     onClick: (event) => {
+      //       this.goldRecord = record;
+      //       this.setState({
+      //         isGoldShow: true,
+      //       });
+      //     }, // 点击行
+      //     onDoubleClick: (event) => {},
+      //     onContextMenu: (event) => {},
+      //     onMouseEnter: (event) => {
+      //       event.target.style.cursor = "pointer";
+      //     }, // 鼠标移入行
+      //     onMouseLeave: (event) => {},
+      //   };
+      // },
       render: (text, record) => {
         let sum = record.game_gold + record.bank_gold - record.lock_gold;
         // console.log("game_gold",record.game_gold);
@@ -167,16 +167,16 @@ export default class User extends Component {
       key: "phone_number",
       align: 'center',
       // width: 150,
-      onCell: (record, rowIndex) => {
-        return {
-          onClick: (event) => {
-            this.record = record;
-            this.setState({
-              isPhoneNumberShow: true,
-            });
-          },
-        };
-      },
+      // onCell: (record, rowIndex) => {
+      //   return {
+      //     onClick: (event) => {
+      //       this.record = record;
+      //       this.setState({
+      //         isPhoneNumberShow: true,
+      //       });
+      //     },
+      //   };
+      // },
     },
     // {
     //   title: "手机归属地",
@@ -685,7 +685,6 @@ export default class User extends Component {
           <Option value="phone_number">手机号</Option>
           <Option value="role_name">账号</Option>
           <Option value="proxy_pid">推广员ID</Option>
-          <Option value="package_nick">所属品牌</Option>
           <Option value="regin_ip">注册IP</Option>
           <Option value="login_ip">登陆IP</Option>
         </Select>

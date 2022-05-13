@@ -45,8 +45,7 @@ class Login extends Component {
         const { username, password, authcode } = values;
         const result = await reqLogin(
           username,
-          window.btoa(password),
-          authcode
+          password,
         );
 
         if (result.status === 0) {
@@ -54,6 +53,7 @@ class Login extends Component {
           message.success("登陆成功");
           localStorage.token = result.data.token;
           localStorage.name = result.data.name;
+          localStorage.adminLoginData = JSON.stringify(result.data)
           // localStorage.tokenTimeStamp = new Date().getTime();
           setToken();
           this.getMenuList();
@@ -100,9 +100,11 @@ class Login extends Component {
   validatePwd = (rule, value, callback) => {
     if (!value) {
       callback("密码必须输入");
-    } else if (value.length < 6) {
-      callback("密码长度不能小于6位");
-    } else if (value.length > 16) {
+    } 
+    // else if (value.length < 6) {
+    //   callback("密码长度不能小于6位");
+    // } 
+    else if (value.length > 16) {
       callback("密码长度不能大于16位");
       // } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
       //   callback("密码必须是英文、数字或下划线组成");
@@ -187,7 +189,7 @@ class Login extends Component {
                 />
               )}
             </Form.Item>
-            <Form.Item>
+            {/* <Form.Item>
               {getFieldDecorator("authcode", {
                 rules: [
                   //{ required: true, whitespace: true, message: '验证码必须输入' },
@@ -209,13 +211,12 @@ class Login extends Component {
                 点击此处
               </Button>
               扫码获取验证码
-            </span>
+            </span> */}
             <Form.Item>
               <Button
                 type="primary"
                 htmlType="submit"
                 className="login-form-button"
-
               >
                 登陆
               </Button>

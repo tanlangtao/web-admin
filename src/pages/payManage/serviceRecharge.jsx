@@ -10,9 +10,13 @@ import {
 import Mytable from "../../components/MyTable";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button/index";
+import { formateDate } from "../../utils/dateUtils";
 import {
-  bindInfo,
-  reqUsers
+  reqUpdateDaiPaymentID,
+  reqModifyDaiPaymentID,
+  reqLockDaiPayment,
+  reqUsers,
+  reqDaiPayOrderList
 } from "../../api/index";
 const { Option } = Select;
 const init_state = {
@@ -21,19 +25,14 @@ const init_state = {
   count: 0,
   startTime: '',
   endTime: '',
-  inputKey: "玩家ID",
+  inputKey: "user_id",
   inputValue: "",
-  inputStatus: "未支付",
-  id: 427223993, // id先写死
+  inputStatus: 0,
   loading: false,
   data: [],
   MyDatePickerValue: null,
-  isShowUpdateModal:false,
   isShowChangeModal:false,
-  isShowAssignedModel:false,
-  updateID:"",
   changeID:"",
-  assignedID:""
 };
 export default class ServiceRecharge extends Component {
   constructor(props) {
@@ -44,66 +43,62 @@ export default class ServiceRecharge extends Component {
   initColumns = () => [
     {
       title: "订单编号",
-      dataIndex: "",
-      key: "",
+      dataIndex: "order_id",
+      key: "order_id",
       fixed: "left",
       align: 'center',
     },
     {
       title: "玩家ID",
-      dataIndex: "",
-      key: "",
+      dataIndex: "user_id",
+      key: "user_id",
       fixed: "left",
       align: 'center',
     },
     {
       title: "玩家昵称",
-      dataIndex: "",
-      key: "",
+      dataIndex: "user_name",
+      key: "user_name",
       align: 'center',
       // width: 150,
     },
     {
       title: "所属品牌",
-      dataIndex: "",
-      key: "",
+      dataIndex: "package_id",
+      key: "package_id",
       align: 'center',
       // width: 100,
     },
     {
       title: "上级代理",
-      dataIndex: "",
-      key: "",
+      dataIndex: "proxy_user_id",
+      key: "proxy_user_id",
       align: 'center',
-      width: 100,
     },
     {
       title: "订单金额",
-      dataIndex: "",
-      key: "",
+      dataIndex: "amount",
+      key: "amount",
       align: 'center',
-      width: 100,
     },
     {
       title: "创建时间",
-      dataIndex: "",
-      key: "",
+      dataIndex: "created_at",
+      key: "created_at",
       align: 'center',
-      width: 120,
+      render:formateDate,
     },
     {
       title: "代充ID",
-      dataIndex: "",
-      key: "",
+      dataIndex: "replace_id",
+      key: "replace_id",
       align: 'center',
-      // width: 150,
     },
     {
       title: "代充昵称",
-      dataIndex: "",
-      key: "",
+      dataIndex: "replace_name",
+      key: "replace_name",
       align: 'center',
-      // width: 150,
     },
     {
       title: "运营操作",
@@ -112,13 +107,13 @@ export default class ServiceRecharge extends Component {
       align: 'center',
       render: (text, record) => (
         <span>
-          <LinkButton type="default" onClick={() => this.showUpdateModel(record)}>
+          <LinkButton type="default" onClick={() => this.handleUpdateId(record)}>
             更新代充
             </LinkButton>
           <LinkButton type="default" onClick={() => this.showChangeModel(record)}>
             修改代充
             </LinkButton>
-          <LinkButton type="default" onClick={() => this.showAssignedModel(record)}>
+          <LinkButton type="default" onClick={() => this.handleAssigned(record)}>
             指派
             </LinkButton>
         </span>
@@ -126,15 +121,23 @@ export default class ServiceRecharge extends Component {
     },
     {
       title: "到账金额",
-      dataIndex: "",
-      key: "",
+      dataIndex: "arrival_amount",
+      key: "arrival_amount",
       align: 'center',
+      render: (text, record) => {
+        let arrival_amount = 0
+        if (record.arrival_at != 0) {
+          arrival_amount = record.arrival_amount
+        }
+        return arrival_amount;
+      },
     },
     {
       title: "到账时间",
-      dataIndex: "",
-      key: "",
+      dataIndex: "arrival_at",
+      key: "arrival_at",
       align: 'center',
+      render:formateDate,
     },
     {
       title: "状态",
@@ -143,76 +146,117 @@ export default class ServiceRecharge extends Component {
       align: 'center',
       render: (text, record) => {
         let statusStr = ''
-        if (record.status == 0) {
-          statusStr = "未完成"
-        } else if (record.status == 1) {
+        if (record.status == 1) {
+          statusStr = "未支付"
+        } else if (record.status == 2) {
+          statusStr = "已过期"
+        }else if (record.status == 4) {
+          statusStr = "已撤销"
+        }else if (record.status == 5 ) {
+          statusStr = "已支付"
+        }else if (record.status == 6 ) {
           statusStr = "已完成"
+        }else if (record.status == 7 ) {
+          statusStr = "补单一审通过"
+        }else if (record.status == 9 ) {
+          statusStr = "补单二审通过"
+        }else if (record.status == 11 ) {
+          statusStr = "充值失败"
+        }else if (record.status == 12 ) {
+          statusStr = "客服拒绝"
         }
         return statusStr;
       },
     },
   ];
-  getUsers = async (page, limit) => {
+  getReqDaiPayOrderList = async (page, limit) => {
     this.setState({ loading: true });
-    const result = await reqUsers(
-      page,
-      limit,
-      this.state.startTime,
-      this.state.endTime,
-      this.state.inputKey,
-      this.state.inputValue
+    const result = await reqDaiPayOrderList(
+      {
+        start_time:this.state.startTime,
+        end_time:this.state.endTime,
+        export:1,
+        page:this.state.current,
+        limit:this.state.pageSize,
+        package_id:this.props.package_id,
+        flag:3,
+        [this.state.inputKey]:Number(this.state.inputValue),
+        order_status:Number(this.state.inputStatus),
+      }
     );
     if (result.status === 0) {
-      const { game_user, proxy_user } = result.data;
-      game_user.forEach((element) => {
-        proxy_user.forEach((item) => {
-          if (element.id === item.id) {
-            element.proxy_nick = item.proxy_pid;
-          }
-        });
-      });
+      let data =result.data && JSON.parse(result.data)
+      console.log(data)
       this.setState({
-        data: game_user,
-        count: result.data && result.data.count,
-        loading: false,
-        packages: result.data && result.data.packages,
-      });
+        data:data,
+        count: data.length,
+      })
     } else {
-      message.info(result.msg || "未检索到数据");
+      message.error(`失败！${result.data}`)
     }
+    this.setState({loading:false})
   };
   showUpdateModel = (record)=>{
     this.setState({
-      isShowUpdateModal:true
+      isShowUpdateModel:true
     })
-    this.recordID = record.id
+    this.record = record
   }
   showChangeModel = (record)=>{
     this.setState({
       isShowChangeModal:true
     })
-    this.recordID = record.id
-  }
-  showAssignedModel = (record)=>{
-    this.setState({
-      isShowAssignedModel:true
-    })
-    this.recordID = record.id
+    this.record = record
   }
   // 更新代充ID
-  handleUpdateId = ()=>{
-    
+  handleUpdateId = async (record)=>{
+    const result = await reqUpdateDaiPaymentID(
+      this.props.admin_user_id,
+      record.order_id,
+      Number(record.package_id),
+    )
+    if (result.status === 0) {
+      message.success("操作成功！")
+      this.getReqDaiPayOrderList(1,20)
+    }else{
+      message.error(`操作失败！${message.data}`)
+    }
+    this.setState({
+      isShowUpdateModel:false
+    })
   }
   // 修改代充
-  handleChange= ()=>{
-    
+  handleChange= async ()=>{
+    const result = await reqModifyDaiPaymentID(
+      Number(this.state.changeID),
+      this.record.order_id,
+      Number(this.record.package_id),
+    )
+    if (result.status === 0) {
+      this.getReqDaiPayOrderList(1,20)
+      message.success("操作成功！")
+    }else{
+      message.error(`操作失败！${message.data}`)
+    }
+    this.setState({
+      isShowChangeModal:false
+    })
   }
   // 指派
-  handleAssigned = ()=>{
-    
+  handleAssigned = async (record)=>{
+    const result = await reqLockDaiPayment(
+      record.order_id,
+      Number(record.package_id),
+    )
+    if (result.status === 0) {
+      this.getReqDaiPayOrderList(1,20)
+      message.success("操作成功！")
+    }else{
+      message.error(`操作失败！${message.data}`)
+    }
   }
   componentDidMount() {
-    this.getUsers(1, 20)
+    this.getReqDaiPayOrderList(1, 20)
   }
   render() {
     const { data, count, current, pageSize, loading } = this.state;
@@ -237,8 +281,8 @@ export default class ServiceRecharge extends Component {
             this.setState({ inputKey: val });
           }}
         >
-          <Option value="id">玩家ID</Option>
-          <Option value="game_nick">代充ID</Option>
+          <Option value="user_id">玩家ID</Option>
+          <Option value="replace_id">代充ID</Option>
         </Select>
         &nbsp; &nbsp;
               <Input
@@ -254,19 +298,23 @@ export default class ServiceRecharge extends Component {
               <Select
           style={{ width: 200 }}
           placeholder="Select a person"
-          value={this.state.inputStatus}
+          value={this.state.inputStatus == 0 ? "全部":(this.state.inputStatus == 6 ? "已完成":(
+            this.state.inputStatus == 1 ? "未支付" :""
+          ))}
           onChange={(val) => {
+            console.log(val)
             this.setState({ inputStatus: val });
           }}
         >
+          <Option value="0">全部</Option>
           <Option value="1">未支付</Option>
-          <Option value="2">已完成</Option>
+          <Option value="6">已完成</Option>
         </Select>
         &nbsp; &nbsp;
               <LinkButton
           onClick={() => {
             this.setState({ current: 1 });
-            this.getUsers(1, this.state.pageSize);
+            this.getReqDaiPayOrderList(1, this.state.pageSize);
           }}
           size="default"
         >
@@ -287,21 +335,6 @@ export default class ServiceRecharge extends Component {
           loading,
         }}
       />
-      {this.state.isShowUpdateModal && (
-        <Modal
-          title="更新代充ID"
-          visible={this.state.isShowUpdateModal}
-          onOk={this.handleUpdateId}
-          onCancel={() => {
-            this.setState({ isShowUpdateModal: false });
-          }}
-        >
-          <Input
-            value={this.state.updateID}
-            onChange={(e) => this.setState({ updateID: e.target.value })}
-          />
-        </Modal>
-      )}
       {this.state.isShowChangeModal && (
         <Modal
           title="修改代充"
@@ -314,21 +347,6 @@ export default class ServiceRecharge extends Component {
           <Input
             value={this.state.changeID}
             onChange={(e) => this.setState({ changeID: e.target.value })}
-          />
-        </Modal>
-      )}
-      {this.state.isShowAssignedModel && (
-        <Modal
-          title="指派"
-          visible={this.state.isShowAssignedModel}
-          onOk={this.handleAssigned}
-          onCancel={() => {
-            this.setState({ isShowAssignedModel: false });
-          }}
-        >
-          <Input
-            value={this.state.assignedID}
-            onChange={(e) => this.setState({ assignedID: e.target.value })}
           />
         </Modal>
       )}

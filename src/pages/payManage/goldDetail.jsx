@@ -93,12 +93,12 @@ export default class MyGoldDetail extends Component {
             this.setState({
                 data: game_user,
                 count: result.data && result.data.count,
-                loading: false,
                 packages: result.data && result.data.packages,
             });
         } else {
             message.info(result.msg || "未检索到数据");
         }
+        this.setState({ loading: false });
     };
     componentDidMount() {
         this.getUsers(1, 20)

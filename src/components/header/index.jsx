@@ -252,11 +252,6 @@ class Header extends Component {
           <Dropdown
             overlay={
               <Menu>
-                <Menu.Item key="0">
-                  <Button type="link" onClick={this.authCode}>
-                    安全码设置
-                  </Button>
-                </Menu.Item>
                 <Menu.Item key="1">
                   <Button type="link" onClick={this.resetPWD}>
                     修改密码

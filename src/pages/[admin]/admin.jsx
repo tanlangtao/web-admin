@@ -130,7 +130,9 @@ import PersonalDaily from "../ptWorkers/personal-daily";
 import PersonalList from "../ptWorkers/personal-list";
 import TeamDaily from "../ptWorkers/team-daily";
 import TeamList from "../ptWorkers/team-list";
+import PtLink from "../ptWorkers/ptlink";
 import AccountDetail from "../accManage/accountDetail";
+import UserGroupManage from "../accManage/userGroupManage";
 import MyAgentRecharge from "../payManage/myAgentRecharge";
 import MyAgentCash from "../payManage/myAgentCash";
 import ServiceRecharge from "../payManage/serviceRecharge";
@@ -145,7 +147,20 @@ const history = createHashHistory();
 export default class Admin extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      package_id:0,
+      login_user_id:0,
+      role_id:0,
+    };
+  }
+  componentDidMount(){
+    const adminLoginData = JSON.parse(localStorage.getItem("adminLoginData"))
+    console.log("adminLoginData",adminLoginData)
+    this.setState({
+      package_id:Number(adminLoginData.packageid),
+      role_id:Number(adminLoginData.roleid),
+      admin_user_id:Number(adminLoginData.userid)
+    })
   }
   render() {
     const token = localStorage.token;
@@ -153,6 +168,7 @@ export default class Admin extends Component {
     if (!token) {
       return <Redirect to="/login" />;
     }
+    console.log("this.state.role_id",this.state.role_id)
     return (
       <Layout style={{ minHeight: "100%" }}>
         <Sider
@@ -171,6 +187,7 @@ export default class Admin extends Component {
             onClick={(tabConfig) => {
               this.child1.add && this.child1.add(tabConfig);
             }}
+            role_id = {this.state.role_id}
           />
         </Sider>
         <Layout style={{ marginLeft: 250 }}>
@@ -777,24 +794,29 @@ export default class Admin extends Component {
                       <AccountDetail />
                     </KeepAlive>
                   </Route>
+                  <Route path="/accManage/userGroupManage" exact>
+                    <KeepAlive name="UserGroupManage">
+                      <UserGroupManage />
+                    </KeepAlive>
+                  </Route>
                   <Route path="/payManage/myAgentRecharge" exact>
                     <KeepAlive name="MyAgentRecharge">
-                      <MyAgentRecharge />
+                      <MyAgentRecharge package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                     </KeepAlive>
                   </Route>
                   <Route path="/payManage/myAgentCash" exact>
                     <KeepAlive name="MyAgentCash">
-                      <MyAgentCash />
+                      <MyAgentCash package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                     </KeepAlive>
                   </Route>
                   <Route path="/payManage/serviceRecharge" exact>
                     <KeepAlive name="ServiceRecharge">
-                      <ServiceRecharge />
+                      <ServiceRecharge package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                     </KeepAlive>
                   </Route>
                   <Route path="/payManage/serviceCash" exact>
                     <KeepAlive name="ServiceCash">
-                      <ServiceCash />
+                      <ServiceCash package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                     </KeepAlive>
                   </Route>
                   <Route path="/payManage/myGoldDetail" exact>
@@ -809,7 +831,12 @@ export default class Admin extends Component {
                   </Route>
                   <Route path="/payManage/creditManage/serviceDetail" exact>
                     <KeepAlive name="ServiceDetail">
-                      <ServiceDetail />
+                      <ServiceDetail package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/ptWorkers/pt-link" exact>
+                    <KeepAlive name="PtLink">
+                      <PtLink package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                     </KeepAlive>
                   </Route>
                   <Route component={NotFound} />

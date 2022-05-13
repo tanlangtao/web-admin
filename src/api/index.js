@@ -25,7 +25,7 @@ export const raceURL = (username, password) => {
   });
   Promise_any(promises)
     .then((result) => {
-      localStorage.BASE = result.config.url.replace("/api/check", "/admin");
+      localStorage.BASE = result.config.url.replace("/api/check", "/creditadmin");
       BASE = localStorage.BASE;
       console.log("选线成功", result, BASE);
     })
@@ -35,8 +35,15 @@ export const raceURL = (username, password) => {
 };
 
 // 登陆
-export const reqLogin = (username, password, authcode) =>
-  ajax(BASE + "/login/login", { username, password, authcode }, "POST");
+export const reqLogin = (username, password, authcode) =>{
+  let urldata = {
+    account : username,
+    password
+  }
+  return ajax(BASE + "/credit/login", { ...urldata}, "POST");
+} 
+  
+  
 
 // 获取authCode
 export const reqAuthCode = (username, password) =>
@@ -2278,3 +2285,166 @@ export const reqGetCreditDividendInfoList = (page, limit, start, end, id,platfor
     "POST"
   );
 };
+//新增信用代充订单
+export const reqDaiPayment = (urlData) => {
+  return ajax(
+    BASE + "/api/payment/daiPayment",
+    {...urlData},
+    "POST"
+  );
+};
+//更新代充ID
+export const reqUpdateDaiPaymentID = (user_id,order_id,package_id) => {
+  return ajax(
+    BASE + "/api/payment/updateDaiPaymentID",
+    {user_id,order_id,package_id},
+    "POST"
+  );
+};
+
+//修改代充ID
+export const reqModifyDaiPaymentID = (user_id,order_id,package_id) => {
+  return ajax(
+    BASE + "/api/payment/modifyDaiPaymentID",
+    {user_id,order_id,package_id},
+    "POST"
+  );
+};
+//指派
+export const reqLockDaiPayment = (order_id,package_id) => {
+  return ajax(
+    BASE + "/api/payment/lockDaiPayment",
+    {order_id,package_id},
+    "POST"
+  );
+};
+//确认上分
+export const reqApplyDaiPayAmount = (order_id,package_id) => {
+  return ajax(
+    BASE + "/api/payment/applyDaiPayAmount",
+    {order_id,package_id},
+    "POST"
+  );
+};
+//修改上分
+export const reqModifyDaiPayAmount = (order_id,package_id,amount) => {
+  return ajax(
+    BASE + "/api/payment/modifyDaiPayAmount",
+    {order_id,package_id,amount},
+    "POST"
+  );
+};
+
+//支付订单列表
+export const reqDaiPayOrderList = (urlData) => {
+  return ajax(
+    BASE + "/api/payment/daiPayOrderList",
+    {...urlData},
+    "POST"
+  );
+};
+
+//显示代充ID为登陆账号的充值记录
+export const reqDaiPayOrderListByLoginId = (urlData) => {
+  return ajax(
+    BASE + "/api/payment/daiPayOrderListByLoginId",
+    {...urlData},
+    "POST"
+  );
+};
+//建立信用代付单
+export const reqWithDrawApply = (urlData) => {
+  return ajax(
+    BASE + "/api/with_draw/withDrawApply",
+    { ...urlData},
+    "POST"
+  );
+};
+//更新代付ID
+export const reqUpdateDaiWithdrawID = (package_id,order_id) => {
+  return ajax(
+    BASE + "/api/with_draw/updateDaiWithdrawID",
+    { package_id,order_id },
+    "POST"
+  );
+};
+//修改代付ID
+export const reqModifyDaiWithdrawID = (user_id,package_id,order_id) => {
+  return ajax(
+    BASE + "/api/with_draw/modifyDaiWithdrawID",
+    { user_id,package_id,order_id },
+    "POST"
+  );
+};
+//我已付款
+export const reqApplyDaiWithdraw = (user_id,package_id,order_id) => {
+  return ajax(
+    BASE + "/api/with_draw/applyDaiWithdraw",
+    { user_id,package_id,order_id },
+    "POST"
+  );
+};
+//兑换订单列表
+export const reqDaiWithdrawOrderList = (urlData,inputKey,inputValue) => {
+  return ajax(
+    BASE + "/api/with_draw/daiWithdrawOrderList",
+    { ...urlData ,[inputKey]:Number(inputValue)},
+    "POST"
+  );
+};
+//显示代充ID为登陆账号的充值记录
+export const reqDaiWithdrawOrderListByLoginId = (urlData) => {
+  return ajax(
+    BASE + "/api/with_draw/daiWithdrawOrderListByLoginId",
+    { ...urlData },
+    "POST"
+  );
+};
+//绑定银行卡，绑定支付宝
+export const reqSaveAccount = (urlData) => {
+  return ajax(
+    BASE + "/api/payment_account/saveAccount",
+    { ...urlData },
+    "POST"
+  );
+};
+//信用盘，新增用户组
+export const reqAddrole = (name,role) => {
+  return ajax(
+    BASE + "/admin/credit/addrole",
+    { name,role },
+    "POST"
+  );
+};
+//信用盘，编辑用户组  
+export const reqEditrole = (id,name,role) => {
+  return ajax(
+    BASE + "/admin/credit/editrole",
+    { id,name,role },
+    "POST"
+  );
+};
+//信用盘，删除用户组  
+export const reqDelrole= (id) => {
+  return ajax(
+    BASE + "/admin/credit/delrole",
+    { id },
+    "POST"
+  );
+};
+//审核
+export const reqReviewDaiWithdraw= (order_id,review_status,user_id,package_id) => {
+  return ajax(
+    BASE + "/api/with_draw/reviewDaiWithdraw",
+    { order_id,review_status,user_id,package_id },
+    "POST"
+  );
+};
+export const getGameUserLoginHistory = (reqData) => {
+  return ajax(
+    BASE + `/Operation/Api/GetGameUserLoginHistory`,
+    { ...reqData,platform_name:"lob",token:"33840c9cb9ff6668a5d899efcd0c1fd683d8f46a",limit:20,page:1 },
+    "GET"
+  );
+};
+

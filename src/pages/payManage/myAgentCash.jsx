@@ -10,10 +10,17 @@ import {
 import Mytable from "../../components/MyTable";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button/index";
+import AgentAccountDetail from "./agentAccountDetail";
+import riskcontrolfn from "../../components/riskcontrol";
+import { formateDate } from "../../utils/dateUtils";
 import {
-  bindInfo,
-  reqUsers
+  reqApplyDaiWithdraw,
+  reqUsers,
+  reqDaiWithdrawOrderList,
+  reqDaiWithdrawOrderListByLoginId
+
 } from "../../api/index";
+
 const { Option } = Select;
 const init_state = {
   current: 1,
@@ -21,10 +28,8 @@ const init_state = {
   count: 0,
   startTime: '',
   endTime: '',
-  inputKey: "玩家ID",
   inputValue: "",
-  inputStatus: "未支付",
-  id: 427223993, // id先写死
+  inputStatus: 0,
   loading: false,
   data: [],
   MyDatePickerValue: null,
@@ -39,96 +44,77 @@ export default class MyAgentCash extends Component {
   initColumns = () => [
     {
       title: "订单ID",
-      dataIndex: "",
-      key: "",
+      dataIndex: "order_id",
+      key: "order_id",
       fixed: "left",
       align: 'center',
     },
     {
       title: "玩家ID",
-      dataIndex: "",
-      key: "",
+      dataIndex: "user_id",
+      key: "user_id",
       fixed: "left",
       align: 'center',
     },
     {
       title: "玩家昵称",
-      dataIndex: "",
-      key: "",
+      dataIndex: "user_name",
+      key: "user_name",
       align: 'center',
       // width: 150,
     },
     {
       title: "所属品牌",
-      dataIndex: "",
-      key: "",
+      dataIndex: "package_id",
+      key: "package_id",
       align: 'center',
       // width: 100,
     },
     {
       title: "上级代理",
-      dataIndex: "",
-      key: "",
+      dataIndex: "proxy_user_id",
+      key: "proxy_user_id",
       align: 'center',
       width: 100,
     },
     {
       title: "订单金额",
-      dataIndex: "",
-      key: "",
+      dataIndex: "amount",
+      key: "amount",
       align: 'center',
       width: 100,
     },
     {
       title: "创建时间",
-      dataIndex: "",
-      key: "",
+      dataIndex: "created_at",
+      key: "created_at",
       align: 'center',
       width: 120,
+      render:formateDate,
     },
     {
       title: "实际费率",
-      dataIndex: "",
-      key: "",
+      dataIndex: "handling_fee",
+      key: "handling_fee",
       align: 'center',
       // width: 150,
     },
     {
       title: "兑换方式",
-      dataIndex: "",
-      key: "",
+      dataIndex: "type",
+      key: "type",
       align: 'center',
-      // width: 150,
-    },
-    {
-      title: "风控",
-      dataIndex: "",
-      key: "",
-      align: 'center',
-    },
-    {
-      title: "代提ID",
-      dataIndex: "",
-      key: "",
-      align: 'center',
-    },
-    {
-      title: "代提昵称",
-      dataIndex: "",
-      key: "",
-      align: 'center',
-    },
-    {
-      title: "到账金额",
-      dataIndex: "",
-      key: "",
-      align: 'center',
-    },
-    {
-      title: "到账时间",
-      dataIndex: "",
-      key: "",
-      align: 'center',
+      render: (text, record) => {
+        let statusStr = ''
+        if (record.type == 12 && record.order_type == 17) {
+          statusStr = "银行卡"
+        } else if (record.type == 12 && record.order_type == 16) {
+          statusStr = "支付宝"
+        }else{
+          statusStr = ""
+        }
+        return statusStr;
+      },
     },
     {
       title: "状态",
@@ -136,14 +122,20 @@ export default class MyAgentCash extends Component {
       key: "status",
       align: 'center',
       render: (text, record) => {
-        let statusStr = ''
-        if (record.status == 0) {
-          statusStr = "未完成"
-        } else if (record.status == 1) {
-          statusStr = "已完成"
-        }
-        return statusStr;
+        return this.getStatusString(record.status);
       },
+    },
+    {
+      title: "代提ID",
+      dataIndex: "replace_id",
+      key: "replace_id",
+      align: 'center',
+    },
+    {
+      title: "代提昵称",
+      dataIndex: "replace_name",
+      key: "replace_name",
+      align: 'center',
     },
     {
       title: "代付操作",
@@ -152,9 +144,10 @@ export default class MyAgentCash extends Component {
       align: 'center',
       render: (text, record) => (
         <span>
-          <LinkButton type="default" onClick={() => this.handleApply(record)}>
-            我已付款
+          { record.status != 4 && <LinkButton type="default" onClick={() => this.handleApply(record)}>
+              我已付款
               </LinkButton>
+          }
         </span>
       ),
     },
@@ -171,16 +164,70 @@ export default class MyAgentCash extends Component {
         </span>
       ),
     },
+    {
+      title: "到账金额",
+      dataIndex: "arrival_amount",
+      key: "arrival_amount",
+      align: 'center',
+      render: (text, record) => {
+        let arrival_amount = 0
+        if (record.arrival_at != 0) {
+          arrival_amount = record.arrival_amount
+        }
+        return arrival_amount;
+      },
+    },
+    {
+      title: "到账时间",
+      dataIndex: "arrival_at",
+      key: "arrival_at",
+      align: 'center',
+      render:formateDate,
+    },
   ];
   showAccountDetail = (record) => {
     this.setState({
       isShowAccountDetail: true
     })
-    this.recordID = record.id
+    this.recordID = record.user_id
   }
   handleApply = async (record) => {
-    // const result = await reqUsers(
-    // )
+    const result = await reqApplyDaiWithdraw(
+      this.props.admin_user_id,
+      record.package_id,
+      record.order_id,
+    )
+    if (result.status === 0) {
+      message.success("操作成功！")
+      this.getReqDaiWithdrawOrderListByLoginId()
+    }else{
+      message.error(`操作失败！${result.data}`)
+    }
+  }
+
+  getReqDaiWithdrawOrderListByLoginId = async (page,limit)=>{
+    const result = await reqDaiWithdrawOrderListByLoginId({
+      start_time:this.state.startTime,
+      end_time:this.state.endTime,
+      export:1,
+      page:page,
+      limit:limit,
+      package_id:this.props.package_id,
+      flag:3,  
+      user_id:this.props.admin_user_id,
+      order_status:Number(this.state.inputStatus),
+    })
+    if(result.status === 0) {
+      let data =result.data && JSON.parse(result.data)
+      console.log(data)
+      this.setState({
+        data: data,
+        count: data.length,
+        loading: false,
+      });
+    }else{
+      message.error(`失败！${result.data}`)
+    }
   }
   getUsers = async (page, limit) => {
     this.setState({ loading: true });
@@ -211,8 +258,32 @@ export default class MyAgentCash extends Component {
       message.info(result.msg || "未检索到数据");
     }
   };
+  getStatusString(status){
+    let statusStr = ''
+    switch(status){
+      case 1:
+        statusStr = "待审核"
+        break
+      case 2:
+        statusStr = "处理中"
+        break
+      case 3:
+        statusStr = "已提交"
+        break
+      case 4:
+        statusStr = "已完成"
+        break
+      case 5:
+        statusStr = "已失败"
+        break
+      default:
+        statusStr = "已失败"
+        break
+    }
+    return statusStr;
+  }
   componentDidMount() {
-    this.getUsers(1, 20)
+    this.getReqDaiWithdrawOrderListByLoginId(1,20)
   }
   render() {
     const { data, count, current, pageSize, loading } = this.state;
@@ -242,19 +313,24 @@ export default class MyAgentCash extends Component {
               <Select
           style={{ width: 200 }}
           placeholder="Select a person"
-          value={this.state.inputStatus}
+          value={this.state.inputStatus == 0 ?"全部" :(
+            this.state.inputStatus == 3 ?"已提交" :(
+              this.state.inputStatus == 5?"已完成" :""
+            )
+          )}
           onChange={(val) => {
             this.setState({ inputStatus: val });
           }}
         >
-          <Option value="1">未支付</Option>
-          <Option value="2">已完成</Option>
+          <Option value="0">全部</Option>
+          <Option value="3">已提交</Option>
+          <Option value="4">已完成</Option>
         </Select>
         &nbsp; &nbsp;
               <LinkButton
           onClick={() => {
             this.setState({ current: 1 });
-            this.getUsers(1, this.state.pageSize);
+            this.getReqDaiWithdrawOrderListByLoginId(1, this.state.pageSize);
           }}
           size="default"
         >
@@ -286,8 +362,8 @@ export default class MyAgentCash extends Component {
           width="85%"
           maskClosable={false}
           style={{ top: 10 }}
-          
         >
+          <AgentAccountDetail recordID = {this.recordID}></AgentAccountDetail>
         </Modal>
       )}
     </Card>

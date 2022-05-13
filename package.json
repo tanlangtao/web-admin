@@ -8,6 +8,7 @@
 		"antd": "^3.26.12",
 		"axios": "^0.18.1",
 		"babel-plugin-import": "^1.12.0",
+		"clipboard": "^2.0.11",
 		"codemirror": "^5.49.0",
 		"customize-cra": "^0.2.14",
 		"dayjs": "^1.10.1",
@@ -77,5 +78,6 @@
 	"keywords": [
 		"admin-web"
 	],
-	"license": "ISC"
+	"license": "ISC",
+	"homepage": "./"
 }
