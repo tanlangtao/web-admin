@@ -137,7 +137,7 @@ class LeftNav extends Component {
           console.log('item.title====', item.title)
         } else {
           // console.log('2item.title====', item.tittle)
-          if (item.title == '用户' || item.title == '报表' || item.title == "推广员管理" || item.title == "账户管理" || item.title == "支付管理") {
+          if (item.title == '用户管理' || item.title == '报表管理' || item.title == "推广员管理" || item.title == "账户管理" || item.title == "支付管理") {
             console.log('2item.title====', item.children)
             //下面代码放入这里即可控制左侧标签渲染数量
             // 查找一个与当前请求路径匹配的子Item
@@ -233,7 +233,7 @@ class LeftNav extends Component {
                       || ele.title == "账户详情" || ele.title == "用户组管理"
                       || ele.title == "人工充值" || ele.title == "我的代充" || ele.title == "人工兑换" || ele.title == "我的代付" || ele.title == "信用管理" || ele.title == "代充明细" || ele.title == "新增代充" || ele.title == "个人账变"
                     ) {
-                      console.log('渲染===ele.title===', ele.title);
+                      // console.log('渲染===ele.title===', ele.title);
                       switch (ele.title) {
                         case "子游戏设定":
                         case "无限代保底分红":
@@ -301,6 +301,8 @@ class LeftNav extends Component {
   componentWillMount() {
     const menuList = JSON.parse(localStorage.getItem("menuList"));
     console.log(menuList)
+    let HasTuiGuangYuan = false
+    let HasPaymentManage = false  
     if (!menuList) {
       this.getMenuList()
       return
@@ -318,7 +320,7 @@ class LeftNav extends Component {
           id:1,
           pid:0,
           spread:false,
-          title:"用户",
+          title:"用户管理",
         }
         testMenulist.push(testItem)
       }else if(e.title == "报表管理"){
@@ -332,10 +334,11 @@ class LeftNav extends Component {
           id:1,
           pid:0,
           spread:false,
-          title:"报表",
+          title:"报表管理",
         }
         testMenulist.push(testItem)
       }else if (e.title == "推广员管理") {
+        HasTuiGuangYuan  = true
         let testItem = {
           children: [
             { id: 998, title: '本级数据日报', href: '/admin/user/index', key: '/ptWorkers/personal-daily', pid: 1, children: null, spread: false },
@@ -370,6 +373,7 @@ class LeftNav extends Component {
         }
         testMenulist.push(testItem)
       }else if(e.title == "支付管理"){
+        HasPaymentManage = true
         let testItem= {
           children:[
             {id: 998, title: '人工充值', href: '/payManage/serviceRecharge', key: '/payManage/serviceRecharge', pid: 1,children: null,spread: false},
@@ -393,6 +397,48 @@ class LeftNav extends Component {
         testMenulist.push(testItem)
       }
     })
+    if(!HasTuiGuangYuan){
+      let testItem = {
+        children: [
+          { id: 998, title: '本级数据日报', href: '/admin/user/index', key: '/ptWorkers/personal-daily', pid: 1, children: null, spread: false },
+          { id: 997, title: '团队数据日报', href: '/admin/user/index', key: '/ptWorkers/team-daily', pid: 1, children: null, spread: false },
+          { id: 996, title: '个人结算列表', href: '/admin/user/index', key: '/ptWorkers/personal-list', pid: 1, children: null, spread: false },
+          { id: 995, title: '团队结算列表', href: '/admin/user/index', key: '/ptWorkers/team-list', pid: 1, children: null, spread: false },
+          { id: 995, title: '推广链接', href: '/admin/user/index', key: '/ptWorkers/pt-link', pid: 1, children: null, spread: false },
+        ],
+        href: "",
+        icon: "",
+        key: "/ptWorkers",
+        id: 999,
+        pid: 0,
+        spread: false,
+        title: "推广员管理",
+      }
+      testMenulist.push(testItem)
+    }
+    if(!HasPaymentManage){
+      let testItem= {
+        children:[
+          {id: 998, title: '人工充值', href: '/payManage/serviceRecharge', key: '/payManage/serviceRecharge', pid: 1,children: null,spread: false},
+          {id: 998, title: '人工兑换', href: '/admin/user/index', key: '/payManage/serviceCash', pid: 1,children: null,spread: false},
+          {id: 998, title: '我的代充', href: '/admin/user/index', key: '/payManage/myAgentRecharge', pid: 1,children: null,spread: false},
+          {id: 998, title: '我的代付', href: '/admin/user/index', key: '/payManage/myAgentCash', pid: 1,children: null,spread: false},
+          {id: 998, title: '个人账变', href: '/admin/user/index', key: '/payManage/myGoldDetail', pid: 1,children: null,spread: false},
+          {id: 998, title: '信用管理', href: '/admin/user/index', key: '/payManage/creditManage', pid: 1,children: [
+            {id: 998, title: '代充明细', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/serviceDetail', pid: 1,children: null,spread: false},
+            {id: 998, title: '新增代充', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/createNewService', pid: 1,children: null,spread: false},
+          ],spread: false},
+        ],
+        href:"",
+        icon:"",
+        key:"/payManage",
+        id:999,
+        pid:0,
+        spread:false,
+        title:"支付管理",
+      }
+      testMenulist.push(testItem)
+    }
     console.log(testMenulist)
     localStorage.menuList = JSON.stringify(testMenulist)
     const menuNodes = this.getMenuNodes(testMenulist);

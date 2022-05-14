@@ -133,10 +133,10 @@ class Login extends Component {
           <h1></h1>
         </header>
         <section className="login-content">
-          <dev id='bg_bg'>
-            <dev id='bg_text'>
-            </dev>
-          </dev>
+          <div id='bg_bg'>
+            <div id='bg_text'>
+            </div>
+          </div>
           <h2></h2>
           <Form onSubmit={this.handleSubmit} className="login-form">
             <Item>

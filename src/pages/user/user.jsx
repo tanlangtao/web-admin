@@ -940,7 +940,6 @@ export default class User extends Component {
           <Modal
             title="代理链信息"
             visible={this.state.isShowProxySetting}
-            onOk={this.handleSaveResetpwd}
             onCancel={() => {
               this.setState({ isShowProxySetting: false });
             }}

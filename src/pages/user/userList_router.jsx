@@ -4,19 +4,8 @@ import React, { Component } from "react";
 import _, { } from "lodash-es";
 import { Menu, Card, Modal, message, Input, Popconfirm, Button } from 'antd';
 import {
-    reqUsers,
-    setGameUserNickName,
-    changeGold,
-    reqLoadGold,
-    saveUserBlack,
     createTask,
-    updateSavePassword,
-    setCustomer,
-    downloadUserList,
     setgameuserstatus,
-    setGameUserPhone,
-    getipdetail,
-    getteldetail,
     changeProxyUserProxyPid
 } from "../../api/index";
 import WrappedComponent from "./gold_details";
