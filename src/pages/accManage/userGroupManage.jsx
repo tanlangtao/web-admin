@@ -16,7 +16,8 @@ import {
     reqUsers,
     reqAddrole,
     reqEditrole,
-    reqDelrole
+    reqDelrole,
+    getCreditUserlist
 } from "../../api/index";
 const init_state = {
     current: 1,
@@ -70,23 +71,14 @@ export default class AccountDetail extends Component {
     //获取当前玩家信息
     getUsers = async (page, limit) => {
         this.setState({ loading: true });
-        const result = await reqUsers(
-            page,
-            limit,
-            "",
-            "",
-            "id",
-            this.state.id
+        const result = await getCreditUserlist(
         );
         if (result.status === 0) {
-            const { game_user, proxy_user } = result.data;
-            this.setState({
-                loading:false,
-                game_user_data: game_user[0],
-                proxy_user_data: proxy_user[0],
-            })
-            
+           
         }
+        this.setState({
+            loading:false
+        })
     }
     getReqAddrole = async ()=>{
         const result = await reqAddrole(

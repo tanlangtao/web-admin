@@ -2276,12 +2276,24 @@ export const getStatementTotalByID = (reqData) => {
     "GET"
   );
 };
-//用户列表
-export const reqGetCreditDividendInfoList = (page, limit, start, end, id,platform_name) => {
+export const reqGetCreditDividendInfoList = (first_date,last_date,id,package_id) => {
   return ajax(
-    // BASE + "/proxy/Operation/Api/GetCreditDividendInfoList",
-    "http://proxy.lymrmfyp.com/Operation/Api/GetCreditDividendInfoList",
-    { page, limit, start, end, id,platform_name },
+    BASE + "/proxy/Operation/Api/GetCreditDividendInfoList",
+    { first_date,last_date,id,package_id },
+    "POST"
+  );
+};
+export const reqGetCreditDividendInfo7Day = (first_date,last_date,account_name) => {
+  return ajax(
+    BASE + "/proxy/user/GetCreditDividendInfo7Day",
+    { first_date,last_date,account_name },
+    "POST"
+  );
+};
+export const reqGetCreditDividendInfo7DayList = (first_date,last_date,id,package_id) => {
+  return ajax(
+    BASE + "/proxy/user/GetCreditDividendInfo7DayList",
+    { first_date,last_date,id,package_id },
     "POST"
   );
 };
@@ -2443,8 +2455,16 @@ export const reqReviewDaiWithdraw= (order_id,review_status,user_id,package_id) =
 export const getGameUserLoginHistory = (reqData) => {
   return ajax(
     BASE + `/Operation/Api/GetGameUserLoginHistory`,
-    { ...reqData,platform_name:"lob",token:"33840c9cb9ff6668a5d899efcd0c1fd683d8f46a",limit:20,page:1 },
+    { ...reqData },
     "GET"
   );
 };
+export const getCreditUserlist = () => {
+  return ajax(
+    BASE + `/credit/userlist`,
+    { },
+    "GET"
+  );
+};
+
 

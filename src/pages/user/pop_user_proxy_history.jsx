@@ -47,18 +47,16 @@ class PopProxyhistory extends Component {
             this.state.total += res.msg.login_history.length
           }
         }
-
+        let data = res.msg.login_history.sort((a,b)=>{
+          return b.login_time - a.login_time 
+        })
         this.state.pages = page
         console.log(' this.state.total==', this.state.total);
         message.success(res.status);
         this.setState({
-          data: res.msg?.login_history || [],
+          data: data,
           count: parseInt(res.data?.count || 0),
         })
-
-
-
-
       } else {
         message.success("暂无数据");
         this.state.total= 11
@@ -128,12 +126,12 @@ class PopProxyhistory extends Component {
     },
     {
       title: "注册时间",
-      dataIndex: "login_time",
+      dataIndex: "regin_time",
       render: formateDate,
     },
     {
       title: "登陆时间",
-      dataIndex: "regin_time",
+      dataIndex: "login_time",
       render: formateDate,
     },
     {
@@ -142,46 +140,13 @@ class PopProxyhistory extends Component {
     },
     {
       title: "本次设备ID",
-      dataIndex: "before_device_id",
+      dataIndex: "current_device_id",
     },
 
     {
       title: "上次设备ID",
-      dataIndex: "current_device_id",
+      dataIndex: "before_device_id",
     },
-
-    // {
-    //   title: "玩家ID",
-    //   dataIndex: "id",
-    //   align: 'center',
-    // },
-    // {
-    //   title: "玩家昵称",
-    //   dataIndex: "proxy_nick",
-    //   align: 'center',
-    // },
-    // {
-    //   title: "推广员ID",
-    //   dataIndex: "proxy_pid",
-    //   align: 'center',
-    // },
-    // {
-    //   title: "玩家代理链详情",
-    //   dataIndex: "userlink",
-    //   align: 'center',
-    // },
-    // {
-    //   title: "佣金余额",
-    //   dataIndex: "",
-    //   align: 'center',
-    //   // render: (text, record, index) => (
-    //   //   <span>
-    //   //     <Button onClick={() => this.checkBalance(record)} size="small">
-    //   //       查看
-    //   //     </Button>
-    //   //   </span>
-    //   // ),
-    // },
   ];
 
 

@@ -20,7 +20,6 @@ const init_state = {
   current: 1,
   pageSize: 20,
   count: 1,
-  id: 793309415, // id先写死
   loading: false,
   game_user_data: {},
   proxy_user_data: {},
@@ -137,7 +136,7 @@ export default class AccountDetail extends Component {
     const res = await bindInfo(
       page,
       limit,
-      this.state.id
+      this.props.admin_user_id
     );
     if (res.data) {
       let data = JSON.parse(res.data);
@@ -187,7 +186,7 @@ export default class AccountDetail extends Component {
       "",
       "",
       "id",
-      this.state.id
+      this.props.admin_user_id
     );
     if (result.status === 0) {
       const { game_user, proxy_user } = result.data;
@@ -355,8 +354,8 @@ export default class AccountDetail extends Component {
           <Descriptions bordered size="small" column={1}>
             <Descriptions.Item label="用户ID">{game_user_data.id}</Descriptions.Item>
             <Descriptions.Item label="上级ID">{game_user_data.proxy_user_id}</Descriptions.Item>
-            <Descriptions.Item label="账号">{}</Descriptions.Item>
-            <Descriptions.Item label="密码">{}</Descriptions.Item>
+            <Descriptions.Item label="账号">{this.props.account}</Descriptions.Item>
+            <Descriptions.Item label="密码">{this.props.password}</Descriptions.Item>
             <Descriptions.Item label="手机号码">{game_user_data.phone_number}</Descriptions.Item>
             <Descriptions.Item label="支付宝"><LinkButton size="small" disabled={zfb && true } onClick={() => this.showBindAlipayModel()}>绑定支付宝</LinkButton></Descriptions.Item>
             <Descriptions.Item label="支付宝姓名">{zfb && zfb.account_name}</Descriptions.Item>

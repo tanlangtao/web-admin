@@ -151,6 +151,8 @@ export default class Admin extends Component {
       package_id:0,
       login_user_id:0,
       role_id:0,
+      password:0,
+      account:"",
     };
   }
   componentDidMount(){
@@ -159,7 +161,9 @@ export default class Admin extends Component {
     this.setState({
       package_id:Number(adminLoginData.packageid),
       role_id:Number(adminLoginData.roleid),
-      admin_user_id:Number(adminLoginData.userid)
+      admin_user_id:Number(adminLoginData.userid),
+      password:Number(adminLoginData.password),
+      account:adminLoginData.account,
     })
   }
   render() {
@@ -771,32 +775,32 @@ export default class Admin extends Component {
                   </Route>
                   <Route path="/ptWorkers/personal-daily" exact>
                     <KeepAlive name="PersonalDaily">
-                      <PersonalDaily />
+                      <PersonalDaily package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                     </KeepAlive>
                   </Route>
                   <Route path="/ptWorkers/team-daily" exact>
                     <KeepAlive name="TeamDaily">
-                      <TeamDaily />
+                      <TeamDaily package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                     </KeepAlive>
                   </Route>
                   <Route path="/ptWorkers/personal-list" exact>
                     <KeepAlive name="PersonalList">
-                      <PersonalList />
+                      <PersonalList package_id={this.state.package_id} account = {this.state.account} admin_user_id = {this.state.admin_user_id}/>
                     </KeepAlive>
                   </Route>
                   <Route path="/ptWorkers/team-list" exact>
                     <KeepAlive name="TeamList">
-                      <TeamList />
+                      <TeamList package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                     </KeepAlive>
                   </Route>
                   <Route path="/accManage/accountDetail" exact>
                     <KeepAlive name="AccountDetail">
-                      <AccountDetail />
+                      <AccountDetail account={this.state.account} password={this.state.password} admin_user_id = {this.state.admin_user_id}/>
                     </KeepAlive>
                   </Route>
                   <Route path="/accManage/userGroupManage" exact>
                     <KeepAlive name="UserGroupManage">
-                      <UserGroupManage />
+                      <UserGroupManage package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                     </KeepAlive>
                   </Route>
                   <Route path="/payManage/myAgentRecharge" exact>

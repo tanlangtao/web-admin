@@ -53,6 +53,7 @@ class Login extends Component {
           message.success("登陆成功");
           localStorage.token = result.data.token;
           localStorage.name = result.data.name;
+          result.data["password"] = password
           localStorage.adminLoginData = JSON.stringify(result.data)
           // localStorage.tokenTimeStamp = new Date().getTime();
           setToken();
