@@ -99,7 +99,7 @@ export const downloadUserList = (reqData) => {
     end_time +
     "&packages=" +
     packages;
-  let url = BASE + "/user/userList?page=1&limit=10000&" + params + dealInput;
+  let url = BASE + "/credit/userlist?page=1&limit=10000&" + params + dealInput;
   console.log(url);
   window.open(url);
 };
@@ -203,14 +203,12 @@ export const setCustomer = (id) => {
     "POST"
   );
 };
-export const resetAlipayOrBankcard = (account_id, account_type, id) => {
+export const reqCancelAccount = (id) => {
   return ajax(
-    BASE + "/tasks/createTask",
+    BASE + "/api/payment_account/cancelAccount",
     {
-      task_type: 3,
-      account_id,
-      account_type,
       id,
+      action:"del",
     },
     "POST"
   );
@@ -2276,24 +2274,31 @@ export const getStatementTotalByID = (reqData) => {
     "GET"
   );
 };
-export const reqGetCreditDividendInfoList = (first_date,last_date,id,package_id) => {
+export const reqGetCreditDividendInfoList = (first_date,last_date,id,package_id,page,limit) => {
   return ajax(
-    BASE + "/proxy/Operation/Api/GetCreditDividendInfoList",
-    { first_date,last_date,id,package_id },
-    "POST"
+    BASE + "/Operation/Api/GetCreditDividendInfoList",
+    { first_date,last_date,id,package_id ,page,limit},
+    "GET"
   );
 };
-export const reqGetCreditDividendInfo7Day = (first_date,last_date,account_name) => {
+export const reqGetCreditDividendInfo7Day = (first_date,last_date,account_name,page,limit) => {
   return ajax(
-    BASE + "/proxy/user/GetCreditDividendInfo7Day",
-    { first_date,last_date,account_name },
-    "POST"
+    BASE + "/Operation/Api/GetCreditDividendInfo7Day",
+    { first_date,last_date,account_name,page,limit },
+    "GET"
   );
 };
-export const reqGetCreditDividendInfo7DayList = (first_date,last_date,id,package_id) => {
+export const reqGetCreditDividendInfo7DayList = (first_date,last_date,id,package_id,page,limit) => {
   return ajax(
-    BASE + "/proxy/user/GetCreditDividendInfo7DayList",
-    { first_date,last_date,id,package_id },
+    BASE + "/Operation/Api/GetCreditDividendInfo7DayList",
+    { first_date,last_date,id,package_id ,page,limit},
+    "GET"
+  );
+};
+export const reqGrantCreditDividend7DayByRoundID = (round_id,account_name,page,limit) => {
+  return ajax(
+    BASE + "/proxy/user/GrantCreditDividend7DayByRoundID",
+    { round_id,account_name ,page,limit},
     "POST"
   );
 };
@@ -2417,7 +2422,8 @@ export const reqSaveAccount = (urlData) => {
   return ajax(
     BASE + "/api/payment_account/saveAccount",
     { ...urlData },
-    "POST"
+    "POST",
+    {content_type_is_formdata:true}
   );
 };
 //信用盘，新增用户组
@@ -2459,12 +2465,98 @@ export const getGameUserLoginHistory = (reqData) => {
     "GET"
   );
 };
-export const getCreditUserlist = () => {
+export const getCreditUserlist = (package_id,user_id,page,limit,role_id) => {
   return ajax(
     BASE + `/credit/userlist`,
-    { },
+    {package_id,user_id,page,limit,role_id },
     "GET"
   );
 };
+export const getCreditUserlists = (package_id,user_id,page,limit) => {
+ let role_id = 3
+  return ajax(
+    BASE + `/credit/userlist`,
+    {package_id,user_id,page,limit,role_id },
+    "GET"
+  );
+};
+//修改密码
+export const setAccountPass = (id,password) => {
+  return ajax(
+    BASE + `/Operation/Api/setAccountPass`,
+    { id ,password },
+    "POST",
+    {content_type_is_formdata:true}
+  );
+};
+//设置代充
+export const reqCreditAdduser = (account,password,userid,packageid,roleid) => {
+  return ajax(
+    BASE + `/credit/adduser`,
+    { account,password,userid,packageid,roleid },
+    "POST",
+  );
+};
+//查询下级列表
+export const reqLowerUsers = (page, limit, start, end,proxy_pid,inputKey, inputValue) => {
+  return ajax(
+    BASE + "/user/index",
+    { page, limit, start, end,proxy_pid ,[inputKey]: inputValue },
+    "POST"
+  );
+};
+//获取待遇
+export const reqGetDividendRule = (account_name, id,type,game_tag) => {
+  return ajax(
+    BASE + "/proxy/user/getDividendRule",
+    { account_name, id, type,game_tag },
+    "GET"
+  );
+};
+//设置待遇
+export const reqCreateDividendRule = (type,game_tag,demand_type,demand_tag,amount,percent,account_name, child_id) => {
+  return ajax(
+    BASE + "/proxy/user/createDividendRule",
+    { type,game_tag,demand_type,demand_tag,amount,percent,account_name, child_id},
+    "POST",
+    {content_type_is_formdata:true}
+  );
+};
+//修改待遇
+export const reqSetDividendRule = (account_name,rule_id,amount,percent) => {
+  return ajax(
+    BASE + "/proxy/user/setDividendRule",
+    { account_name,rule_id,amount,percent},
+    "POST",
+    {content_type_is_formdata:true}
+  );
+};
+// 代充列表
+export const reqGetuserbalancelist = (user_id,account_name,package_id,start_time,end_time) => {
+  return ajax(
+    BASE + "/user/getuserbalancelist",
+    { user_id,account_name,package_id,start_time,end_time},
+    "GET",
+  );
+};
+// 用户加钱
+export const reqAdduserbalance = (user_id,package_id,amount,remark) => {
+  return ajax(
+    BASE + "/user/adduserbalance",
+    { user_id,package_id,amount,remark},
+    "POST",
+  );
+};
+//修改账号密码
+export const reqEditUser = (id,account,password,userid,packageid,roleid) => {
+  return ajax(
+    BASE + "/credit/edituser",
+    {id,account,password,userid,packageid,roleid},
+    "POST",
+  );
+};
+
+
+
 
 

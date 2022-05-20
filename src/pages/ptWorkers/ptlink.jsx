@@ -14,35 +14,35 @@ const init_state = {
     isShowQrCodeModel:false,
     data: [
         {
-            name: "微信推广链接1",
+            name: "推广链接1",
             url: "www.lymrmfyp.com",
             img:"img1",
         },
         {
-            name: "微信推广链接2",
+            name: "推广链接2",
             url: "www.ywtcgyp.com",
             img:"img2",
         },
-        {
-            name: "qq推广链接1",
-            url: "www.lymrmfyp.com",
-            img:"img3",
-        },
-        {
-            name: "qq推广链接2",
-            url: "www.ywtcgyp.com",
-            img:"img4",
-        },
-        {
-            name: "其他推广链接1",
-            url: "www.lymrmfyp.com",
-            img:"img2",
-        },
-        {
-            name: "其他推广链接2",
-            url: "www.ywtcgyp.com",
-            img:"img1",
-        }
+        // {
+        //     name: "推广链接3",
+        //     url: "www.lymrmfyp.com",
+        //     img:"img3",
+        // },
+        // {
+        //     name: "推广链接4",
+        //     url: "www.ywtcgyp.com",
+        //     img:"img4",
+        // },
+        // {
+        //     name: "推广链接5",
+        //     url: "www.lymrmfyp.com",
+        //     img:"img2",
+        // },
+        // {
+        //     name: "推广链接6",
+        //     url: "www.ywtcgyp.com",
+        //     img:"img1",
+        // }
     ]
 };
 const copy = new Clipboard('.copy-btn');
@@ -59,7 +59,7 @@ export default class PtLink extends Component {
         this.state = init_state;
     }
     handlejump = () => {
-        window.location.replace('https://www.sina.lt/')
+        window.open('https://www.sina.lt/')
     }
     showQrCodeModel = (img,url) => {
         this.qrImg = img

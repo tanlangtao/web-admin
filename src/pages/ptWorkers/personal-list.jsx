@@ -11,7 +11,7 @@ import {
 } from "antd";
 import Mytable from "../../components/MyTable";
 import MyDatePicker from "../../components/MyDatePicker";
-import { formateDate } from "../../utils/dateUtils";
+import { formatDateYMD } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-button/index";
 import {
   reqGetCreditDividendInfo7Day,
@@ -72,7 +72,7 @@ export default class PersonalList extends Component {
       key: "first_balance",
       align: 'center',
       render: (text, record) => {
-        return (Math.round(record.first_balance * 1000000) / 1000000).toFixed();
+        return (Math.round(record.first_balance * 100) / 100);
       },
     },
     {
@@ -81,7 +81,7 @@ export default class PersonalList extends Component {
       key: "last_balance",
       align: 'center',
       render: (text, record) => {
-        return (Math.round(record.last_balance * 1000000) / 1000000).toFixed();
+        return (Math.round(record.last_balance * 100) / 100);
       },
     },
     {
@@ -90,7 +90,7 @@ export default class PersonalList extends Component {
       key: "amount",
       align: 'center',
       render: (text, record) => {
-        return (Math.round(record.amount * 1000000) / 1000000).toFixed();
+        return (Math.round(record.amount * 100) / 100);
       },
     },
     {
@@ -119,7 +119,7 @@ export default class PersonalList extends Component {
       key: "cost_money",
       align: 'center',
       render: (text, record) => {
-        return (Math.round(record.cost_money * 1000000) / 1000000).toFixed();
+        return (Math.round(record.cost_money * 100) / 100);
       },
     },
     {
@@ -127,18 +127,27 @@ export default class PersonalList extends Component {
       dataIndex: "last_grant",
       key: "last_grant",
       align: 'center',
+      render: (text, record) => {
+        return (Math.round(record.last_grant * 100) / 100);
+      },
     },
     {
         title: "直属下级分红",
         dataIndex: "child_money",
         key: "child_money",
         align: 'center',
+        render: (text, record) => {
+          return (Math.round(record.child_money * 100) / 100);
+        },
     },
     {
         title: "直属下级上期结转",
         dataIndex: "last_child_grant",
         key: "last_child_grant",
         align: 'center',
+        render: (text, record) => {
+          return (Math.round(record.last_child_grant * 100) / 100);
+        },
     },
     {
         title: "应发分红",
@@ -147,7 +156,7 @@ export default class PersonalList extends Component {
         align: 'center',
         render: (text, record) => {
             let sum = record.money + record.last_grant - record.child_money+record.last_child_grant
-            return (Math.round(sum * 1000000) / 1000000).toFixed();
+            return (Math.round(sum * 100) / 100);
         },
     },
     {
@@ -169,12 +178,14 @@ export default class PersonalList extends Component {
   getUsers = async (page, limit) => {
     this.setState({ loading: true });
     const result = await reqGetCreditDividendInfo7Day(
-      this.state.startTime,
-      this.state.endTime,
-      this.props.account,
+      formatDateYMD(this.state.startTime),
+      formatDateYMD(this.state.endTime),
+      this.props.admin_user_id,
+      page,
+      limit
     );
     // const result = {"status":0,"code":200,"msg":[{"_id":"ac49bbb1f423c7a5ec13d69044cc6d6c","date":"2022-04-30:2022-05-05","id":630997900,"package_id":20,"proxy_user_id":590176383,"type":4,"demand_type":3,"demand_tag":1,"game_tag":0,"money":176.19900000000234,"grant":176.19900000000234,"amount":34190.33,"percent":30,"statement":0,"deficit":0,"statement_type":0,"statement_percent":0,"deficit_percent":0,"cost_percent":2,"cost_type":0,"cost_money":1980.9,"statement_cost_money":0,"deficit_cost_money":0,"status":0,"first_balance":0,"last_balance":10809.67,"top_up":45000,"withdraw":0,"child_money":0,"last_child_grant":0,"last_grant":0,"top_up_cost":1350,"activity_cost":6750}]}
-    if (result.status === 0) {
+    if (result.code == 200) {
       this.setState({
         data: result.msg,
         count: result.msg && result.msg.length,
@@ -208,6 +219,7 @@ export default class PersonalList extends Component {
           >
             <Icon type="search" />
           </LinkButton>
+          <span style={{color:"red"}}>开始日期必须为周一，结束日期必须为周日</span>
         </span>
     );
       const extra = (

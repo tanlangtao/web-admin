@@ -11,6 +11,7 @@ import Mytable from "../../components/MyTable";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button/index";
 import { formateDate } from "../../utils/dateUtils";
+import moment from "moment";
 import {
   reqDaiPayOrderListByLoginId,
   reqApplyDaiPayAmount,
@@ -175,7 +176,7 @@ export default class MyAgentRecharge extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiPayOrderListByLoginId()
+      this.getReqDaiPayOrderListByLoginId(1,20)
     }else{
       message.error(`操作失败！${result.data}`)
     }
@@ -194,7 +195,7 @@ export default class MyAgentRecharge extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiPayOrderListByLoginId()
+      this.getReqDaiPayOrderListByLoginId(1,20)
     }else{
       message.error(`操作失败！${result.data}`)
     }
@@ -208,8 +209,8 @@ export default class MyAgentRecharge extends Component {
         start_time:this.state.startTime,
         end_time:this.state.endTime,
         export:1,
-        page:this.state.current,
-        limit:this.state.pageSize,
+        page,
+        limit,
         flag:3,
         order_status:Number(this.state.inputStatus),
       }
@@ -227,7 +228,17 @@ export default class MyAgentRecharge extends Component {
     this.setState({loading:false})
   };
   componentDidMount() {
-    this.getReqDaiPayOrderListByLoginId(1,20)
+    
+    //默认查询一周数据
+    let start = moment().startOf("day").subtract(1, "week");
+    let end = moment().startOf("day").subtract(-1, "day").subtract(1, "seconds");
+    this.setState({
+      startTime:start.format("YYYY-MM-DD HH:mm:ss"),
+      endTime:end.format("YYYY-MM-DD HH:mm:ss"),
+      MyDatePickerValue:[start,end]
+    },()=>{
+      this.getReqDaiPayOrderListByLoginId(1,20)
+    })
   }
   render() {
     const { data, count, current, pageSize, loading } = this.state;
@@ -291,6 +302,16 @@ export default class MyAgentRecharge extends Component {
           current,
           pageSize,
           loading,
+        }}
+        paginationOnchange={(page, limit) => {
+          this.getReqDaiPayOrderListByLoginId(page, limit);
+        }}
+        setPagination={(current, pageSize) => {
+            if (pageSize) {
+                this.setState({ current, pageSize });
+            } else {
+                this.setState({ current });
+            }
         }}
       />
       {this.state.isShowModifyModel && (

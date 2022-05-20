@@ -41,7 +41,6 @@ export const thirdPartyGameRouter = {
   "569a62be7ff123m117d446aa": { path: "/paicai/api", name: "派彩" },
   "5b1f3a3cb76a591e7f25173": { path: "/zhenrensx/api", name: "真人视讯" },
   "5b1f3a3cb76a591e7f251726": { path: "/caiyuanqp/api", name: "彩源棋牌" },
-  "5b1f3a3cb76a591e7f251729": { path: "/castcraft/api", name: "城堡争霸" },
   "5b1f3a3cb76a591e7f251736": { path: "/ag/api", name: "AG游戏" },
   "5b1f3a3cb1005251736": { path: "/pg/api", name: "PG游戏" },
   "5b1f3a3cb76a591e7f251735": { path: "/cq9/api", name: "CQ9游戏" },

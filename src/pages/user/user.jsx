@@ -94,24 +94,24 @@ export default class User extends Component {
       fixed: "left",
       align: 'center',
       width: 100,
-      // onCell: (record, rowIndex) => {
-      //   return {
-      //     onClick: (event) => {
-      //       this.game_nick = record.game_nick;
-      //       this.id = record.id;
-      //       this.rowIndex = rowIndex;
-      //       this.setState({
-      //         isNickShow: true,
-      //       });
-      //     }, // 点击行
-      //     onDoubleClick: (event) => {},
-      //     onContextMenu: (event) => {},
-      //     onMouseEnter: (event) => {
-      //       event.target.style.cursor = "pointer";
-      //     }, // 鼠标移入行
-      //     onMouseLeave: (event) => {},
-      //   };
-      // },
+      onCell: (record, rowIndex) => {
+        return {
+          onClick: (event) => {
+            this.game_nick = record.game_nick;
+            this.id = record.id;
+            this.rowIndex = rowIndex;
+            this.setState({
+              isNickShow: true,
+            });
+          }, // 点击行
+          onDoubleClick: (event) => {},
+          onContextMenu: (event) => {},
+          onMouseEnter: (event) => {
+            event.target.style.cursor = "pointer";
+          }, // 鼠标移入行
+          onMouseLeave: (event) => {},
+        };
+      },
     },
     {
       title: "推广员ID",
@@ -122,8 +122,8 @@ export default class User extends Component {
     },
     {
       title: "所属品牌",
-      dataIndex: "package_nick",
-      key: "package_nick",
+      dataIndex: "package_id",
+      key: "package_id",
       align: 'center',
       // width: 100,
     },
@@ -243,7 +243,7 @@ export default class User extends Component {
       dataIndex: "login_ip",
       key: "login_ip",
       align: 'center',
-      // width: 200,
+      width: 140,
     },
     // {
     //   title: "登录IP区域",
@@ -276,6 +276,7 @@ export default class User extends Component {
       title: "是否被限制登录",
       dataIndex: "status",
       align: 'center',
+      width:80,
       render: (text, record, index) => (
         <span>{parseInt(text) === 0 ? "是" : ""}</span>
       ),
@@ -567,6 +568,7 @@ export default class User extends Component {
     }
     this.setState({ isShowUserListRouter: true });
     this.recordID = record.id;
+    this.recordPid = record.package_id;
   };
   getMoreDetail = (record) => {
     this.moreModal = Modal.info({
@@ -724,12 +726,12 @@ export default class User extends Component {
         />
         <br />
         <br />
-        <LinkButton
+        {/* <LinkButton
           size="default"
           style={{ float: "right" }}
           onClick={this.download}
           icon="download"
-        />
+        /> */}
       </span>
     );
     console.log("user-data",data)
@@ -955,7 +957,7 @@ export default class User extends Component {
         )}
         {this.state.isShowUserListRouter&& (
           <Modal
-            title="用户列表"
+            title={`用户列表：${this.recordID}`}
             visible={this.state.isShowUserListRouter}
             onOk={()=>{
               this.setState({ isShowUserListRouter: false })
@@ -964,12 +966,13 @@ export default class User extends Component {
               this.setState({ isShowUserListRouter: false })
             }}
             footer={null}
-            width="85%"
+            width="95%"
             maskClosable={false}
             style={{ top: 10 }}
           >
             <UserListRouter 
               recordID={this.recordID}
+              recordPid={this.recordPid}
             />
           </Modal>
         )}

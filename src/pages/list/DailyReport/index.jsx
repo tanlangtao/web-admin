@@ -170,9 +170,12 @@ class DailyReport extends Component {
   initColumns = () => [
     {
       title: "品牌",
-      dataIndex: "name",
+      dataIndex: "package_id",
       fixed: "left",
       width: 100,
+      render: (text, record) => {
+        return record.name =="合计" ?"合计":record.package_id;
+      }
     },
     {
       title: "新增用户",
@@ -203,39 +206,12 @@ class DailyReport extends Component {
       render: reverseNumber,
     },
     {
-      title: "人工首充用户",
-      dataIndex: "first_pay_user_number_res",
-    },
-    {
-      title: "人工首充金额",
-      dataIndex: "first_pay_money_total_res",
-      render: reverseNumber,
-    },
-    {
-      title: "人工充值用户",
-      dataIndex: "pay_user_number_res",
-    },
-    {
-      title: "人工充值金额",
-      dataIndex: "pay_money_total_res",
-      render: reverseNumber,
-    },
-    {
       title: "官方兑换用户",
       dataIndex: "exchange_user_number",
     },
     {
       title: "官方兑换金额",
       dataIndex: "exchange_money_total",
-      render: reverseNumber,
-    },
-    {
-      title: "人工兑换用户",
-      dataIndex: "exchange_user_number_res",
-    },
-    {
-      title: "人工兑换金额",
-      dataIndex: "exchange_money_total_res",
       render: reverseNumber,
     },
     {

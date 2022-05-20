@@ -11,6 +11,7 @@ import Mytable from "../../components/MyTable";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button/index";
 import { formateDate } from "../../utils/dateUtils";
+import moment from "moment";
 import {
   reqUpdateDaiPaymentID,
   reqModifyDaiPaymentID,
@@ -25,16 +26,14 @@ const init_state = {
   count: 0,
   startTime: '',
   endTime: '',
-  inputKey: "user_id",
-  inputValue: "",
   inputStatus: 0,
   loading: false,
   data: [],
   MyDatePickerValue: null,
-  isShowChangeModal: false,
-  changeID: "",
+  isShowChangeModal:false,
+  changeID:"",
 };
-export default class ServiceRecharge extends Component {
+class PopUserRechargeDetail extends Component {
   constructor(props) {
     super(props);
     this.state = init_state;
@@ -45,34 +44,12 @@ export default class ServiceRecharge extends Component {
       title: "订单编号",
       dataIndex: "order_id",
       key: "order_id",
-      fixed: "left",
       align: 'center',
     },
     {
       title: "玩家ID",
       dataIndex: "user_id",
       key: "user_id",
-      fixed: "left",
-      align: 'center',
-    },
-    {
-      title: "玩家昵称",
-      dataIndex: "user_name",
-      key: "user_name",
-      align: 'center',
-      // width: 150,
-    },
-    {
-      title: "所属品牌",
-      dataIndex: "package_id",
-      key: "package_id",
-      align: 'center',
-      // width: 100,
-    },
-    {
-      title: "上级代理",
-      dataIndex: "proxy_user_id",
-      key: "proxy_user_id",
       align: 'center',
     },
     {
@@ -86,38 +63,14 @@ export default class ServiceRecharge extends Component {
       dataIndex: "created_at",
       key: "created_at",
       align: 'center',
-      render: formateDate,
+      width: 110,
+      render:formateDate,
     },
     {
       title: "代充ID",
       dataIndex: "replace_id",
       key: "replace_id",
       align: 'center',
-    },
-    {
-      title: "代充昵称",
-      dataIndex: "replace_name",
-      key: "replace_name",
-      align: 'center',
-    },
-    {
-      title: "运营操作",
-      dataIndex: "",
-      key: "",
-      align: 'center',
-      render: (text, record) => (
-        <span>
-          <LinkButton type="default" onClick={() => this.handleUpdateId(record)}>
-            更新代充
-            </LinkButton>
-          <LinkButton type="default" onClick={() => this.showChangeModel(record)}>
-            修改代充
-            </LinkButton>
-          <LinkButton type="default" onClick={() => this.handleAssigned(record)}>
-            指派
-            </LinkButton>
-        </span>
-      ),
     },
     {
       title: "到账金额",
@@ -137,7 +90,8 @@ export default class ServiceRecharge extends Component {
       dataIndex: "arrival_at",
       key: "arrival_at",
       align: 'center',
-      render: formateDate,
+      width: 110,
+      render:formateDate,
     },
     {
       title: "状态",
@@ -150,19 +104,19 @@ export default class ServiceRecharge extends Component {
           statusStr = "未支付"
         } else if (record.status == 2) {
           statusStr = "已过期"
-        } else if (record.status == 4) {
+        }else if (record.status == 4) {
           statusStr = "已撤销"
-        } else if (record.status == 5) {
+        }else if (record.status == 5 ) {
           statusStr = "已支付"
-        } else if (record.status == 6) {
+        }else if (record.status == 6 ) {
           statusStr = "已完成"
-        } else if (record.status == 7) {
+        }else if (record.status == 7 ) {
           statusStr = "补单一审通过"
-        } else if (record.status == 9) {
+        }else if (record.status == 9 ) {
           statusStr = "补单二审通过"
-        } else if (record.status == 11) {
+        }else if (record.status == 11 ) {
           statusStr = "充值失败"
-        } else if (record.status == 12) {
+        }else if (record.status == 12 ) {
           statusStr = "客服拒绝"
         }
         return statusStr;
@@ -173,43 +127,43 @@ export default class ServiceRecharge extends Component {
     this.setState({ loading: true });
     const result = await reqDaiPayOrderList(
       {
-        start_time: this.state.startTime,
-        end_time: this.state.endTime,
-        export: 1,
-        page: page,
-        limit: limit,
-        package_id: this.props.package_id,
-        flag: 3,
-        [this.state.inputKey]: Number(this.state.inputValue),
-        order_status: Number(this.state.inputStatus),
+        start_time:this.state.startTime,
+        end_time:this.state.endTime,
+        export:1,
+        page:this.state.current,
+        limit:this.state.pageSize,
+        package_id:this.props.package_id,
+        flag:3,
+        user_id:Number(this.props.user_id),
+        order_status:Number(this.state.inputStatus),
       }
     );
     if (result.status === 0) {
-      let data = result.data && JSON.parse(result.data)
+      let data =result.data && JSON.parse(result.data)
       console.log(data)
       this.setState({
-        data: data,
+        data:data,
         count: data.length,
       })
     } else {
       message.error(`失败！${result.data}`)
     }
-    this.setState({ loading: false })
+    this.setState({loading:false})
   };
-  showUpdateModel = (record) => {
+  showUpdateModel = (record)=>{
     this.setState({
-      isShowUpdateModel: true
+      isShowUpdateModel:true
     })
     this.record = record
   }
-  showChangeModel = (record) => {
+  showChangeModel = (record)=>{
     this.setState({
-      isShowChangeModal: true
+      isShowChangeModal:true
     })
     this.record = record
   }
   // 更新代充ID
-  handleUpdateId = async (record) => {
+  handleUpdateId = async (record)=>{
     const result = await reqUpdateDaiPaymentID(
       this.props.admin_user_id,
       record.order_id,
@@ -217,46 +171,51 @@ export default class ServiceRecharge extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiPayOrderList(1, 20)
-    } else {
+      this.getReqDaiPayOrderList(1,20)
+    }else{
       message.error(`操作失败！${message.data}`)
     }
     this.setState({
-      isShowUpdateModel: false
+      isShowUpdateModel:false
     })
   }
   // 修改代充
-  handleChange = async () => {
+  handleChange= async ()=>{
     const result = await reqModifyDaiPaymentID(
       Number(this.state.changeID),
       this.record.order_id,
       Number(this.record.package_id),
     )
     if (result.status === 0) {
-      this.getReqDaiPayOrderList(1, 20)
+      this.getReqDaiPayOrderList(1,20)
       message.success("操作成功！")
-    } else {
+    }else{
       message.error(`操作失败！${message.data}`)
     }
     this.setState({
-      isShowChangeModal: false
+      isShowChangeModal:false
     })
   }
   // 指派
-  handleAssigned = async (record) => {
+  handleAssigned = async (record)=>{
     const result = await reqLockDaiPayment(
       record.order_id,
       Number(record.package_id),
     )
     if (result.status === 0) {
-      this.getReqDaiPayOrderList(1, 20)
+      this.getReqDaiPayOrderList(1,20)
       message.success("操作成功！")
-    } else {
+    }else{
       message.error(`操作失败！${message.data}`)
     }
   }
   componentDidMount() {
-    this.getReqDaiPayOrderList(1, 20)
+    this.setState({
+        start_time:moment().startOf("day").subtract(1, "weeks"),
+        end_time:moment().startOf("day")
+    },()=>{
+        this.getReqDaiPayOrderList(1, 20)
+    })
   }
   render() {
     const { data, count, current, pageSize, loading } = this.state;
@@ -273,33 +232,12 @@ export default class ServiceRecharge extends Component {
           value={this.state.MyDatePickerValue}
         />
         &nbsp; &nbsp;
-              <Select
-          style={{ width: 200 }}
-          placeholder="Select a person"
-          value={this.state.inputKey}
-          onChange={(val) => {
-            this.setState({ inputKey: val });
-          }}
-        >
-          <Option value="user_id">玩家ID</Option>
-          <Option value="replace_id">代充ID</Option>
-        </Select>
-        &nbsp; &nbsp;
-              <Input
-          type="text"
-          placeholder="请输入关键字搜索"
-          style={{ width: 150 }}
-          onChange={(e) => {
-            this.setState({ inputValue: e.target.value });
-          }}
-          value={this.state.inputValue}
-        />
         &nbsp; &nbsp;
               <Select
           style={{ width: 200 }}
           placeholder="Select a person"
-          value={this.state.inputStatus == 0 ? "全部" : (this.state.inputStatus == 6 ? "已完成" : (
-            this.state.inputStatus == 1 ? "未支付" : ""
+          value={this.state.inputStatus == 0 ? "全部":(this.state.inputStatus == 6 ? "已完成":(
+            this.state.inputStatus == 1 ? "未支付" :""
           ))}
           onChange={(val) => {
             console.log(val)
@@ -334,16 +272,6 @@ export default class ServiceRecharge extends Component {
           pageSize,
           loading,
         }}
-        paginationOnchange={(page, limit) => {
-          this.getReqDaiPayOrderList(page, limit);
-        }}
-        setPagination={(current, pageSize) => {
-          if (pageSize) {
-            this.setState({ current, pageSize });
-          } else {
-            this.setState({ current });
-          }
-        }}
       />
       {this.state.isShowChangeModal && (
         <Modal
@@ -363,3 +291,4 @@ export default class ServiceRecharge extends Component {
     </Card>
   }
 }
+export default PopUserRechargeDetail;

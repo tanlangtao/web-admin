@@ -28,7 +28,7 @@ export default function MyDatePicker(props) {
         }}
         showTime={{
           format: "HH:mm",
-          defaultValue: [moment("00:00", "HH:mm"), moment("00:00", "HH:mm")],
+          defaultValue: [moment("00:00", "HH:mm"), moment("23:59", "HH:mm")],
         }}
         format="YYYY-MM-DD HH:mm:ss"
         placeholder={["开始日期", "结束日期"]}

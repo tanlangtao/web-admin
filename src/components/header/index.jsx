@@ -252,11 +252,11 @@ class Header extends Component {
           <Dropdown
             overlay={
               <Menu>
-                <Menu.Item key="1">
+                {/* <Menu.Item key="1">
                   <Button type="link" onClick={this.resetPWD}>
                     修改密码
                   </Button>
-                </Menu.Item>
+                </Menu.Item> */}
               </Menu>
             }
             trigger={["click"]}

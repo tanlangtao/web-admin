@@ -1,157 +1,173 @@
 import React, { Component } from "react";
 import {
-    Card,
-    Modal,
-    message,
-    Icon,
-    Input,
-    Select,
+  Card,
+  Modal,
+  message,
+  Icon,
+  Input,
+  Select,
 } from "antd";
 import Mytable from "../../components/MyTable";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button/index";
-import GoldDetail from "./goldDetail";
+import moment from "moment";
+import { formateDate } from "../../utils/dateUtils";
 import {
-    bindInfo,
-    reqUsers
+  reqUsers,
+  reqGetuserbalancelist
+
 } from "../../api/index";
+
 const { Option } = Select;
 const init_state = {
-    current: 1,
-    pageSize: 20,
-    count: 0,
-    id: 427223993, // id先写死
-    loading: false,
-    data: [],
-    isShowGoldDetail: false,
+  current: 1,
+  pageSize: 20,
+  count: 0,
+  startTime: '',
+  endTime: '',
+  loading: false,
+  data: [],
+  inputValue:"",
 };
 export default class MyGoldDetail extends Component {
-    constructor(props) {
-        super(props);
-        this.state = init_state;
-    }
+  constructor(props) {
+    super(props);
+    this.state = init_state;
+  }
 
-    initColumns = () => [
-        {
-            title: "代充ID",
-            dataIndex: "",
-            key: "",
-            align: 'center',
-        },
-        {
-            title: "历史总代充",
-            dataIndex: "",
-            key: "",
-            align: 'center',
-        },
-        {
-            title: "历史总代付",
-            dataIndex: "",
-            key: "",
-            align: 'center',
-            // width: 150,
-        },
-        {
-            title: "充提差",
-            dataIndex: "",
-            key: "",
-            align: 'center',
-            // width: 100,
-        },
-        {
-            title: "当前信用额度",
-            dataIndex: "",
-            key: "",
-            align: 'center',
-        },
-        {
-            title: "注册时间",
-            dataIndex: "",
-            key: "",
-            align: 'center',
-            width: 100,
-        },
-        {
-            title: "操作",
-            dataIndex: "",
-            key: "",
-            align: 'center',
-            render: (text, record) => (
-                <span>
-                    <LinkButton type="default" onClick={() => this.showGoldDetail()}>
-                        资金明细
-                    </LinkButton>
-                </span>
-            ),
-        },
-    ];
-    showGoldDetail = () => {
-        this.setState({
-            isShowGoldDetail: true
-        })
+  initColumns = () => [
+    {
+      title: "时间",
+      dataIndex: "created_at",
+      key: "created_at",
+      align: 'center',
+      render:formateDate
+    },
+    {
+      title: "代充ID",
+      dataIndex: "account_name",
+      key: "account_name",
+      align: 'center',
+    },
+    {
+      title: "玩家ID",
+      dataIndex: "user_id",
+      key: "user_id",
+      align: 'center',
+      // width: 150,
+    },
+    {
+      title: "交易前金额",
+      dataIndex: "before_amount",
+      key: "before_amount",
+      align: 'center',
+      // width: 100,
+    },
+    {
+      title: "交易金额",
+      dataIndex: "act_amount",
+      key: "act_amount",
+      align: 'center',
+    },
+    {
+      title: "交易后金额",
+      dataIndex: "after_amount",
+      key: "after_amount",
+      align: 'center',
+    },
+    {
+      title: "备注",
+      dataIndex: "remark",
+      key: "remark",
+      align: 'center',
+    },
+  ];
+  getUsers = async (page, limit) => {
+    this.setState({ loading: true });
+    const result = await reqGetuserbalancelist(
+        this.state.inputValue,
+        this.props.admin_user_id,
+        this.props.package_id,
+        this.state.startTime,
+        this.state.endTime,
+    );
+    if (result.status === 0) {
+      this.setState({
+        data: result.data,
+        count: result.data && result.data.length,
+        loading: false,
+      });
+    } else {
+      message.info(result.msg || "未检索到数据");
     }
-    getUsers = async (page, limit) => {
-        this.setState({ loading: true });
-        const result = await reqUsers(
-            page,
-            limit,
-            this.state.startTime,
-            this.state.endTime,
-            this.state.inputKey,
-            this.state.inputValue
-        );
-        if (result.status === 0) {
-            const { game_user, proxy_user } = result.data;
-            game_user.forEach((element) => {
-                proxy_user.forEach((item) => {
-                    if (element.id === item.id) {
-                        element.proxy_nick = item.proxy_pid;
-                    }
-                });
-            });
-            this.setState({
-                data: game_user,
-                count: result.data && result.data.count,
-                loading: false,
-                packages: result.data && result.data.packages,
-            });
-        } else {
-            message.info(result.msg || "未检索到数据");
-        }
-    };
-    componentDidMount() {
+  };
+  componentDidMount() {
+    this.setState({
+        startTime:moment().startOf("day").subtract(1, "month"),
+        endTime:moment().startOf("day")
+    },()=>{
         this.getUsers(1, 20)
-    }
-    render() {
-        const { data, count, current, pageSize, loading } = this.state;
-        return <Card>
-            <Mytable
-                tableData={{
-                    data,
-                    count,
-                    columns: this.initColumns(),
-                    x: "max-content",
-                    // y: "65vh",
-                    current,
-                    pageSize,
-                    loading,
-                }}
-            />
-            {this.state.isShowGoldDetail && (
-                <Modal
-                    title={`资金明细`}
-                    visible={this.state.isShowGoldDetail}
-                    onCancel={() => {
-                        this.setState({ isShowGoldDetail: false });
-                    }}
-                    footer={null}
-                    width="85%"
-                    maskClosable={false}
-                    style={{ top: 10 }}
-                >
-                    <GoldDetail></GoldDetail>
-                </Modal>
-            )}
-        </Card>
-    }
+    })
+  }
+  render() {
+    const { data, count, current, pageSize, loading } = this.state;
+    const title = (
+      <span>
+        <MyDatePicker
+          handleValue={(data, dateString) => {
+            this.setState({
+              startTime: dateString[0],
+              endTime: dateString[1],
+              MyDatePickerValue: data,
+            });
+          }}
+          value={this.state.MyDatePickerValue}
+        />
+        &nbsp; &nbsp;
+              <Input
+          type="text"
+          placeholder="请输入玩家ID"
+          style={{ width: 150 }}
+          onChange={(e) => {
+            this.setState({ inputValue: e.target.value });
+          }}
+          value={this.state.inputValue}
+        />
+        &nbsp; &nbsp;
+              <LinkButton
+          onClick={() => {
+            this.setState({ current: 1 });
+            this.getUsers(1, this.state.pageSize);
+          }}
+          size="default"
+        >
+          <Icon type="search" />
+        </LinkButton>
+      </span>
+    );
+    return <Card title={title} >
+      <Mytable
+        tableData={{
+          data,
+          count,
+          columns: this.initColumns(),
+          x: "max-content",
+          // y: "65vh",
+          current,
+          pageSize,
+          loading,
+        }}
+        paginationOnchange={(page, limit) => {
+            this.getUsers(page, limit);
+        }}
+        setPagination={(current, pageSize) => {
+            if (pageSize) {
+                this.setState({ current, pageSize });
+            } else {
+                this.setState({ current });
+            }
+        }}
+      />
+    </Card>
+  }
 }

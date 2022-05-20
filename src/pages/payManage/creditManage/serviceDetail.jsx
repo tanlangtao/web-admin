@@ -6,24 +6,28 @@ import {
     Icon,
     Input,
     Select,
+    InputNumber,
 } from "antd";
 import Mytable from "../../../components/MyTable";
 import MyDatePicker from "../../../components/MyDatePicker";
 import LinkButton from "../../../components/link-button/index";
 import GoldDetail from "../goldDetail";
+import moment from "moment";
 import {
-    bindInfo,
-    reqUsers,
-    createTask
+    reqCreditAdduser,
+    getCreditUserlists,
+    reqAdduserbalance,
+    reqEditUser
 } from "../../../api/index";
+import { formateDate } from "../../../utils/dateUtils";
 const { Option } = Select;
 const init_state = {
     current: 1,
     pageSize: 20,
     count: 0,
-    startTime: '',
-    endTime: '',
-    inputKey: "玩家ID",
+    start_time: '',
+    end_time: '',
+    inputKey: "user_id",
     inputValue: "",
     id: 427223993, // id先写死
     loading: false,
@@ -32,7 +36,11 @@ const init_state = {
     isResetPwdShow:false,
     isShowGoldChange:false,
     resetpwd:"",
-    changeGold:""
+    changeGold:"",
+    setAgentUserID:"",
+    setAgentAccount:"",
+    setAgentpassword:"",
+    isShowSetAgent:false,
 };
 export default class ServiceDetail extends Component {
     constructor(props) {
@@ -42,44 +50,45 @@ export default class ServiceDetail extends Component {
 
     initColumns = () => [
         {
-            title: "代充ID",
-            dataIndex: "",
-            key: "",
+            title: "账号名称",
+            dataIndex: "name",
+            key: "name",
             align: 'center',
         },
         {
-            title: "历史总代充",
-            dataIndex: "",
-            key: "",
-            align: 'center',
-        },
-        {
-            title: "历史总代付",
-            dataIndex: "",
-            key: "",
-            align: 'center',
-            // width: 150,
-        },
-        {
-            title: "充提差",
-            dataIndex: "",
-            key: "",
-            align: 'center',
-            // width: 100,
-        },
-        {
-            title: "当前信用额度",
-            dataIndex: "",
-            key: "",
+            title: "玩家ID",
+            dataIndex: "user_id",
+            key: "user_id",
             align: 'center',
         },
         {
             title: "注册时间",
-            dataIndex: "",
-            key: "",
+            dataIndex: "created_at",
+            key: "created_at",
             align: 'center',
-            width: 100,
+            render:(record)=>{
+                return moment(record.created_at).format("YYYY-MM-DD HH:mm:ss")
+            },
         },
+        {
+            title: "用户组",
+            dataIndex: "role_id",
+            key: "role_id",
+            align: 'center',
+        },
+        {
+            title: "所属品牌",
+            dataIndex: "package_id",
+            key: "package_id",
+            align: 'center',
+        },
+        {
+            title: "账户余额",
+            dataIndex: "user_balance",
+            key: "user_balance",
+            align: 'center',
+        },
+        
         {
             title: "操作",
             dataIndex: "",
@@ -87,34 +96,45 @@ export default class ServiceDetail extends Component {
             align: 'center',
             render: (text, record) => (
                 <span>
-                    <LinkButton type="default" onClick={() => this.showGoldDetail()}>
+                    <LinkButton  onClick={() => this.showGoldDetail(record)}>
                         资金明细
               </LinkButton>
-                    <LinkButton type="default" onClick={() =>this.resetPwd(record)}>
+                    <LinkButton  onClick={() =>this.resetPwd(record)}>
                         重置密码
               </LinkButton>
-                    <LinkButton type="default" onClick={() =>this.goldChange(record)}>
+                    <LinkButton  onClick={() =>this.goldChange(record)}>
                         资金变动
               </LinkButton>
                 </span>
             ),
         },
     ];
-    showGoldDetail = () => {
+    showGoldDetail = (record) => {
         this.setState({
             isShowGoldDetail: true
         })
+        this.recordID = record.user_id
     }
     resetPwd = (record) => {
         this.setState({ isResetPwdShow: true });
-        this.recordID = record.id;
+        this.record = record
     };
     goldChange = (record) => {
         this.setState({ isShowGoldChange: true });
-        this.recordID = record.id;
+        this.record = record;
     };
     handleResetpwd = async () => {
-        const res = await createTask(this.recordID, this.state.resetpwd);
+        if(this.state.resetpwd == ""){
+            return message.info("密码不能为空！")
+        }
+        const res = await reqEditUser(
+            this.record.id, 
+            this.record.name, 
+            this.state.resetpwd,
+            this.record.user_id,
+            this.record.package_id,
+            this.record.role_id
+        );
         if (res.status === 0) {
             message.success("操作成功！");
             this.setState({ resetpwd: "", isResetPwdShow: false });
@@ -123,45 +143,65 @@ export default class ServiceDetail extends Component {
         }
     };
     handleGoldChange = async () => {
-        const res = await createTask(this.recordID, this.state.changeGold);
+        const res = await reqAdduserbalance(
+            this.record.user_id, 
+            this.record.package_id, 
+            this.state.changeGold,
+        );
         if (res.status === 0) {
             message.success("操作成功！");
             this.setState({ changeGold: "", isShowGoldChange: false });
+            this.getCreditUserlist(1,20)
         } else {
              message.success("操作失败:" + res.msg);
         }
     };
-    getUsers = async (page, limit) => {
+    getCreditUserlist = async (page, limit) => {
         this.setState({ loading: true });
-        const result = await reqUsers(
+        const result = await getCreditUserlists(
+            this.props.package_id,
+            this.state.inputValue,
             page,
             limit,
-            this.state.startTime,
-            this.state.endTime,
-            this.state.inputKey,
-            this.state.inputValue
         );
         if (result.status === 0) {
-            const { game_user, proxy_user } = result.data;
-            game_user.forEach((element) => {
-                proxy_user.forEach((item) => {
-                    if (element.id === item.id) {
-                        element.proxy_nick = item.proxy_pid;
-                    }
-                });
-            });
             this.setState({
-                data: game_user,
-                count: result.data && result.data.count,
-                loading: false,
-                packages: result.data && result.data.packages,
+                data: result.data,
+                count: result.data && result.data.length,
             });
         } else {
             message.info(result.msg || "未检索到数据");
         }
+        this.setState({
+            loading: false,
+        });
     };
+    handSetAgent =  async () => {
+        if (this.state.setAgentAccount == "" ||this.state.setAgentpassword == "") {
+            return message.info("代充账号密码不能为空!");
+        }
+        const res = await reqCreditAdduser(
+            this.state.setAgentAccount,
+            this.state.setAgentpassword,
+            this.state.setAgentUserID,
+            String(this.props.package_id),
+            3,//代充默认为3
+        );
+        if (res.status == 0) {
+            message.success("操作成功！");
+            this.setState({ setAgentUserID: "",setAgentAccount: "", setAgentpassword: "",isShowSetAgent:false });
+            this.getCreditUserlist(1,20)
+        } else {
+            message.info("操作失败:" + res.msg);
+        }
+    }
     componentDidMount() {
-        this.getUsers(1, 20)
+        this.setState({
+            start_time:moment().startOf("day").subtract(1, "month"),
+            end_time:moment().startOf("day")
+        },()=>{
+            this.getCreditUserlist(1, 20)
+        })
     }
     render() {
         const { data, count, current, pageSize, loading } = this.state;
@@ -169,7 +209,7 @@ export default class ServiceDetail extends Component {
             <span>
                 <Input
                     type="text"
-                    placeholder="请输入代充ID"
+                    placeholder="请输入查询玩家ID"
                     style={{ width: 150 }}
                     onChange={(e) => {
                         this.setState({ inputValue: e.target.value });
@@ -180,11 +220,19 @@ export default class ServiceDetail extends Component {
                 <LinkButton
                     onClick={() => {
                         this.setState({ current: 1 });
-                        this.getUsers(1, this.state.pageSize);
+                        this.getCreditUserlist(1, this.state.pageSize);
                     }}
                     size="default"
                 >
                     <Icon type="search" />
+                </LinkButton>
+                &nbsp; &nbsp;
+                <LinkButton
+                    onClick={() => {
+                        this.setState({ isShowSetAgent: true });
+                    }}
+                    size="default"
+                >新增代充
                 </LinkButton>
             </span>
         );
@@ -200,10 +248,20 @@ export default class ServiceDetail extends Component {
                     pageSize,
                     loading,
                 }}
+                paginationOnchange={(page, limit) => {
+                    this.getCreditUserlist(page, limit);
+                }}
+                setPagination={(current, pageSize) => {
+                    if (pageSize) {
+                        this.setState({ current, pageSize });
+                    } else {
+                        this.setState({ current });
+                    }
+                }}
             />
             {this.state.isShowGoldDetail && (
                 <Modal
-                    title={`资金明细`}
+                    title={`资金明细 ${this.recordID}`}
                     visible={this.state.isShowGoldDetail}
                     onCancel={() => {
                         this.setState({ isShowGoldDetail: false });
@@ -213,7 +271,7 @@ export default class ServiceDetail extends Component {
                     maskClosable={false}
                     style={{ top: 10 }}
                 >
-                    <GoldDetail></GoldDetail>
+                    <GoldDetail user_id = {this.recordID}></GoldDetail>
                 </Modal>
             )}
             {this.state.isResetPwdShow && (
@@ -234,19 +292,47 @@ export default class ServiceDetail extends Component {
             )}
              {this.state.isShowGoldChange && (
                 <Modal
-                    title="资金变动"
+                    title={`资金变动 ${this.record.user_id}`}
                     visible={this.state.isShowGoldChange}
                     onOk={this.handleGoldChange}
                     onCancel={() => {
                         this.setState({ isShowGoldChange: false });
                     }}
                 >
-                    <Input
+                    <InputNumber
                         value={this.state.changeGold}
-                        onChange={(e) => this.setState({ changeGold: e.target.value })}
-                    />
+                        onBlur={(e) => this.setState({ changeGold: e.target.value })}
+                    /> &nbsp; &nbsp;<span style={{color:"red"}}>正数为加钱， 负数为减钱</span>
                 </Modal>
             )}
+            {
+                this.state.isShowSetAgent && (
+                    <Modal
+                        title="设置代充"
+                        visible={this.state.isShowSetAgent}
+                        onOk={this.handSetAgent}
+                        onCancel={() => {
+                            this.setState({ isShowSetAgent: false });
+                        }}
+                    >
+                         <p>玩家ID <Input
+                            placeholder="请输入玩家ID"
+                            value={this.state.setAgentUserID}
+                            onChange={(e) => this.setState({ setAgentUserID: e.target.value })}
+                        /></p>
+                        <p>代充账号 <Input
+                            placeholder="请输入代充账号"
+                            value={this.state.setAgentAccount}
+                            onChange={(e) => this.setState({ setAgentAccount: e.target.value })}
+                        /></p>
+                        <p>代充密码 <Input
+                            placeholder="请输入代充密码"
+                            value={this.state.setAgentpassword}
+                            onChange={(e) => this.setState({ setAgentpassword: e.target.value })}
+                        /></p>
+                    </Modal>
+                )
+            }
         </Card>
     }
 }

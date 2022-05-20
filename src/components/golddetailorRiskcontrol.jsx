@@ -11,13 +11,32 @@ import {
   reversePercent,
 } from "../utils/commonFuntion";
 import LinkButton from "./link-button";
-import { gameRouter } from "../utils/public_variable";
+import { gameRouter, thirdPartyGameRouter } from "../utils/public_variable";
 import "../css/gamedata.css";
+
+// 三方遊戲需要撈取單筆數據的遊戲清單
+let new_thirdPartyGameRouter = { ...thirdPartyGameRouter };
+// 彩源棋牌＆直播平台不需要
+delete new_thirdPartyGameRouter["5b1f3a3cb76a591e7f251726"];
+delete new_thirdPartyGameRouter["5b1f3a3cb76a451e210726"];
+// 以下後端還在開發中，等後端開發完畢就可以刪除了
+// AG
+delete new_thirdPartyGameRouter["5b1f3a3cb76a591e7f251736"];
+// 三昇
+delete new_thirdPartyGameRouter["5b1f3a3cb76a451e211109"];
+// 派彩
+delete new_thirdPartyGameRouter["569a62be7ff123m117d446aa"];
+// 沙巴體育
+delete new_thirdPartyGameRouter["5b1f3a3cb76a591e7f25179"];
+// 真人視訊
+delete new_thirdPartyGameRouter["5b1f3a3cb76a591e7f25173"];
 
 let new_gameRouter1 = {
   ...gameRouter,
+  ...new_thirdPartyGameRouter,
   "5b1f3a3cb76a591e7f251729": { path: "/castcraft/api", name: "城堡争霸" },
 };
+
 export default function GoldDetailorRiskControl({
   goldDetailData,
   tableOnchange,
@@ -163,7 +182,9 @@ const reverse = (pokers, isarray = true) => {
 async function check_game_data(record) {
   let { pay_account_id, id, round_id } = record;
   let str;
+  let isThirdParty;
   let modal_width = "50%";
+
   for (const key in new_gameRouter1) {
     if (key === pay_account_id) {
       str = new_gameRouter1[key].path;
@@ -173,6 +194,21 @@ async function check_game_data(record) {
     message.info("暂无游戏数据");
     return;
   }
+  // 如果是三方的遊戲，則獲取三方的單筆紀錄url，並另外開啟新視窗顯示
+  for (const key in thirdPartyGameRouter) {
+    if (key === pay_account_id) isThirdParty = true;
+  }
+
+  if (isThirdParty) {
+    const newstr = `${str}/getGameData?game_id=${record.pay_account_id}&id=${id}&round_id=${round_id}`;
+    const res = await reqGameData(newstr);
+    if (res.code === 0) {
+      let url = res.data;
+      return window.open(url, "_blank");
+    }
+    return message.info("暂无游戏数据");
+  }
+
   let newstr, res;
   if (pay_account_id === "5b1f3a3cb76a591e7f251731") {
     newstr = `/duofuduocai/api/getGamePlayerData?game_id=${record.pay_account_id}&round_id=${round_id}`;
@@ -2715,19 +2751,16 @@ async function check_game_data(record) {
 }
 const initColumns = [
   {
-    title: "玩家ID",
+    title: "user_id",
     dataIndex: "id",
-    align: 'center',
   },
   {
     title: "产生来源",
     dataIndex: "pay_account_name",
-    align: 'center',
   },
   {
     title: "余额(变动前)",
     dataIndex: "total_balance",
-    align: 'center',
     render: (text, record) => {
       if (record) {
         return <div>{(record.balance + record.banker_balance).toFixed(6)}</div>;
@@ -2739,7 +2772,6 @@ const initColumns = [
   {
     title: "变动金额",
     dataIndex: "final_pay",
-    align: 'center',
     render: (text, record) => {
       return <span>{text.toFixed(6)}</span>;
     },
@@ -2747,7 +2779,6 @@ const initColumns = [
   {
     title: "税收",
     dataIndex: "tax",
-    align: 'center',
     render: (text, record) => {
       return <span>{record.final_pay > 0 ? text.toFixed(6) : ""}</span>;
     },
@@ -2755,7 +2786,6 @@ const initColumns = [
   {
     title: "余额(变动后)",
     dataIndex: "total_final_balance",
-    align: 'center',
     render: (text, record) => {
       if (record) {
         return (
@@ -2771,19 +2801,16 @@ const initColumns = [
   {
     title: "备注",
     dataIndex: "pay_reason",
-    align: 'center',
     width: "15%",
   },
   {
     title: "创建时间",
     dataIndex: "create_time",
-    align: 'center',
     render: formateDate,
   },
   {
     title: "游戏数据",
     dataIndex: "",
-    align: 'center',
     render: (text, record) => (
       <LinkButton onClick={() => check_game_data(record)}>游戏数据</LinkButton>
     ),
@@ -2791,7 +2818,6 @@ const initColumns = [
   {
     title: "有效投注",
     dataIndex: "bet_money",
-    align: 'center',
     render: (text, record) => {
       return <span>{text && text.toFixed(6)}</span>;
     },

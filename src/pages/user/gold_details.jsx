@@ -6,7 +6,7 @@ import moment from "moment";
 import {
 	userDetail,
 	bindInfo,
-	resetAlipayOrBankcard,
+	reqCancelAccount,
 	GoldDetailorRiskControlSUMdata,
 } from "../../api/index";
 import { formateDate } from "../../utils/dateUtils";
@@ -73,6 +73,10 @@ class GoldDetail extends Component {
 			console.log("newData:", newData);
 			this.setState({
 				data: newData,
+			});
+		}else if(isBindInfo){
+			this.setState({
+				data: [],
 			});
 		}
 
@@ -204,24 +208,24 @@ class GoldDetail extends Component {
 		let { data, count, current, sumData } = this.state;
 		
 		let getItem=()=>{
-			if(data){
+			if (data) {
 				let zfb,yhk,trc,erc = null
 				data.forEach(e=>{
-					if(e.type == 3){
-						yhk = e
-					}else if(e.type == 4){
-						erc = e
-					}else if(e.type == 5){
-						trc = e
-					}else if(e.type == 2){
-						zfb = e
-					}
+				  if(e.type == 3){
+					yhk = e
+				  }else if(e.type == 4){
+					erc = e
+				  }else if(e.type == 5){
+					trc = e
+				  }else if(e.type == 2){
+					zfb = e
+				  }
 				})
-				console.log(zfb,yhk,trc,erc)
+				console.log(zfb)
 				return <Descriptions bordered size="small" column={1}>
 					<Descriptions.Item label="支付宝"><LinkButton size="small" disabled={!zfb && true } onClick={() => this.reset(zfb, "2")}>解绑支付宝</LinkButton></Descriptions.Item>
 					<Descriptions.Item label="支付宝姓名">{zfb && zfb.account_name}</Descriptions.Item>
-					<Descriptions.Item label="支付宝账号">{zfb && zfb.account_card}</Descriptions.Item>
+            		<Descriptions.Item label="支付宝账号">{zfb && zfb.account_card}</Descriptions.Item>
 					<Descriptions.Item label="银行卡"><LinkButton size="small" disabled={!yhk && true } onClick={() => this.reset(yhk, "3")}>解绑银行卡</LinkButton></Descriptions.Item>
 					<Descriptions.Item label="银行名称" >{yhk && yhk.bank_name}</Descriptions.Item>
 					<Descriptions.Item label="银行卡号">{yhk && yhk.card_num}</Descriptions.Item>
@@ -246,11 +250,11 @@ class GoldDetail extends Component {
 							if (diffDays > 31) {
 								message.info("请选择时间范围不大于31天");
 							} else if (data && data.length !== 0) {
-								start = moment(data.valueOf()).format("YYYY-MM-DD HH:mm:ss");
+								start = moment(data[0].valueOf()).format("YYYY-MM-DD HH:mm:ss");
 								end = moment(data[1].valueOf() - 1).format("YYYY-MM-DD HH:mm:ss");
 								console.log(start, end);
 								this.startTime = start;
-								this.endTime = end;
+								this.endTime = end;	
 							} else {
 								this.startTime = "";
 								this.endTime = "";
@@ -307,158 +311,22 @@ class GoldDetail extends Component {
 			</Card>
 		);
 	}
-	initColumns = () => {
-		return [
-			{
-				title: "支付宝账号",
-				dataIndex: "account_card",
-				align: 'center',
-				render: (text, record) => {
-					if (text) {
-						return (
-							<div>
-								{text}
-							</div>
-						);
-					} else {
-						return <div />;
-					}
-				},
-			},
-			{
-				title: "绑定支付宝时间",
-				dataIndex: "alipay_created_at",
-				align: 'center',
-			},
-			{
-				title: "USDT钱包地址",
-				dataIndex: "wallet_addr",
-				align: 'center',
-				width: 120,
-				render: (text, record) => (
-					<div style={{ wordWrap: "break-word", wordBreak: "break-word" }}>{text}</div>
-				),
-			},
-			{
-				title: "USDT协议",
-				dataIndex: "protocol",
-				align: 'center',
-			},
-			{
-				title: "开户人姓名",
-				dataIndex: "card_name",
-				align: 'center',
-				render: (text, record) => {
-					if (text) {
-						return <div>{text}</div>;
-					} else {
-						return <div />;
-					}
-				},
-			},
-			{
-				title: "银行名称",
-				dataIndex: "bank_name",
-				align: 'center',
-			},
-			{
-				title: "银行卡号",
-				dataIndex: "card_num",
-				align: 'center',
-				render: (text, record) => {
-					if (text) {
-						return (
-							<div>
-								{text}
-							</div>
-						);
-					} else {
-						return <div />;
-					}
-				},
-			},
-			{
-				title: "绑定银行卡时间",
-				dataIndex: "bankcard_created_at",
-				align: 'center',
-			},
-			// {
-			// 	title: "是否灰名单",
-			// 	dataIndex: "is_gray",
-			// },
-			// {
-			// 	title: "灰名单备注",
-			// 	dataIndex: "black_remark",
-			// },
-			{
-				title: "开户省",
-				dataIndex: "info",
-				key: "info1",
-				align: 'center',
-				render: text => {
-					console.log(JSON.parse(text));
-					return JSON.parse(text)?.bank_province;
-				},
-			},
-			{
-				title: "开户市",
-				dataIndex: "info",
-				key: "info2",
-				align: 'center',
-				render: text => {
-					console.log(JSON.parse(text));
-					return JSON.parse(text)?.bank_city;
-				},
-			},
-			// {
-			// 	title: "备注人",
-			// 	dataIndex: "remark_name",
-			// },
-			// {
-			// 	title: "备注时间",
-			// 	dataIndex: "remark_at",
-			// },
-			{
-				title: "操作",
-				dataIndex: "option",
-				align: 'center',
-				render: (text, record) => (
-					<span>
-						<LinkButton type="default" onClick={() => this.reset(record, "2")}>
-							解绑支付宝
-						</LinkButton>
-						<LinkButton type="default" onClick={() => this.reset(record, "3")}>
-							解绑银行卡
-						</LinkButton>
-						<LinkButton type="default" onClick={() => {
-							if (record.protocol === "TRC20") {
-								this.reset(record, "5")
-							} else {
-								this.reset(record, "4")
-							}
-						}
-						}>
-							解绑USDT
-						</LinkButton>
-					</span>
-				),
-			},
-		];
-	};
 	reset = (record, type) => {
+		let self = this
 		if (record.type !== type) {
 			message.info("没有绑定信息");
 		} else {
 			let id = parseInt(record.id);
-			let type = parseInt(record.type);
-			let user_id = parseInt(record.user_id);
-			Modal.confirm({
+			let modal = Modal
+			modal.confirm({
 				title: "信息",
 				content: "确定要解绑吗?",
 				async onOk() {
-					const res = await resetAlipayOrBankcard(id, type, user_id);
-					if (res.status === 0) {
+					const res = await reqCancelAccount(id);
+					if (res.status == 0) {
 						message.success(res.msg);
+						self.getUsers(1,20)
+						modal.destroyAll()
 					} else {
 						message.info(res.msg);
 					}

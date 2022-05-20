@@ -12,6 +12,7 @@ import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button/index";
 import riskcontrolfn from "../../components/riskcontrol";
 import { formateDate } from "../../utils/dateUtils";
+import moment from "moment";
 import {
   reqUpdateDaiWithdrawID,
   reqModifyDaiWithdrawID,
@@ -25,8 +26,6 @@ const init_state = {
   count: 0,
   startTime: '',
   endTime: '',
-  inputKey: "user_id",
-  inputValue: "",
   inputStatus: 0,
   loading: false,
   data: [],
@@ -35,7 +34,7 @@ const init_state = {
   changeID:"",
 
 };
-export default class MyAgentCash extends Component {
+ class PopUserCashDetail extends Component {
   constructor(props) {
     super(props);
     this.state = init_state;
@@ -46,50 +45,27 @@ export default class MyAgentCash extends Component {
       title: "订单ID",
       dataIndex: "order_id",
       key: "order_id",
-      fixed: "left",
       align: 'center',
     },
     {
       title: "玩家ID",
       dataIndex: "user_id",
       key: "user_id",
-      fixed: "left",
       align: 'center',
-    },
-    {
-      title: "玩家昵称",
-      dataIndex: "user_name",
-      key: "user_name",
-      align: 'center',
-      // width: 150,
-    },
-    {
-      title: "所属品牌",
-      dataIndex: "package_id",
-      key: "package_id",
-      align: 'center',
-      // width: 100,
-    },
-    {
-      title: "上级代理",
-      dataIndex: "proxy_user_id",
-      key: "proxy_user_id",
-      align: 'center',
-      width: 100,
     },
     {
       title: "订单金额",
       dataIndex: "amount",
       key: "amount",
       align: 'center',
-      width: 100,
     },
     {
       title: "创建时间",
       dataIndex: "created_at",
       key: "created_at",
       align: 'center',
-      width: 120,
+      width: 110,
+
       render:formateDate,
     },
     {
@@ -117,66 +93,10 @@ export default class MyAgentCash extends Component {
       },
     },
     {
-      title: "风控",
-      dataIndex: "",
-      key: "",
-      align: 'center',
-      render: (text, record) => (
-				<span>
-					<LinkButton
-						onClick={() => {
-							riskcontrolfn(record);
-						}}
-						type="default"
-					>
-						风控
-					</LinkButton>
-				</span>
-			),
-    },
-    {
       title: "代提ID",
       dataIndex: "replace_id",
       key: "replace_id",
       align: 'center',
-    },
-    {
-      title: "代提昵称",
-      dataIndex: "replace_name",
-      key: "replace_name",
-      align: 'center',
-    },
-    {
-      title: "运营操作",
-      dataIndex: "",
-      key: "",
-      align: 'center',
-      render: (text, record) => (
-        <span>
-          <LinkButton type="default" onClick={() => this.handleUpdateId(record)}>
-            更新代付
-              </LinkButton>
-          <LinkButton type="default" onClick={() => this.showChangeModel(record)}>
-            修改代付
-              </LinkButton>
-        </span>
-      ),
-    },
-    {
-      title: "运营审核",
-      dataIndex: "",
-      key: "",
-      align: 'center',
-      render: (text, record) => (
-        <span>
-          <LinkButton type="default" onClick={() => this.rejectCheck(record)}>
-            拒绝
-              </LinkButton>
-          <LinkButton type="default" onClick={() => this.passCheck(record)}>
-            通过
-              </LinkButton>
-        </span>
-      ),
     },
     {
       title: "到账金额",
@@ -196,6 +116,7 @@ export default class MyAgentCash extends Component {
       dataIndex: "arrival_at",
       key: "arrival_at",
       align: 'center',
+      width: 110,
       render:formateDate,
     },
     {
@@ -231,7 +152,7 @@ export default class MyAgentCash extends Component {
         limit:limit,
         package_id:this.props.package_id,
         flag:3,
-        [this.state.inputKey]:Number(this.state.inputValue),
+        user_id:Number(this.props.user_id),
         order_status:Number(this.state.inputStatus),
     })
     if(result.status === 0) {
@@ -264,7 +185,7 @@ export default class MyAgentCash extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiWithdrawOrderList(1,20)
+      this.getReqDaiWithdrawOrderList()
     }else{
       message.error(`操作失败！${result.data}`)
     }
@@ -278,7 +199,7 @@ export default class MyAgentCash extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiWithdrawOrderList(1,20)
+      this.getReqDaiWithdrawOrderList()
     }else{
       message.error(`操作失败！${result.data}`)
     }
@@ -296,7 +217,7 @@ export default class MyAgentCash extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiWithdrawOrderList(1,20)
+      this.getReqDaiWithdrawOrderList()
     }else{
       message.error(`操作失败！${result.data}`)
     }
@@ -311,13 +232,18 @@ export default class MyAgentCash extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiWithdrawOrderList(1,20)
+      this.getReqDaiWithdrawOrderList()
     }else{
       message.error(`操作失败！${result.data}`)
     }
   }
   componentDidMount() {
-    this.getReqDaiWithdrawOrderList(1, 20)
+    this.setState({
+        start_time:moment().startOf("day").subtract(1, "weeks"),
+        end_time:moment().startOf("day")
+    },()=>{
+      this.getReqDaiWithdrawOrderList(1, 20)
+    })
   }
   render() {
     const { data, count, current, pageSize, loading } = this.state;
@@ -332,31 +258,6 @@ export default class MyAgentCash extends Component {
             });
           }}
           value={this.state.MyDatePickerValue}
-        />
-        &nbsp; &nbsp;
-              <Select
-          style={{ width: 200 }}
-          placeholder="Select a person"
-          value={this.state.inputKey}
-          onChange={(val) => {
-            this.setState({ inputKey: val });
-          }}
-        >
-          <Option value="user_id">玩家ID</Option>
-          <Option value="proxy_user_id">上级ID</Option>
-          <Option value="order_id">订单ID</Option>
-          {/* <Option value="start_time">创建时间</Option> */}
-          {/* <Option value="game_nick">金额区间</Option> */}
-        </Select>
-        &nbsp; &nbsp;
-              <Input
-          type="text"
-          placeholder="请输入关键字搜索"
-          style={{ width: 150 }}
-          onChange={(e) => {
-            this.setState({ inputValue: e.target.value });
-          }}
-          value={this.state.inputValue}
         />
         &nbsp; &nbsp;
               <Select
@@ -395,16 +296,6 @@ export default class MyAgentCash extends Component {
           pageSize,
           loading,
         }}
-        paginationOnchange={(page, limit) => {
-            this.getReqDaiWithdrawOrderList(page, limit);
-        }}
-        setPagination={(current, pageSize) => {
-            if (pageSize) {
-                this.setState({ current, pageSize });
-            } else {
-                this.setState({ current });
-            }
-        }}
       />
       {this.state.isShowChangeModal && (
         <Modal
@@ -424,3 +315,4 @@ export default class MyAgentCash extends Component {
     </Card>
   }
 }
+export default PopUserCashDetail;

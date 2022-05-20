@@ -125,24 +125,24 @@ class MoreDetail extends Component {
           dataIndex: "pay_money_total",
           render: reverseNumber,
         },
-        {
-          title: "人工首充用户",
-          dataIndex: "first_pay_user_number_res",
-        },
-        {
-          title: "人工首充金额",
-          dataIndex: "first_pay_money_total_res",
-          render: reverseNumber,
-        },
-        {
-          title: "人工充值用户",
-          dataIndex: "pay_user_number_res",
-        },
-        {
-          title: "人工充值金额",
-          dataIndex: "pay_money_total_res",
-          render: reverseNumber,
-        },
+        // {
+        //   title: "人工首充用户",
+        //   dataIndex: "first_pay_user_number_res",
+        // },
+        // {
+        //   title: "人工首充金额",
+        //   dataIndex: "first_pay_money_total_res",
+        //   render: reverseNumber,
+        // },
+        // {
+        //   title: "人工充值用户",
+        //   dataIndex: "pay_user_number_res",
+        // },
+        // {
+        //   title: "人工充值金额",
+        //   dataIndex: "pay_money_total_res",
+        //   render: reverseNumber,
+        // },
         {
           title: "官方兑换用户",
           dataIndex: "exchange_user_number",
@@ -152,15 +152,15 @@ class MoreDetail extends Component {
           dataIndex: "exchange_money_total",
           render: reverseNumber,
         },
-        {
-          title: "人工兑换用户",
-          dataIndex: "exchange_user_number_res",
-        },
-        {
-          title: "人工兑换金额",
-          dataIndex: "exchange_money_total_res",
-          render: reverseNumber,
-        },
+        // {
+        //   title: "人工兑换用户",
+        //   dataIndex: "exchange_user_number_res",
+        // },
+        // {
+        //   title: "人工兑换金额",
+        //   dataIndex: "exchange_money_total_res",
+        //   render: reverseNumber,
+        // },
         {
           title: "玩家总赢额",
           dataIndex: "win_statement_total",

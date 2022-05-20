@@ -13,6 +13,7 @@ import LinkButton from "../../components/link-button/index";
 import AgentAccountDetail from "./agentAccountDetail";
 import riskcontrolfn from "../../components/riskcontrol";
 import { formateDate } from "../../utils/dateUtils";
+import moment from "moment";
 import {
   reqApplyDaiWithdraw,
   reqUsers,
@@ -199,7 +200,7 @@ export default class MyAgentCash extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiWithdrawOrderListByLoginId()
+      this.getReqDaiWithdrawOrderListByLoginId(1,20)
     }else{
       message.error(`操作失败！${result.data}`)
     }
@@ -229,35 +230,6 @@ export default class MyAgentCash extends Component {
       message.error(`失败！${result.data}`)
     }
   }
-  getUsers = async (page, limit) => {
-    this.setState({ loading: true });
-    const result = await reqUsers(
-      page,
-      limit,
-      this.state.startTime,
-      this.state.endTime,
-      this.state.inputKey,
-      this.state.inputValue
-    );
-    if (result.status === 0) {
-      const { game_user, proxy_user } = result.data;
-      game_user.forEach((element) => {
-        proxy_user.forEach((item) => {
-          if (element.id === item.id) {
-            element.proxy_nick = item.proxy_pid;
-          }
-        });
-      });
-      this.setState({
-        data: game_user,
-        count: result.data && result.data.count,
-        loading: false,
-        packages: result.data && result.data.packages,
-      });
-    } else {
-      message.info(result.msg || "未检索到数据");
-    }
-  };
   getStatusString(status){
     let statusStr = ''
     switch(status){
@@ -283,7 +255,16 @@ export default class MyAgentCash extends Component {
     return statusStr;
   }
   componentDidMount() {
-    this.getReqDaiWithdrawOrderListByLoginId(1,20)
+    //默认查询一周数据
+    let start = moment().startOf("day").subtract(1, "week");
+    let end = moment().startOf("day").subtract(-1, "day").subtract(1, "seconds");
+    this.setState({
+      startTime:start.format("YYYY-MM-DD HH:mm:ss"),
+      endTime:end.format("YYYY-MM-DD HH:mm:ss"),
+      MyDatePickerValue:[start,end]
+    },()=>{
+        this.getReqDaiWithdrawOrderListByLoginId(1,20)
+    })
   }
   render() {
     const { data, count, current, pageSize, loading } = this.state;
@@ -315,7 +296,7 @@ export default class MyAgentCash extends Component {
           placeholder="Select a person"
           value={this.state.inputStatus == 0 ?"全部" :(
             this.state.inputStatus == 3 ?"已提交" :(
-              this.state.inputStatus == 5?"已完成" :""
+              this.state.inputStatus == 4?"已完成" :""
             )
           )}
           onChange={(val) => {
@@ -349,6 +330,16 @@ export default class MyAgentCash extends Component {
           current,
           pageSize,
           loading,
+        }}
+        paginationOnchange={(page, limit) => {
+          this.getReqDaiWithdrawOrderListByLoginId(page, limit);
+        }}
+        setPagination={(current, pageSize) => {
+            if (pageSize) {
+                this.setState({ current, pageSize });
+            } else {
+                this.setState({ current });
+            }
         }}
       />
       {this.state.isShowAccountDetail && (
