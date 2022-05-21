@@ -30,7 +30,7 @@ const init_state = {
   inputValue: "",
   MyDatePickerValue: null,
 };
-export default class GoldDetail extends Component {
+export default class CreditDetail extends Component {
   constructor(props) {
     super(props);
     this.state = init_state;
@@ -86,8 +86,8 @@ export default class GoldDetail extends Component {
   getUsers = async (page, limit) => {
     this.setState({ loading: true });
     const result = await reqGetuserbalancelist(
-      this.state.inputValue,
       this.props.user_id,
+      this.state.inputValue,
       this.props.package_id,
       this.state.startTime,
       this.state.endTime,

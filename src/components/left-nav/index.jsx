@@ -217,7 +217,7 @@ class LeftNav extends Component {
                     // console.log("this.props.role_id",this.props.role_id)
                     if(this.role_id == 2){
                       //操盘  列出来的不显示
-                      if(ele.title=="我的代充" || ele.title=="我的代付" || ele.title=="个人结算列表" || ele.title=="本级数据日报" || ele.title == "个人账变" ){
+                      if(ele.title=="我的代充" || ele.title=="我的代付" || ele.title=="个人结算列表" || ele.title=="本级数据日报" || ele.title == "充提账变" || ele.title == "信用账变" ){
                         return cpre
                       }
                     }else if(this.role_id == 3){
@@ -239,7 +239,7 @@ class LeftNav extends Component {
                     if (ele.title == "用户列表" || ele.title == "日常运营"
                       || ele.title == "本级数据日报" || ele.title == "团队数据日报" || ele.title == "个人结算列表" || ele.title == "团队结算列表" || ele.title == "推广链接" ||ele.title == "下级管理" || ele.title == "推广管理"
                       || ele.title == "账户详情" || ele.title == "用户组管理"
-                      || ele.title == "人工充值" || ele.title == "我的代充" || ele.title == "人工兑换" || ele.title == "我的代付" || ele.title == "代充管理" || ele.title == "代充明细" || ele.title == "新增代充" || ele.title == "个人账变"
+                      || ele.title == "人工充值" || ele.title == "我的代充" || ele.title == "人工兑换" || ele.title == "我的代付" || ele.title == "代充管理" || ele.title == "代充明细" || ele.title == "新增代充" || ele.title == "充提账变" || ele.title == "信用账变"
                     ) {
                       // console.log('渲染===ele.title===', ele.title);
                       switch (ele.title) {
@@ -351,7 +351,8 @@ class LeftNav extends Component {
             {id: 998, title: '人工兑换', href: '/admin/user/index', key: '/payManage/serviceCash', pid: 1,children: null,spread: false},
             {id: 998, title: '我的代充', href: '/admin/user/index', key: '/payManage/myAgentRecharge', pid: 1,children: null,spread: false},
             {id: 998, title: '我的代付', href: '/admin/user/index', key: '/payManage/myAgentCash', pid: 1,children: null,spread: false},
-            {id: 998, title: '个人账变', href: '/admin/user/index', key: '/payManage/myGoldDetail', pid: 1,children: null,spread: false},
+            {id: 998, title: '充提账变', href: '/admin/user/index', key: '/payManage/myGoldDetail', pid: 1,children: null,spread: false},
+            {id: 998, title: '信用账变', href: '/admin/user/index', key: '/payManage/myGoldDetailXinyong', pid: 1,children: null,spread: false},
             {id: 998, title: '代充管理', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/serviceDetail', pid: 1,children: null,spread: false},
             // {id: 998, title: '新增代充', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/createNewService', pid: 1,children: null,spread: false},
           ],
@@ -445,7 +446,8 @@ class LeftNav extends Component {
           {id: 998, title: '人工兑换', href: '/admin/user/index', key: '/payManage/serviceCash', pid: 1,children: null,spread: false},
           {id: 998, title: '我的代充', href: '/admin/user/index', key: '/payManage/myAgentRecharge', pid: 1,children: null,spread: false},
           {id: 998, title: '我的代付', href: '/admin/user/index', key: '/payManage/myAgentCash', pid: 1,children: null,spread: false},
-          {id: 998, title: '个人账变', href: '/admin/user/index', key: '/payManage/myGoldDetail', pid: 1,children: null,spread: false},
+          {id: 998, title: '充提账变', href: '/admin/user/index', key: '/payManage/myGoldDetail', pid: 1,children: null,spread: false},
+          {id: 998, title: '信用账变', href: '/admin/user/index', key: '/payManage/myGoldDetailXinyong', pid: 1,children: null,spread: false},
           {id: 998, title: '代充管理', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/serviceDetail', pid: 1,children: null,spread: false},
           // {id: 998, title: '新增代充', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/createNewService', pid: 1,children: null,spread: false},
         ],
@@ -534,7 +536,7 @@ class LeftNav extends Component {
   //         {id: 998, title: '人工兑换', href: '/admin/user/index', key: '/payManage/serviceCash', pid: 1,children: null,spread: false},
   //         {id: 998, title: '我的代充', href: '/admin/user/index', key: '/payManage/myAgentRecharge', pid: 1,children: null,spread: false},
   //         {id: 998, title: '我的代付', href: '/admin/user/index', key: '/payManage/myAgentCash', pid: 1,children: null,spread: false},
-  //         {id: 998, title: '个人账变', href: '/admin/user/index', key: '/payManage/myGoldDetail', pid: 1,children: null,spread: false},
+  //         {id: 998, title: '充提账变', href: '/admin/user/index', key: '/payManage/myGoldDetail', pid: 1,children: null,spread: false},
   //         {id: 998, title: '代充管理', href: '/admin/user/index', key: '/payManage/creditManage', pid: 1,children: [
   //           {id: 998, title: '代充明细', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/serviceDetail', pid: 1,children: null,spread: false},
   //           {id: 998, title: '新增代充', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/createNewService', pid: 1,children: null,spread: false},

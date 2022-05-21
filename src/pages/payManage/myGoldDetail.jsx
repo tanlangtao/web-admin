@@ -102,11 +102,16 @@ export default class MyGoldDetail extends Component {
     }
   };
   componentDidMount() {
+    //默认查询一周数据
+    let start = moment().startOf("day").subtract(1, "week");
+    let end = moment().startOf("day").subtract(-1, "day").subtract(1, "seconds");
+
     this.setState({
-        startTime:moment().startOf("day").subtract(1, "month"),
-        endTime:moment().startOf("day")
-    },()=>{
-        this.getUsers(1, 20)
+      startTime: start.format("YYYY-MM-DD HH:mm:ss"),
+      endTime: end.format("YYYY-MM-DD HH:mm:ss"),
+      
+    }, () => {
+      this.getUsers(1, 20)
     })
   }
   render() {

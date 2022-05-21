@@ -14,7 +14,7 @@ import {
 } from "antd";
 
 import LinkButton from "../link-button";
-import { getAuthCode, editPass } from "../../api";
+import { getAuthCode, editPass ,getCreditUserlist,reqEditUser} from "../../api";
 // import QRCode from "qrcode.react";
 import "./index.less";
 const { TabPane } = Tabs;
@@ -37,7 +37,9 @@ class Header extends Component {
     this.state = {
       activeKey: panes[0].key,
       panes,
-      isEditFormShow: false,
+      isResetPwdShow: false,
+      user_balance:0,
+      resetpwd:""
     };
   }
   onChange = (activeKey) => {
@@ -242,7 +244,24 @@ class Header extends Component {
       });
     }
   }
-
+  //获取当前玩家信息
+  reqGetCreditUserlist = async (page, limit) => {
+    const result = await getCreditUserlist(
+      this.props.package_id,
+      this.props.admin_user_id,
+      page,
+      limit,
+    );
+    if (result.status === 0) {
+      this.setState({
+        user_balance: result.data && result.data[0].user_balance,
+        record:result.data && result.data[0]
+      })
+    } else {
+      message.info(result.msg || "未检索到数据");
+    }
+  }
+  
   render() {
     const username = localStorage.getItem("name");
     const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -252,14 +271,20 @@ class Header extends Component {
           <Dropdown
             overlay={
               <Menu>
-                {/* <Menu.Item key="1">
+                <Menu.Item key="1">
                   <Button type="link" onClick={this.resetPWD}>
                     修改密码
                   </Button>
-                </Menu.Item> */}
+                </Menu.Item>
+                <Menu.Item key="2">
+                    <Button type="link" >
+                        账号余额: {this.state.user_balance}
+                    </Button>
+                </Menu.Item>
               </Menu>
             }
             trigger={["click"]}
+            onClick={()=>this.reqGetCreditUserlist(1,20)}
           >
             <Button type="link">
               {username} <Icon type="down" />
@@ -355,6 +380,22 @@ class Header extends Component {
             </Form>
           </Modal>
         )}
+        {this.state.isResetPwdShow && (
+                <Modal
+                    title="重置密码"
+                    visible={this.state.isResetPwdShow}
+                    onOk={this.handleResetpwd}
+                    onCancel={() => {
+                        this.setState({ isResetPwdShow: false });
+                    }}
+                >
+                    <span>重置密码</span>
+                    <Input
+                        value={this.state.resetpwd}
+                        onChange={(e) => this.setState({ resetpwd: e.target.value })}
+                    />
+                </Modal>
+            )}
       </div>
     );
   }
@@ -377,7 +418,7 @@ class Header extends Component {
     }
   };
   resetPWD = () => {
-    this.setState({ isEditFormShow: true });
+    this.setState({ isResetPwdShow: true });
   };
   handleEditSubmit = (event) => {
     event.preventDefault();
@@ -392,6 +433,31 @@ class Header extends Component {
       }
     });
   };
+  handleResetpwd = async () => {
+    if(this.state.resetpwd == ""){
+        return message.info("密码不能为空！")
+    }
+    const res = await reqEditUser(
+        this.state.record.id, 
+        this.state.record.name, 
+        this.state.resetpwd,
+        this.state.record.user_id,
+        this.state.record.package_id,
+        this.state.record.role_id
+    );
+    if (res.status === 0) {
+        message.success("操作成功！");
+        this.setState({ resetpwd: "", isResetPwdShow: false });
+        localStorage.removeItem("menuList");
+        localStorage.removeItem("token");
+        localStorage.removeItem("name");
+        localStorage.removeItem("BASE");
+        // 跳转到login
+        this.props.history.replace("/login");
+    } else {
+         message.success("操作失败:" + res.msg);
+    }
+};
 }
 const WrappedHeader = Form.create()(Header);
 export default withRouter(WrappedHeader);

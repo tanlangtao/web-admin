@@ -21,7 +21,7 @@ import {
 const { Option } = Select;
 const init_state = {
   current: 1,
-  pageSize: 20,
+  pageSize: 10,
   count: 0,
   startTime: '',
   endTime: '',
@@ -217,7 +217,7 @@ export default class ServiceRecharge extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiPayOrderList(1, 20)
+      this.getReqDaiPayOrderList(1,10)
     } else {
       message.error(`操作失败！${message.data}`)
     }
@@ -233,7 +233,7 @@ export default class ServiceRecharge extends Component {
       Number(this.record.package_id),
     )
     if (result.status === 0) {
-      this.getReqDaiPayOrderList(1, 20)
+      this.getReqDaiPayOrderList(1,10)
       message.success("操作成功！")
     } else {
       message.error(`操作失败！${message.data}`)
@@ -249,14 +249,14 @@ export default class ServiceRecharge extends Component {
       Number(record.package_id),
     )
     if (result.status === 0) {
-      this.getReqDaiPayOrderList(1, 20)
+      this.getReqDaiPayOrderList(1,10)
       message.success("操作成功！")
     } else {
-      message.error(`操作失败！${message.data}`)
+      message.error(`操作失败！${result.data}`)
     }
   }
   componentDidMount() {
-    this.getReqDaiPayOrderList(1, 20)
+    this.getReqDaiPayOrderList(1,10)
   }
   render() {
     const { data, count, current, pageSize, loading } = this.state;
@@ -322,6 +322,17 @@ export default class ServiceRecharge extends Component {
         </LinkButton>
       </span>
     );
+    let daichongTitle = (
+      <span>
+        修改代充
+        &nbsp; &nbsp;
+        &nbsp; &nbsp;
+        <span style={{color:"red"}}>
+          请输入 代充账号对应的代充ID信息（9位数字）
+          填写完毕点击确定后 请返回人工充值界面对应订单点击【指派】
+        </span>
+      </span>
+    )
     return <Card title={title} >
       <Mytable
         tableData={{
@@ -347,7 +358,7 @@ export default class ServiceRecharge extends Component {
       />
       {this.state.isShowChangeModal && (
         <Modal
-          title="修改代充"
+          title={daichongTitle}
           visible={this.state.isShowChangeModal}
           onOk={this.handleChange}
           onCancel={() => {

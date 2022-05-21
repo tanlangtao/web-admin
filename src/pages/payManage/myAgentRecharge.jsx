@@ -88,6 +88,7 @@ export default class MyAgentRecharge extends Component {
       key: "created_at",
       align: 'center',
       width: 120,
+      render:formateDate
     },
     {
       title: "代充ID",
@@ -188,13 +189,19 @@ export default class MyAgentRecharge extends Component {
     this.record = record
   }
   handleModifyModel = async () => {
+    if(this.state.modifyAmount == ""){
+      return message.info("不能为空！")
+    }
     const result = await reqModifyDaiPayAmount(
       this.record.order_id,
       Number(this.record.package_id),
-      Number(this.modifyAmount),
+      Number(this.state.modifyAmount),
     )
     if (result.status === 0) {
       message.success("操作成功！")
+      this.setState({
+        isShowModifyModel:false
+      })
       this.getReqDaiPayOrderListByLoginId(1,20)
     }else{
       message.error(`操作失败！${result.data}`)
@@ -218,10 +225,23 @@ export default class MyAgentRecharge extends Component {
     if (result.status === 0) {
       let data =result.data && JSON.parse(result.data)
       console.log(data)
-      this.setState({
-        data:data,
-        count: data.length,
-      })
+      if(this.state.inputValue != ""){
+        let newData = []
+        data.forEach(e => {
+          if(e.user_id == this.state.inputValue){
+            newData.push(e)
+          }
+        });
+        this.setState({
+          data:newData,
+          count: newData.length,
+        })
+      }else{
+        this.setState({
+          data:data,
+          count: data.length,
+        })
+      }
     } else {
       message.error(`失败！${result.data}`)
     }
@@ -235,7 +255,7 @@ export default class MyAgentRecharge extends Component {
     this.setState({
       startTime:start.format("YYYY-MM-DD HH:mm:ss"),
       endTime:end.format("YYYY-MM-DD HH:mm:ss"),
-      MyDatePickerValue:[start,end]
+      
     },()=>{
       this.getReqDaiPayOrderListByLoginId(1,20)
     })

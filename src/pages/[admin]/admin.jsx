@@ -139,6 +139,7 @@ import MyAgentCash from "../payManage/myAgentCash";
 import ServiceRecharge from "../payManage/serviceRecharge";
 import ServiceCash from "../payManage/serviceCash";
 import MyGoldDetail from "../payManage/myGoldDetail";
+import MyGoldDetailXinyong from "../payManage/myGoldDetailXinyong";
 import CreateNewService from "../payManage/creditManage/createNewService";
 import ServiceDetail from "../payManage/creditManage/serviceDetail";
 import LowerManage from "../ptWorkers/lower-manage";
@@ -205,7 +206,7 @@ export default class Admin extends Component {
           />
         </Sider>
         <Layout style={{ marginLeft: 250 }}>
-          <Header onRef={(ref) => (this.child1 = ref)} history={history}>
+          <Header onRef={(ref) => (this.child1 = ref)} history={history} package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id} >
             Header
           </Header>
           <Content style={{ margin: 5, backgroundColor: "#fff" }}>
@@ -841,6 +842,11 @@ export default class Admin extends Component {
                   <Route path="/payManage/myGoldDetail" exact>
                     <KeepAlive name="MyGoldDetail">
                       <MyGoldDetail package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/payManage/myGoldDetailXinyong" exact>
+                    <KeepAlive name="MyGoldDetailXinyong">
+                      <MyGoldDetailXinyong package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                     </KeepAlive>
                   </Route>
                   <Route path="/payManage/creditManage/createNewService" exact>

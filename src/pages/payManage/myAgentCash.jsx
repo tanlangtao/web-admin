@@ -220,12 +220,25 @@ export default class MyAgentCash extends Component {
     })
     if(result.status === 0) {
       let data =result.data && JSON.parse(result.data)
-      console.log(data)
-      this.setState({
-        data: data,
-        count: data.length,
-        loading: false,
-      });
+      if(this.state.inputValue != ""){
+        let newData = []
+        data.forEach(e => {
+          if(e.user_id == this.state.inputValue){
+            newData.push(e)
+          }
+        });
+        this.setState({
+          data:newData,
+          count: newData.length,
+          loading: false,
+        })
+      }else{
+        this.setState({
+          data: data,
+          count: data.length,
+          loading: false,
+        });
+      }
     }else{
       message.error(`失败！${result.data}`)
     }
@@ -261,7 +274,7 @@ export default class MyAgentCash extends Component {
     this.setState({
       startTime:start.format("YYYY-MM-DD HH:mm:ss"),
       endTime:end.format("YYYY-MM-DD HH:mm:ss"),
-      MyDatePickerValue:[start,end]
+      
     },()=>{
         this.getReqDaiWithdrawOrderListByLoginId(1,20)
     })

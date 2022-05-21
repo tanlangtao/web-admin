@@ -27,10 +27,9 @@ const init_state = {
   endTime: '',
   loading: false,
   data: [],
-  inputValue: "",
-  MyDatePickerValue: null,
+  inputValue:"",
 };
-export default class GoldDetail extends Component {
+export default class MyGoldDetailXinyong extends Component {
   constructor(props) {
     super(props);
     this.state = init_state;
@@ -42,7 +41,7 @@ export default class GoldDetail extends Component {
       dataIndex: "created_at",
       key: "created_at",
       align: 'center',
-      render: formateDate
+      render:formateDate
     },
     {
       title: "代充ID",
@@ -86,11 +85,11 @@ export default class GoldDetail extends Component {
   getUsers = async (page, limit) => {
     this.setState({ loading: true });
     const result = await reqGetuserbalancelist(
-      this.state.inputValue,
-      this.props.user_id,
-      this.props.package_id,
-      this.state.startTime,
-      this.state.endTime,
+        this.props.admin_user_id,
+        this.state.inputValue,
+        this.props.package_id,
+        this.state.startTime,
+        this.state.endTime,
     );
     if (result.status === 0) {
       this.setState({
@@ -129,11 +128,11 @@ export default class GoldDetail extends Component {
           }}
           value={this.state.MyDatePickerValue}
         />
-         &nbsp; &nbsp;
-         <LinkButton
+        &nbsp; &nbsp;
+        <LinkButton
           onClick={() => {
             this.setState({ current: 1 });
-            this.getUsers(1);
+            this.getUsers(1, this.state.pageSize);
           }}
           size="default"
         >
@@ -141,7 +140,7 @@ export default class GoldDetail extends Component {
         </LinkButton>
       </span>
     );
-    return <Card title={title}>
+    return <Card title={title} >
       <Mytable
         tableData={{
           data,
@@ -154,14 +153,14 @@ export default class GoldDetail extends Component {
           loading,
         }}
         paginationOnchange={(page, limit) => {
-          this.getUsers(page, limit);
+            this.getUsers(page, limit);
         }}
         setPagination={(current, pageSize) => {
-          if (pageSize) {
-            this.setState({ current, pageSize });
-          } else {
-            this.setState({ current });
-          }
+            if (pageSize) {
+                this.setState({ current, pageSize });
+            } else {
+                this.setState({ current });
+            }
         }}
       />
     </Card>

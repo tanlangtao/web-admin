@@ -11,10 +11,12 @@ import {
 import Mytable from "../../components/MyTable";
 import { formateDate } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-button/index";
+import CreditDetail from "../payManage/creditDetail";
 import {
   bindInfo,
   reqUsers,
-  reqSaveAccount
+  reqSaveAccount,
+  getCreditUserlist
 } from "../../api/index";
 const init_state = {
   current: 1,
@@ -27,6 +29,7 @@ const init_state = {
   isShowBindAlipayModel: false,
   isShowBindUsdtTrcModel: false,
   isShowBindUsdtErcModel: false,
+  isShowCreditDetail: false,
   card_name: "",
   card_num: "",
   bank_name: "",
@@ -37,6 +40,7 @@ const init_state = {
   account_name: "",
   wallet_addr_erc: "",
   wallet_addr_trc: "",
+  user_balance: 0
 };
 export default class AccountDetail extends Component {
   constructor(props) {
@@ -99,7 +103,7 @@ export default class AccountDetail extends Component {
         data: newData,
         loading: false
       });
-    }else{
+    } else {
       this.setState({
         data: [],
         loading: false
@@ -125,6 +129,22 @@ export default class AccountDetail extends Component {
       })
     }
   }
+  //获取当前玩家信息
+  reqGetCreditUserlist = async (page, limit) => {
+    const result = await getCreditUserlist(
+      this.props.package_id,
+      this.props.admin_user_id,
+      page,
+      limit,
+    );
+    if (result.status === 0) {
+      this.setState({
+        user_balance: result.data && result.data[0].user_balance
+      })
+    } else {
+      message.info(result.msg || "未检索到数据");
+    }
+  }
   showBindBankModel() {
     this.setState({
       isShowBindBankModel: true
@@ -146,9 +166,9 @@ export default class AccountDetail extends Component {
     })
   }
   bindBankCard = async () => {
-    if(this.state.card_num == "" || this.state.card_name == "" ||
-     this.state.bank_name == "" || this.state.branch_name == ""|| 
-     this.state.bank_province == ""|| this.state.bank_city == ""){
+    if (this.state.card_num == "" || this.state.card_name == "" ||
+      this.state.bank_name == "" || this.state.branch_name == "" ||
+      this.state.bank_province == "" || this.state.bank_city == "") {
       return message.info("银行卡信息不能为空！")
     }
     //绑定银行卡
@@ -184,7 +204,7 @@ export default class AccountDetail extends Component {
     })
   }
   bindAlipay = async () => {
-    if(this.state.account_card == "" || this.state.account_name == ""){
+    if (this.state.account_card == "" || this.state.account_name == "") {
       return message.info("支付宝账号姓名不能为空！")
     }
     //绑定支付宝
@@ -216,7 +236,7 @@ export default class AccountDetail extends Component {
     })
   }
   bindUsdtErc = async () => {
-    if(this.state.wallet_addr_erc == "" ){
+    if (this.state.wallet_addr_erc == "") {
       return message.info("地址不能为空！")
     }
     let info = JSON.stringify({
@@ -247,7 +267,7 @@ export default class AccountDetail extends Component {
     })
   }
   bindUsdtTrc = async () => {
-    if(this.state.wallet_addr_trc == "" ){
+    if (this.state.wallet_addr_trc == "") {
       return message.info("地址不能为空！")
     }
     let info = JSON.stringify({
@@ -280,6 +300,7 @@ export default class AccountDetail extends Component {
   componentDidMount() {
     this.getBindInfo(1, 20);
     this.getUsers(1, 20)
+    this.reqGetCreditUserlist(1, 20)
   }
   render() {
     const { data, game_user_data, proxy_user_data } = this.state;
@@ -298,7 +319,7 @@ export default class AccountDetail extends Component {
             zfb = e
           }
         })
-        
+
         return <div>
           <LinkButton
             style={{ float: "right" }}
@@ -306,6 +327,7 @@ export default class AccountDetail extends Component {
               this.setState(init_state, () => {
                 this.getUsers(1, 20);
                 this.getBindInfo(1, 20);
+                this.reqGetCreditUserlist(1, 20);
               });
             }}
             icon="reload"
@@ -316,6 +338,7 @@ export default class AccountDetail extends Component {
             <Descriptions.Item label="上级ID">{game_user_data.proxy_user_id}</Descriptions.Item>
             <Descriptions.Item label="账号">{this.props.account}</Descriptions.Item>
             <Descriptions.Item label="密码">******</Descriptions.Item>
+            <Descriptions.Item label="账号余额">{this.state.user_balance} &nbsp;&nbsp;<LinkButton onClick={() => this.setState({ isShowCreditDetail: true })}>信用明细</LinkButton></Descriptions.Item>
             <Descriptions.Item label="手机号码">{game_user_data.phone_number}</Descriptions.Item>
             <Descriptions.Item label="支付宝"><LinkButton size="small" disabled={zfb && true} onClick={() => this.showBindAlipayModel()}>绑定支付宝</LinkButton></Descriptions.Item>
             <Descriptions.Item label="支付宝姓名">{zfb && zfb.account_name}</Descriptions.Item>
@@ -446,6 +469,21 @@ export default class AccountDetail extends Component {
             onChange={(e) => this.setState({ wallet_addr_erc: e.target.value })}
           />
 
+        </Modal>
+      )}
+      {this.state.isShowCreditDetail && (
+        <Modal
+          title={`信用明细 ${this.props.admin_user_id}`}
+          visible={this.state.isShowCreditDetail}
+          onCancel={() => {
+            this.setState({ isShowCreditDetail: false });
+          }}
+          footer={null}
+          width="85%"
+          maskClosable={false}
+          style={{ top: 10 }}
+        >
+          <CreditDetail user_id={this.props.admin_user_id}></CreditDetail>
         </Modal>
       )}
     </Card>

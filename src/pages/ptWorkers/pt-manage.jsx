@@ -59,8 +59,8 @@ export default class PtManage extends Component {
         },
         {
             title: "注册时间",
-            dataIndex: "created_at",
-            key: "created_at",
+            dataIndex: "",
+            key: "",
             align: 'center',
             render: (record) => {
                 return moment(record.created_at).format("YYYY-MM-DD HH:mm:ss")
@@ -68,9 +68,23 @@ export default class PtManage extends Component {
         },
         {
             title: "用户组",
-            dataIndex: "role_id",
-            key: "role_id",
+            dataIndex: "",
+            key: "",
             align: 'center',
+            render:(record)=>{
+                let str = ""
+                switch(record.role_id){
+                    case 3:
+                        str = "充提组"
+                        break
+                    case 4:
+                        str = "推广组"
+                        break
+                    default:
+                        str = "未定义用户组"
+                }
+                return str
+            }
         },
         {
             title: "所属品牌",

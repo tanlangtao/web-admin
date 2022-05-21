@@ -21,7 +21,7 @@ import {
 const { Option } = Select;
 const init_state = {
   current: 1,
-  pageSize: 20,
+  pageSize: 10,
   count: 0,
   startTime: '',
   endTime: '',
@@ -135,6 +135,22 @@ export default class MyAgentCash extends Component {
 			),
     },
     {
+      title: "运营审核",
+      dataIndex: "",
+      key: "",
+      align: 'center',
+      render: (text, record) => (
+        <span>
+          <LinkButton type="default" onClick={() => this.rejectCheck(record)}>
+            拒绝
+              </LinkButton>
+          <LinkButton type="default" onClick={() => this.passCheck(record)}>
+            通过
+              </LinkButton>
+        </span>
+      ),
+    },
+    {
       title: "代提ID",
       dataIndex: "replace_id",
       key: "replace_id",
@@ -162,22 +178,7 @@ export default class MyAgentCash extends Component {
         </span>
       ),
     },
-    {
-      title: "运营审核",
-      dataIndex: "",
-      key: "",
-      align: 'center',
-      render: (text, record) => (
-        <span>
-          <LinkButton type="default" onClick={() => this.rejectCheck(record)}>
-            拒绝
-              </LinkButton>
-          <LinkButton type="default" onClick={() => this.passCheck(record)}>
-            通过
-              </LinkButton>
-        </span>
-      ),
-    },
+    
     {
       title: "到账金额",
       dataIndex: "arrival_amount",
@@ -264,7 +265,7 @@ export default class MyAgentCash extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiWithdrawOrderList(1,20)
+      this.getReqDaiWithdrawOrderList(1,10)
     }else{
       message.error(`操作失败！${result.data}`)
     }
@@ -278,7 +279,7 @@ export default class MyAgentCash extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiWithdrawOrderList(1,20)
+      this.getReqDaiWithdrawOrderList(1,10)
     }else{
       message.error(`操作失败！${result.data}`)
     }
@@ -296,7 +297,7 @@ export default class MyAgentCash extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiWithdrawOrderList(1,20)
+      this.getReqDaiWithdrawOrderList(1,10)
     }else{
       message.error(`操作失败！${result.data}`)
     }
@@ -311,13 +312,13 @@ export default class MyAgentCash extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiWithdrawOrderList(1,20)
+      this.getReqDaiWithdrawOrderList(1,10)
     }else{
       message.error(`操作失败！${result.data}`)
     }
   }
   componentDidMount() {
-    this.getReqDaiWithdrawOrderList(1, 20)
+    this.getReqDaiWithdrawOrderList(1,10)
   }
   render() {
     const { data, count, current, pageSize, loading } = this.state;
@@ -383,6 +384,16 @@ export default class MyAgentCash extends Component {
         </LinkButton>
       </span>
     );
+    let daiFuTitle = (
+      <span>
+        修改代付
+        &nbsp; &nbsp;
+        &nbsp; &nbsp;
+        <span style={{color:"red"}}>
+          请输入 代充账号对应的代付ID信息（9位数字）
+        </span>
+      </span>
+    )
     return <Card title={title} >
       <Mytable
         tableData={{
@@ -408,7 +419,7 @@ export default class MyAgentCash extends Component {
       />
       {this.state.isShowChangeModal && (
         <Modal
-          title="修改代付"
+          title={daiFuTitle}
           visible={this.state.isShowChangeModal}
           onOk={this.handleChange}
           onCancel={() => {

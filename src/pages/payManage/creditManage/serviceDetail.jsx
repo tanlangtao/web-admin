@@ -12,6 +12,7 @@ import Mytable from "../../../components/MyTable";
 import MyDatePicker from "../../../components/MyDatePicker";
 import LinkButton from "../../../components/link-button/index";
 import GoldDetail from "../goldDetail";
+import CreditDetail from "../creditDetail";
 import moment from "moment";
 import {
     reqCreditAdduser,
@@ -33,6 +34,7 @@ const init_state = {
     loading: false,
     data: [],
     isShowGoldDetail: false,
+    isShowCreditDetail:false,
     isResetPwdShow:false,
     isShowGoldChange:false,
     resetpwd:"",
@@ -63,8 +65,8 @@ export default class ServiceDetail extends Component {
         },
         {
             title: "注册时间",
-            dataIndex: "created_at",
-            key: "created_at",
+            dataIndex: "",
+            key: "",
             align: 'center',
             render:(record)=>{
                 return moment(record.created_at).format("YYYY-MM-DD HH:mm:ss")
@@ -72,9 +74,23 @@ export default class ServiceDetail extends Component {
         },
         {
             title: "用户组",
-            dataIndex: "role_id",
-            key: "role_id",
+            dataIndex: "",
+            key: "",
             align: 'center',
+            render:(record)=>{
+                let str = ""
+                switch(record.role_id){
+                    case 3:
+                        str = "充提组"
+                        break
+                    case 4:
+                        str = "推广组"
+                        break
+                    default:
+                        str = "未定义用户组"
+                }
+                return str
+            }
         },
         {
             title: "所属品牌",
@@ -96,8 +112,11 @@ export default class ServiceDetail extends Component {
             align: 'center',
             render: (text, record) => (
                 <span>
+                      <LinkButton  onClick={() => this.showCreditDetail(record)}>
+                    信用明细
+              </LinkButton>
                     <LinkButton  onClick={() => this.showGoldDetail(record)}>
-                        资金明细
+                    充提明细
               </LinkButton>
                     <LinkButton  onClick={() =>this.resetPwd(record)}>
                         重置密码
@@ -109,6 +128,12 @@ export default class ServiceDetail extends Component {
             ),
         },
     ];
+    showCreditDetail = (record) => {
+        this.setState({
+            isShowCreditDetail: true
+        })
+        this.recordID = record.user_id
+    }
     showGoldDetail = (record) => {
         this.setState({
             isShowGoldDetail: true
@@ -259,9 +284,24 @@ export default class ServiceDetail extends Component {
                     }
                 }}
             />
+            {this.state.isShowCreditDetail && (
+                <Modal
+                    title={`信用明细 ${this.recordID}`}
+                    visible={this.state.isShowCreditDetail}
+                    onCancel={() => {
+                        this.setState({ isShowCreditDetail: false });
+                    }}
+                    footer={null}
+                    width="85%"
+                    maskClosable={false}
+                    style={{ top: 10 }}
+                >
+                    <CreditDetail user_id = {this.recordID}></CreditDetail>
+                </Modal>
+            )}
             {this.state.isShowGoldDetail && (
                 <Modal
-                    title={`资金明细 ${this.recordID}`}
+                    title={`充提明细 ${this.recordID}`}
                     visible={this.state.isShowGoldDetail}
                     onCancel={() => {
                         this.setState({ isShowGoldDetail: false });
