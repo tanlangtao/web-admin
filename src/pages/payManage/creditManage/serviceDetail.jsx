@@ -56,12 +56,14 @@ export default class ServiceDetail extends Component {
             dataIndex: "name",
             key: "name",
             align: 'center',
+            fixed:"left"
         },
         {
             title: "玩家ID",
             dataIndex: "user_id",
             key: "user_id",
             align: 'center',
+            fixed:"left"
         },
         {
             title: "注册时间",

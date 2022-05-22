@@ -38,20 +38,19 @@ export default class PersonalDaily extends Component {
 
   initColumns = () => [
     {
-      title: "统计时间",
-      dataIndex: "date",
-      key: "date",
-      fixed: "left",
-      align: 'center',
-      width: 200,
-    },
-    {
       title: "玩家id",
       dataIndex: "id",
       key: "id",
       fixed: "left",
       align: 'center',
       width: 100,
+    },
+    {
+      title: "统计时间",
+      dataIndex: "date",
+      key: "date",
+      align: 'center',
+      width: 200,
     },
     {
       title: "今日团队充值",

@@ -97,7 +97,6 @@ export default class LowerManage extends Component {
       title: "玩家昵称",
       dataIndex: "game_nick",
       key: "game_nick",
-      fixed: "left",
       align: 'center',
       width: 100,
       // onCell: (record, rowIndex) => {

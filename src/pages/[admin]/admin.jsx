@@ -156,6 +156,7 @@ export default class Admin extends Component {
       role_id:0,
       password:0,
       account:"",
+      collapsed:true
     };
   }
   componentDidMount(){
@@ -177,6 +178,13 @@ export default class Admin extends Component {
       this.props.history.replace("/login");
     }
   }
+  onCollapse = collapsed => {
+    console.log(collapsed);
+    this.setState({ collapsed });
+  };
+  componentDidMount(){
+    this.onCollapse()
+  }
   render() {
     const token = localStorage.token;
     // 如果内存没有存储token ==> 当前没有登陆
@@ -186,26 +194,7 @@ export default class Admin extends Component {
     console.log("this.state.role_id",this.state.role_id)
     return (
       <Layout style={{ minHeight: "100%" }}>
-        <Sider
-          breakpoint="lg"
-          collapsedWidth="0"
-          style={{
-            overflow: "auto",
-            height: "100vh",
-            position: "fixed",
-            left: 0,
-          }}
-          width="250"
-        >
-          <LeftNav
-            style
-            onClick={(tabConfig) => {
-              this.child1.add && this.child1.add(tabConfig);
-            }}
-            role_id = {this.state.role_id}
-          />
-        </Sider>
-        <Layout style={{ marginLeft: 250 }}>
+      <Layout style={{ marginLeft: 200 }}>
           <Header onRef={(ref) => (this.child1 = ref)} history={history} package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id} >
             Header
           </Header>
@@ -879,6 +868,29 @@ export default class Admin extends Component {
             推荐使用谷歌浏览器，可以获得更佳页面操作体验
           </Footer> */}
         </Layout>
+        <Sider
+          breakpoint="lg"
+          collapsedWidth="200"
+          collapsed={this.state.collapsed}
+          onCollapse={this.onCollapse}
+          style={{
+            overflow: "auto",
+            height: "100vh",
+            position: "fixed",
+            // left: 0,
+          }}
+          width="200"
+          
+        >
+          <LeftNav
+            style
+            onClick={(tabConfig) => {
+              this.child1.add && this.child1.add(tabConfig);
+            }}
+            role_id = {this.state.role_id}
+          />
+        </Sider>
+        
       </Layout>
     );
   }

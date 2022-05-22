@@ -48,13 +48,12 @@ export default class MyAgentCash extends Component {
       key: "order_id",
       fixed: "left",
       align: 'center',
+      width:120
     },
     {
       title: "玩家ID",
       dataIndex: "user_id",
       key: "user_id",
-      fixed: "left",
-      align: 'center',
     },
     {
       title: "玩家昵称",

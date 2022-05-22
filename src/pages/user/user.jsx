@@ -91,7 +91,6 @@ export default class User extends Component {
       title: "玩家昵称",
       dataIndex: "game_nick",
       key: "game_nick",
-      fixed: "left",
       align: 'center',
       width: 100,
       onCell: (record, rowIndex) => {
@@ -243,7 +242,6 @@ export default class User extends Component {
       dataIndex: "login_ip",
       key: "login_ip",
       align: 'center',
-      width: 140,
     },
     // {
     //   title: "登录IP区域",

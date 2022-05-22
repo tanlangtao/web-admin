@@ -47,12 +47,12 @@ export default class ServiceRecharge extends Component {
       key: "order_id",
       fixed: "left",
       align: 'center',
+      width:120
     },
     {
       title: "玩家ID",
       dataIndex: "user_id",
       key: "user_id",
-      fixed: "left",
       align: 'center',
     },
     {

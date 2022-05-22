@@ -49,12 +49,14 @@ export default class PtManage extends Component {
             title: "账号名称",
             dataIndex: "name",
             key: "name",
+            fixed:"left",
             align: 'center',
         },
         {
             title: "玩家ID",
             dataIndex: "user_id",
             key: "user_id",
+            fixed:"left",
             align: 'center',
         },
         {

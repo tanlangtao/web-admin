@@ -123,29 +123,44 @@ class PopProxyhistory extends Component {
     {
       title: "玩家ID",
       dataIndex: "proxy_user_id",
+      key: "proxy_user_id",
+      align: 'center',
     },
     {
       title: "注册时间",
       dataIndex: "regin_time",
+      key: "regin_time",
+      align: 'center',
       render: formateDate,
     },
     {
       title: "登陆时间",
       dataIndex: "login_time",
+      key: "login_time",
+      align: 'center',
       render: formateDate,
     },
     {
       title: "登陆IP",
       dataIndex: "ip",
+      key: "ip",
+      align: 'center',
+      width:120,
     },
     {
       title: "本次设备ID",
       dataIndex: "current_device_id",
+      key: "current_device_id",
+      align: 'center',
+      width:100,
     },
 
     {
       title: "上次设备ID",
       dataIndex: "before_device_id",
+      key: "before_device_id",
+      align: 'center',
+      width:100,
     },
   ];
 

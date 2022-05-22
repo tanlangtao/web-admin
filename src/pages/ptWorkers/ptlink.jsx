@@ -78,12 +78,14 @@ export default class PtLink extends Component {
                 console.log(data)
                 return data.map((e, index) => {
                     return <div key={index}>
-                        <p style={{ width: "60%", display: "flex", justifyContent: "space-around" }}>
-                            <span>{e.name}</span>
+                        <p style={{ width: "80%", display: "flex", justifyContent: "space-around" }}>
+                            <span style={{width:"200px",height:"40px"}} >{e.name}</span>
                             <span>{`${e.url}?u=${this.props.admin_user_id}&p=${this.props.package_id}`}</span>
+                            &nbsp; &nbsp;
                             <LinkButton
                                 onClick={()=>this.showQrCodeModel(e.img,`${e.url}?u=${this.props.admin_user_id}&p=${this.props.package_id}`)}
                             >获取二维码</LinkButton>
+                             
                             {/* <LinkButton
                                 data-clipboard-text={`${e.url}?u=${this.props.admin_user_id}&p=${this.props.package_id}`}
                                 onClick={()=>this.handleCopy()}
@@ -92,6 +94,7 @@ export default class PtLink extends Component {
                                 data-clipboard-text={`${e.url}?u=${this.props.admin_user_id}&p=${this.props.package_id}`}
                                 className="copy-btn"
                                 type="button"
+                                style={{width:"120px",height:"25px"}}
                             >点击复制</button>
                         </p>
                     </div>
