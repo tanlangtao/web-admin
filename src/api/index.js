@@ -2555,6 +2555,28 @@ export const reqEditUser = (id,account,password,userid,packageid,roleid) => {
     "POST",
   );
 };
+export const reqMenulist = (page,limit) => {
+  return ajax(
+    BASE + "/credit/menulist",
+    {page,limit},
+    "GET",
+  );
+};
+export const reqAddmenu= (title,id,sort,status) => {
+  return ajax(
+    BASE + "/credit/addmenu",
+    {title,id,sort,status},
+    "POST",
+  );
+};
+export const reqEditmenu= (title,id,sort,status) => {
+  return ajax(
+    BASE + "/credit/editmenu",
+    {title,id,sort,status},
+    "POST",
+  );
+};
+
 
 
 

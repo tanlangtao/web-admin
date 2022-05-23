@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Icon, Input, Button, Modal, message } from "antd";
 import "./login.less";
-import { reqLogin, reqAuthCode, navList, setToken, raceURL } from "../../api";
+import { reqLogin, reqAuthCode, navList, setToken, raceURL ,reqMenulist} from "../../api";
 
 const Item = Form.Item;
 
@@ -31,6 +31,7 @@ class Login extends Component {
       // 提示错误信息
       message.info(result.msg);
     }
+    
   };
   //点击登录按钮
   handleSubmit = (event) => {

@@ -143,6 +143,7 @@ import MyGoldDetailXinyong from "../payManage/myGoldDetailXinyong";
 import CreateNewService from "../payManage/creditManage/createNewService";
 import ServiceDetail from "../payManage/creditManage/serviceDetail";
 import LowerManage from "../ptWorkers/lower-manage";
+import MenuManage from "../menuManage/menuManage";
 const { Sider, Content } = Layout;
 const history = createHashHistory();
 
@@ -856,6 +857,11 @@ export default class Admin extends Component {
                   <Route path="/ptWorkers/lower-manage" exact>
                     <KeepAlive name="LowerManage">
                       <LowerManage package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
+                    </KeepAlive>
+                  </Route>
+                  <Route path="/menuManage/menuManage" exact>
+                    <KeepAlive name="MenuManage">
+                      <MenuManage package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                     </KeepAlive>
                   </Route>
                   <Route component={NotFound} />

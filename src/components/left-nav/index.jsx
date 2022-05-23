@@ -115,8 +115,6 @@ class LeftNav extends Component {
 
       menuList &&
       menuList.reduce((pre, item) => {
-
-
         // 向pre添加<Menu.Item>
         // if (item.key) {
         //按需渲染侧边栏，必须已经在后台-权限管理中设置了路由key才能渲染
@@ -137,7 +135,7 @@ class LeftNav extends Component {
           console.log('item.title====', item.title)
         } else {
           // console.log('2item.title====', item.tittle)
-          if (item.title == '用户管理' || item.title == '报表管理' || item.title == "推广员管理" || item.title == "账户管理" || item.title == "支付管理") {
+          if (item.title == '用户管理' || item.title == '报表管理' || item.title == "推广员管理" || item.title == "账户管理" || item.title == "支付管理" || item.title == "菜单管理") {
             // console.log('2item.title====', item.children)
             //下面代码放入这里即可控制左侧标签渲染数量
             // 查找一个与当前请求路径匹配的子Item
@@ -152,13 +150,8 @@ class LeftNav extends Component {
               this.openKey = [item.key];
             }
 
-            if (
-              path.includes("/gameSetting/subGame") &&
-              item.title === "游戏设定"
-            ) {
-              this.openKey = findPathIndex(item);
-              console.log("this.openKey", this.openKey);
-            }
+            this.openKey = findPathIndex(item);
+            console.log("this.openKey", this.openKey);
             pre.push(
               <SubMenu
                 key={item.key || item.id}
@@ -240,6 +233,7 @@ class LeftNav extends Component {
                       || ele.title == "本级数据日报" || ele.title == "团队数据日报" || ele.title == "个人结算列表" || ele.title == "团队结算列表" || ele.title == "推广链接" ||ele.title == "下级管理" || ele.title == "推广管理"
                       || ele.title == "账户详情" || ele.title == "用户组管理"
                       || ele.title == "人工充值" || ele.title == "我的代充" || ele.title == "人工兑换" || ele.title == "我的代付" || ele.title == "代充管理" || ele.title == "代充明细" || ele.title == "新增代充" || ele.title == "充提账变" || ele.title == "信用账变"
+                      || ele.title == "菜单管理"
                     ) {
                       // console.log('渲染===ele.title===', ele.title);
                       switch (ele.title) {
@@ -458,6 +452,21 @@ class LeftNav extends Component {
         pid:0,
         spread:false,
         title:"支付管理",
+      }
+      testMenulist.splice(1,0,testItem)
+    }
+    if(this.role_id == 1){
+      let testItem= {
+        children:[
+          {id: 998, title: '菜单管理', href: '/menuManage/menuManage', key: '/menuManage/menuManage', pid: 1,children: null,spread: false},
+        ],
+        href:"",
+        icon:"",
+        key:"/menuManage",
+        id:999,
+        pid:0,
+        spread:false,
+        title:"菜单管理",
       }
       testMenulist.splice(1,0,testItem)
     }
