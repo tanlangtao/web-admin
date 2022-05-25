@@ -139,7 +139,7 @@ export default class AccountDetail extends Component {
     );
     if (result.status === 0) {
       this.setState({
-        user_balance: result.data && result.data[0].user_balance
+        user_balance: result.data && result.data.lists[0].user_balance
       })
     } else {
       message.info(result.msg || "未检索到数据");

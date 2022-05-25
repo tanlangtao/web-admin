@@ -122,8 +122,8 @@ class PopProxyhistory extends Component {
   initColumns = () => [
     {
       title: "玩家ID",
-      dataIndex: "proxy_user_id",
-      key: "proxy_user_id",
+      dataIndex: "id",
+      key: "id",
       align: 'center',
     },
     {

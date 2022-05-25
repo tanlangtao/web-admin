@@ -139,11 +139,11 @@ class PopUserRechargeDetail extends Component {
       }
     );
     if (result.status === 0) {
-      let data =result.data && JSON.parse(result.data)
+      let data =result.data && result.data.lists
       console.log(data)
       this.setState({
         data:data,
-        count: data.length,
+        count: result.data.total,
       })
     } else {
       message.error(`失败！${result.data}`)
@@ -173,7 +173,7 @@ class PopUserRechargeDetail extends Component {
       message.success("操作成功！")
       this.getReqDaiPayOrderList(1,20)
     }else{
-      message.error(`操作失败！${message.data}`)
+      message.error(`操作失败！${result.data}`)
     }
     this.setState({
       isShowUpdateModel:false
@@ -190,7 +190,7 @@ class PopUserRechargeDetail extends Component {
       this.getReqDaiPayOrderList(1,20)
       message.success("操作成功！")
     }else{
-      message.error(`操作失败！${message.data}`)
+      message.error(`操作失败！${result.data}`)
     }
     this.setState({
       isShowChangeModal:false
@@ -206,7 +206,7 @@ class PopUserRechargeDetail extends Component {
       this.getReqDaiPayOrderList(1,20)
       message.success("操作成功！")
     }else{
-      message.error(`操作失败！${message.data}`)
+      message.error(`操作失败！${result.data}`)
     }
   }
   componentDidMount() {

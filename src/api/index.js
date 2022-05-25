@@ -2562,21 +2562,34 @@ export const reqMenulist = (page,limit) => {
     "GET",
   );
 };
-export const reqAddmenu= (title,id,sort,status) => {
+export const reqMenulisttotal = () => {
+  return ajax(
+    BASE + "/credit/menulisttotal",
+    {},
+    "GET",
+  );
+};
+export const reqAddmenu= (title,pid,sort,status,level) => {
   return ajax(
     BASE + "/credit/addmenu",
-    {title,id,sort,status},
+    {title,pid,sort,status,level},
     "POST",
   );
 };
-export const reqEditmenu= (title,id,sort,status) => {
+export const reqEditmenu= (title,id,pid,sort,status,level) => {
   return ajax(
     BASE + "/credit/editmenu",
-    {title,id,sort,status},
+    {title,id,pid,sort,status,level},
     "POST",
   );
 };
-
+export const reqActivityList= (package_id,user_id,activity_id,start_time,end_time,page,limit) => {
+  return ajax(
+    BASE + "/api/activity/activityList",
+    {package_id,user_id,activity_id,start_time,end_time,page,limit},
+    "GET",
+  );
+};
 
 
 

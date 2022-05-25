@@ -154,13 +154,13 @@ const init_state = {
         flag:3,
         user_id:Number(this.props.user_id),
         order_status:Number(this.state.inputStatus),
-    })
+    },"user_id","")
     if(result.status === 0) {
-      let data =result.data && JSON.parse(result.data)
+      let data =result.data && result.data.lists
       console.log(data)
       this.setState({
         data: data,
-        count: data.length,
+        count: result.data.total,
         loading: false,
       });
     }else{

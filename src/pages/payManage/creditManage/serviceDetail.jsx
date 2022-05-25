@@ -193,8 +193,8 @@ export default class ServiceDetail extends Component {
         );
         if (result.status === 0) {
             this.setState({
-                data: result.data,
-                count: result.data && result.data.length,
+                data: result.data.lists,
+                count: result.data && result.data.total,
             });
         } else {
             message.info(result.msg || "未检索到数据");

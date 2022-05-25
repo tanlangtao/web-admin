@@ -17,7 +17,8 @@ import moment from "moment";
 import {
     reqMenulist,
     reqAddmenu,
-    reqEditmenu
+    reqEditmenu,
+    reqMenulisttotal
 
 } from "../../api/index";
 
@@ -111,7 +112,7 @@ export default class MenuManage extends Component {
             }
         },
         {
-            title: "代付操作",
+            title: "操作",
             dataIndex: "",
             key: "",
             align: 'center',
@@ -141,11 +142,15 @@ export default class MenuManage extends Component {
         }
     }
     handleAddMenu = async ()=>{
+        if(this.state.inputTitle == "" || this.state.inputId == "" || this.state.inputSort == "" || this.state.inputStatus==""){
+            return message.info("输入不能为空")
+        }
         const result = await reqAddmenu(
             this.state.inputTitle,
             Number(this.state.inputId),
             Number(this.state.inputSort),
             Number(this.state.inputStatus),
+            this.state.inputId == 0 ? 0 :1 // level
         )
         if (result.status == 0){
             message.success("操作成功")
@@ -163,11 +168,16 @@ export default class MenuManage extends Component {
         }
     }
     handleEditMenu = async ()=>{
-        const result = await reqAddmenu(
+        if(this.state.inputId == "" || this.state.inputSort == "" || this.state.inputStatus==""){
+            return message.info("输入不能为空")
+        }
+        const result = await reqEditmenu(
             this.record.title,
+            this.record.id,
             Number(this.state.inputId),
             Number(this.state.inputSort),
             Number(this.state.inputStatus),
+            this.state.inputId == 0 ? 0:1 // level
         )
         if (result.status == 0){
             message.success("操作成功")
@@ -186,23 +196,25 @@ export default class MenuManage extends Component {
     }
     
     getReqMenulist = async (page, limit) => {
-        const result = await reqMenulist({
-            page: page,
-            limit: limit,
-        })
+        this.getReqMenulisttotal()
+        const result = await reqMenulist(page,limit)
         if (result.status === 0) {
             let data = result.data
-            let dataLevel1 = []
-            data.forEach((e)=>{
-                if(e.level == 1){
-                    dataLevel1.push(e)
-                }
-            })
             this.setState({
                 data: data,
-                dataLevel1:dataLevel1,
-                count: data.length,
                 loading: false,
+            });
+        } else {
+            message.error(`失败！${result.data}`)
+        }
+    }
+    getReqMenulisttotal = async () => {
+        const result = await reqMenulisttotal()
+        if (result.status === 0) {
+            let data = result.data
+            this.setState({
+                count: data.length,
+                dataLevel1:data
             });
         } else {
             message.error(`失败！${result.data}`)
@@ -210,7 +222,7 @@ export default class MenuManage extends Component {
     }
     componentDidMount() {
         //默认查询一周数据
-        this.getReqMenulist(1, 20)
+        this.getReqMenulist(1,20)
     }
     render() {
         const { data, count, current, pageSize, loading } = this.state;
@@ -251,16 +263,17 @@ export default class MenuManage extends Component {
                         this.setState({ isShowAddModel: false });
                     }}
                 >
-                    <p style={{display:"flex"}}> 
-                        <div style={{width:"80px"}}>菜单名称</div>
+                    <div style={{display:"flex"}}> 
+                        <span style={{width:"80px"}}>菜单名称</span>
                         &nbsp;&nbsp;
                         <Input
                             placeholder="请输入菜单名称"
                             value={this.state.inputTitle}
                             onChange={(e) => this.setState({ inputTitle: e.target.value })}
                         />
-                    </p>
-                    <p>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div>
                         <span>菜单上级</span>
                         &nbsp;&nbsp;
                         <Select
@@ -273,13 +286,14 @@ export default class MenuManage extends Component {
                             >
                             <Option value='0'>无</Option>
                             {
-                                this.state.dataLevel1.map((e)=>{
-                                    return <Option value={`${e.id}`}>{e.title}</Option>
+                                this.state.dataLevel1.map((e,i)=>{
+                                    return <Option value={`${e.id}`} key={i}>{e.title}</Option>
                                 })
                             }
                         </Select>
-                    </p>
-                    <p>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div>
                         <span>当前层级排序</span>
                         &nbsp;&nbsp;
                         <InputNumber
@@ -289,8 +303,9 @@ export default class MenuManage extends Component {
                             value={this.state.inputSort}
                             onBlur={(e) => this.setState({ inputSort: e.target.value })}
                         />
-                    </p>
-                    <p>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div>
                         <span>显示状态</span>
                         &nbsp;&nbsp;
                         <Select
@@ -304,7 +319,7 @@ export default class MenuManage extends Component {
                             <Option value="1">是</Option>
                             <Option value="0">否</Option>
                         </Select>
-                    </p>
+                    </div>
                 </Modal>
             )}
             {this.state.isShowEditModel && (
@@ -316,12 +331,13 @@ export default class MenuManage extends Component {
                         this.setState({ isShowEditModel: false });
                     }}
                 >
-                    <p style={{display:"flex"}}> 
-                        <div style={{width:"80px"}}>菜单名称</div>
+                    <div style={{display:"flex"}}> 
+                        <span style={{width:"80px"}}>菜单名称</span>
                         &nbsp;&nbsp;
-                        <div>{this.record.title}</div>
-                    </p>
-                    <p>
+                        <span>{this.record.title}</span>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div>
                         <span>菜单上级</span>
                         &nbsp;&nbsp;
                         <Select
@@ -334,13 +350,14 @@ export default class MenuManage extends Component {
                             >
                             <Option value='0'>无</Option>
                             {
-                                this.state.dataLevel1.map((e)=>{
-                                    return <Option value={`${e.id}`}>{e.title}</Option>
+                                this.state.dataLevel1.map((e,i)=>{
+                                    return <Option value={`${e.id}`} key={i}>{e.title}</Option>
                                 })
                             }
                         </Select>
-                    </p>
-                    <p>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div>
                         <span>当前层级排序</span>
                         &nbsp;&nbsp;
                         <InputNumber
@@ -350,8 +367,9 @@ export default class MenuManage extends Component {
                             value={this.state.inputSort}
                             onBlur={(e) => this.setState({ inputSort: e.target.value })}
                         />
-                    </p>
-                    <p>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div>
                         <span>显示状态</span>
                         &nbsp;&nbsp;
                         <Select
@@ -365,7 +383,7 @@ export default class MenuManage extends Component {
                             <Option value="1">是</Option>
                             <Option value="0">否</Option>
                         </Select>
-                    </p>
+                    </div>
                 </Modal>
             )}
         </Card>

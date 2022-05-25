@@ -15,13 +15,6 @@ class Login extends Component {
     const result = await navList();
     if (result.status === 0) {
       let { data } = result;
-      data.forEach((element) => {
-        if (element.children) {
-          element.children.forEach((item) => {
-            item.title = item.title.slice(24);
-          });
-        }
-      });
       localStorage.menuList = JSON.stringify(data);
       // 跳转到管理界面 (不需要再回退回到登陆)
       this.props.history.replace("/");

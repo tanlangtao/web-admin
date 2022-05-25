@@ -231,15 +231,14 @@ export default class MyAgentCash extends Component {
         limit:limit,
         package_id:this.props.package_id,
         flag:3,
-        [this.state.inputKey]:Number(this.state.inputValue),
         order_status:Number(this.state.inputStatus),
-    })
+    },this.state.inputKey,this.state.inputValue)
     if(result.status === 0) {
-      let data =result.data && JSON.parse(result.data)
+      let data =result.data && result.data.lists
       console.log(data)
       this.setState({
         data: data,
-        count: data.length,
+        count: result.data.total,
         loading: false,
       });
     }else{

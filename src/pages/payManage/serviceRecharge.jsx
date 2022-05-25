@@ -185,11 +185,11 @@ export default class ServiceRecharge extends Component {
       }
     );
     if (result.status === 0) {
-      let data = result.data && JSON.parse(result.data)
+      let data = result.data && result.data.lists
       console.log(data)
       this.setState({
         data: data,
-        count: data.length,
+        count: result.data.total,
       })
     } else {
       message.error(`失败！${result.data}`)
@@ -219,7 +219,7 @@ export default class ServiceRecharge extends Component {
       message.success("操作成功！")
       this.getReqDaiPayOrderList(1,10)
     } else {
-      message.error(`操作失败！${message.data}`)
+      message.error(`操作失败！${result.data}`)
     }
     this.setState({
       isShowUpdateModel: false
@@ -236,7 +236,7 @@ export default class ServiceRecharge extends Component {
       this.getReqDaiPayOrderList(1,10)
       message.success("操作成功！")
     } else {
-      message.error(`操作失败！${message.data}`)
+      message.error(`操作失败！${result.data}`)
     }
     this.setState({
       isShowChangeModal: false

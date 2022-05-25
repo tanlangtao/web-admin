@@ -36,7 +36,7 @@ class LeftNav extends Component {
   getMenuNodes = (menuList) => {
     // 得到当前请求的路由路径
     const path = this.props.location.pathname;
-    console.log(path);
+    // console.log(path);
 
     //递归菜单函数
     //menulist转变为menunodes
@@ -70,7 +70,6 @@ class LeftNav extends Component {
             title={
               <span>
               <Icon id='airplane' />
-
                 <span>{item.title.replace(/&nbsp;/g, "")}</span>
               </span>
             }
@@ -103,7 +102,7 @@ class LeftNav extends Component {
       var result = [],
         target = [];
       iter(item, []);
-      console.log("res====", result);
+      // console.log("res====", result);
       result.forEach((e) => {
         if (e.value === path) {
           target = e.pathindex;
@@ -135,7 +134,7 @@ class LeftNav extends Component {
           console.log('item.title====', item.title)
         } else {
           // console.log('2item.title====', item.tittle)
-          if (item.title == '用户管理' || item.title == '报表管理' || item.title == "推广员管理" || item.title == "账户管理" || item.title == "支付管理" || item.title == "菜单管理") {
+          if (item.title == '用户管理' || item.title == '报表管理' || item.title == "推广员管理" || item.title == "账户管理" || item.title == "支付管理" || item.title == "菜单管理" || item.title == "活动管理") {
             // console.log('2item.title====', item.children)
             //下面代码放入这里即可控制左侧标签渲染数量
             // 查找一个与当前请求路径匹配的子Item
@@ -151,15 +150,14 @@ class LeftNav extends Component {
             }
 
             this.openKey = findPathIndex(item);
-            console.log("this.openKey", this.openKey);
+            // console.log("this.openKey", this.openKey);
             pre.push(
               <SubMenu
                 key={item.key || item.id}
                 title={
-                  // 左侧一级菜单主页按钮渲染type="menu" 
                   <span>
-                    <Icon id='cicle' />
-
+                    {/* <Icon id='cicle' /> */}
+                    <Icon type={item.type} />
                     <span>{item.title}</span>
                   </span>
                 }
@@ -203,66 +201,55 @@ class LeftNav extends Component {
                   }, [])}
                 {item.title !== "第三方游戏数据" &&
                   item.children.reduce((cpre, ele) => {
-                    //只有"子游戏设定"栏(id=229)需要三级导航栏,由于menulist的特殊性,故不对所有submenu递归
-                    //需要三级导航栏 2021-6-28"无限代保底分红"栏(id=254) 2021-7-4"亏损分红充提差"(id=257)
-                    // console.log('ele.title===', ele.title);
-                    //目前只渲染报表 和 用户数据
-                    // console.log("this.props.role_id",this.props.role_id)
-                    if(this.role_id == 2){
-                      //操盘  列出来的不显示
-                      if(ele.title=="我的代充" || ele.title=="我的代付" || ele.title=="个人结算列表" || ele.title=="本级数据日报" || ele.title == "充提账变" || ele.title == "信用账变" ){
-                        return cpre
-                      }
-                    }else if(this.role_id == 3){
-                      //充提组
-                      if(ele.title=="人工充值" || ele.title=="人工兑换" || ele.title == "代充管理" ){
-                        return cpre
-                      }
-                    }else if(this.role_id == 4){
-                      //推广组
-                      if(ele.title=="团队数据日报" || ele.title=="团队结算列表" || ele.title == "推广管理" ){
-                        return cpre
-                      }
-                    }if(this.role_id == 1){
-                      //超管
-                      if(ele.title=="账户详情"){
-                        return cpre
-                      }
-                    }
-                    if (ele.title == "用户列表" || ele.title == "日常运营"
-                      || ele.title == "本级数据日报" || ele.title == "团队数据日报" || ele.title == "个人结算列表" || ele.title == "团队结算列表" || ele.title == "推广链接" ||ele.title == "下级管理" || ele.title == "推广管理"
-                      || ele.title == "账户详情" || ele.title == "用户组管理"
-                      || ele.title == "人工充值" || ele.title == "我的代充" || ele.title == "人工兑换" || ele.title == "我的代付" || ele.title == "代充管理" || ele.title == "代充明细" || ele.title == "新增代充" || ele.title == "充提账变" || ele.title == "信用账变"
-                      || ele.title == "菜单管理"
-                    ) {
-                      // console.log('渲染===ele.title===', ele.title);
-                      switch (ele.title) {
-                        case "子游戏设定":
-                        case "无限代保底分红":
-                        case "无限代保底分红1":
-                        case "无限代保底分红2":
-                        case "亏损分红充提差":
-                        case "提现手续费5级分红":
-                          cpre.push(getMoreMenuNodes(ele));
-                          break;
-                        default:
-                          cpre.push(
-                            <Menu.Item
-                              key={ele.key}
-                              onClick={() => {
-                                this.props.onClick(ele);
-                              }}
-                            >
-                              {/* 左侧菜单二级菜单按钮渲染图表 type="bug"*/}
-                              <Link to={ele.key}>
-                                <Icon id='airplane' />
-                                <span>{ele.title}</span>
-                              </Link>
-                            </Menu.Item>
-                          );
-                      }
-                    }
-
+                    // if (ele.title == "用户列表" || ele.title == "日常运营"
+                    //   || ele.title == "本级数据日报" || ele.title == "团队数据日报" || ele.title == "个人结算列表" || ele.title == "团队结算列表" || ele.title == "推广链接" ||ele.title == "下级管理" || ele.title == "推广管理"
+                    //   || ele.title == "账户详情" || ele.title == "用户组管理"
+                    //   || ele.title == "人工充值" || ele.title == "我的代充" || ele.title == "人工兑换" || ele.title == "我的代付" || ele.title == "代充管理" || ele.title == "代充明细" || ele.title == "新增代充" || ele.title == "充提账变" || ele.title == "信用账变"
+                    //   || ele.title == "菜单管理"
+                    // ) 
+                    // {
+                    //   // console.log('渲染===ele.title===', ele.title);
+                    //   switch (ele.title) {
+                    //     case "子游戏设定":
+                    //     case "无限代保底分红":
+                    //     case "无限代保底分红1":
+                    //     case "无限代保底分红2":
+                    //     case "亏损分红充提差":
+                    //     case "提现手续费5级分红":
+                    //       cpre.push(getMoreMenuNodes(ele));
+                    //       break;
+                    //     default:
+                    //       cpre.push(
+                    //         <Menu.Item
+                    //           key={ele.key}
+                    //           onClick={() => {
+                    //             this.props.onClick(ele);
+                    //           }}
+                    //         >
+                    //           {/* 左侧菜单二级菜单按钮渲染图表 type="bug"*/}
+                    //           <Link to={ele.key}>
+                    //             <Icon id='airplane' />
+                    //             <span>{ele.title}</span>
+                    //           </Link>
+                    //         </Menu.Item>
+                    //       );
+                    //   }
+                    // }
+                    // return cpre;
+                    cpre.push(
+                      <Menu.Item
+                        key={ele.key}
+                        onClick={() => {
+                          this.props.onClick(ele);
+                        }}
+                      >
+                        {/* 左侧菜单二级菜单按钮渲染图表 type="bug"*/}
+                        <Link to={ele.key}>
+                          <Icon id='airplane' />
+                          <span>{ele.title}</span>
+                        </Link>
+                      </Menu.Item>
+                    );
                     return cpre;
                     // }
 
@@ -271,7 +258,6 @@ class LeftNav extends Component {
 
             );
           } else {
-
           }
 
 
@@ -314,257 +300,83 @@ class LeftNav extends Component {
         this.props.history.replace("/login");
     }
     const menuList = JSON.parse(localStorage.getItem("menuList"));
-    console.log(menuList)
-    let HasTuiGuangYuan = false
-    let HasPaymentManage = false  
     if (!menuList) {
       this.getMenuList()
       return
     }
-    let testMenulist = []
-    menuList.forEach(e => {
-       if(e.title == "用户管理"){
-        let testItem= {
-          children:[
-            {id: 26, title: '用户列表', href: '/admin/user/index', key: '/user/user-list', pid: 1,children: null,spread: false},
-          ],
-          href:"",
-          icon:"",
-          key:"/user",
-          id:1,
-          pid:0,
-          spread:false,
-          title:"用户管理",
-        }
-        testMenulist.push(testItem)
-      }else if(e.title == "支付管理"){
-        HasPaymentManage = true
-        let testItem= {
-          children:[
-            {id: 998, title: '人工充值', href: '/payManage/serviceRecharge', key: '/payManage/serviceRecharge', pid: 1,children: null,spread: false},
-            {id: 998, title: '人工兑换', href: '/admin/user/index', key: '/payManage/serviceCash', pid: 1,children: null,spread: false},
-            {id: 998, title: '我的代充', href: '/admin/user/index', key: '/payManage/myAgentRecharge', pid: 1,children: null,spread: false},
-            {id: 998, title: '我的代付', href: '/admin/user/index', key: '/payManage/myAgentCash', pid: 1,children: null,spread: false},
-            {id: 998, title: '充提账变', href: '/admin/user/index', key: '/payManage/myGoldDetail', pid: 1,children: null,spread: false},
-            {id: 998, title: '信用账变', href: '/admin/user/index', key: '/payManage/myGoldDetailXinyong', pid: 1,children: null,spread: false},
-            {id: 998, title: '代充管理', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/serviceDetail', pid: 1,children: null,spread: false},
-            // {id: 998, title: '新增代充', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/createNewService', pid: 1,children: null,spread: false},
-          ],
-          href:"",
-          icon:"",
-          key:"/payManage",
-          id:999,
-          pid:0,
-          spread:false,
-          title:"支付管理",
-        }
-        testMenulist.push(testItem)
-      }else if (e.title == "推广员管理") {
-        HasTuiGuangYuan  = true
-        let testItem = {
-          children: [
-            { id: 998, title: '本级数据日报', href: '/admin/user/index', key: '/ptWorkers/personal-daily', pid: 1, children: null, spread: false },
-            { id: 997, title: '团队数据日报', href: '/admin/user/index', key: '/ptWorkers/team-daily', pid: 1, children: null, spread: false },
-            { id: 996, title: '个人结算列表', href: '/admin/user/index', key: '/ptWorkers/personal-list', pid: 1, children: null, spread: false },
-            { id: 995, title: '团队结算列表', href: '/admin/user/index', key: '/ptWorkers/team-list', pid: 1, children: null, spread: false },
-            { id: 995, title: '推广链接', href: '/admin/user/index', key: '/ptWorkers/pt-link', pid: 1, children: null, spread: false },
-            { id: 995, title: '下级管理', href: '/admin/user/index', key: '/ptWorkers/lower-manage', pid: 1, children: null, spread: false },
-            { id: 995, title: '推广管理', href: '/admin/user/index', key: '/ptWorkers/pt-manage', pid: 1, children: null, spread: false },
-          ],
-          href: "",
-          icon: "",
-          key: "/ptWorkers",
-          id: 999,
-          pid: 0,
-          spread: false,
-          title: "推广员管理",
-        }
-        testMenulist.push(testItem)
-      }else if(e.title == "报表管理"){
-        let testItem= {
-          children:[
-            {id: 130, title: '日常运营', href: '/admin/report/dailyReport', key: '/list/daily-report', pid: 22,children: null,spread: false},
-          ],
-          href:"",
-          icon:"",
-          key:"/list",
-          id:1,
-          pid:0,
-          spread:false,
-          title:"报表管理",
-        }
-        testMenulist.push(testItem)
-      }else if(e.title == "账户管理"){
-        let testItem = {
-          children:[
-            {id: 998, title: '账户详情', href: '/admin/user/index', key: '/accManage/accountDetail', pid: 1,children: null,spread: false},
-            // {id: 998, title: '用户组管理', href: '/admin/user/index', key: '/accManage/userGroupManage', pid: 1,children: null,spread: false},
-          ],
-          href:"",
-          icon:"",
-          key:"/accManage",
-          id:999,
-          pid:0,
-          spread:false,
-          title:"账户管理",
-  
-        }
-        testMenulist.push(testItem)
-      }
-    })
-    if(!HasTuiGuangYuan && (this.role_id == 2 || this.role_id == 4 )){
-      let testItem = {
-        children: [
-          { id: 998, title: '本级数据日报', href: '/admin/user/index', key: '/ptWorkers/personal-daily', pid: 1, children: null, spread: false },
-          { id: 997, title: '团队数据日报', href: '/admin/user/index', key: '/ptWorkers/team-daily', pid: 1, children: null, spread: false },
-          { id: 996, title: '个人结算列表', href: '/admin/user/index', key: '/ptWorkers/personal-list', pid: 1, children: null, spread: false },
-          { id: 995, title: '团队结算列表', href: '/admin/user/index', key: '/ptWorkers/team-list', pid: 1, children: null, spread: false },
-          { id: 995, title: '推广链接', href: '/admin/user/index', key: '/ptWorkers/pt-link', pid: 1, children: null, spread: false },
-          { id: 995, title: '下级管理', href: '/admin/user/index', key: '/ptWorkers/lower-manage', pid: 1, children: null, spread: false },
-          { id: 995, title: '推广管理', href: '/admin/user/index', key: '/ptWorkers/pt-manage', pid: 1, children: null, spread: false },
-        ],
-        href: "",
-        icon: "",
-        key: "/ptWorkers",
-        id: 999,
-        pid: 0,
-        spread: false,
-        title: "推广员管理",
-      }
-      testMenulist.splice(2,0,testItem)
-    }
-    if(!HasPaymentManage &&  (this.role_id == 1 || this.role_id == 2 || this.role_id == 3 )){
-      let testItem= {
-        children:[
-          {id: 998, title: '人工充值', href: '/payManage/serviceRecharge', key: '/payManage/serviceRecharge', pid: 1,children: null,spread: false},
-          {id: 998, title: '人工兑换', href: '/admin/user/index', key: '/payManage/serviceCash', pid: 1,children: null,spread: false},
-          {id: 998, title: '我的代充', href: '/admin/user/index', key: '/payManage/myAgentRecharge', pid: 1,children: null,spread: false},
-          {id: 998, title: '我的代付', href: '/admin/user/index', key: '/payManage/myAgentCash', pid: 1,children: null,spread: false},
-          {id: 998, title: '充提账变', href: '/admin/user/index', key: '/payManage/myGoldDetail', pid: 1,children: null,spread: false},
-          {id: 998, title: '信用账变', href: '/admin/user/index', key: '/payManage/myGoldDetailXinyong', pid: 1,children: null,spread: false},
-          {id: 998, title: '代充管理', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/serviceDetail', pid: 1,children: null,spread: false},
-          // {id: 998, title: '新增代充', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/createNewService', pid: 1,children: null,spread: false},
-        ],
-        href:"",
-        icon:"",
-        key:"/payManage",
-        id:999,
-        pid:0,
-        spread:false,
-        title:"支付管理",
-      }
-      testMenulist.splice(1,0,testItem)
-    }
-    if(this.role_id == 1){
-      let testItem= {
-        children:[
-          {id: 998, title: '菜单管理', href: '/menuManage/menuManage', key: '/menuManage/menuManage', pid: 1,children: null,spread: false},
-        ],
-        href:"",
-        icon:"",
-        key:"/menuManage",
-        id:999,
-        pid:0,
-        spread:false,
-        title:"菜单管理",
-      }
-      testMenulist.splice(1,0,testItem)
-    }
-    console.log(testMenulist)
-    localStorage.menuList = JSON.stringify(testMenulist)
-    const menuNodes = this.getMenuNodes(testMenulist);
+    // let hasactivity = false
+    // menuList.forEach((e)=>{
+    //   if(e.title == "活动管理"){
+    //     hasactivity = true
+    //   }
+    // })
+    // if(!hasactivity){
+    //   menuList.push({
+    //     id:3,
+    //     title:"活动管理",
+    //     level:1,
+    //     children:[{
+    //       id:15,
+    //       title:"活动领取列表",
+    //       level:2
+    //     }]
+    //   })
+    // }
+    let newList = this.reduceItem(menuList)
+    localStorage.menuList = JSON.stringify(newList)
+    const menuNodes = this.getMenuNodes(newList);
     this.setState({ menuNodes });
   }
-  // 旧版本渲染方式，先隐藏
-  // componentWillMount() {
-  //   const menuList = JSON.parse(localStorage.getItem("menuList"));
-  //   console.log(menuList)
-  //   if(!menuList){
-  //     this.getMenuList()
-  //     return
-  //   }
-  //   // test 
-  //   let HasTuiGuangYuan = false
-  //   menuList.forEach(e=>{
-  //     if(e.title == "推广员管理"){
-  //       HasTuiGuangYuan = true
-  //     }
-  //   })
-  //   if(!HasTuiGuangYuan){
-  //     let testitem = {
-  //       children:[
-  //         {id: 998, title: '本级数据日报', href: '/admin/user/index', key: '/ptWorkers/personal-daily', pid: 1,children: null,spread: false},
-  //         {id: 997, title: '团队数据日报', href: '/admin/user/index', key: '/ptWorkers/team-daily', pid: 1,children: null,spread: false},
-  //         {id: 996, title: '个人结算列表', href: '/admin/user/index', key: '/ptWorkers/personal-list', pid: 1,children: null,spread: false},
-  //         {id: 995, title: '团队结算列表', href: '/admin/user/index', key: '/ptWorkers/team-list', pid: 1,children: null,spread: false},
-  //       ],
-  //       href:"",
-  //       icon:"",
-  //       key:"/ptWorkers",
-  //       id:999,
-  //       pid:0,
-  //       spread:false,
-  //       title:"推广员管理",
-
-  //     }
-  //     menuList.push(testitem)
-  //   }
-  //   let HasAccountManage = false
-  //   menuList.forEach(e=>{
-  //     if(e.title == "账户管理"){
-  //       HasAccountManage = true
-  //     }
-  //   })
-  //   if(!HasAccountManage){
-  //     let testitem = {
-  //       children:[
-  //         {id: 998, title: '账户详情', href: '/admin/user/index', key: '/accManage/accountDetail', pid: 1,children: null,spread: false},
-  //         {id: 998, title: '用户组管理', href: '/admin/user/index', key: '/accManage/userGroupManage', pid: 1,children: null,spread: false},
-  //       ],
-  //       href:"",
-  //       icon:"",
-  //       key:"/accManage",
-  //       id:999,
-  //       pid:0,
-  //       spread:false,
-  //       title:"账户管理",
-
-  //     }
-  //     menuList.push(testitem)
-  //   }
-  //   let HasPaymentManage = false
-  //   menuList.forEach(e=>{
-  //     if(e.title == "支付管理"){
-  //       HasPaymentManage = true
-  //     }
-  //   })
-  //   if(!HasPaymentManage){
-  //     let testitem = {
-  //       children:[
-  //         {id: 998, title: '人工充值', href: '/payManage/serviceRecharge', key: '/payManage/serviceRecharge', pid: 1,children: null,spread: false},
-  //         {id: 998, title: '人工兑换', href: '/admin/user/index', key: '/payManage/serviceCash', pid: 1,children: null,spread: false},
-  //         {id: 998, title: '我的代充', href: '/admin/user/index', key: '/payManage/myAgentRecharge', pid: 1,children: null,spread: false},
-  //         {id: 998, title: '我的代付', href: '/admin/user/index', key: '/payManage/myAgentCash', pid: 1,children: null,spread: false},
-  //         {id: 998, title: '充提账变', href: '/admin/user/index', key: '/payManage/myGoldDetail', pid: 1,children: null,spread: false},
-  //         {id: 998, title: '代充管理', href: '/admin/user/index', key: '/payManage/creditManage', pid: 1,children: [
-  //           {id: 998, title: '代充明细', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/serviceDetail', pid: 1,children: null,spread: false},
-  //           {id: 998, title: '新增代充', href: '/payManage/serviceRecharge', key: '/payManage/creditManage/createNewService', pid: 1,children: null,spread: false},
-  //         ],spread: false},
-  //       ],
-  //       href:"",
-  //       icon:"",
-  //       key:"/payManage",
-  //       id:999,
-  //       pid:0,
-  //       spread:false,
-  //       title:"支付管理",
-
-  //     }
-  //     menuList.push(testitem)
-  //   }
-  //   const menuNodes = this.getMenuNodes(menuList);
-  //   this.setState({ menuNodes });
-  // }
+  reduceItem(menuList){
+    return menuList.map(e=>{
+      if(e.children){
+        e.children = this.reduceItem(e.children)
+        return {
+          ...e,
+          key:this.GetIdToKey(e.id)[0],
+          type:this.GetIdToKey(e.id)[1],
+          children:e.children
+        }
+      }else{
+        return {...e,key:this.GetIdToKey(e.id)[0],type:this.GetIdToKey(e.id)[1]
+        }
+      }
+    })
+  }
+  GetIdToKey(id){
+    let key = ""
+    let type = "bug"
+    switch(id){
+      case 1: key = "/user";type= "user" ; break; //用户管理
+      case 2: key = "/payManage";type="pay-circle" ; break; // 支付管理
+      case 3: key = "/activity" ;type="fire"; break; // 活动管理
+      case 4: key = "/list" ;type="table"; break; // 报表管理
+      case 5: key = "/ptWorkers" ;type="team"; break; // 推广员管理
+      case 6: key = "/accManage" ;type="idcard";  break; //账户管理
+      case 7: key = "/user/user-list" ; ;break;//用户列表
+      case 8: key = "/payManage/serviceRecharge" ;break;//人工充值
+      case 9: key = "/payManage/serviceCash" ; break;//人工兑换
+      case 10: key = "/payManage/creditManage/serviceDetail" ; break; // 代充管理
+      case 11: key = "/payManage/myAgentRecharge" ; break; // 我的代充
+      case 12: key = "/payManage/myAgentCash" ; break;//我的代付
+      case 13: key = "/payManage/myGoldDetail" ; break;//充提账变
+      case 14: key = "/payManage/myGoldDetailXinyong" ; break;//信用账变
+      case 15: key = "/activity/activity-manage" ; break;//活动领取列表
+      case 16: key = "/list/daily-report" ; break;//日常运营
+      case 17: key = "/ptWorkers/personal-daily" ; break;//本级数据日报
+      case 18: key = "/ptWorkers/team-daily" ; break;//团队数据日报
+      case 19: key = "/ptWorkers/personal-list" ; break;//个人结算列表
+      case 20: key = "/ptWorkers/team-list" ; break;//团队结算列表  
+      case 21: key = "/ptWorkers/pt-link" ; break;//推广链接
+      case 22: key = "/ptWorkers/lower-manage" ; break;//下级管理
+      case 23: key = "/ptWorkers/pt-manage" ; break;//推广管理
+      case 24: key = "/accManage/accountDetail" ; break;//账户详情
+      case 25: key = "/menuManage/menuManage" ;type="menu"; break;//菜单管理
+      case 26: key = "/menuManage/roleManage" ; break; //权限管理
+      case 27: key = "/menuManage/accountDetail" ; break; //账户管理 
+    }
+    return [key,type]
+  }
   componentDidMount() {
     this.setState({ openKey: this.openKey });
   }
@@ -581,6 +393,13 @@ class LeftNav extends Component {
     }
     return name
   }
+  IsMobile() {
+    let userAgent = navigator.userAgent,Agents = ["Android", "iPhone","SymbianOS", "Windows Phone","iPad", "iPod"];
+    console.log("userAgent",userAgent)
+    return Agents.some((i)=>{
+        return userAgent.includes(i)
+    })
+}
   render() {
     // 得到当前请求的路由路径
     let path = this.props.location.pathname;
@@ -590,13 +409,12 @@ class LeftNav extends Component {
           className="left-nav-header"
           onClick={() => (window.location.href = "/")}
         >
-          <h1>{`${this.getGameName()}游戏中心`}</h1>
+          <h1 style={{fontSize:"15px"}}>{`${this.getGameName()}游戏中心`}</h1>
           {/* <h4>V:1.0.9</h4> */}
         </div>
         <Menu
           mode="inline"
           theme="dark"
-
           // selectedKeys={[path]}
           // defaultOpenKeys={[this.openKey]}
           onOpenChange={(key) => {

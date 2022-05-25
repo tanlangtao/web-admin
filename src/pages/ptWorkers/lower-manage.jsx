@@ -690,7 +690,7 @@ export default class LowerManage extends Component {
             onCancel={() => {
               this.setState({ isShowSetTreatmentModel: false });
             }}
-            footer={null}
+            onOk={this.handSetTreatment}
           >
             <div>玩家ID : {this.recordID}</div>
             &nbsp; &nbsp;
@@ -703,7 +703,7 @@ export default class LowerManage extends Component {
               min={0} 
               max={100}
               value={this.state.setTreatment}
-              onBlur={(e) => (this.setState({ setTreatment: e.target.value },this.handSetTreatment))}
+              onBlur={(e) => (this.setState({ setTreatment: e.target.value }))}
             />%</div>
             <div style={{ height: "10px" }}></div>
           </Modal>
@@ -715,7 +715,7 @@ export default class LowerManage extends Component {
             onCancel={() => {
               this.setState({ isShowEditTreatMentModel: false });
             }}
-            footer={null}
+            onOk={this.handEditTreatment}
           >
             <div>玩家ID : {this.recordID}</div>
             &nbsp; &nbsp;
@@ -736,7 +736,7 @@ export default class LowerManage extends Component {
               min={0} 
               max={100}
               value={this.state.editTreatment}
-              onBlur={(e) => (this.setState({ editTreatment: e.target.value },this.handEditTreatment))}
+              onBlur={(e) => (this.setState({ editTreatment: e.target.value }))}
             />%</div>
             &nbsp; &nbsp;
             <div style={{ height: "10px" }}></div>

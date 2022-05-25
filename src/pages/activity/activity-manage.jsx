@@ -10,12 +10,10 @@ import {
 import Mytable from "../../components/MyTable";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button/index";
-import moment from "moment";
 import { formateDate } from "../../utils/dateUtils";
+import moment from "moment";
 import {
-  reqUsers,
-  reqGetuserbalancelist
-
+    reqActivityList
 } from "../../api/index";
 
 const { Option } = Select;
@@ -25,11 +23,13 @@ const init_state = {
   count: 0,
   startTime: '',
   endTime: '',
+  inputUserId: "",
+  inputActivityId: "",
   loading: false,
   data: [],
-  inputValue:"",
+  MyDatePickerValue: null,
 };
-export default class MyGoldDetail extends Component {
+export default class ActivityManage extends Component {
   constructor(props) {
     super(props);
     this.state = init_state;
@@ -37,81 +37,93 @@ export default class MyGoldDetail extends Component {
 
   initColumns = () => [
     {
-      title: "时间",
+      title: "user_id",
+      dataIndex: "user_id",
+      key: "user_id",
+      // fixed: "left",
+      align: 'center',
+    },
+    {
+      title: "活动ID",
+      dataIndex: "activity_id",
+      key: "activity_id",
+      align: 'center',
+    },
+    {
+      title: "活动名称",
+      dataIndex: "activity_name",
+      key: "activity_name",
+      align: 'center',
+    },
+    {
+      title: "品牌ID",
+      dataIndex: "package_id",
+      key: "package_id",
+      align: 'center',
+    },
+    {
+      title: "领取日期",
+      dataIndex: "receive_date",
+      key: "receive_date",
+      align: 'center',
+    },
+    {
+      title: "领取金额",
+      dataIndex: "receive_amount",
+      key: "receive_amount",
+      align: 'center',
+    },
+    {
+      title: "创建时间",
       dataIndex: "created_at",
       key: "created_at",
       align: 'center',
-      render:formateDate
-    },
-    {
-      title: "代充ID",
-      dataIndex: "account_name",
-      key: "account_name",
-      align: 'center',
-    },
-    {
-      title: "玩家ID",
-      dataIndex: "user_id",
-      key: "user_id",
-      align: 'center',
-      // width: 150,
-    },
-    {
-      title: "交易前金额",
-      dataIndex: "before_amount",
-      key: "before_amount",
-      align: 'center',
-      // width: 100,
-    },
-    {
-      title: "交易金额",
-      dataIndex: "act_amount",
-      key: "act_amount",
-      align: 'center',
-    },
-    {
-      title: "交易后金额",
-      dataIndex: "after_amount",
-      key: "after_amount",
-      align: 'center',
-    },
-    {
-      title: "备注",
-      dataIndex: "remark",
-      key: "remark",
-      align: 'center',
+      render:formateDate,
     },
   ];
-  getUsers = async (page, limit) => {
-    this.setState({ loading: true });
-    const result = await reqGetuserbalancelist(
-        this.state.inputValue,
-        this.props.admin_user_id,
+  getReqActivityList = async (page,limit)=>{
+    const result = await reqActivityList(
         this.props.package_id,
+        this.state.inputUserId,
+        this.state.inputActivityId,
         this.state.startTime,
         this.state.endTime,
-    );
-    if (result.status === 0) {
-      this.setState({
-        data: result.data.lists,
-        count: result.data && result.data.total,
-        loading: false,
-      });
-    } else {
-      message.info(result.msg || "未检索到数据");
+        page,
+        limit
+    )
+    if(result.status === 0) {
+        let newdata = []
+        result.data.data.forEach(e=>{
+            if(this.state.inputUserId != "" && e.user_id == this.state.inputUserId){
+                newdata.push(e)
+            }else if(this.state.inputActivityId != "" && e.activity_id == this.state.inputActivityId ){
+                newdata.push(e)
+            }else if(this.state.inputUserId != "" && this.state.inputActivityId != "" && e.user_id == this.state.inputUserId && e.activity_id == this.state.inputActivityId){
+                newdata.push(e)
+            }else if(this.state.inputUserId == "" && this.state.inputActivityId == ""){
+                newdata.push(e)
+            }
+        })
+        console.log(this.state.inputUserId,"newdata",newdata)
+        this.setState({
+            data:newdata,
+            count: newdata.count,
+            loading: false,
+        })
+    }else{
+      message.error(`失败！${result.data}`)
     }
-  };
+  }
   componentDidMount() {
     //默认查询一周数据
     let start = moment().startOf("day").subtract(1, "week");
     let end = moment().startOf("day").subtract(-1, "day").subtract(1, "seconds");
-
     this.setState({
-      startTime: start.format("YYYY-MM-DD HH:mm:ss"),
-      endTime: end.format("YYYY-MM-DD HH:mm:ss"),
+      startTime:start.format("YYYY-MM-DD HH:mm:ss"),
+      endTime:end.format("YYYY-MM-DD HH:mm:ss"),
       
-    }, () => {
-      this.getUsers(1, 20)
+    },()=>{
+        this.getReqActivityList(1,20)
     })
   }
   render() {
@@ -134,15 +146,25 @@ export default class MyGoldDetail extends Component {
           placeholder="请输入玩家ID"
           style={{ width: 150 }}
           onChange={(e) => {
-            this.setState({ inputValue: e.target.value });
+            this.setState({ inputUserId: e.target.value });
           }}
-          value={this.state.inputValue}
+          value={this.state.inputUserId}
+        />
+        &nbsp; &nbsp;
+              <Input
+          type="text"
+          placeholder="请输入活动ID"
+          style={{ width: 150 }}
+          onChange={(e) => {
+            this.setState({ inputActivityId: e.target.value });
+          }}
+          value={this.state.inputActivityId}
         />
         &nbsp; &nbsp;
               <LinkButton
           onClick={() => {
             this.setState({ current: 1 });
-            this.getUsers(1, this.state.pageSize);
+            this.getReqActivityList(1, this.state.pageSize);
           }}
           size="default"
         >
@@ -163,7 +185,7 @@ export default class MyGoldDetail extends Component {
           loading,
         }}
         paginationOnchange={(page, limit) => {
-            this.getUsers(page, limit);
+          this.getReqActivityList(page, limit);
         }}
         setPagination={(current, pageSize) => {
             if (pageSize) {

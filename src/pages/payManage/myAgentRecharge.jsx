@@ -209,6 +209,7 @@ export default class MyAgentRecharge extends Component {
   }
   getReqDaiPayOrderListByLoginId = async (page, limit) => {
     this.setState({ loading: true });
+    console.log("this.props.admin_user_id,",this.props.admin_user_id,)
     const result = await reqDaiPayOrderListByLoginId(
       {
         user_id:this.props.admin_user_id,
@@ -223,7 +224,7 @@ export default class MyAgentRecharge extends Component {
       }
     );
     if (result.status === 0) {
-      let data =result.data && JSON.parse(result.data)
+      let data =result.data && result.data.lists
       console.log(data)
       if(this.state.inputValue != ""){
         let newData = []
@@ -234,12 +235,12 @@ export default class MyAgentRecharge extends Component {
         });
         this.setState({
           data:newData,
-          count: newData.length,
+          count: result.data.total,
         })
       }else{
         this.setState({
           data:data,
-          count: data.length,
+          count: result.data.total,
         })
       }
     } else {
