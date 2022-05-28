@@ -180,9 +180,8 @@ export default class ServiceRecharge extends Component {
         limit: limit,
         package_id: this.props.package_id,
         flag: 3,
-        [this.state.inputKey]: Number(this.state.inputValue),
         order_status: Number(this.state.inputStatus),
-      }
+      },this.state.inputKey,this.state.inputValue
     );
     if (result.status === 0) {
       let data = result.data && result.data.lists
@@ -218,8 +217,8 @@ export default class ServiceRecharge extends Component {
     if (result.status === 0) {
       message.success("操作成功！")
       this.getReqDaiPayOrderList(1,10)
-    } else {
-      message.error(`操作失败！${result.data}`)
+    } else {//${result.data}
+      message.error(`操作失败！`)
     }
     this.setState({
       isShowUpdateModel: false
@@ -257,6 +256,13 @@ export default class ServiceRecharge extends Component {
   }
   componentDidMount() {
     this.getReqDaiPayOrderList(1,10)
+    let self = this
+    this.timer = setInterval(e=>{
+      self.getReqDaiPayOrderList(1,10)
+    },1000*60*3)
+  }
+  componentWillUnmount(){
+    clearInterval(this.timer)
   }
   render() {
     const { data, count, current, pageSize, loading } = this.state;
@@ -283,6 +289,7 @@ export default class ServiceRecharge extends Component {
         >
           <Option value="user_id">玩家ID</Option>
           <Option value="replace_id">代充ID</Option>
+          <Option value="order_id">订单ID</Option>
         </Select>
         &nbsp; &nbsp;
               <Input

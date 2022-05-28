@@ -260,6 +260,13 @@ export default class MyAgentRecharge extends Component {
     },()=>{
       this.getReqDaiPayOrderListByLoginId(1,20)
     })
+    let self = this
+    this.timer = setInterval(e=>{
+      self.getReqDaiPayOrderListByLoginId(1,20)
+    },1000*60*3)
+  }
+  componentWillUnmount(){
+    clearInterval(this.timer)
   }
   render() {
     const { data, count, current, pageSize, loading } = this.state;

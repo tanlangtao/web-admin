@@ -32,7 +32,7 @@ const init_state = {
     isShowAddModel:false,
     isShowEditModel:false,
     inputTitle:"",
-    inputId:"",
+    inputId:"0",
     inputSort:"",
     inputStatus:""
 };
@@ -129,10 +129,14 @@ export default class MenuManage extends Component {
 
     showModel = (record, num) => {
         this.record = record
+        let {pid,sort,status} = this.record
         switch (num) {
             case 1:
                 this.setState({
-                    isShowEditModel: true
+                    isShowEditModel: true,
+                    inputId:`${pid}`,
+                    inputSort:`${sort}`,
+                    inputStatus:`${status}`,
                 })
                 break;
             case 2:
@@ -162,7 +166,7 @@ export default class MenuManage extends Component {
                 inputStatus:"",
                 isShowAddModel:false
             })
-            this.getReqMenulist(1,20)
+            this.getReqMenulisttotal()
         }else{
             message.error(`失败！${result.data}`)
         }
@@ -189,14 +193,13 @@ export default class MenuManage extends Component {
                 inputStatus:"",
                 isShowEditModel:false
             })
-            this.getReqMenulist(1,20)
+            this.getReqMenulisttotal()
         }else{
             message.error(`失败！${result.data}`)
         }
     }
     
     getReqMenulist = async (page, limit) => {
-        this.getReqMenulisttotal()
         const result = await reqMenulist(page,limit)
         if (result.status === 0) {
             let data = result.data
@@ -210,6 +213,7 @@ export default class MenuManage extends Component {
     }
     getReqMenulisttotal = async () => {
         const result = await reqMenulisttotal()
+        this.getReqMenulist(1,20)
         if (result.status === 0) {
             let data = result.data
             this.setState({
@@ -222,7 +226,7 @@ export default class MenuManage extends Component {
     }
     componentDidMount() {
         //默认查询一周数据
-        this.getReqMenulist(1,20)
+        this.getReqMenulisttotal()
     }
     render() {
         const { data, count, current, pageSize, loading } = this.state;

@@ -371,9 +371,10 @@ class LeftNav extends Component {
       case 22: key = "/ptWorkers/lower-manage" ; break;//下级管理
       case 23: key = "/ptWorkers/pt-manage" ; break;//推广管理
       case 24: key = "/accManage/accountDetail" ; break;//账户详情
-      case 25: key = "/menuManage/menuManage" ;type="menu"; break;//菜单管理
-      case 26: key = "/menuManage/roleManage" ; break; //权限管理
-      case 27: key = "/menuManage/accountDetail" ; break; //账户管理 
+      case 25: key = "/accManage/menuManage" ;type="menu"; break;//菜单管理
+      case 26: key = "/accManage/roleManage" ; break; //权限管理
+      case 27: key = "/accManage/accountDetail" ; break; //账户管理 
+      case 38: key = "/accManage/doman-config" ; break; //账户管理 
     }
     return [key,type]
   }

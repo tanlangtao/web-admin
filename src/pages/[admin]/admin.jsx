@@ -133,7 +133,7 @@ import TeamList from "../ptWorkers/team-list";
 import PtLink from "../ptWorkers/ptlink";
 import PtManage from "../ptWorkers/pt-manage";
 import AccountDetail from "../accManage/accountDetail";
-import UserGroupManage from "../accManage/userGroupManage";
+import RoleManage from "../accManage/roleManage";
 import MyAgentRecharge from "../payManage/myAgentRecharge";
 import MyAgentCash from "../payManage/myAgentCash";
 import ServiceRecharge from "../payManage/serviceRecharge";
@@ -143,8 +143,9 @@ import MyGoldDetailXinyong from "../payManage/myGoldDetailXinyong";
 import CreateNewService from "../payManage/creditManage/createNewService";
 import ServiceDetail from "../payManage/creditManage/serviceDetail";
 import LowerManage from "../ptWorkers/lower-manage";
-import MenuManage from "../menuManage/menuManage";
+import MenuManage from "../accManage/menuManage";
 import ActivityManage from "../activity/activity-manage";
+import DomanConfig from "../accManage/doman-config";
 import { conforms } from "lodash-es";
 const { Sider, Content } = Layout;
 const history = createHashHistory();
@@ -166,7 +167,7 @@ export default class Admin extends Component {
     const adminLoginData = JSON.parse(localStorage.getItem("adminLoginData"))
     if(adminLoginData){
       this.setState({
-        package_id:Number(adminLoginData.packageid),
+        package_id:adminLoginData.roleid !=1 ? Number(adminLoginData.packageid):adminLoginData.packageid,
         role_id:Number(adminLoginData.roleid),
         admin_user_id:Number(adminLoginData.userid),
         password:Number(adminLoginData.password),
@@ -835,9 +836,9 @@ export default class Admin extends Component {
                         <AccountDetail  package_id={this.state.package_id} account={this.state.account} password={this.state.password} admin_user_id = {this.state.admin_user_id}/>
                       </KeepAlive>
                     </Route>
-                    <Route path="/accManage/userGroupManage" exact>
-                      <KeepAlive name="UserGroupManage">
-                        <UserGroupManage package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
+                    <Route path="/accManage/roleManage" exact>
+                      <KeepAlive name="RoleManage">
+                        <RoleManage package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                       </KeepAlive>
                     </Route>
                     <Route path="/payManage/myAgentRecharge" exact>
@@ -890,7 +891,7 @@ export default class Admin extends Component {
                         <LowerManage package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                       </KeepAlive>
                     </Route>
-                    <Route path="/menuManage/menuManage" exact>
+                    <Route path="/accManage/menuManage" exact>
                       <KeepAlive name="MenuManage">
                         <MenuManage package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                       </KeepAlive>
@@ -900,7 +901,11 @@ export default class Admin extends Component {
                         <ActivityManage package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                       </KeepAlive>
                     </Route>
-                    
+                    <Route path="/accManage/doman-config" exact>
+                      <KeepAlive name="DomanConfig">
+                        <DomanConfig package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
+                      </KeepAlive>
+                    </Route>
                     <Route component={NotFound} />
                   </Switch>
                   

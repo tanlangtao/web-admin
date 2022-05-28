@@ -172,8 +172,8 @@ class PopUserRechargeDetail extends Component {
     if (result.status === 0) {
       message.success("操作成功！")
       this.getReqDaiPayOrderList(1,20)
-    }else{
-      message.error(`操作失败！${result.data}`)
+    }else{//${result.data}
+      message.error(`操作失败！`)
     }
     this.setState({
       isShowUpdateModel:false

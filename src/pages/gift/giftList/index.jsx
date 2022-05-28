@@ -107,7 +107,7 @@ class Withdraw_list extends Component {
               <Icon type="search" />
             </LinkButton>
           </div>
-        }
+        } 
         extra={
           <span>
             <LinkButton

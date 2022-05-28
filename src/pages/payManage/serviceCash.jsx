@@ -317,6 +317,13 @@ export default class MyAgentCash extends Component {
   }
   componentDidMount() {
     this.getReqDaiWithdrawOrderList(1,10)
+    let self = this;
+    this.timer = setInterval(e=>{
+      self.getReqDaiWithdrawOrderList(1,10)
+    },1000*60*3)
+  }
+  componentWillUnmount(){
+    clearInterval(this.timer)
   }
   render() {
     const { data, count, current, pageSize, loading } = this.state;
@@ -342,7 +349,7 @@ export default class MyAgentCash extends Component {
           }}
         >
           <Option value="user_id">玩家ID</Option>
-          <Option value="proxy_user_id">上级ID</Option>
+          <Option value="replace_id">代提ID</Option>
           <Option value="order_id">订单ID</Option>
           {/* <Option value="start_time">创建时间</Option> */}
           {/* <Option value="game_nick">金额区间</Option> */}

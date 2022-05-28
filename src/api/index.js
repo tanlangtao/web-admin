@@ -19,7 +19,7 @@ export const raceURL = (username, password) => {
   });
   // axios.defaults.headers.post["Content-Type"] = "application/json";
   let URLs = process.env.REACT_APP_HOST.split(",");
-  console.log("urls=========",URLs);
+  console.log("urls=========", URLs);
   let promises = URLs.map((value) => {
     return instance2.get(value + "/api/check");
   });
@@ -35,15 +35,15 @@ export const raceURL = (username, password) => {
 };
 
 // 登陆
-export const reqLogin = (username, password, authcode) =>{
+export const reqLogin = (username, password, authcode) => {
   let urldata = {
-    account : username,
+    account: username,
     password
   }
-  return ajax(BASE + "/credit/login", { ...urldata}, "POST");
-} 
-  
-  
+  return ajax(BASE + "/credit/login", { ...urldata }, "POST");
+}
+
+
 
 // 获取authCode
 export const reqAuthCode = (username, password) =>
@@ -208,7 +208,7 @@ export const reqCancelAccount = (id) => {
     BASE + "/api/payment_account/cancelAccount",
     {
       id,
-      action:"del",
+      action: "del",
     },
     "POST"
   );
@@ -701,9 +701,9 @@ export const getprofitpool = (str) => {
 //更新盈余池 -> go-admin -> 控制角色权限
 export const uptprofitpool = (str, formdata) => {
   /*return ajax(process.env.REACT_APP_GAME_HOST + str, formdata, "POST", {
-		needAuth: false,
-		content_type_is_formdata: true,
-	});*/
+    needAuth: false,
+    content_type_is_formdata: true,
+  });*/
   return ajax(
     process.env.REACT_APP_GAME_HOST + str,
     {
@@ -729,7 +729,7 @@ export const setBuYuConfig = (reqData) => {
   let { RoomIndex, PlaceType, Level, Difficult, ChouFang } = reqData;
   return ajax(
     BASE +
-      `/config/setBuYuConfig?RoomIndex=${RoomIndex}&PlaceType=${PlaceType}&Level=${Level}&Difficult=${Difficult}&ChouFang=${ChouFang}`,
+    `/config/setBuYuConfig?RoomIndex=${RoomIndex}&PlaceType=${PlaceType}&Level=${Level}&Difficult=${Difficult}&ChouFang=${ChouFang}`,
     {},
     "GET"
   );
@@ -742,10 +742,9 @@ export const changeRoomStatus = ({
   subgame,
 }) => {
   return ajax(
-    `${process.env.REACT_APP_GAME_HOST}${
-      subgame !== "cycdx"
-        ? "/cylhd/api/changeRoomStatus"
-        : "/caidaxiao/api/changeRoomStatus"
+    `${process.env.REACT_APP_GAME_HOST}${subgame !== "cycdx"
+      ? "/cylhd/api/changeRoomStatus"
+      : "/caidaxiao/api/changeRoomStatus"
     }`,
     { game_id, room_id, room_status },
     "GET",
@@ -755,10 +754,9 @@ export const changeRoomStatus = ({
 //cylhd&cycdx玩家限红设定与查询
 export const getUserLimitRangeRecord = ({ game_id, user_id, subgame }) => {
   return ajax(
-    `${process.env.REACT_APP_GAME_HOST}${
-      subgame !== "cycdx"
-        ? "/cylhd/api/getUserLimitRangeRecord"
-        : "/caidaxiao/api/getUserLimitBet"
+    `${process.env.REACT_APP_GAME_HOST}${subgame !== "cycdx"
+      ? "/cylhd/api/getUserLimitRangeRecord"
+      : "/caidaxiao/api/getUserLimitBet"
     }`,
     { game_id, user_id },
     "GET",
@@ -773,10 +771,9 @@ export const setUserLimitRangeBet = ({
   subgame,
 }) => {
   return ajax(
-    `${process.env.REACT_APP_GAME_HOST}${
-      subgame !== "cycdx"
-        ? "/cylhd/api/setUserLimitRangeBet"
-        : "/caidaxiao/api/setUserLimitBet"
+    `${process.env.REACT_APP_GAME_HOST}${subgame !== "cycdx"
+      ? "/cylhd/api/setUserLimitRangeBet"
+      : "/caidaxiao/api/setUserLimitBet"
     }`,
     { game_id, user_id, max_bet, min_bet },
     "POST",
@@ -786,10 +783,9 @@ export const setUserLimitRangeBet = ({
 //cylhd&cycdx房间限红设定与查询
 export const getRoomLimitRangeRecord = ({ game_id, room_id, subgame }) => {
   return ajax(
-    `${process.env.REACT_APP_GAME_HOST}${
-      subgame !== "cycdx"
-        ? "/cylhd/api/getRoomLimitBet"
-        : "/caidaxiao/api/getRoomLimitBet"
+    `${process.env.REACT_APP_GAME_HOST}${subgame !== "cycdx"
+      ? "/cylhd/api/getRoomLimitBet"
+      : "/caidaxiao/api/getRoomLimitBet"
     }`,
     { game_id, room_id },
     "POST",
@@ -804,10 +800,9 @@ export const setRoomLimitBet = ({
   subgame,
 }) => {
   return ajax(
-    `${process.env.REACT_APP_GAME_HOST}${
-      subgame !== "cycdx"
-        ? "/cylhd/api/setRoomLimitBet"
-        : "/caidaxiao/api/setRoomLimitBet"
+    `${process.env.REACT_APP_GAME_HOST}${subgame !== "cycdx"
+      ? "/cylhd/api/setRoomLimitBet"
+      : "/caidaxiao/api/setRoomLimitBet"
     }`,
     { game_id, room_id, max_bet, min_bet },
     "POST",
@@ -921,7 +916,7 @@ export const getProxy = (id, start_time, end_time) => {
 export const getProxyChild = (id, start_time, end_time) => {
   return ajax(
     BASE +
-      `/Operation/Api/GetChildrenIncome?id=${id}&start_time=${start_time}&end_time=${end_time}`,
+    `/Operation/Api/GetChildrenIncome?id=${id}&start_time=${start_time}&end_time=${end_time}`,
     {},
     "GET"
   );
@@ -1059,7 +1054,7 @@ export const getIPconfig = () => {
 export const getIPlist = (page, limit, ip) => {
   return ajax(
     BASE +
-      `/Operation/Api/getBlackList?page=${page}&limit=${limit}&platform_key=654321&ip=${ip}`,
+    `/Operation/Api/getBlackList?page=${page}&limit=${limit}&platform_key=654321&ip=${ip}`,
     {},
     "GET",
     {
@@ -1101,7 +1096,7 @@ export const setLimit = (field, value) => {
 export const getwhiteIPlist = (page, limit, ip) => {
   return ajax(
     BASE +
-      `/Operation/Api/GetWhiteList?page=${page}&limit=${limit}&platform_key=654321&ip=${ip}`,
+    `/Operation/Api/GetWhiteList?page=${page}&limit=${limit}&platform_key=654321&ip=${ip}`,
     {},
     "GET",
     {
@@ -1357,11 +1352,11 @@ export const applyReimburse = (
       : `${BASE}/api/activity/oldUserApplyReimburse`,
     !is_old
       ? {
-          user_id,
-          activity_id,
-          package_id,
-          token: "e40f01afbb1b9ae3dd6747ced5bca532",
-        }
+        user_id,
+        activity_id,
+        package_id,
+        token: "e40f01afbb1b9ae3dd6747ced5bca532",
+      }
       : { user_id, activity_id, token: "e40f01afbb1b9ae3dd6747ced5bca532" },
     "POST",
     { content_type_is_formdata: true }
@@ -1971,7 +1966,7 @@ export const getb2bregister = (skip, limit) => {
 export const getZRSXdata = (page, limit, start_time, end_time, gametype) => {
   return ajax(
     BASE +
-      `/ag/gameRoundsRes?start_time=${start_time}&page=${page}&gametype=${gametype}&end_time=${end_time}&limit=${limit}`,
+    `/ag/gameRoundsRes?start_time=${start_time}&page=${page}&gametype=${gametype}&end_time=${end_time}&limit=${limit}`,
     {},
     "GET"
   );
@@ -1979,7 +1974,7 @@ export const getZRSXdata = (page, limit, start_time, end_time, gametype) => {
 export const getAGdata = (page, limit, start_time, end_time, gametype) => {
   return ajax(
     BASE +
-      `/ag/OrdersRes?start_time=${start_time}&page=${page}&gametype=${gametype}&end_time=${end_time}&limit=${limit}`,
+    `/ag/OrdersRes?start_time=${start_time}&page=${page}&gametype=${gametype}&end_time=${end_time}&limit=${limit}`,
     {},
     "GET"
   );
@@ -1987,7 +1982,7 @@ export const getAGdata = (page, limit, start_time, end_time, gametype) => {
 export const getPCCP_project = (page, start_time, end_time, filter_string) => {
   return ajax(
     BASE +
-      `/apcaipiao/projectList?start_time=${start_time}&page=${page}&end_time=${end_time}${filter_string}`,
+    `/apcaipiao/projectList?start_time=${start_time}&page=${page}&end_time=${end_time}${filter_string}`,
     {},
     "GET"
   );
@@ -1995,7 +1990,7 @@ export const getPCCP_project = (page, start_time, end_time, filter_string) => {
 export const getPCCP_fundList = (page, start_time, end_time, type) => {
   return ajax(
     BASE +
-      `/apcaipiao/fundList?start_time=${start_time}&page=${page}&end_time=${end_time}&type=${type}`,
+    `/apcaipiao/fundList?start_time=${start_time}&page=${page}&end_time=${end_time}&type=${type}`,
     {},
     "GET"
   );
@@ -2274,31 +2269,31 @@ export const getStatementTotalByID = (reqData) => {
     "GET"
   );
 };
-export const reqGetCreditDividendInfoList = (first_date,last_date,id,package_id,page,limit) => {
+export const reqGetCreditDividendInfoList = (first_date, last_date, id, package_id, page, limit) => {
   return ajax(
     BASE + "/Operation/Api/GetCreditDividendInfoList",
-    { first_date,last_date,id,package_id ,page,limit},
+    { first_date, last_date, id, package_id },
     "GET"
   );
 };
-export const reqGetCreditDividendInfo7Day = (first_date,last_date,account_name,page,limit) => {
+export const reqGetCreditDividendInfo7Day = (first_date, last_date, account_name, page, limit) => {
   return ajax(
     BASE + "/Operation/Api/GetCreditDividendInfo7Day",
-    { first_date,last_date,account_name,page,limit },
+    { first_date, last_date, account_name },
     "GET"
   );
 };
-export const reqGetCreditDividendInfo7DayList = (first_date,last_date,id,package_id,page,limit) => {
+export const reqGetCreditDividendInfo7DayList = (first_date, last_date, id, package_id, page, limit) => {
   return ajax(
     BASE + "/Operation/Api/GetCreditDividendInfo7DayList",
-    { first_date,last_date,id,package_id ,page,limit},
+    { first_date, last_date, id, package_id, page, limit },
     "GET"
   );
 };
-export const reqGrantCreditDividend7DayByRoundID = (round_id,account_name,page,limit) => {
+export const reqGrantCreditDividend7DayByRoundID = (round_id, account_name, page, limit) => {
   return ajax(
     BASE + "/proxy/user/GrantCreditDividend7DayByRoundID",
-    { round_id,account_name ,page,limit},
+    { round_id, account_name, page, limit },
     "POST"
   );
 };
@@ -2306,57 +2301,57 @@ export const reqGrantCreditDividend7DayByRoundID = (round_id,account_name,page,l
 export const reqDaiPayment = (urlData) => {
   return ajax(
     BASE + "/api/payment/daiPayment",
-    {...urlData},
+    { ...urlData },
     "POST"
   );
 };
 //更新代充ID
-export const reqUpdateDaiPaymentID = (user_id,order_id,package_id) => {
+export const reqUpdateDaiPaymentID = (user_id, order_id, package_id) => {
   return ajax(
     BASE + "/api/payment/updateDaiPaymentID",
-    {user_id,order_id,package_id},
+    { user_id, order_id, package_id },
     "POST"
   );
 };
 
 //修改代充ID
-export const reqModifyDaiPaymentID = (user_id,order_id,package_id) => {
+export const reqModifyDaiPaymentID = (user_id, order_id, package_id) => {
   return ajax(
     BASE + "/api/payment/modifyDaiPaymentID",
-    {user_id,order_id,package_id},
+    { user_id, order_id, package_id },
     "POST"
   );
 };
 //指派
-export const reqLockDaiPayment = (order_id,package_id) => {
+export const reqLockDaiPayment = (order_id, package_id) => {
   return ajax(
     BASE + "/api/payment/lockDaiPayment",
-    {order_id,package_id},
+    { order_id, package_id },
     "POST"
   );
 };
 //确认上分
-export const reqApplyDaiPayAmount = (order_id,package_id) => {
+export const reqApplyDaiPayAmount = (order_id, package_id) => {
   return ajax(
     BASE + "/api/payment/applyDaiPayAmount",
-    {order_id,package_id},
+    { order_id, package_id },
     "POST"
   );
 };
 //修改上分
-export const reqModifyDaiPayAmount = (order_id,package_id,amount) => {
+export const reqModifyDaiPayAmount = (order_id, package_id, amount) => {
   return ajax(
     BASE + "/api/payment/modifyDaiPayAmount",
-    {order_id,package_id,amount},
+    { order_id, package_id, amount },
     "POST"
   );
 };
 
 //支付订单列表
-export const reqDaiPayOrderList = (urlData) => {
+export const reqDaiPayOrderList = (urlData,inputKey, inputValue) => {
   return ajax(
     BASE + "/api/payment/daiPayOrderList",
-    {...urlData},
+    { ...urlData,[inputKey]: inputKey == "order_id" ? inputValue : Number(inputValue) },
     "POST"
   );
 };
@@ -2365,7 +2360,7 @@ export const reqDaiPayOrderList = (urlData) => {
 export const reqDaiPayOrderListByLoginId = (urlData) => {
   return ajax(
     BASE + "/api/payment/daiPayOrderListByLoginId",
-    {...urlData},
+    { ...urlData },
     "POST"
   );
 };
@@ -2373,39 +2368,39 @@ export const reqDaiPayOrderListByLoginId = (urlData) => {
 export const reqWithDrawApply = (urlData) => {
   return ajax(
     BASE + "/api/with_draw/withDrawApply",
-    { ...urlData},
+    { ...urlData },
     "POST"
   );
 };
 //更新代付ID
-export const reqUpdateDaiWithdrawID = (package_id,order_id) => {
+export const reqUpdateDaiWithdrawID = (package_id, order_id) => {
   return ajax(
     BASE + "/api/with_draw/updateDaiWithdrawID",
-    { package_id,order_id },
+    { package_id, order_id },
     "POST"
   );
 };
 //修改代付ID
-export const reqModifyDaiWithdrawID = (user_id,package_id,order_id) => {
+export const reqModifyDaiWithdrawID = (user_id, package_id, order_id) => {
   return ajax(
     BASE + "/api/with_draw/modifyDaiWithdrawID",
-    { user_id,package_id,order_id },
+    { user_id, package_id, order_id },
     "POST"
   );
 };
 //我已付款
-export const reqApplyDaiWithdraw = (user_id,package_id,order_id) => {
+export const reqApplyDaiWithdraw = (user_id, package_id, order_id) => {
   return ajax(
     BASE + "/api/with_draw/applyDaiWithdraw",
-    { user_id,package_id,order_id },
+    { user_id, package_id, order_id },
     "POST"
   );
 };
 //兑换订单列表
-export const reqDaiWithdrawOrderList = (urlData,inputKey,inputValue) => {
+export const reqDaiWithdrawOrderList = (urlData, inputKey, inputValue) => {
   return ajax(
     BASE + "/api/with_draw/daiWithdrawOrderList",
-    { ...urlData ,[inputKey]:Number(inputValue)},
+    { ...urlData, [inputKey]: inputKey == "order_id" ? inputValue : Number(inputValue) },
     "POST"
   );
 };
@@ -2423,38 +2418,38 @@ export const reqSaveAccount = (urlData) => {
     BASE + "/api/payment_account/saveAccount",
     { ...urlData },
     "POST",
-    {content_type_is_formdata:true}
+    { content_type_is_formdata: true }
   );
 };
 //信用盘，新增用户组
-export const reqAddrole = (name,role) => {
+export const reqAddrole = (name, role) => {
   return ajax(
-    BASE + "/admin/credit/addrole",
-    { name,role },
-    "POST"
+    BASE + "/credit/addrole",
+    { name, role },
+    "POST",
   );
 };
 //信用盘，编辑用户组  
-export const reqEditrole = (id,name,role) => {
+export const reqEditrole = (id, name, role) => {
   return ajax(
-    BASE + "/admin/credit/editrole",
-    { id,name,role },
-    "POST"
+    BASE + "/credit/editrole",
+    { id, name, role },
+    "POST",
   );
 };
 //信用盘，删除用户组  
-export const reqDelrole= (id) => {
+export const reqDelrole = (id) => {
   return ajax(
-    BASE + "/admin/credit/delrole",
+    BASE + "/credit/delrole",
     { id },
     "POST"
   );
 };
 //审核
-export const reqReviewDaiWithdraw= (order_id,review_status,user_id,package_id) => {
+export const reqReviewDaiWithdraw = (order_id, review_status, user_id, package_id) => {
   return ajax(
     BASE + "/api/with_draw/reviewDaiWithdraw",
-    { order_id,review_status,user_id,package_id },
+    { order_id, review_status, user_id, package_id },
     "POST"
   );
 };
@@ -2465,100 +2460,100 @@ export const getGameUserLoginHistory = (reqData) => {
     "GET"
   );
 };
-export const getCreditUserlist = (package_id,user_id,page,limit,role_id) => {
+export const getCreditUserlist = (package_id, user_id, page, limit, role_id) => {
   return ajax(
     BASE + `/credit/userlist`,
-    {package_id,user_id,page,limit,role_id },
+    { package_id, user_id, page, limit, role_id },
     "GET"
   );
 };
-export const getCreditUserlists = (package_id,user_id,page,limit) => {
- let role_id = 3
+export const getCreditUserlists = (package_id, user_id, page, limit) => {
+  let role_id = 3
   return ajax(
     BASE + `/credit/userlist`,
-    {package_id,user_id,page,limit,role_id },
+    { package_id, user_id, page, limit, role_id },
     "GET"
   );
 };
 //修改密码
-export const setAccountPass = (id,password) => {
+export const setAccountPass = (id, password) => {
   return ajax(
     BASE + `/Operation/Api/setAccountPass`,
-    { id ,password },
+    { id, password },
     "POST",
-    {content_type_is_formdata:true}
+    { content_type_is_formdata: true }
   );
 };
 //设置代充
-export const reqCreditAdduser = (account,password,userid,packageid,roleid) => {
+export const reqCreditAdduser = (account, password, userid, packageid, roleid) => {
   return ajax(
     BASE + `/credit/adduser`,
-    { account,password,userid,packageid,roleid },
+    { account, password, userid, packageid, roleid },
     "POST",
   );
 };
 //查询下级列表
-export const reqLowerUsers = (page, limit, start, end,proxy_pid,inputKey, inputValue) => {
+export const reqLowerUsers = (page, limit, start, end, proxy_pid, inputKey, inputValue) => {
   return ajax(
     BASE + "/user/index",
-    { page, limit, start, end,proxy_pid ,[inputKey]: inputValue },
+    { page, limit, start, end, proxy_pid, [inputKey]: inputValue },
     "POST"
   );
 };
 //获取待遇
-export const reqGetDividendRule = (account_name, id,type,game_tag) => {
+export const reqGetDividendRule = (account_name, id, type, game_tag) => {
   return ajax(
     BASE + "/proxy/user/getDividendRule",
-    { account_name, id, type,game_tag },
+    { account_name, id, type, game_tag },
     "GET"
   );
 };
 //设置待遇
-export const reqCreateDividendRule = (type,game_tag,demand_type,demand_tag,amount,percent,account_name, child_id) => {
+export const reqCreateDividendRule = (type, game_tag, demand_type, demand_tag, amount, percent, account_name, child_id) => {
   return ajax(
     BASE + "/proxy/user/createDividendRule",
-    { type,game_tag,demand_type,demand_tag,amount,percent,account_name, child_id},
+    { type, game_tag, demand_type, demand_tag, amount, percent, account_name, child_id },
     "POST",
-    {content_type_is_formdata:true}
+    { content_type_is_formdata: true }
   );
 };
 //修改待遇
-export const reqSetDividendRule = (account_name,rule_id,amount,percent) => {
+export const reqSetDividendRule = (account_name, rule_id, amount, percent) => {
   return ajax(
     BASE + "/proxy/user/setDividendRule",
-    { account_name,rule_id,amount,percent},
+    { account_name, rule_id, amount, percent },
     "POST",
-    {content_type_is_formdata:true}
+    { content_type_is_formdata: true }
   );
 };
 // 代充列表
-export const reqGetuserbalancelist = (user_id,account_name,package_id,start_time,end_time) => {
+export const reqGetuserbalancelist = (user_id, account_name, package_id, start_time, end_time) => {
   return ajax(
     BASE + "/user/getuserbalancelist",
-    { user_id,account_name,package_id,start_time,end_time},
+    { user_id, account_name, package_id, start_time, end_time },
     "GET",
   );
 };
 // 用户加钱
-export const reqAdduserbalance = (user_id,package_id,amount,remark) => {
+export const reqAdduserbalance = (user_id, package_id, amount, remark) => {
   return ajax(
     BASE + "/user/adduserbalance",
-    { user_id,package_id,amount,remark},
+    { user_id, package_id, amount, remark },
     "POST",
   );
 };
 //修改账号密码
-export const reqEditUser = (id,account,password,userid,packageid,roleid) => {
+export const reqEditUser = (id, account, password, userid, packageid, roleid) => {
   return ajax(
     BASE + "/credit/edituser",
-    {id,account,password,userid,packageid,roleid},
+    { id, account, password, userid, packageid, roleid },
     "POST",
   );
 };
-export const reqMenulist = (page,limit) => {
+export const reqMenulist = (page, limit) => {
   return ajax(
     BASE + "/credit/menulist",
-    {page,limit},
+    { page, limit },
     "GET",
   );
 };
@@ -2569,28 +2564,72 @@ export const reqMenulisttotal = () => {
     "GET",
   );
 };
-export const reqAddmenu= (title,pid,sort,status,level) => {
+export const reqAddmenu = (title, pid, sort, status, level) => {
   return ajax(
     BASE + "/credit/addmenu",
-    {title,pid,sort,status,level},
+    { title, pid, sort, status, level },
     "POST",
   );
 };
-export const reqEditmenu= (title,id,pid,sort,status,level) => {
+export const reqEditmenu = (title, id, pid, sort, status, level) => {
   return ajax(
     BASE + "/credit/editmenu",
-    {title,id,pid,sort,status,level},
+    { title, id, pid, sort, status, level },
     "POST",
   );
 };
-export const reqActivityList= (package_id,user_id,activity_id,start_time,end_time,page,limit) => {
+export const reqActivityList = (package_id, user_id, activity_id, start_time, end_time, page, limit) => {
   return ajax(
     BASE + "/api/activity/activityList",
-    {package_id,user_id,activity_id,start_time,end_time,page,limit},
+    { package_id, user_id, activity_id, start_time, end_time, page, limit },
     "GET",
   );
 };
-
+export const reqCreditrolelist = () => {
+  return ajax(
+    BASE + "/credit/rolelist",
+    {},
+    "GET",
+  );
+};
+export const reqDomainlist = (inputKey,inputValue,page,limit) => {
+  return ajax(
+    BASE + "/credit/domainlist",
+    {[inputKey]:inputValue,page,limit},
+    "GET",
+  );
+};
+export const reqDomainlistbyPid = (packageid,envtype,domaintype,page,limit) => {
+  return ajax(
+    BASE + "/credit/domainlist",
+    {packageid,envtype,domaintype,page,limit},
+    "GET",
+  );
+};
+export const reqAdddomain = (packageid,envtype,domaintype,domainlist) => {
+  return ajax(
+    BASE + "/credit/adddomain",
+    {packageid,envtype,domaintype,domainlist},
+    "POST",
+    { content_type_is_formdata: true }
+  );
+};
+export const reqEditdomain = (id,packageid,envtype,domaintype,domainlist) => {
+  return ajax(
+    BASE + "/credit/editdomain",
+    {id,packageid,envtype,domaintype,domainlist},
+    "POST",
+    { content_type_is_formdata: true }
+  );
+};
+export const reqDeldomain = (id) => {
+  return ajax(
+    BASE + "/credit/deldomain",
+    {id},
+    "POST",
+    { content_type_is_formdata: true }
+  );
+};
 
 
 

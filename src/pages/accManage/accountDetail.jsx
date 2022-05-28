@@ -139,7 +139,7 @@ export default class AccountDetail extends Component {
     );
     if (result.status === 0) {
       this.setState({
-        user_balance: result.data && result.data.lists[0].user_balance
+        user_balance: result.data.lists.length>0 && result.data.lists[0].user_balance
       })
     } else {
       message.info(result.msg || "未检索到数据");
@@ -303,8 +303,15 @@ export default class AccountDetail extends Component {
     this.reqGetCreditUserlist(1, 20)
   }
   render() {
-    const { data, game_user_data, proxy_user_data } = this.state;
-    console.log(data)
+    let { data, game_user_data } = this.state;
+    console.log(game_user_data)
+    if(JSON.stringify(game_user_data) == "{}" || game_user_data == undefined){
+      game_user_data = {
+        id:"",
+        proxy_user_id:"",
+        phone_number:""
+      }
+    }
     let getItem = () => {
       if (data) {
         let zfb, yhk, trc, erc = null

@@ -9,6 +9,7 @@ import {
 import LinkButton from "../../components/link-button/index";
 import "./ptlink.less";
 import {
+    reqDomainlistbyPid
 } from "../../api/index";
 const init_state = {
     isShowQrCodeModel:false,
@@ -61,14 +62,55 @@ export default class PtLink extends Component {
     handlejump = () => {
         window.open('https://www.sina.lt/')
     }
-    showQrCodeModel = (img,url) => {
-        this.qrImg = img
+    showQrCodeModel = (url) => {
         this.qrUrl = url
         this.setState({
             isShowQrCodeModel :true
         })
     }
+    getReqDomainlist = async (page, limit) => {
+        this.setState({
+            loading: true
+        })
+        const result = await reqDomainlistbyPid(
+            this.props.package_id,
+            this.envtype,//环境编号 1:DEV 2:PRE 3:OL
+            1, //domaintype 1:入口域名 2:后台域名
+            page
+            , limit
+        )
+        if (result.status === 0) {
+            let data = result.data.lists
+            let newArr = []
+            data.forEach((item,index)=>{
+                let domain_listArr  = item.domain_list.split(",")
+                domain_listArr.forEach(e=>{
+                    let newItem = {
+                        domain_type:item.domain_type,
+                        domain_list:`${e}`,
+                        env_type:item.env_type,
+                        package_id:item.package_id,
+                    }
+                    newArr.push(newItem)
+                })
+            })
+            this.setState({
+                data: newArr,
+                count:result.data.total,
+                loading: false,
+            });
+        } else {
+            message.error(`失败！${result.msg}`)
+        }
+    }
     componentDidMount() {
+        this.envtype = 0
+        if(localStorage.BASE == "https://admin.lymrmfyp.com/creditadmin"){
+            this.envtype = 2
+        }else{
+            this.envtype = 3
+        }
+        this.getReqDomainlist(1,20)
     }
     render() {
         const { data } = this.state
@@ -76,29 +118,41 @@ export default class PtLink extends Component {
         let getItem = () => {
             if (data) {
                 console.log(data)
-                return data.map((e, index) => {
-                    return <div key={index}>
-                        <p style={{ width: "80%", display: "flex", justifyContent: "space-around" }}>
-                            <span style={{width:"200px",height:"40px"}} >{e.name}</span>
-                            <span>{`${e.url}?u=${this.props.admin_user_id}&p=${this.props.package_id}`}</span>
-                            &nbsp; &nbsp;
-                            <LinkButton
-                                onClick={()=>this.showQrCodeModel(e.img,`${e.url}?u=${this.props.admin_user_id}&p=${this.props.package_id}`)}
-                            >获取二维码</LinkButton>
-                             
-                            {/* <LinkButton
-                                data-clipboard-text={`${e.url}?u=${this.props.admin_user_id}&p=${this.props.package_id}`}
-                                onClick={()=>this.handleCopy()}
-                            >点击复制</LinkButton> */}
-                            <button
-                                data-clipboard-text={`${e.url}?u=${this.props.admin_user_id}&p=${this.props.package_id}`}
-                                className="copy-btn"
-                                type="button"
-                                style={{width:"120px",height:"25px"}}
-                            >点击复制</button>
-                        </p>
+                return (
+                    <div>
+                        <LinkButton
+                            style={{ float: "right" }}
+                            onClick={() => {
+                                this.getReqDomainlist(1, 20);
+                            }}
+                            icon="reload"
+                            size="default"
+                        />
+                        {
+                            data.map((e, index) => {
+                                return <div key={index}>
+                                    
+                                    <p style={{display:"flex"}}>
+                                        <span style={{width:"100px",height:"40px"}} >{`推广链接${index+1}`}</span>
+                                        <span>{`${e.domain_list}?m=${e.env_type}&p=${e.package_id}&u=${this.props.admin_user_id}`}</span>
+                                        &nbsp;&nbsp;
+                                        <LinkButton
+                                            onClick={()=>this.showQrCodeModel(`${e.domain_list}?m=${e.env_type}&p=${e.package_id}&u=${this.props.admin_user_id}`)}
+                                        >获取二维码</LinkButton>
+                                        &nbsp;&nbsp;
+                                        <LinkButton
+                                            data-clipboard-text={`${e.domain_list}?m=${e.env_type}&p=${e.package_id}&u=${this.props.admin_user_id}`}
+                                            className="copy-btn"
+                                            type="button"
+                                            style={{lineHeight:"22px"}}
+                                        >点击复制</LinkButton>
+                                    </p>
+                                </div>
+                            })
+                        }
                     </div>
-                })
+                )
+                
             }
         }
         let getCodeDev = (className)=>{

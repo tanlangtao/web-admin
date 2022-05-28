@@ -47,8 +47,8 @@ class PopProxyhistory extends Component {
             this.state.total += res.msg.login_history.length
           }
         }
-        let data = res.msg.login_history.sort((a,b)=>{
-          return b.login_time - a.login_time 
+        let data = res.msg.login_history.sort((a, b) => {
+          return b.login_time - a.login_time
         })
         this.state.pages = page
         console.log(' this.state.total==', this.state.total);
@@ -59,10 +59,10 @@ class PopProxyhistory extends Component {
         })
       } else {
         message.success("暂无数据");
-        this.state.total= 11
+        this.state.total = 11
         this.setState({
           data: [],
-         
+
         })
       }
     } else {
@@ -94,7 +94,7 @@ class PopProxyhistory extends Component {
   }
   render() {
     return (
-      <div
+      <Card
       >
         <Table
           bordered
@@ -103,8 +103,9 @@ class PopProxyhistory extends Component {
           columns={this.initColumns()}
           size="small"
           pagination={false}
+          scroll={{ x: 1000 }}
         />
-
+     
         <Pagination
           defaultCurrent={1}
           total={this.state.total}
@@ -115,7 +116,7 @@ class PopProxyhistory extends Component {
         />
 
 
-      </div>
+      </Card>
 
     );
   }
@@ -145,14 +146,14 @@ class PopProxyhistory extends Component {
       dataIndex: "ip",
       key: "ip",
       align: 'center',
-      width:120,
+      width: 120,
     },
     {
       title: "本次设备ID",
       dataIndex: "current_device_id",
       key: "current_device_id",
       align: 'center',
-      width:100,
+      width: 100,
     },
 
     {
@@ -160,7 +161,7 @@ class PopProxyhistory extends Component {
       dataIndex: "before_device_id",
       key: "before_device_id",
       align: 'center',
-      width:100,
+      width: 100,
     },
   ];
 

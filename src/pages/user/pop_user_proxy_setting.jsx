@@ -95,6 +95,7 @@ class PopProxySetting extends Component {
           columns={this.initColumns()}
           size="small"
           pagination={false}
+          scroll={{ x: 1000 }}
         />
         {/* <Table
           bordered

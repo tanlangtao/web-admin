@@ -142,10 +142,10 @@ export default class PersonalDaily extends Component {
       formatDateYMD(this.state.startTime),
       formatDateYMD(this.state.endTime),
       this.props.admin_user_id,
+      this.props.package_id,
       page,
       limit
     );
-    // const result = {"status":0,"code":200,"msg":[{"_id":"53c430d9aff2e955ca0beb399cd966b1","date":"2022-05-05:2022-05-05","id":630997900,"package_id":20,"proxy_user_id":590176383,"type":4,"demand_type":3,"demand_tag":1,"game_tag":0,"money":9194.535,"grant":0,"amount":36531.45,"percent":30,"statement":0,"deficit":0,"statement_type":0,"statement_percent":0,"deficit_percent":0,"cost_percent":2,"cost_type":0,"cost_money":864.9,"statement_cost_money":0,"deficit_cost_money":0,"status":0,"first_balance":42341.119999999995,"last_balance":10809.67,"top_up":5000,"withdraw":0,"top_up_cost":150,"activity_cost":750},{"_id":"313c663e4ca6c18ecc847da99232efa1","date":"2022-05-04:2022-05-04","id":630997900,"package_id":20,"proxy_user_id":590176383,"type":4,"demand_type":3,"demand_tag":1,"game_tag":0,"money":-6328.220999999998,"grant":0,"amount":-5374.069999999992,"percent":30,"statement":0,"deficit":0,"statement_type":0,"statement_percent":0,"deficit_percent":0,"cost_percent":2,"cost_type":0,"cost_money":1116,"statement_cost_money":0,"deficit_cost_money":0,"status":0,"first_balance":16967.05,"last_balance":42341.119999999995,"top_up":20000,"withdraw":0,"top_up_cost":600,"activity_cost":3000},{"_id":"b1f1302c97704b93a5edca7fd0cac5b5","date":"2022-05-03:2022-05-03","id":630997900,"package_id":0,"proxy_user_id":590176383,"type":4,"demand_type":3,"demand_tag":1,"game_tag":0,"money":-2690.115,"grant":0,"amount":3032.9500000000007,"percent":30,"statement":0,"deficit":0,"statement_type":0,"statement_percent":0,"deficit_percent":0,"cost_percent":2,"cost_type":0,"cost_money":0,"statement_cost_money":0,"deficit_cost_money":0,"status":0,"first_balance":0,"last_balance":16967.05,"top_up":20000,"withdraw":0,"top_up_cost":600,"activity_cost":3000}]}
     if (result.code == 200) {
       this.setState({
         data: result.msg,
