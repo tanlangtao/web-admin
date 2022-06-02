@@ -40,6 +40,7 @@
 		"build": "yarn install &&react-app-rewired build",
 		"build:pre": "yarn install && dotenv -e .env.pre react-app-rewired build --max-old-space-size=4096",
 		"build:dev": "yarn install && dotenv -e .env.dev react-app-rewired build",
+		"build:ol": "yarn install && dotenv -e .env.ol react-app-rewired build",
 		"test": "react-app-rewired test",
 		"eject": "react-scripts eject",
 		"analyse": "node analyse.js"

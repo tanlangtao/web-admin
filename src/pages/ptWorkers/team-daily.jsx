@@ -16,6 +16,7 @@ import LinkButton from "../../components/link-button/index";
 import {
     reqGetCreditDividendInfoList,
 } from "../../api/index";
+import moment from "moment";
 const { Option } = Select;
 
 const init_state = {
@@ -62,10 +63,12 @@ export default class TeamDaily extends Component {
     },
     {
       title: "今日团队兑换",
-      dataIndex: "withdraw",
-      key: "withdraw",
+      dataIndex: "",
+      key: "",
       align: 'center',
-      // width: 100,
+      render:(record)=>{
+        return Math.abs(record.withdraw)
+      }
     },
     {
       title: "期初金额",
@@ -114,7 +117,7 @@ export default class TeamDaily extends Component {
       },
     },
     {
-      title: "今日活动成本",
+      title: "今日运营成本",
       dataIndex: "activity_cost",
       key: "activity_cost",
       align: 'center',
@@ -163,6 +166,34 @@ export default class TeamDaily extends Component {
       message.info(result.msg || "未检索到数据");
     }
   };
+  getDataByTime(num){
+    let start = ""
+    let end = ""
+    switch(num){
+      case 1 :
+        //昨天
+         start = moment().startOf("day").subtract(1, "day")
+         end = moment().endOf("day").subtract(1, "day")
+         break;
+      case 2 :
+          //本周
+         start = moment().startOf("week")
+         end = moment().endOf("week")
+         break;
+      case 3 :
+        //本周
+         start = moment().startOf("week").subtract(1, "week")
+         end = moment().endOf("week").subtract(1, "week")
+         break;
+    }
+    this.setState({
+      startTime:start.format("YYYY-MM-DD HH:mm:ss"),
+      endTime:end.format("YYYY-MM-DD HH:mm:ss"),
+      current:1
+    },()=>{
+      this.getUsers(1,20)
+    })
+  }
   componentDidMount(){
     let platform_name = localStorage.getItem("name")
     this.setState({
@@ -204,7 +235,25 @@ export default class TeamDaily extends Component {
         >
         <Icon type="search" />
         </LinkButton>
-        </span>
+        &nbsp; &nbsp;
+        <LinkButton
+          onClick={() => this.getDataByTime(1)}
+          size="default"
+          >昨天
+        </LinkButton>
+        &nbsp; &nbsp;
+        <LinkButton
+          onClick={() => this.getDataByTime(2)}
+          size="default"
+          >本周
+        </LinkButton>
+        &nbsp; &nbsp;
+        <LinkButton
+          onClick={() => this.getDataByTime(3)}
+          size="default"
+          >上周
+        </LinkButton>
+      </span>
     );
         
       const extra = (

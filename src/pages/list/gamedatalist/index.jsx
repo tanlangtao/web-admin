@@ -739,7 +739,9 @@ export default (props) => {
             >
               {_.map(new_gameRouter2, (value, key) => {
                 return (
-                  <Select.Option key={key} value={key}>
+                  (value.name == "红黑大战" || value.name == "百家乐" || 
+                  value.name == "轮盘" || value.name == "龙虎斗" || 
+                  value.name == "狮子王国" ||value.name == "骰宝") && <Select.Option key={key} value={key}>
                     {value.name}
                   </Select.Option>
                 );
@@ -758,7 +760,7 @@ export default (props) => {
           <br />
 
           <div>
-            <span style={{ fontSize: 14, marginRight: 20 }}>房间信息</span>
+            {/* <span style={{ fontSize: 14, marginRight: 20 }}>房间信息</span>
             {gameID !== "5b1f3a3cb76a591e7f25176" ? (
               <Input
                 placeholder="根据游戏名称联合查询"
@@ -781,7 +783,7 @@ export default (props) => {
                 <Select.Option value="2">中级场</Select.Option>
                 <Select.Option value="3">高级场</Select.Option>
               </Select>
-            )}
+            )} */}
             <span style={{ fontSize: 14, marginRight: 20 }}>时间</span>
             <MyDatePicker
               format="YYYY-MM-DD HH:mm"
@@ -812,9 +814,9 @@ export default (props) => {
       }
       extra={
         <>
-          <Button type="primary" icon="download" onClick={handle_download}>
+          {/* <Button type="primary" icon="download" onClick={handle_download}>
             导出数据
-          </Button>
+          </Button> */}
         </>
       }
     >

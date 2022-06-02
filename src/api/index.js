@@ -2269,6 +2269,14 @@ export const getStatementTotalByID = (reqData) => {
     "GET"
   );
 };
+export const reqGetCreditDividendInfo = (first_date, last_date, account_name) => {
+  return ajax(
+    BASE + "/Operation/Api/GetCreditDividendInfo",
+    { first_date, last_date, account_name },
+    "GET"
+  );
+};
+
 export const reqGetCreditDividendInfoList = (first_date, last_date, id, package_id, page, limit) => {
   return ajax(
     BASE + "/Operation/Api/GetCreditDividendInfoList",
@@ -2467,11 +2475,10 @@ export const getCreditUserlist = (package_id, user_id, page, limit, role_id) => 
     "GET"
   );
 };
-export const getCreditUserlists = (package_id, user_id, page, limit) => {
-  let role_id = 3
+export const getCreditUserlists = (inputKey, inputValue, page, limit) => {
   return ajax(
     BASE + `/credit/userlist`,
-    { package_id, user_id, page, limit, role_id },
+    { [inputKey]:inputValue, page, limit},
     "GET"
   );
 };
@@ -2628,6 +2635,21 @@ export const reqDeldomain = (id) => {
     {id},
     "POST",
     { content_type_is_formdata: true }
+  );
+};
+// pay_type 信用后台用户增加金币:600/信用后台用户减少金币:601/信用后台代理增加金币:602/信用后台代理减少金币:603	
+export const reqDaichangeUserBalance = (admin_id,user_id,package_id,pay_type,amount) => {
+  return ajax(
+    BASE + "/api/backend/daichangeUserBalance",
+    {admin_id,user_id,package_id,pay_type,amount},
+    "POST",
+  );
+};
+export const reqGetProxyUserNumber = (data) => {
+  return ajax(
+    BASE + "/proxy/user/GetProxyUserNumber",
+    {...data},
+    "GET",
   );
 };
 

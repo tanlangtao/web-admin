@@ -1,4 +1,4 @@
-REACT_APP_HOST=https://creditweb.lymrmfyp.com
+REACT_APP_HOST=https://creditweb.lymrmfypppppp.com
 REACT_APP_GAME_HOST=https://game.lymrmfyp.com 
 REACT_APP_IM_HOST=https://im.lymrmfyp.com
 REACT_APP_CENTER_HOST=https://proxy.lymrmfyp.com 

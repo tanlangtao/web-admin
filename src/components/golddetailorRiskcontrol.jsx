@@ -19,9 +19,9 @@ let new_thirdPartyGameRouter = { ...thirdPartyGameRouter };
 // 彩源棋牌＆直播平台不需要
 delete new_thirdPartyGameRouter["5b1f3a3cb76a591e7f251726"];
 delete new_thirdPartyGameRouter["5b1f3a3cb76a451e210726"];
-// 以下後端還在開發中，等後端開發完畢就可以刪除了
-// AG
+// AG 三方沒有提供查詢數據的接口
 delete new_thirdPartyGameRouter["5b1f3a3cb76a591e7f251736"];
+// 以下四種以彈窗方式渲染遊戲數據
 // 三昇
 delete new_thirdPartyGameRouter["5b1f3a3cb76a451e211109"];
 // 派彩
@@ -35,6 +35,10 @@ let new_gameRouter1 = {
   ...gameRouter,
   ...new_thirdPartyGameRouter,
   "5b1f3a3cb76a591e7f251729": { path: "/castcraft/api", name: "城堡争霸" },
+  "569a62be7ff123m117d446aa": { path: "/paicai/api", name: "派彩" },
+  "5b1f3a3cb76a591e7f25173": { path: "/zhenrensx/api", name: "真人视讯" },
+  "5b1f3a3cb76a451e211109": { path: "/sanshengtiyu/api", name: "三昇体育" },
+  // "5b1f3a3cb76a591e7f25179": { path: "/shabaty/api", name: "沙巴体育" },
 };
 
 export default function GoldDetailorRiskControl({
@@ -195,7 +199,7 @@ async function check_game_data(record) {
     return;
   }
   // 如果是三方的遊戲，則獲取三方的單筆紀錄url，並另外開啟新視窗顯示
-  for (const key in thirdPartyGameRouter) {
+  for (const key in new_thirdPartyGameRouter) {
     if (key === pay_account_id) isThirdParty = true;
   }
 
@@ -221,6 +225,22 @@ async function check_game_data(record) {
     let reactnode, data;
     if (res.data && res.data.list) {
       data = res.data.list[0];
+    }
+    // 三昇體育
+    if (pay_account_id === "5b1f3a3cb76a451e211109" && res.data) {
+      data = res.data;
+    }
+    // 真人視訊
+    if (pay_account_id === "5b1f3a3cb76a591e7f25173" && res.data) {
+      data = res.data.Row[0];
+    }
+    // 沙巴體育
+    if (pay_account_id === "5b1f3a3cb76a591e7f25179" && res.data) {
+      data = res.data.Data.BetDetails;
+    }
+    // 派彩
+    if (pay_account_id === "569a62be7ff123m117d446aa" && res.data) {
+      data = res.data;
     }
     try {
       switch (pay_account_id) {
@@ -2729,6 +2749,351 @@ async function check_game_data(record) {
                 </Descriptions.Item>
               </Descriptions>
             </>
+          );
+          break;
+        case "5b1f3a3cb76a451e211109":
+          // 三昇體育
+          let columns5 = [
+            {
+              title: "投注类型",
+              dataIndex: "",
+              render: (text, record) => {
+                return (
+                  <>
+                    <div>{record.playtype_caption}</div>
+                    <div>{record.bet_type_caption}</div>
+                  </>
+                );
+              },
+            },
+            {
+              title: "赛事详情",
+              dataIndex: "sport",
+              render: (text, record) => {
+                let sportType;
+                switch (record.sport) {
+                  case "SC":
+                    sportType = "足球";
+                    break;
+                  case "BK":
+                    sportType = "篮球";
+                    break;
+                  case "OTR":
+                    sportType = "优胜冠军";
+                    break;
+                  case "TN":
+                    sportType = "网球";
+                    break;
+                  case "AF":
+                    sportType = "美式足球";
+                    break;
+                  case "C":
+                    sportType = "板球";
+                    break;
+                  case "HB":
+                    sportType = "手球";
+                    break;
+                  case "H":
+                    sportType = "冰球";
+                    break;
+                  case "SN":
+                    sportType = "桌球";
+                    break;
+                  case "V":
+                    sportType = "排球";
+                    break;
+                  case "B":
+                    sportType = "羽毛球";
+                    break;
+                  case "MULP":
+                    sportType = "过关";
+                    break;
+                  case "ES":
+                    sportType = "电子竞技";
+                    break;
+                  default:
+                    sportType = text;
+                }
+                return (
+                  <>
+                    <div>{record.match_date}</div>
+                    <div>
+                      {sportType} - {record.league_name}
+                    </div>
+                    <div>({record.score})</div>
+                    <div>
+                      {record.teamA_name} VS {record.teamB_name}
+                    </div>
+                    <div>
+                      {record.team_bet_caption} {record.handicap_value}
+                    </div>
+                  </>
+                );
+              },
+            },
+            {
+              title: "赔率",
+              dataIndex: "odds_type",
+              render: (text, record) => {
+                let odds = "";
+                switch (record.odds_type) {
+                  case "MY":
+                    odds = "马来盘";
+                    break;
+                  case "EURO":
+                    odds = "欧洲盘";
+                    break;
+                  case "HK1":
+                    odds = "香港盘";
+                    break;
+                  case "INDO":
+                    odds = "印尼盘";
+                    break;
+                  default:
+                }
+                return (
+                  <>
+                    <div>{record.wager_odds}</div>
+                    <div>({odds})</div>
+                  </>
+                );
+              },
+            },
+            {
+              title: "投注金额",
+              dataIndex: "wager_stake",
+              render: reverseDecimal,
+            },
+            {
+              title: "结果",
+              dataIndex: "",
+              render: (text, record) => {
+                switch (record.result) {
+                  case "C":
+                    return "取消";
+                  case "CM":
+                    return "赛事取消";
+                  case "R":
+                    return "拒绝";
+                  case "P":
+                    return "待确认";
+                  case "N":
+                    return "确认";
+                  case "WH":
+                    return "赢一半";
+                  case "LH":
+                    return "输一半";
+                  case "W":
+                    return "赢";
+                  case "D":
+                    return "和";
+                  default:
+                    return text;
+                }
+              },
+            },
+          ];
+          reactnode = (
+            <>
+              <Descriptions bordered size="small" column={2}>
+                <Descriptions.Item label="会员账号">
+                  {data[0].member_code}
+                </Descriptions.Item>
+                <Descriptions.Item label="投注时间">
+                  {data[0].bet_date}
+                </Descriptions.Item>
+                <Descriptions.Item label="注单编号">
+                  {data[0].wager_id}
+                </Descriptions.Item>
+                <Descriptions.Item label="注单取消原因">
+                  {data[0].cancel_reason_caption}
+                </Descriptions.Item>
+              </Descriptions>
+              <br />
+              <Table
+                bordered
+                rowKey={(record, index) => `${index}`}
+                dataSource={data}
+                columns={columns5}
+                size="small"
+                pagination={false}
+              />
+            </>
+          );
+          break;
+        case "5b1f3a3cb76a591e7f25173":
+          // 真人視訊
+          reactnode = (
+            <Descriptions bordered size="small" column={2}>
+              <Descriptions.Item label="局号">
+                {data.GameCode}
+              </Descriptions.Item>
+              <Descriptions.Item label="游戏类型">
+                {data.GameType}
+              </Descriptions.Item>
+              <Descriptions.Item label="荷官名称">
+                {data.Dealer}
+              </Descriptions.Item>
+              <Descriptions.Item label="靴号">
+                {data.ShoeCode}
+              </Descriptions.Item>
+              <Descriptions.Item label="视频ID" span={2}>
+                {data.Vid}
+              </Descriptions.Item>
+              <Descriptions.Item label="开始时间">
+                {data.BeginTime}
+              </Descriptions.Item>
+              <Descriptions.Item label="结束时间">
+                {data.CloseTime}
+              </Descriptions.Item>
+              <Descriptions.Item label="状态" span={2}>
+                {data.Flag === 1 ? "有效" : "无效"}
+              </Descriptions.Item>
+              <Descriptions.Item label="庄分数">
+                {data.BankPoint || "-"}
+              </Descriptions.Item>
+              <Descriptions.Item label="闲分数">
+                {data.PlayPoint || "-"}
+              </Descriptions.Item>
+              <Descriptions.Item label="龙点数">
+                {data.DragonPoint || "-"}
+              </Descriptions.Item>
+              <Descriptions.Item label="虎点数">
+                {data.TigerPoint || "-"}
+              </Descriptions.Item>
+              <Descriptions.Item label="张数">{data.CardNum}</Descriptions.Item>
+              <Descriptions.Item label="对子结果">
+                {/* 0 没有对子,1 庄对,2 闲对,3 庄对闲对 */}
+                {data.Pair === "0" && "没有对子"}
+                {data.Pair === "1" && "庄对"}
+                {data.Pair === "2" && "闲对"}
+                {data.Pair === "3" && "庄对闲对"}
+              </Descriptions.Item>
+              <Descriptions.Item label="CardList" span={2}>
+                {data.CardList}
+              </Descriptions.Item>
+            </Descriptions>
+          );
+          break;
+        case "5b1f3a3cb76a591e7f25179":
+          // 沙巴體育
+
+          // 撈取中文名稱函數
+          const findChineseName = (matchKey) => {
+            const _name = data[matchKey].find((item) => item.lang === "cs");
+            return _name ? _name.name : "-";
+          };
+
+          reactnode = (
+            <Descriptions bordered size="small" column={1}>
+              <Descriptions.Item label="联盟编号">
+                {findChineseName("Leaguename")}
+              </Descriptions.Item>
+              <Descriptions.Item label="赛事编号">
+                {data.match_id}
+              </Descriptions.Item>
+              <Descriptions.Item label="主队编号">
+                {findChineseName("Hometeamname")}
+              </Descriptions.Item>
+              <Descriptions.Item label="客队编号">
+                {findChineseName("Awayteamname")}
+              </Descriptions.Item>
+              <Descriptions.Item label="赛事开始时间">
+                {data.match_datetime}
+              </Descriptions.Item>
+              <Descriptions.Item label="主队全场得分">
+                {data.home_score}
+              </Descriptions.Item>
+              <Descriptions.Item label="客队全场得分">
+                {data.away_score}
+              </Descriptions.Item>
+              <Descriptions.Item label="体育种类名称">
+                {findChineseName("Sportname")}
+              </Descriptions.Item>
+              <Descriptions.Item label="下注类型名称">
+                {findChineseName("Bettypename")}
+              </Descriptions.Item>
+              <Descriptions.Item label="注单赔率">
+                {data.odds}
+              </Descriptions.Item>
+              <Descriptions.Item label="会员下注金额">
+                {data.stake}
+              </Descriptions.Item>
+              <Descriptions.Item label="投注交易时间">
+                {data.transaction_time}
+              </Descriptions.Item>
+              <Descriptions.Item label="注单状态">
+                {data.ticket_status}
+              </Descriptions.Item>
+              <Descriptions.Item label="此注输或赢的金额">
+                {data.winlost_amount}
+              </Descriptions.Item>
+              <Descriptions.Item label="赔率类型表">
+                {/* 1 Malay Odds(马来盘)
+                  2 China Odds(中国盘)
+                  3 Decimal Odds(欧洲盘)
+                  4 Indo Odds(印度尼西亚盘)
+                  5 American Odds(美国盘) */}
+                {data.odds_type === 0 && "-"}
+                {data.odds_type === 1 && "Malay Odds(马来盘)"}
+                {data.odds_type === 2 && "China Odds(中国盘)"}
+                {data.odds_type === 3 && "Decimal Odds(欧洲盘)"}
+                {data.odds_type === 4 && "Indo Odds(印度尼西亚盘)"}
+                {data.odds_type === 5 && "American Odds(美国盘)"}
+              </Descriptions.Item>
+              <Descriptions.Item label="主队让球/大小盘球头">
+                {data.home_hdp}
+              </Descriptions.Item>
+              <Descriptions.Item label="客队让球/大小盘球头">
+                {data.away_hdp}
+              </Descriptions.Item>
+            </Descriptions>
+          );
+          break;
+        case "569a62be7ff123m117d446aa":
+          // 派彩
+          reactnode = (
+            <Descriptions bordered size="small" column={1}>
+              <Descriptions.Item label="注单ID">
+                {data.projectid}
+              </Descriptions.Item>
+              <Descriptions.Item label="奖期">{data.issue}</Descriptions.Item>
+              <Descriptions.Item label="彩种名称">
+                {data.lotteryName}
+              </Descriptions.Item>
+              <Descriptions.Item label="玩法名称">
+                {data.methodid}
+              </Descriptions.Item>
+              <Descriptions.Item label="下注号码类型">
+                {/* digital 数字类型 dxds 大小单双类型 input 输入类型 */}
+                {data.codetype === "digital" && "数字类型"}
+                {data.codetype === "dxds" && "大小单双类型"}
+                {data.codetype === "input" && "输入类型"}
+              </Descriptions.Item>
+              <Descriptions.Item label="投注金额模式">
+                {/* 1 元模式 2 角模式 3 分模式 4 厘模式 */}
+                {data.modes === 1 && "元模式"}
+                {data.modes === 2 && "角模式"}
+                {data.modes === 3 && "分模式"}
+                {data.modes === 4 && "厘模式"}
+              </Descriptions.Item>
+              <Descriptions.Item label="是否中奖">
+                {/* 0：未处理 1：中奖 2：未中奖 */}
+                {data.isgetprize === 0 && "未处理"}
+                {data.isgetprize === 1 && "中奖"}
+                {data.isgetprize === 2 && "未中奖"}
+              </Descriptions.Item>
+              <Descriptions.Item label="倍数">
+                {data.multiple}
+              </Descriptions.Item>
+              <Descriptions.Item label="开奖号码">
+                {data.bonusCode}
+              </Descriptions.Item>
+              <Descriptions.Item label="奖金">{data.Bonus}</Descriptions.Item>
+              <Descriptions.Item label="下注金额">
+                {data.Money}
+              </Descriptions.Item>
+            </Descriptions>
           );
           break;
         default:

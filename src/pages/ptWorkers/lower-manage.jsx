@@ -32,6 +32,7 @@ import {
   reqGetDividendRule,
   reqCreateDividendRule,
   reqSetDividendRule,
+  reqGetProxyUserNumber
 } from "../../api/index";
 import MyDatePicker from "../../components/MyDatePicker";
 import Mytable from "../../components/MyTable";
@@ -76,6 +77,12 @@ const init_state = {
   canSetTreatment:false,
   editTreatment:0,
   rule_id:"",
+  isShowTeamPerson:false,
+  teamPersonData:[],
+  teamPersonCount:0,
+  teamLoading:false,
+  minTreatment:1,
+  maxTreatment:100
 };
 export default class LowerManage extends Component {
   constructor(props) {
@@ -83,7 +90,20 @@ export default class LowerManage extends Component {
     this.state = init_state;
     this.handleInputThrottled = throttle(this.onChangeGold, 3000);
   }
-
+  teamColumns = ()=>[
+    {
+      title: "玩家ID",
+      dataIndex: "id",
+      key: "id",
+      align: 'center',
+    },
+    {
+      title: "团队总人数",
+      dataIndex: "count",
+      key: "count",
+      align: 'center',
+    },
+  ]
   initColumns = () => [
     {
       title: "玩家ID",
@@ -156,6 +176,9 @@ export default class LowerManage extends Component {
           </LinkButton>
           <LinkButton onClick={() => this.showModel(record,3)}>
             修改待遇
+          </LinkButton>
+          <LinkButton onClick={() => this.showModel(record,4)}>
+            团队人数
           </LinkButton>
         </span>
       ),
@@ -429,6 +452,26 @@ export default class LowerManage extends Component {
       message.info(res.msg || "操作失败");
     }
   };
+  GetProxyUserNumber = async (record, status) => {
+    this.setState({teamLoading:true})
+    let data={
+      "account_name":this.props.admin_user_id,
+      "ids":`[${this.recordID}]`
+    }
+    const res = await reqGetProxyUserNumber(data);
+    let data2 = [{id:`${this.recordID}`,"count":0}]
+    if (res.code === 200) {
+      this.setState({
+        teamPersonData:res.msg? res.msg : data2 ,
+        teamPersonCount:res.msg ? res.msg.length:1,
+      })
+    } else {
+      message.info(res.msg || "失败");
+    }
+    this.setState({
+      teamLoading:false
+    })
+  };
   download = () => {
     let reqdata = {
       start_time: this.state.startTime,
@@ -450,17 +493,30 @@ export default class LowerManage extends Component {
         break;
       case 2:{
         this.setState({
-          isShowSetTreatmentModel: true
+          isShowSetTreatmentModel: true,
+          setTreatment:0,
+          minTreatment:1,
+          maxTreatment:1
         })
-        this.reqGetDividendRule()
+        this.reqGetDividendRule(this.recordID)
         break;
       }
       case 3:{
         this.setState({
           isShowEditTreatMentModel: true,
           canSetTreatment:false,
+          setTreatment:0,
+          minTreatment:1,
+          maxTreatment:1
         })
-        this.reqGetDividendRule()
+        this.reqGetDividendRule(this.recordID)
+        break;
+      }
+      case 4:{
+        this.setState({
+          isShowTeamPerson: true,
+        })
+        this.GetProxyUserNumber()
         break;
       }
     }
@@ -484,14 +540,15 @@ export default class LowerManage extends Component {
         message.info("操作失败:" + res.msg);
     }
   }
-  reqGetDividendRule = async ()=>{
+  reqGetDividendRule = async (user_id)=>{
     const res = await reqGetDividendRule(
       this.props.admin_user_id,
-      String(this.recordID),
+      String(user_id),
       4, //type
       0, //game_tag
     );
     if (res.code == 200) {
+      this.reqGetDividendRule2(this.props.admin_user_id)
       if(res.msg ){
         this.setState({
           //如果有值，则不能设置
@@ -511,10 +568,40 @@ export default class LowerManage extends Component {
         message.info("操作失败:" + res.msg);
     }
   }
+  reqGetDividendRule2 = async (user_id)=>{
+    const res = await reqGetDividendRule(
+      this.props.admin_user_id,
+      String(user_id),
+      4, //type
+      0, //game_tag
+    );
+    if (res.code == 200) {
+      let min = 1
+      if(this.state.setTreatment > this.state.minTreatment){
+        min = this.state.setTreatment + 1
+      } 
+      if(this.state.setTreatment >= 57 ){
+        min = 57
+      }
+      if(res.msg ){
+        this.setState({
+          maxTreatment:res.msg[0].percent > 57 ? 57 :res.msg[0].percent-1,
+          minTreatment:min
+        })
+      }else{
+        this.setState({
+          maxTreatment:57,
+          minTreatment:min
+        })
+      }
+    } else {
+        message.info("操作失败:" + res.msg);
+    }
+  }
   handSetTreatment = async ()=>{
     let newNum = Number(Number(this.state.setTreatment).toFixed(0))
-    if(newNum < 0){
-      return message.info("只能设置为正整数");
+    if(newNum < this.state.minTreatment || newNum > this.state.maxTreatment){
+      return message.info("超出范围！");
     }
     const res = await reqCreateDividendRule(
       4, //type
@@ -538,8 +625,10 @@ export default class LowerManage extends Component {
   }
   handEditTreatment = async ()=>{
     let newNum = Number(Number(this.state.editTreatment).toFixed(0))
-    if(newNum < 0){
-      return message.info("只能设置为正整数");
+    if(newNum ==  this.state.setTreatment){
+      return message.info("待遇相同，无法修改");
+    }else if(newNum < this.state.minTreatment || newNum > this.state.maxTreatment){
+      return message.info("超出范围！");
     }
     const res = await reqSetDividendRule(
       this.props.admin_user_id,
@@ -635,7 +724,20 @@ export default class LowerManage extends Component {
         /> */}
       </span>
     );
-    console.log("user-data", data)
+    const SetTreatmentTitle = (
+      <span>
+        <span>设置待遇</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span style ={{color:"red"}}>*不能超过本级待遇，且点控为1%</span>
+      </span>
+    )
+    const EditTreatmentTitle = (
+      <span>
+        <span>修改待遇</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span style ={{color:"red"}}>*不能超过本级待遇，不能低于原待遇，且点控为1%</span>
+      </span>
+    )
     return (
       <Card title={title} extra={extra}>
         <Mytable
@@ -685,7 +787,7 @@ export default class LowerManage extends Component {
         )}
          {this.state.isShowSetTreatmentModel && (
           <Modal
-            title="设置待遇"
+            title={SetTreatmentTitle}//设置待遇
             visible={this.state.isShowSetTreatmentModel}
             onCancel={() => {
               this.setState({ isShowSetTreatmentModel: false });
@@ -704,13 +806,18 @@ export default class LowerManage extends Component {
               max={100}
               value={this.state.setTreatment}
               onBlur={(e) => (this.setState({ setTreatment: e.target.value }))}
-            />%</div>
+            />
+              %
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <span>可填写数值{this.state.minTreatment}%-
+                {this.state.maxTreatment}%</span>
+            </div>
             <div style={{ height: "10px" }}></div>
           </Modal>
         )}
           {this.state.isShowEditTreatMentModel && (
           <Modal
-            title="修改待遇"
+            title={EditTreatmentTitle} //修改待遇
             visible={this.state.isShowEditTreatMentModel}
             onCancel={() => {
               this.setState({ isShowEditTreatMentModel: false });
@@ -737,7 +844,10 @@ export default class LowerManage extends Component {
               max={100}
               value={this.state.editTreatment}
               onBlur={(e) => (this.setState({ editTreatment: e.target.value }))}
-            />%</div>
+            />%
+             &nbsp;&nbsp;&nbsp;&nbsp;
+            <span>可填写数值{this.state.minTreatment}%-{this.state.maxTreatment}%</span>
+            </div>
             &nbsp; &nbsp;
             <div style={{ height: "10px" }}></div>
           </Modal>
@@ -760,6 +870,32 @@ export default class LowerManage extends Component {
             <UserListRouter
               recordID={this.recordID}
               recordPid={this.recordPid}
+            />
+          </Modal>
+        )}
+        {this.state.isShowTeamPerson && (
+          <Modal
+            title={`团队人数 ${this.recordID}`}
+            visible={this.state.isShowTeamPerson}
+            onCancel={() => {
+              this.setState({ isShowTeamPerson: false });
+            }}
+            footer={null}
+          >
+            <Mytable
+              tableData={{
+                data:this.state.teamPersonData,
+                count:this.state.teamPersonCount,
+                columns: this.teamColumns(),
+                x: "max-content",
+                loading:this.state.teamLoading
+              }}
+              pagination={false}
+              paginationOnchange={(page, limit) => {
+              }}
+              setPagination={(current, pageSize) => {
+                
+              }}
             />
           </Modal>
         )}

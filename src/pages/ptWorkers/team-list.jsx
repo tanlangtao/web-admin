@@ -14,6 +14,7 @@ import MyDatePicker from "../../components/MyDatePicker";
 import { formatDateYMD } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-button/index";
 import WrappedComponent from "../user/gold_details";
+import moment from "moment"
 import {
   reqGetCreditDividendInfo7DayList,
   reqGrantCreditDividend7DayByRoundID,
@@ -71,10 +72,12 @@ export default class PersonalList extends Component {
     },
     {
       title: "团队兑换",
-      dataIndex: "withdraw",
-      key: "withdraw",
+      dataIndex: "",
+      key: "",
       align: 'center',
-      // width: 100,
+      render:(record)=>{
+        return Math.abs(record.withdraw)
+      }
     },
     {
       title: "期初金额",
@@ -118,7 +121,7 @@ export default class PersonalList extends Component {
       // width: 150,
     },
     {
-      title: "活动成本",
+      title: "运营成本",
       dataIndex: "activity_cost",
       key: "activity_cost",
       align: 'center',
@@ -226,6 +229,34 @@ export default class PersonalList extends Component {
       loading:false
     })
   };
+  getDataByTime(num){
+    let start = ""
+    let end = ""
+    switch(num){
+      case 1 :
+        //昨天
+         start = moment().startOf("day").subtract(1, "day")
+         end = moment().endOf("day").subtract(1, "day")
+         break;
+      case 2 :
+          //本周
+         start = moment().startOf("week")
+         end = moment().endOf("week")
+         break;
+      case 3 :
+        //本周
+         start = moment().startOf("week").subtract(1, "week")
+         end = moment().endOf("week").subtract(1, "week")
+         break;
+    }
+    this.setState({
+      startTime:start.format("YYYY-MM-DD HH:mm:ss"),
+      endTime:end.format("YYYY-MM-DD HH:mm:ss"),
+      current:1
+    },()=>{
+      this.getUsers(1,20)
+    })
+  }
   getGoldDetail = async (record, isBindInfo) => {
     this.isBindInfo = isBindInfo;
     this.recordID = record.id;
@@ -278,6 +309,25 @@ export default class PersonalList extends Component {
           >
             <Icon type="search" />
           </LinkButton>
+          &nbsp; &nbsp;
+          <LinkButton
+            onClick={() => this.getDataByTime(1)}
+            size="default"
+            >昨天
+          </LinkButton>
+          &nbsp; &nbsp;
+          <LinkButton
+            onClick={() => this.getDataByTime(2)}
+            size="default"
+            >本周
+          </LinkButton>
+          &nbsp; &nbsp;
+          <LinkButton
+            onClick={() => this.getDataByTime(3)}
+            size="default"
+            >上周
+          </LinkButton>
+          <br/>
           <span style={{color:"red"}}>开始日期必须为周一，结束日期必须为周日</span>
         </span>
     );
@@ -286,9 +336,7 @@ export default class PersonalList extends Component {
           <LinkButton
             style={{ float: "right" }}
             onClick={() => {
-              this.setState(init_state, () => {
-                this.getUsers(1, 20);
-              });
+              this.getUsers(1, 20);
             }}
             icon="reload"
             size="default"

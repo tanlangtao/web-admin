@@ -13,21 +13,22 @@ import Mytable from "../../components/MyTable";
 import MyDatePicker from "../../components/MyDatePicker";
 import { formatDateYMD } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-button/index";
+import moment from "moment";
 import {
   reqGetCreditDividendInfo7Day,
 } from "../../api/index";
 const { Option } = Select;
 
 const init_state = {
-    current: 1,
-    pageSize: 20,
-    data: [],
-    count: 0,
-    startTime: "",
-    endTime: "",
-    MyDatePickerValue: null,
-    packages:"",
-    loading: false,
+  current: 1,
+  pageSize: 20,
+  data: [],
+  count: 0,
+  startTime: "",
+  endTime: "",
+  MyDatePickerValue: null,
+  packages: "",
+  loading: false,
 };
 export default class PersonalList extends Component {
   constructor(props) {
@@ -60,10 +61,12 @@ export default class PersonalList extends Component {
     },
     {
       title: "团队兑换",
-      dataIndex: "withdraw",
-      key: "withdraw",
+      dataIndex: "",
+      key: "",
       align: 'center',
-      // width: 100,
+      render: (record) => {
+        return Math.abs(record.withdraw)
+      }
     },
     {
       title: "期初金额",
@@ -107,7 +110,7 @@ export default class PersonalList extends Component {
       // width: 150,
     },
     {
-      title: "活动成本",
+      title: "运营成本",
       dataIndex: "activity_cost",
       key: "activity_cost",
       align: 'center',
@@ -131,47 +134,47 @@ export default class PersonalList extends Component {
       },
     },
     {
-        title: "直属下级分红",
-        dataIndex: "child_money",
-        key: "child_money",
-        align: 'center',
-        render: (text, record) => {
-          return (Math.round(record.child_money * 100) / 100);
-        },
+      title: "直属下级分红",
+      dataIndex: "child_money",
+      key: "child_money",
+      align: 'center',
+      render: (text, record) => {
+        return (Math.round(record.child_money * 100) / 100);
+      },
     },
     {
-        title: "直属下级上期结转",
-        dataIndex: "last_child_grant",
-        key: "last_child_grant",
-        align: 'center',
-        render: (text, record) => {
-          return (Math.round(record.last_child_grant * 100) / 100);
-        },
+      title: "直属下级上期结转",
+      dataIndex: "last_child_grant",
+      key: "last_child_grant",
+      align: 'center',
+      render: (text, record) => {
+        return (Math.round(record.last_child_grant * 100) / 100);
+      },
     },
     {
-        title: "应发分红",
-        dataIndex: "money",
-        key: "money",
-        align: 'center',
-        render: (text, record) => {
-            let sum = record.money + record.last_grant - record.child_money+record.last_child_grant
-            return (Math.round(sum * 100) / 100);
-        },
+      title: "应发分红",
+      dataIndex: "money",
+      key: "money",
+      align: 'center',
+      render: (text, record) => {
+        let sum = record.money + record.last_grant - record.child_money + record.last_child_grant
+        return (Math.round(sum * 100) / 100);
+      },
     },
     {
-        title: "状态",
-        dataIndex: "status",
-        key: "status",
-        align: 'center',
-        render: (text, record) => {
-            let statusStr = ''
-            if(record.status == 0){
-                statusStr = "未发"
-            }else if(record.status == 1){
-                statusStr = "已发"
-            }
-            return statusStr;
-        },
+      title: "状态",
+      dataIndex: "status",
+      key: "status",
+      align: 'center',
+      render: (text, record) => {
+        let statusStr = ''
+        if (record.status == 0) {
+          statusStr = "未发"
+        } else if (record.status == 1) {
+          statusStr = "已发"
+        }
+        return statusStr;
+      },
     },
   ];
   getUsers = async (page, limit) => {
@@ -194,61 +197,108 @@ export default class PersonalList extends Component {
       message.info(result.msg || "未检索到数据");
     }
   };
-  render(){
+  getDataByTime(num) {
+    let start = ""
+    let end = ""
+    switch (num) {
+      case 1:
+        //昨天
+        start = moment().startOf("day").subtract(1, "day")
+        end = moment().endOf("day").subtract(1, "day")
+        break;
+      case 2:
+        //本周
+        start = moment().startOf("week")
+        end = moment().endOf("week")
+        break;
+      case 3:
+        //本周
+        start = moment().startOf("week").subtract(1, "week")
+        end = moment().endOf("week").subtract(1, "week")
+        break;
+    }
+    this.setState({
+      startTime: start.format("YYYY-MM-DD HH:mm:ss"),
+      endTime: end.format("YYYY-MM-DD HH:mm:ss"),
+      current: 1
+    }, () => {
+      this.getUsers(1, 20)
+    })
+  }
+  render() {
     const { data, count, current, pageSize, loading } = this.state;
     const title = (
-        <span>
-          <MyDatePicker
-            handleValue={(data, dateString) => {
-              this.setState({
-                startTime: dateString[0],
-                endTime: dateString[1],
-                MyDatePickerValue: data,
-              });
-            }}
-            value={this.state.MyDatePickerValue}
-          />
-          &nbsp; &nbsp;
+      <span>
+        <MyDatePicker
+          handleValue={(data, dateString) => {
+            this.setState({
+              startTime: dateString[0],
+              endTime: dateString[1],
+              MyDatePickerValue: data,
+            });
+          }}
+          value={this.state.MyDatePickerValue}
+        />
+        &nbsp; &nbsp;
           <LinkButton
-            onClick={() => {
-              this.setState({ current: 1 });
-              this.getUsers(1, this.state.pageSize);
-            }}
-            size="default"
-          >
-            <Icon type="search" />
-          </LinkButton>
-          <span style={{color:"red"}}>开始日期必须为周一，结束日期必须为周日</span>
-        </span>
+          onClick={() => {
+            this.setState({ current: 1 });
+            this.getUsers(1, this.state.pageSize);
+          }}
+          size="default"
+        >
+          <Icon type="search" />
+        </LinkButton>
+        &nbsp; &nbsp;
+        <LinkButton
+          onClick={() => this.getDataByTime(1)}
+          size="default"
+        >昨天
+        </LinkButton>
+        &nbsp; &nbsp;
+        <LinkButton
+          onClick={() => this.getDataByTime(2)}
+          size="default"
+        >本周
+        </LinkButton>
+        &nbsp; &nbsp;
+        <LinkButton
+          onClick={() => this.getDataByTime(3)}
+          size="default"
+        >上周
+        </LinkButton>
+        <br />
+        <span style={{ color: "red" }}>开始日期必须为周一，结束日期必须为周日</span>
+      </span>
     );
-      const extra = (
-        <span>
-          <LinkButton
-            style={{ float: "right" }}
-            onClick={() => {
-              this.setState(init_state, () => {
-                this.getUsers(1, 20);
-              });
-            }}
-            icon="reload"
-            size="default"
-          />
-          <br />
-          <br />
-        </span>
-      );
-      return  <Card title={title} extra={extra}>
-            <Mytable
-                tableData={{
-                data,
-                count,
-                columns: this.initColumns(),
-                x: "max-content",
-                // y: "65vh",
-                current,
-                pageSize,
-                loading,
-                }}
+    const extra = (
+      <span>
+        <LinkButton
+          style={{ float: "right" }}
+          onClick={() => {
+            this.setState(init_state, () => {
+              this.getUsers(1, 20);
+            });
+          }}
+          icon="reload"
+          size="default"
+        />
+        <br />
+        <br />
+      </span>
+    );
+    return <Card title={title} extra={extra}>
+      <Mytable
+        tableData={{
+          data,
+          count,
+          columns: this.initColumns(),
+          x: "max-content",
+          // y: "65vh",
+          current,
+          pageSize,
+          loading,
+        }}
         paginationOnchange={(page, limit) => {
           this.getUsers(page, limit);
         }}
@@ -260,5 +310,5 @@ export default class PersonalList extends Component {
           }
         }}
       /></Card>
-    }
+  }
 }

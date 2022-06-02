@@ -11,12 +11,14 @@ import {
 import Mytable from "../../components/MyTable";
 import LinkButton from "../../components/link-button/index";
 import PopProxySetting from "../user/pop_user_proxy_setting";
-import moment from "moment";
+import moment from "moment"
+import TeamdataQuery from "./teamdataQuery";
 import {
     getCreditUserlist,
-    reqGetDividendRule,
+    getDividendRule,
     reqSetDividendRule,
-    reqEditUser
+    reqEditUser,
+    reqGetProxyUserNumber
 } from "../../api/index";
 import { formateDate } from "../../utils/dateUtils";
 const { Option } = Select;
@@ -34,9 +36,14 @@ const init_state = {
     resetpwd: "",
     isShowSetTreatMentModel: false,
     isShowEditTreatMentModel: false,
+    isShowTeamdataQuery: false,
     setTreatment: "",
     editTreatment: "",
-    rule_id:""
+    rule_id: "",
+    isShowTeamPerson:false,
+    teamPersonData:[],
+    teamPersonCount:0,
+    teamLoading:false,
 };
 export default class PtManage extends Component {
     constructor(props) {
@@ -44,19 +51,34 @@ export default class PtManage extends Component {
         this.state = init_state;
     }
 
+    teamColumns = ()=>[
+        {
+          title: "玩家ID",
+          dataIndex: "id",
+          key: "id",
+          align: 'center',
+        },
+        {
+          title: "团队总人数",
+          dataIndex: "count",
+          key: "count",
+          align: 'center',
+        },
+      ]
+
     initColumns = () => [
         {
             title: "账号名称",
             dataIndex: "name",
             key: "name",
-            fixed:"left",
+            fixed: "left",
             align: 'center',
         },
         {
             title: "玩家ID",
             dataIndex: "user_id",
             key: "user_id",
-            fixed:"left",
+            fixed: "left",
             align: 'center',
         },
         {
@@ -73,9 +95,9 @@ export default class PtManage extends Component {
             dataIndex: "",
             key: "",
             align: 'center',
-            render:(record)=>{
+            render: (record) => {
                 let str = ""
-                switch(record.role_id){
+                switch (record.role_id) {
                     case 3:
                         str = "充提组"
                         break
@@ -103,16 +125,22 @@ export default class PtManage extends Component {
                 <span>
                     <LinkButton onClick={() => this.handleShowModel(record, 1)}>
                         查看代理链
-              </LinkButton>
+                    </LinkButton>
                     <LinkButton onClick={() => this.handleShowModel(record, 2)}>
                         重置密码
-              </LinkButton>
+                    </LinkButton>
                     <LinkButton onClick={() => this.handleShowModel(record, 3)}>
                         查看待遇
-              </LinkButton>
-                    <LinkButton onClick={() => this.handleShowModel(record, 4)}>
+                    </LinkButton>
+                    <LinkButton onClick={() => this.handleShowModel(record, 5)}>
+                        团队业绩查询
+                    </LinkButton>
+                    <LinkButton onClick={() => this.handleShowModel(record, 6)}>
+                        团队人数
+                    </LinkButton>
+                    {/* <LinkButton onClick={() => this.handleShowModel(record, 4)}>
                         修改待遇
-              </LinkButton>
+              </LinkButton> */}
                 </span>
             ),
         },
@@ -140,7 +168,17 @@ export default class PtManage extends Component {
                 this.setState({
                     isShowEditTreatMentModel: true,
                 })
-                this.GetDividendRule()
+                // this.GetDividendRule()
+            case 5:
+                this.setState({
+                    isShowTeamdataQuery: true,
+                })
+                break;
+            case 6:
+                this.setState({
+                    isShowTeamPerson: true,
+                })
+                this.GetProxyUserNumber()
                 break;
 
         }
@@ -166,11 +204,8 @@ export default class PtManage extends Component {
         }
     };
     GetDividendRule = async () => {
-        const res = await reqGetDividendRule(
-            this.props.admin_user_id,
+        const res = await getDividendRule(
             this.record.user_id,//id
-            4, //type
-            0, //game_tag
         );
         if (res.code == 200) {
             this.setState({
@@ -224,7 +259,28 @@ export default class PtManage extends Component {
             loading: false,
         });
     };
+    GetProxyUserNumber = async (record, status) => {
+        this.setState({ teamLoading: true })
+        let data = {
+            "account_name": this.props.admin_user_id,
+            "ids": `[${this.record.user_id}]`
+        }
+        const res = await reqGetProxyUserNumber(data);
+        let data2 = [{id:`${this.recordID}`,"count":0}]
+        if (res.code === 200) {
+          this.setState({
+            teamPersonData:res.msg? res.msg : data2 ,
+            teamPersonCount:res.msg ? res.msg.length:1,
+          })
+        } else {
+            message.info(res.msg || "失败");
+        }
+        this.setState({
+            teamLoading: false
+        })
+    };
     componentDidMount() {
+        // console.log('PtManage====', this.props.admin_user_id);
         this.setState({
             start_time: moment().startOf("day").subtract(1, "month"),
             end_time: moment().startOf("day")
@@ -297,6 +353,24 @@ export default class PtManage extends Component {
                     />
                 </Modal>
             )}
+            {/* 团队业绩查询 */}
+            {this.state.isShowTeamdataQuery && (
+
+                <Modal
+                    title={`团队业绩查询 ${this.record.user_id}`}
+                    visible={this.state.isShowTeamdataQuery}
+                    onCancel={() => {
+                        this.setState({ isShowTeamdataQuery: false });
+                    }}
+                    footer={null}
+                    width="85%"
+                    maskClosable={false}
+                    style={{ top: 10 }}
+                >
+                    <TeamdataQuery user_id={this.record} admin_id={this.props.admin_user_id}></TeamdataQuery>
+                </Modal>
+            )}
+
             {this.state.isResetPwdShow && (
                 <Modal
                     title="重置密码"
@@ -324,9 +398,9 @@ export default class PtManage extends Component {
                 >
                     <div>玩家ID : {this.record.user_id}</div>
                     &nbsp; &nbsp;
-                <div><span>分红类型 :</span> <span>亏损分红</span></div>
+                    <div><span>分红类型 :</span> <span>亏损分红</span></div>
                     &nbsp; &nbsp;
-                <div>待遇 : <InputNumber
+                    <div>待遇 : <InputNumber
                         disabled={true}
                         placeholder=""
                         size="small"
@@ -348,9 +422,9 @@ export default class PtManage extends Component {
                 >
                     <div>玩家ID : {this.record.user_id}</div>
                     &nbsp; &nbsp;
-            <div><span>分红类型 :</span> <span>亏损分红</span></div>
+                    <div><span>分红类型 :</span> <span>亏损分红</span></div>
                     &nbsp; &nbsp;
-            <div>当前待遇 : <InputNumber
+                    <div>当前待遇 : <InputNumber
                         disabled={true}
                         placeholder=""
                         size="small"
@@ -368,7 +442,33 @@ export default class PtManage extends Component {
                         onBlur={(e) => (this.setState({ editTreatment: e.target.value }, this.handEditTreatment))}
                     />%</div>
                     &nbsp; &nbsp;
-            <div style={{ height: "10px" }}></div>
+                    <div style={{ height: "10px" }}></div>
+                </Modal>
+            )}
+            {this.state.isShowTeamPerson && (
+                <Modal
+                    title={`团队人数 ${this.record.user_id}`}
+                    visible={this.state.isShowTeamPerson}
+                    onCancel={() => {
+                        this.setState({ isShowTeamPerson: false });
+                    }}
+                    footer={null}
+                >
+                    <Mytable
+                        tableData={{
+                            data: this.state.teamPersonData,
+                            count: this.state.teamPersonCount,
+                            columns: this.teamColumns(),
+                            x: "max-content",
+                            loading: this.state.teamLoading
+                        }}
+                        pagination={false}
+                        paginationOnchange={(page, limit) => {
+                        }}
+                        setPagination={(current, pageSize) => {
+
+                        }}
+                    />
                 </Modal>
             )}
         </Card>

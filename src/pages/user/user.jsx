@@ -970,6 +970,8 @@ export default class User extends Component {
             <UserListRouter 
               recordID={this.recordID}
               recordPid={this.recordPid}
+              admin_user_id ={this.props.admin_user_id}
+              package_id ={this.props.package_id}
             />
           </Modal>
         )}

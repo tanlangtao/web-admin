@@ -146,6 +146,8 @@ import LowerManage from "../ptWorkers/lower-manage";
 import MenuManage from "../accManage/menuManage";
 import ActivityManage from "../activity/activity-manage";
 import DomanConfig from "../accManage/doman-config";
+import DailySettlement from "../ptWorkers/daily-settlement";
+import AccList from "../accManage/acc-list";
 import { conforms } from "lodash-es";
 const { Sider, Content } = Layout;
 const history = createHashHistory();
@@ -169,7 +171,7 @@ export default class Admin extends Component {
       this.setState({
         package_id:adminLoginData.roleid !=1 ? Number(adminLoginData.packageid):adminLoginData.packageid,
         role_id:Number(adminLoginData.roleid),
-        admin_user_id:Number(adminLoginData.userid),
+        admin_user_id:adminLoginData.roleid !=1 ? Number(adminLoginData.userid):adminLoginData.userid,
         password:Number(adminLoginData.password),
         account:adminLoginData.account,
       })
@@ -216,6 +218,7 @@ export default class Admin extends Component {
               height: "100%",
               position: "fixed",
               left: 0,
+              background:"rgb(72,80,98)"
             }}
             width="200"
           >
@@ -243,7 +246,7 @@ export default class Admin extends Component {
                     <Route path="/home" exact component={Home} />
                     <Route path="/user/user-list" exact>
                       <KeepAlive name="User">
-                        <User />
+                        <User  package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                       </KeepAlive>
                     </Route>
                     <Route path="/user/user_game_data" exact>
@@ -833,7 +836,7 @@ export default class Admin extends Component {
                     </Route>
                     <Route path="/accManage/accountDetail" exact>
                       <KeepAlive name="AccountDetail">
-                        <AccountDetail  package_id={this.state.package_id} account={this.state.account} password={this.state.password} admin_user_id = {this.state.admin_user_id}/>
+                        <AccountDetail role_id = {this.state.role_id}  package_id={this.state.package_id} account={this.state.account} password={this.state.password} admin_user_id = {this.state.admin_user_id}/>
                       </KeepAlive>
                     </Route>
                     <Route path="/accManage/roleManage" exact>
@@ -904,6 +907,16 @@ export default class Admin extends Component {
                     <Route path="/accManage/doman-config" exact>
                       <KeepAlive name="DomanConfig">
                         <DomanConfig package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
+                      </KeepAlive>
+                    </Route>
+                    <Route path="/ptWorkers/daily-settlement" exact>
+                      <KeepAlive name="DailySettlement">
+                        <DailySettlement package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
+                      </KeepAlive>
+                    </Route>
+                    <Route path="/accManage/acc-list" exact>
+                      <KeepAlive name="AccList">
+                        <AccList package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                       </KeepAlive>
                     </Route>
                     <Route component={NotFound} />

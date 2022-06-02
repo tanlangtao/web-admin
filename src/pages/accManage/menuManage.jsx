@@ -34,7 +34,8 @@ const init_state = {
     inputTitle:"",
     inputId:"0",
     inputSort:"",
-    inputStatus:""
+    inputStatus:"",
+    version:1654068817
 };
 export default class MenuManage extends Component {
     constructor(props) {
@@ -233,6 +234,8 @@ export default class MenuManage extends Component {
         const title = (
             <span>
                 <LinkButton onClick={()=>this.showModel({},2)}>增加菜单</LinkButton>
+                <li style={{display: "inline", marginLeft: "70%"}}>版本号:{this.state.version}</li>
+                
             </span>
         )
         return <Card title={title} >

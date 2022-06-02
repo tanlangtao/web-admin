@@ -8,19 +8,17 @@ import {
     Select,
     InputNumber,
 } from "antd";
-import Mytable from "../../../components/MyTable";
-import MyDatePicker from "../../../components/MyDatePicker";
-import LinkButton from "../../../components/link-button/index";
-import GoldDetail from "../goldDetail";
-import CreditDetail from "../creditDetail";
+import Mytable from "../../components/MyTable";
+import LinkButton from "../../components/link-button/index";
+import GoldDetail from "../payManage/goldDetail";
+import CreditDetail from "../payManage/creditDetail";
 import moment from "moment";
 import {
     reqCreditAdduser,
-    getCreditUserlist,
+    getCreditUserlists,
     reqAdduserbalance,
     reqEditUser
-} from "../../../api/index";
-import { formateDate } from "../../../utils/dateUtils";
+} from "../../api/index";
 const { Option } = Select;
 const init_state = {
     current: 1,
@@ -30,7 +28,6 @@ const init_state = {
     end_time: '',
     inputKey: "user_id",
     inputValue: "",
-    id: 427223993, // id先写死
     loading: false,
     data: [],
     isShowGoldDetail: false,
@@ -39,12 +36,14 @@ const init_state = {
     isShowGoldChange:false,
     resetpwd:"",
     changeGold:"",
-    setAgentUserID:"",
-    setAgentAccount:"",
-    setAgentpassword:"",
-    isShowSetAgent:false,
+    inputPackageId:"",
+    inputAccount:"",
+    inputPassword:"",
+    inputUserId:"",
+    isShowAddChaoguan:false,
+    isShowAddCaopan:false,
 };
-export default class ServiceDetail extends Component {
+export default class AccList extends Component {
     constructor(props) {
         super(props);
         this.state = init_state;
@@ -52,52 +51,34 @@ export default class ServiceDetail extends Component {
 
     initColumns = () => [
         {
-            title: "账号名称",
-            dataIndex: "name",
-            key: "name",
+            title: "ID",
+            dataIndex: "id",
+            key: "id",
             align: 'center',
             fixed:"left"
+        },
+        {
+            title: "账号",
+            dataIndex: "account",
+            key: "account",
+            align: 'center',
         },
         {
             title: "玩家ID",
             dataIndex: "user_id",
             key: "user_id",
             align: 'center',
-            fixed:"left"
         },
         {
-            title: "注册时间",
-            dataIndex: "",
-            key: "",
-            align: 'center',
-            render:(record)=>{
-                return moment(record.created_at).format("YYYY-MM-DD HH:mm:ss")
-            },
-        },
-        {
-            title: "用户组",
-            dataIndex: "",
-            key: "",
-            align: 'center',
-            render:(record)=>{
-                let str = ""
-                switch(record.role_id){
-                    case 3:
-                        str = "充提组"
-                        break
-                    case 4:
-                        str = "推广组"
-                        break
-                    default:
-                        str = "未定义用户组"
-                }
-                return str
-            }
-        },
-        {
-            title: "所属品牌",
+            title: "品牌ID",
             dataIndex: "package_id",
             key: "package_id",
+            align: 'center',
+        },
+        {
+            title: "角色ID",
+            dataIndex: "role_id",
+            key: "role_id",
             align: 'center',
         },
         {
@@ -106,7 +87,15 @@ export default class ServiceDetail extends Component {
             key: "user_balance",
             align: 'center',
         },
-        
+        {
+            title: "创建时间",
+            dataIndex: "",
+            key: "",
+            align: 'center',
+            render:(record)=>{
+                return moment(record.created_at).format("YYYY-MM-DD HH:mm:ss")
+            },
+        },
         {
             title: "操作",
             dataIndex: "",
@@ -185,12 +174,11 @@ export default class ServiceDetail extends Component {
     };
     getCreditUserlist = async (page, limit) => {
         this.setState({ loading: true });
-        const result = await getCreditUserlist(
-            this.props.package_id,
+        const result = await getCreditUserlists(
+            this.state.inputKey,
             this.state.inputValue,
             page,
             limit,
-            3
         );
         if (result.status === 0) {
             this.setState({
@@ -204,20 +192,47 @@ export default class ServiceDetail extends Component {
             loading: false,
         });
     };
-    handSetAgent =  async () => {
-        if (this.state.setAgentAccount == "" ||this.state.setAgentpassword == "") {
-            return message.info("代充账号密码不能为空!");
+    handlAddChaoguan =  async () => {
+        if (this.state.inputAccount == "" ||this.state.inputPassword == "") {
+            return message.info("账号密码不能为空!");
+        }
+        if(this.state.inputPackageId == ""){
+            return message.info("授权品牌不能为空！")
         }
         const res = await reqCreditAdduser(
-            this.state.setAgentAccount,
-            this.state.setAgentpassword,
-            this.state.setAgentUserID,
-            String(this.props.package_id),
-            3,//代充默认为3
+            this.state.inputAccount,
+            this.state.inputPassword,
+            "",
+            this.state.inputPackageId,
+            1,//超管默认为1
         );
         if (res.status == 0) {
             message.success("操作成功！");
-            this.setState({ setAgentUserID: "",setAgentAccount: "", setAgentpassword: "",isShowSetAgent:false });
+            this.setState({ inputPackageId: "",inputAccount: "", inputPassword: "",isShowAddChaoguan:false });
+            this.getCreditUserlist(1,20)
+        } else {
+            message.info("操作失败:" + res.msg);
+        }
+    }
+    handlAddCaopan =  async () => {
+        if (this.state.inputAccount == "" ||this.state.inputPassword == "") {
+            return message.info("账号密码不能为空!");
+        }
+        if(this.state.inputPackageId == ""){
+            return message.info("授权品牌不能为空！")
+        }else if(this.state.inputPackageId.split("").length>2){
+            return message.info("授权品牌只能传1个")
+        }
+        const res = await reqCreditAdduser(
+            this.state.inputAccount,
+            this.state.inputPassword,
+            this.state.inputUserId,
+            this.state.inputPackageId,
+            2,//操盘默认为2
+        );
+        if (res.status == 0) {
+            message.success("操作成功！");
+            this.setState({ inputPackageId: "",inputAccount: "", inputPassword: "",inputUserId:"",isShowAddCaopan:false });
             this.getCreditUserlist(1,20)
         } else {
             message.info("操作失败:" + res.msg);
@@ -235,9 +250,24 @@ export default class ServiceDetail extends Component {
         const { data, count, current, pageSize, loading } = this.state;
         const title = (
             <span>
+                &nbsp; &nbsp;
+                <Select
+                    placeholder="查询下拉选项"
+                    style={{ width: 200 }}
+                    value={this.state.inputKey}
+                    onChange={(val) => {
+                        this.setState({ inputKey: val });
+                    }}
+                >
+                    <Option value="account">账号</Option>
+                    <Option value="user_id">玩家ID</Option>
+                    <Option value="package_id">品牌ID</Option>
+                    <Option value="role_id">角色ID</Option>
+                </Select>
+                &nbsp; &nbsp;
                 <Input
                     type="text"
-                    placeholder="请输入查询玩家ID"
+                    placeholder="请输入查询内容"
                     style={{ width: 150 }}
                     onChange={(e) => {
                         this.setState({ inputValue: e.target.value });
@@ -257,14 +287,23 @@ export default class ServiceDetail extends Component {
                 &nbsp; &nbsp;
                 <LinkButton
                     onClick={() => {
-                        this.setState({ isShowSetAgent: true });
+                        this.setState({ isShowAddChaoguan: true });
                     }}
                     size="default"
-                >新增代充
+                >新增超管
+                </LinkButton>
+                &nbsp; &nbsp;
+                <LinkButton
+                        onClick={() => {
+                            this.setState({ isShowAddCaopan: true });
+                        }}
+                        size="default"
+                    >新增操盘
                 </LinkButton>
             </span>
         );
         return <Card title={title} >
+            
             <Mytable
                 tableData={{
                     data,
@@ -349,30 +388,65 @@ export default class ServiceDetail extends Component {
                 </Modal>
             )}
             {
-                this.state.isShowSetAgent && (
+                this.state.isShowAddChaoguan && (
                     <Modal
-                        title="设置代充"
-                        visible={this.state.isShowSetAgent}
-                        onOk={this.handSetAgent}
+                        title="新增超管"
+                        visible={this.state.isShowAddChaoguan}
+                        onOk={this.handlAddChaoguan}
                         onCancel={() => {
-                            this.setState({ isShowSetAgent: false });
+                            this.setState({ isShowAddChaoguan: false });
                         }}
                     >
-                         <p>玩家ID <Input
+                        <p>超管账号 <Input
+                            placeholder="请输入账号"
+                            value={this.state.inputAccount}
+                            onChange={(e) => this.setState({ inputAccount: e.target.value })}
+                        /></p>
+                        <p>超管密码 <Input
+                            placeholder="请输入密码"
+                            value={this.state.inputPassword}
+                            onChange={(e) => this.setState({ inputPassword: e.target.value })}
+                        /></p>
+                        <p>授权品牌 <Input
+                            placeholder="请输入授权品牌"
+                            value={this.state.inputPackageId}
+                            onChange={(e) => this.setState({ inputPackageId: e.target.value })}
+                        /></p>
+                        <p style={{color:"red"}}>说明:授权品牌可以传多个,中间用逗号间隔</p>
+                    </Modal>
+                )
+            }
+             {
+                this.state.isShowAddCaopan && (
+                    <Modal
+                        title="新增操盘"
+                        visible={this.state.isShowAddCaopan}
+                        onOk={this.handlAddCaopan}
+                        onCancel={() => {
+                            this.setState({ isShowAddCaopan: false });
+                        }}
+                    >
+                        <p>操盘账号 <Input
+                            placeholder="请输入账号"
+                            value={this.state.inputAccount}
+                            onChange={(e) => this.setState({ inputAccount: e.target.value })}
+                        /></p>
+                        <p>操盘密码 <Input
+                            placeholder="请输入密码"
+                            value={this.state.inputPassword}
+                            onChange={(e) => this.setState({ inputPassword: e.target.value })}
+                        /></p>
+                        <p>玩家ID <Input
                             placeholder="请输入玩家ID"
-                            value={this.state.setAgentUserID}
-                            onChange={(e) => this.setState({ setAgentUserID: e.target.value })}
+                            value={this.state.inputUserId}
+                            onChange={(e) => this.setState({ inputUserId: e.target.value })}
                         /></p>
-                        <p>代充账号 <Input
-                            placeholder="请输入代充账号"
-                            value={this.state.setAgentAccount}
-                            onChange={(e) => this.setState({ setAgentAccount: e.target.value })}
+                        <p>授权品牌 <Input
+                            placeholder="请输入授权品牌"
+                            value={this.state.inputPackageId}
+                            onChange={(e) => this.setState({ inputPackageId: e.target.value })}
                         /></p>
-                        <p>代充密码 <Input
-                            placeholder="请输入代充密码"
-                            value={this.state.setAgentpassword}
-                            onChange={(e) => this.setState({ setAgentpassword: e.target.value })}
-                        /></p>
+                        <p style={{color:"red"}}>说明:授权品牌只能传1个</p>
                     </Modal>
                 )
             }

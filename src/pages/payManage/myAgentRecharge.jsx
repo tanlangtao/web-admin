@@ -31,7 +31,8 @@ const init_state = {
   data: [],
   MyDatePickerValue: null,
   isShowModifyModel:false,
-  modifyAmount:""
+  modifyAmount:"",
+  time_type:1
 };
 export default class MyAgentRecharge extends Component {
   constructor(props) {
@@ -221,28 +222,19 @@ export default class MyAgentRecharge extends Component {
         limit,
         flag:3,
         order_status:Number(this.state.inputStatus),
+        player_id:Number(this.state.inputValue),
+        time_type:this.state.time_type
       }
     );
     if (result.status === 0) {
       let data =result.data && result.data.lists
       console.log(data)
-      if(this.state.inputValue != ""){
-        let newData = []
-        data.forEach(e => {
-          if(e.user_id == this.state.inputValue){
-            newData.push(e)
-          }
-        });
-        this.setState({
-          data:newData,
-          count: result.data.total,
-        })
-      }else{
         this.setState({
           data:data,
           count: result.data.total,
+          total_amount: result.data.total_amount,
+          total_arrival_amount: result.data.Total_arrival_amount,
         })
-      }
     } else {
       message.error(`失败！${result.data}`)
     }
@@ -272,6 +264,17 @@ export default class MyAgentRecharge extends Component {
     const { data, count, current, pageSize, loading } = this.state;
     const title = (
       <span>
+        <Select
+          style={{ width: 200 }}
+          value={this.state.time_type}
+          onChange={(val) => {
+            this.setState({ time_type: val });
+          }}
+        >
+          <Option value={1}>创建时间</Option>
+          <Option value={2}>到账时间</Option>
+        </Select>
+        &nbsp; &nbsp;
         <MyDatePicker
           handleValue={(data, dateString) => {
             this.setState({
@@ -317,6 +320,10 @@ export default class MyAgentRecharge extends Component {
         >
           <Icon type="search" />
         </LinkButton>
+        <span style={{display:"flex"}}>
+        <span style={{display:"block"}}>总订单金额:{this.state.total_amount} <br />总到账金额:{this.state.total_arrival_amount}</span>
+            {/* <span>总到账金额:{this.state.total_arrival_amount}</span> */}
+        </span>
       </span>
     );
     return <Card title={title} >

@@ -33,7 +33,9 @@ const init_state = {
   MyDatePickerValue: null,
   isShowChangeModal:false,
   changeID:"",
-
+  total_amount:0,
+  Total_arrival_amount:0,
+  time_type:1
 };
 export default class MyAgentCash extends Component {
   constructor(props) {
@@ -232,6 +234,7 @@ export default class MyAgentCash extends Component {
         package_id:this.props.package_id,
         flag:3,
         order_status:Number(this.state.inputStatus),
+        time_type:this.state.time_type
     },this.state.inputKey,this.state.inputValue)
     if(result.status === 0) {
       let data =result.data && result.data.lists
@@ -240,6 +243,8 @@ export default class MyAgentCash extends Component {
         data: data,
         count: result.data.total,
         loading: false,
+        total_amount: result.data.total_amount,
+        total_arrival_amount: result.data.Total_arrival_amount,
       });
     }else{
       message.error(`操作失败！${result.data}`)
@@ -329,6 +334,17 @@ export default class MyAgentCash extends Component {
     const { data, count, current, pageSize, loading } = this.state;
     const title = (
       <span>
+        <Select
+          style={{ width: 200 }}
+          value={this.state.time_type}
+          onChange={(val) => {
+            this.setState({ time_type: val });
+          }}
+        >
+          <Option value={1}>创建时间</Option>
+          <Option value={2}>到账时间</Option>
+        </Select>
+        &nbsp; &nbsp;
         <MyDatePicker
           handleValue={(data, dateString) => {
             this.setState({
@@ -387,6 +403,10 @@ export default class MyAgentCash extends Component {
         >
           <Icon type="search" />
         </LinkButton>
+        <span style={{display:"flex"}}>
+        <span style={{display:"block"}}>总订单金额:{this.state.total_amount} <br />总到账金额:{this.state.total_arrival_amount}</span>
+            {/* <span>总到账金额:{this.state.total_arrival_amount}</span> */}
+        </span>
       </span>
     );
     let daiFuTitle = (

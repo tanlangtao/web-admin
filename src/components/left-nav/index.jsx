@@ -47,7 +47,6 @@ class LeftNav extends Component {
         // console.log('item.title111====',item,item.title);
         return (
           <Menu.Item
-          
             key={item.key}
             onClick={() => {
               self.props.onClick(item);
@@ -374,7 +373,10 @@ class LeftNav extends Component {
       case 25: key = "/accManage/menuManage" ;type="menu"; break;//菜单管理
       case 26: key = "/accManage/roleManage" ; break; //权限管理
       case 27: key = "/accManage/accountDetail" ; break; //账户管理 
-      case 38: key = "/accManage/doman-config" ; break; //账户管理 
+      case 38: key = "/accManage/doman-config" ; break; //权限管理 
+      case 39: key = "/accManage/acc-list" ; break; //账户列表 
+      case 40: key = "/ptWorkers/daily-settlement" ; break; //单日团队数据 
+      case 41: key = "/list/gamedatalist" ; break; //游戏数据
     }
     return [key,type]
   }
@@ -415,7 +417,8 @@ class LeftNav extends Component {
         </div>
         <Menu
           mode="inline"
-          theme="dark"
+          theme="light"
+          className = "lefv-nav-manu"
           // selectedKeys={[path]}
           // defaultOpenKeys={[this.openKey]}
           onOpenChange={(key) => {

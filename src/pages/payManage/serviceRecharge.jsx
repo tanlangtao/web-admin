@@ -33,6 +33,9 @@ const init_state = {
   MyDatePickerValue: null,
   isShowChangeModal: false,
   changeID: "",
+  total_amount: 0,
+  Total_arrival_amount: 0,
+  time_type: 1
 };
 export default class ServiceRecharge extends Component {
   constructor(props) {
@@ -47,7 +50,7 @@ export default class ServiceRecharge extends Component {
       key: "order_id",
       fixed: "left",
       align: 'center',
-      width:120
+      width: 120
     },
     {
       title: "玩家ID",
@@ -181,7 +184,8 @@ export default class ServiceRecharge extends Component {
         package_id: this.props.package_id,
         flag: 3,
         order_status: Number(this.state.inputStatus),
-      },this.state.inputKey,this.state.inputValue
+        time_type: this.state.time_type
+      }, this.state.inputKey, this.state.inputValue
     );
     if (result.status === 0) {
       let data = result.data && result.data.lists
@@ -189,6 +193,8 @@ export default class ServiceRecharge extends Component {
       this.setState({
         data: data,
         count: result.data.total,
+        total_amount: result.data.total_amount,
+        total_arrival_amount: result.data.Total_arrival_amount,
       })
     } else {
       message.error(`失败！${result.data}`)
@@ -216,7 +222,7 @@ export default class ServiceRecharge extends Component {
     )
     if (result.status === 0) {
       message.success("操作成功！")
-      this.getReqDaiPayOrderList(1,10)
+      this.getReqDaiPayOrderList(1, 10)
     } else {//${result.data}
       message.error(`操作失败！`)
     }
@@ -232,7 +238,7 @@ export default class ServiceRecharge extends Component {
       Number(this.record.package_id),
     )
     if (result.status === 0) {
-      this.getReqDaiPayOrderList(1,10)
+      this.getReqDaiPayOrderList(1, 10)
       message.success("操作成功！")
     } else {
       message.error(`操作失败！${result.data}`)
@@ -248,26 +254,37 @@ export default class ServiceRecharge extends Component {
       Number(record.package_id),
     )
     if (result.status === 0) {
-      this.getReqDaiPayOrderList(1,10)
+      this.getReqDaiPayOrderList(1, 10)
       message.success("操作成功！")
     } else {
       message.error(`操作失败！${result.data}`)
     }
   }
   componentDidMount() {
-    this.getReqDaiPayOrderList(1,10)
+    this.getReqDaiPayOrderList(1, 10)
     let self = this
-    this.timer = setInterval(e=>{
-      self.getReqDaiPayOrderList(1,10)
-    },1000*60*3)
+    this.timer = setInterval(e => {
+      self.getReqDaiPayOrderList(1, 10)
+    }, 1000 * 60 * 3)
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     clearInterval(this.timer)
   }
   render() {
     const { data, count, current, pageSize, loading } = this.state;
     const title = (
       <span>
+        <Select
+        style={{ width: 200 }}
+        value={this.state.time_type}
+        onChange={(val) => {
+          this.setState({ time_type: val });
+        }}
+      >
+        <Option value={1}>创建时间</Option>
+        <Option value={2}>到账时间</Option>
+      </Select>
+      &nbsp; &nbsp;
         <MyDatePicker
           handleValue={(data, dateString) => {
             this.setState({
@@ -327,6 +344,11 @@ export default class ServiceRecharge extends Component {
         >
           <Icon type="search" />
         </LinkButton>
+        <span style={{ display: "flex" }}>
+          <span style={{ display: "block" }}>总订单金额:{this.state.total_amount} <br />总到账金额:{this.state.total_arrival_amount}</span>
+          {/*             
+            <span  style={{display:"block"}}>总到账金额:{this.state.total_arrival_amount}</span> */}
+        </span>
       </span>
     );
     let daichongTitle = (
@@ -334,7 +356,7 @@ export default class ServiceRecharge extends Component {
         修改代充
         &nbsp; &nbsp;
         &nbsp; &nbsp;
-        <span style={{color:"red"}}>
+        <span style={{ color: "red" }}>
           请输入 代充账号对应的代充ID信息（9位数字）
           填写完毕点击确定后 请返回人工充值界面对应订单点击【指派】
         </span>

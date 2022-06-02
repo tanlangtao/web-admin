@@ -12,6 +12,7 @@ import Mytable from "../../components/MyTable";
 import { formateDate } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-button/index";
 import CreditDetail from "../payManage/creditDetail";
+import GoldDetail from "../payManage/goldDetail";
 import {
   bindInfo,
   reqUsers,
@@ -30,6 +31,7 @@ const init_state = {
   isShowBindUsdtTrcModel: false,
   isShowBindUsdtErcModel: false,
   isShowCreditDetail: false,
+  isShowGoldDetail: false,
   card_name: "",
   card_num: "",
   bank_name: "",
@@ -48,6 +50,9 @@ export default class AccountDetail extends Component {
     this.state = init_state;
   }
   getBindInfo = async (page, limit) => {
+    if(this.props.role_id == 1){
+      return 
+    }
     this.setState({
       card_name: "",
       card_num: "",
@@ -59,7 +64,7 @@ export default class AccountDetail extends Component {
       account_name: "",
       wallet_addr_erc: "",
       wallet_addr_trc: "",
-      loading: true
+      loading: true,
     })
     const res = await bindInfo(
       page,
@@ -345,7 +350,12 @@ export default class AccountDetail extends Component {
             <Descriptions.Item label="上级ID">{game_user_data.proxy_user_id}</Descriptions.Item>
             <Descriptions.Item label="账号">{this.props.account}</Descriptions.Item>
             <Descriptions.Item label="密码">******</Descriptions.Item>
-            <Descriptions.Item label="账号余额">{this.state.user_balance} &nbsp;&nbsp;<LinkButton onClick={() => this.setState({ isShowCreditDetail: true })}>信用明细</LinkButton></Descriptions.Item>
+            <Descriptions.Item label="账号余额">{this.state.user_balance} 
+              &nbsp;&nbsp;
+              <LinkButton onClick={() => this.setState({ isShowCreditDetail: true })}>信用明细</LinkButton>
+              &nbsp;&nbsp;
+              <LinkButton onClick={() => this.setState({ isShowGoldDetail: true })}>充提明细</LinkButton>
+            </Descriptions.Item>
             <Descriptions.Item label="手机号码">{game_user_data.phone_number}</Descriptions.Item>
             <Descriptions.Item label="支付宝"><LinkButton size="small" disabled={zfb && true} onClick={() => this.showBindAlipayModel()}>绑定支付宝</LinkButton></Descriptions.Item>
             <Descriptions.Item label="支付宝姓名">{zfb && zfb.account_name}</Descriptions.Item>
@@ -491,6 +501,21 @@ export default class AccountDetail extends Component {
           style={{ top: 10 }}
         >
           <CreditDetail user_id={this.props.admin_user_id}></CreditDetail>
+        </Modal>
+      )}
+      {this.state.isShowGoldDetail && (
+        <Modal
+            title={`充提明细 ${this.props.admin_user_id}`}
+            visible={this.state.isShowGoldDetail}
+            onCancel={() => {
+                this.setState({ isShowGoldDetail: false });
+            }}
+            footer={null}
+            width="85%"
+            maskClosable={false}
+            style={{ top: 10 }}
+        >
+            <GoldDetail user_id = {this.props.admin_user_id}></GoldDetail>
         </Modal>
       )}
     </Card>
