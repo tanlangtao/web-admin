@@ -35,7 +35,7 @@ const init_state = {
     inputId:"0",
     inputSort:"",
     inputStatus:"",
-    version:1654068817
+    version:1654155035
 };
 export default class MenuManage extends Component {
     constructor(props) {

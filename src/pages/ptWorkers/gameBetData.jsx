@@ -1,12 +1,15 @@
-import React, { useState } from "react";
-import { Card, message, Input, Table } from "antd";
-import { getProxyUserLinkBet } from "../../../api";
-import MyDatePicker from "../../../components/MyDatePicker";
-import { reverseNumber } from "../../../utils/commonFuntion";
+import React, { useState ,useEffect} from "react";
+import { Card, message, Icon, Table } from "antd";
+import { getProxyUserLinkBet } from "../../api";
+import MyDatePicker from "../../components/MyDatePicker";
+import { reverseNumber } from "../../utils/commonFuntion";
+import LinkButton from "../../components/link-button/index";
+import moment from "moment";
+import ExportJsonExcel from "js-export-excel";
 import {
   gameRouter,
   thirdPartyGameRouter,
-} from "../../../utils/public_variable";
+} from "../../utils/public_variable";
 
 let initstate = {
   start_time: null,
@@ -19,21 +22,26 @@ let gameNameMap = {
   "5b1f3a3cb76a591e7f251729": { path: "/castcraft/api", name: "城堡争霸" },
 };
 
-export default () => {
+export default (props) => {
   const [data, setData] = useState([]);
+  useEffect(()=>{
+    //相当于生命周期compomentDidmonut
+        initstate = {
+            start_time:moment().startOf("day"),
+            end_time:moment().endOf("day"),
+        }
+        proxySearch(props.recordID)
+    },[])
   const initColumns = [
     {
       title: "日期",
       dataIndex: "date",
-      width: "15%",
-    },
-    {
-      title: "game_id",
-      dataIndex: "game_id",
+      align: 'center',
     },
     {
       title: "游戏名称",
       dataIndex: "",
+      align: 'center',
       render: (text, record) => {
         return record.game_id ? gameNameMap[record.game_id]?.name : "";
       },
@@ -41,6 +49,7 @@ export default () => {
     {
       title: "有效投注",
       dataIndex: "bet_money",
+      align: 'center',
       render: reverseNumber,
     },
   ];
@@ -48,10 +57,6 @@ export default () => {
   //搜寻代理个人玩家流水
   const proxySearch = async (value) => {
     const { start_time, end_time } = initstate;
-    if (!value) {
-      message.info("请输入玩家ID");
-      return;
-    }
     if (!start_time || !end_time) {
       message.info("请选择时间范围");
       return;
@@ -63,7 +68,6 @@ export default () => {
     };
     const res = await getProxyUserLinkBet(reqData);
     if (res.code === 200) {
-      message.success(res.status);
       let newData = [];
       //將日期以key = date 寫入每一筆data
       for (const [key, value] of Object.entries(res.msg)) {
@@ -83,7 +87,33 @@ export default () => {
       message.info(res.status || JSON.stringify(res));
     }
   };
+  const download = async () => {
+    var option = {};
+    let dataTable = [];
+    data &&
+    data.forEach((ele) => {
+        let obj = {
+          日期: ele.date,
+          游戏名称:ele.game_id ? gameNameMap[ele.game_id].name : "",
+          有效投注:reverseNumber(ele.bet_money),
+        };
+        dataTable.push(obj);
+      });
+    option.datas = [
+      {
+        sheetData: dataTable,
+        sheetName: "sheet",
+        sheetHeader: [
+          "日期",
+          "游戏名称",
+          "有效投注",
+        ],
+      },
+    ];
 
+    var toExcel = new ExportJsonExcel(option); //new
+    toExcel.saveExcel();
+  };
   return (
     <Card
       title={
@@ -95,13 +125,26 @@ export default () => {
             }}
           />
           &nbsp; &nbsp;
-          <Input.Search
-            style={{ width: 200 }}
-            placeholder="请输入玩家ID"
-            enterButton
-            onSearch={(value) => proxySearch(value)}
-          />
-        </div>
+        <LinkButton
+            onClick={() =>proxySearch(props.recordID) }
+            size="default"
+        >
+            <Icon type="search" />
+        </LinkButton>
+        &nbsp; &nbsp;
+        <span style={{color:'red'}}>
+            *只支持查询30天内数据*
+        </span>
+        &nbsp; &nbsp;
+        <LinkButton
+            type="primary"
+            onClick={() => {
+              download();
+            }}
+        >
+            导出数据
+        </LinkButton>
+        </div>  
       }
     >
       <Table

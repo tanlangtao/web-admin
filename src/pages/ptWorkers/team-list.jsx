@@ -153,15 +153,15 @@ export default class PersonalList extends Component {
           return (Math.round(record.child_money * 100) / 100);
         },
     },
-    {
-        title: "直属下级上期结转",
-        dataIndex: "last_child_grant",
-        key: "last_child_grant",
-        align: 'center',
-        render: (text, record) => {
-          return (Math.round(record.last_child_grant * 100) / 100);
-        },
-    },
+    // {
+    //     title: "直属下级上期结转",
+    //     dataIndex: "last_child_grant",
+    //     key: "last_child_grant",
+    //     align: 'center',
+    //     render: (text, record) => {
+    //       return (Math.round(record.last_child_grant * 100) / 100);
+    //     },
+    // },
     {
         title: "应发分红",
         dataIndex: "money",
@@ -244,7 +244,7 @@ export default class PersonalList extends Component {
          end = moment().endOf("week")
          break;
       case 3 :
-        //本周
+        //上周
          start = moment().startOf("week").subtract(1, "week")
          end = moment().endOf("week").subtract(1, "week")
          break;
@@ -308,18 +308,6 @@ export default class PersonalList extends Component {
             size="default"
           >
             <Icon type="search" />
-          </LinkButton>
-          &nbsp; &nbsp;
-          <LinkButton
-            onClick={() => this.getDataByTime(1)}
-            size="default"
-            >昨天
-          </LinkButton>
-          &nbsp; &nbsp;
-          <LinkButton
-            onClick={() => this.getDataByTime(2)}
-            size="default"
-            >本周
           </LinkButton>
           &nbsp; &nbsp;
           <LinkButton

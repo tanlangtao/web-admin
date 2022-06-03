@@ -10,8 +10,8 @@ import {
     changeProxyUserProxyPid,
     reqCreditAdduser,
     reqDaichangeUserBalance,
+    getDividendRule,
     reqSetDividendRule,
-    reqGetDividendRule,
 
 } from "../../api/index";
 import WrappedComponent from "./gold_details";
@@ -49,6 +49,7 @@ const init_state = {
     canSetTreatment:false,
     editTreatment:0,
     rule_id:"",
+    proxy_user_id:0
 }
 class UserListRouter extends Component {
     constructor(props) {
@@ -120,7 +121,7 @@ class UserListRouter extends Component {
                 case "14":
                     //代理资金变动
                     this.setState({ isShowEditTreatMentModel: true });
-                    this.reqGetDividendRule()
+                    this.GetDividendRule()
                     break
 
             }
@@ -129,26 +130,23 @@ class UserListRouter extends Component {
             current: e.key
         })
     };
-    reqGetDividendRule = async ()=>{
-        const res = await reqGetDividendRule(
-          this.props.admin_user_id,
+    GetDividendRule = async ()=>{
+        const res = await getDividendRule(
           String(this.props.recordID),
-          4, //type
-          0, //game_tag
         );
         if (res.code == 200) {
           if(res.msg ){
             this.setState({
-              //如果有值，则不能设置
+              
               setTreatment:res.msg[0].percent,
               rule_id:res.msg[0]._id,
-              canSetTreatment:true,
+              proxy_user_id:res.msg[0].proxy_user_id,
             })
           }else{
             this.setState({
-              canSetTreatment:false,
               setTreatment:0,
-              rule_id:""
+              rule_id:"",
+              proxy_user_id:0
             })
           }
           
@@ -162,7 +160,7 @@ class UserListRouter extends Component {
             return message.info("只能设置为正整数");
         }
         const res = await reqSetDividendRule(
-            this.props.admin_user_id,
+            this.state.proxy_user_id,
             this.state.rule_id,
             0,
             newNum, //分红比例， 只能传正整数

@@ -21,6 +21,8 @@ import {
     reqGetProxyUserNumber
 } from "../../api/index";
 import { formateDate } from "../../utils/dateUtils";
+import GameBetAmount from "./gameBetAmount"
+import GameBetData from "./gameBetData"
 const { Option } = Select;
 const init_state = {
     current: 1,
@@ -44,6 +46,8 @@ const init_state = {
     teamPersonData:[],
     teamPersonCount:0,
     teamLoading:false,
+    isShowGameBetAmount:false,
+    isShowGameBetData:false,
 };
 export default class PtManage extends Component {
     constructor(props) {
@@ -132,12 +136,18 @@ export default class PtManage extends Component {
                     <LinkButton onClick={() => this.handleShowModel(record, 3)}>
                         查看待遇
                     </LinkButton>
-                    <LinkButton onClick={() => this.handleShowModel(record, 5)}>
-                        团队业绩查询
+                    <LinkButton onClick={() => this.handleShowModel(record, 7)}>
+                        团队输赢流水
+                    </LinkButton>
+                    <LinkButton onClick={() => this.handleShowModel(record, 8)}>
+                        团队有效投注
                     </LinkButton>
                     <LinkButton onClick={() => this.handleShowModel(record, 6)}>
                         团队人数
                     </LinkButton>
+                    {/* <LinkButton onClick={() => this.handleShowModel(record, 5)}>
+                        团队业绩查询
+                    </LinkButton> */}
                     {/* <LinkButton onClick={() => this.handleShowModel(record, 4)}>
                         修改待遇
               </LinkButton> */}
@@ -180,6 +190,17 @@ export default class PtManage extends Component {
                 })
                 this.GetProxyUserNumber()
                 break;
+            case 7:
+                this.setState({
+                    isShowGameBetAmount: true,
+                })
+                break;
+            case 8:
+                this.setState({
+                    isShowGameBetData: true,
+                })
+                break;
+
 
         }
 
@@ -469,6 +490,34 @@ export default class PtManage extends Component {
 
                         }}
                     />
+                </Modal>
+            )}
+            {this.state.isShowGameBetAmount && (
+                <Modal
+                    title={`团队输赢流水 ${this.record.user_id}`}
+                    visible={this.state.isShowGameBetAmount}
+                    onCancel={() => {
+                        this.setState({ isShowGameBetAmount: false });
+                    }}
+                    width="90%"
+                    top={10}
+                    footer={null}
+                >
+                    <GameBetAmount recordID = {this.record.user_id}></GameBetAmount>
+                </Modal>
+            )}
+            {this.state.isShowGameBetData && (
+                <Modal
+                    title={`团队有效投注 ${this.record.user_id}`}
+                    visible={this.state.isShowGameBetData}
+                    onCancel={() => {
+                        this.setState({ isShowGameBetData: false });
+                    }}
+                    footer={null}
+                    width="90%"
+                    top={10}
+                >
+                    <GameBetData recordID = {this.record.user_id}></GameBetData>
                 </Modal>
             )}
         </Card>

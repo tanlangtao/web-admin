@@ -161,7 +161,7 @@ class Login extends Component {
               })(
                 <Input
                   prefix={
-                    <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                    <Icon type="user" style={{ color: "rgba(0,0,0,.25)" ,fontSize: "14px !important"}} />
                   }
                   placeholder="用户名"
                 />
@@ -177,7 +177,7 @@ class Login extends Component {
               })(
                 <Input
                   prefix={
-                    <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+                    <Icon type="lock" style={{ color: "rgba(0,0,0,.25)",fontSize: "14px !important" }} />
                   }
                   type="password"
                   placeholder="密码"
