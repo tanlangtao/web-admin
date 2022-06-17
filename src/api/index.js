@@ -2356,7 +2356,7 @@ export const reqModifyDaiPayAmount = (order_id, package_id, amount) => {
 };
 
 //支付订单列表
-export const reqDaiPayOrderList = (urlData,inputKey, inputValue) => {
+export const reqDaiPayOrderList = (urlData,inputKey = "time_type", inputValue = "1") => {
   return ajax(
     BASE + "/api/payment/daiPayOrderList",
     { ...urlData,[inputKey]: inputKey == "order_id" ? inputValue : Number(inputValue) },
@@ -2405,7 +2405,7 @@ export const reqApplyDaiWithdraw = (user_id, package_id, order_id) => {
   );
 };
 //兑换订单列表
-export const reqDaiWithdrawOrderList = (urlData, inputKey, inputValue) => {
+export const reqDaiWithdrawOrderList = (urlData, inputKey = "time_type", inputValue="1") => {
   return ajax(
     BASE + "/api/with_draw/daiWithdrawOrderList",
     { ...urlData, [inputKey]: inputKey == "order_id" ? inputValue : Number(inputValue) },
@@ -2652,6 +2652,60 @@ export const reqGetProxyUserNumber = (data) => {
     "GET",
   );
 };
+export const reqTeamabs = (data) => {
+  return ajax(
+    BASE + "/export/teamabs",
+    {...data},
+    "GET",
+  );
+};
+export const reqTeambetmoney = (data) => {
+  return ajax(
+    BASE + "/export/teambetmoney",
+    {...data},
+    "GET",
+  );
+};
+export const reqapply28Gold = (user_id,activity_id,package_id) => {
+  return ajax(
+    BASE + "/api/activity/apply28Gold",
+    {user_id,activity_id,package_id},
+    "POST",
+    { content_type_is_formdata: true }
+  );
+};
+export const reqlist28Gold = (user_id,activity_id,package_id) => {
+  return ajax(
+    BASE + "/api/activity/list28Gold",
+    {user_id,activity_id,package_id},
+    "POST",
+    { content_type_is_formdata: true }
+  );
+};
+export const reqGetGameAccountsInfo = (id) => {
+  return ajax(
+    BASE + "/Operation/Api/GetGameAccountsInfo",
+    {id},
+    "GET",
+  );
+};
+export const reqreimburselist = (user_id,activity_id,package_id) => {
+  return ajax(
+    BASE + "/api/activity/reimburse/list",
+    {user_id,activity_id,package_id},
+    "GET",
+    { content_type_is_formdata: true }
+  );
+};
+export const reqreimburseapply = (user_id,activity_id,package_id) => {
+  return ajax(
+    BASE + "/api/activity/reimburse/apply",
+    {user_id,activity_id,package_id},
+    "POST",
+    { content_type_is_formdata: true }
+  );
+};
+
 
 
 

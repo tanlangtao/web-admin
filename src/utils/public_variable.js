@@ -31,6 +31,7 @@ export const gameRouter = {
   "5b1f3a3cb76a59n210407n738": { path: "/xwby/api", name: "疯狂旋涡" },
   "5b1f3a3cb76a451e210820": { path: "/szffc/api", name: "上庄分分彩" },
   "5b1f3a3cb76a591e7f251728": { path: "/ygxb/api", name: "云谷寻宝" },
+  "5b1f3a3cb76a451e220527": { path: "/ad/api", name: "奥丁游戏" },
   // 城堡争霸，分防守與進攻兩種數據，在用戶>資金明細、盈餘池查詢、玩家遊戲數據組件個別寫入
   // "5b1f3a3cb76a591e7f251729": { path: "/castcraft/api", name: "城堡争霸" },
 };

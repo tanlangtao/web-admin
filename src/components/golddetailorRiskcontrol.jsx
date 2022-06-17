@@ -38,7 +38,7 @@ let new_gameRouter1 = {
   "569a62be7ff123m117d446aa": { path: "/paicai/api", name: "派彩" },
   "5b1f3a3cb76a591e7f25173": { path: "/zhenrensx/api", name: "真人视讯" },
   "5b1f3a3cb76a451e211109": { path: "/sanshengtiyu/api", name: "三昇体育" },
-  // "5b1f3a3cb76a591e7f25179": { path: "/shabaty/api", name: "沙巴体育" },
+  "5b1f3a3cb76a591e7f25179": { path: "/shabaty/api", name: "沙巴体育" },
 };
 
 export default function GoldDetailorRiskControl({
@@ -231,12 +231,20 @@ async function check_game_data(record) {
       data = res.data;
     }
     // 真人視訊
-    if (pay_account_id === "5b1f3a3cb76a591e7f25173" && res.data) {
+    if (
+      pay_account_id === "5b1f3a3cb76a591e7f25173" &&
+      res.data &&
+      res.data.Row
+    ) {
       data = res.data.Row[0];
     }
     // 沙巴體育
-    if (pay_account_id === "5b1f3a3cb76a591e7f25179" && res.data) {
-      data = res.data.Data.BetDetails;
+    if (
+      pay_account_id === "5b1f3a3cb76a591e7f25179" &&
+      res.data &&
+      res.data.Data.BetDetails
+    ) {
+      data = res.data.Data.BetDetails[0];
     }
     // 派彩
     if (pay_account_id === "569a62be7ff123m117d446aa" && res.data) {

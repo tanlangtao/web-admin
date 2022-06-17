@@ -32,6 +32,8 @@ const init_state = {
   MyDatePickerValue: null,
   isShowChangeModal:false,
   changeID:"",
+  total_amount:"0",
+  total_arrival_amount:"0"
 
 };
  class PopUserCashDetail extends Component {
@@ -154,7 +156,7 @@ const init_state = {
         flag:3,
         user_id:Number(this.props.user_id),
         order_status:Number(this.state.inputStatus),
-    },"user_id","")
+    })
     if(result.status === 0) {
       let data =result.data && result.data.lists
       console.log(data)
@@ -162,6 +164,8 @@ const init_state = {
         data: data,
         count: result.data.total,
         loading: false,
+        total_amount:result.data.total_amount,
+        total_arrival_amount:result.data.Total_arrival_amount,
       });
     }else{
       message.error(`操作失败！${result.data}`)
@@ -282,6 +286,7 @@ const init_state = {
         >
           <Icon type="search" />
         </LinkButton>
+        <span style={{display:"block"}}>总订单金额:{this.state.total_amount} <br />总到账金额:{this.state.total_arrival_amount}</span>
       </span>
     );
     return <Card title={title} >

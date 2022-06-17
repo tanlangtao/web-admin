@@ -32,6 +32,8 @@ const init_state = {
   MyDatePickerValue: null,
   isShowChangeModal:false,
   changeID:"",
+  total_amount:"0",
+  total_arrival_amount:"0"
 };
 class PopUserRechargeDetail extends Component {
   constructor(props) {
@@ -144,6 +146,8 @@ class PopUserRechargeDetail extends Component {
       this.setState({
         data:data,
         count: result.data.total,
+        total_amount:result.data.total_amount,
+        total_arrival_amount:result.data.Total_arrival_amount,
       })
     } else {
       message.error(`失败！${result.data}`)
@@ -258,6 +262,7 @@ class PopUserRechargeDetail extends Component {
         >
           <Icon type="search" />
         </LinkButton>
+        <span style={{display:"block"}}>总订单金额:{this.state.total_amount} <br />总到账金额:{this.state.total_arrival_amount}</span>
       </span>
     );
     return <Card title={title} >

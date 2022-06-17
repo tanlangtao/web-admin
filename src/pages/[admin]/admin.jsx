@@ -148,6 +148,8 @@ import ActivityManage from "../activity/activity-manage";
 import DomanConfig from "../accManage/doman-config";
 import DailySettlement from "../ptWorkers/daily-settlement";
 import AccList from "../accManage/acc-list";
+import Zcs28 from "../activity/zcs-28";
+import Xyhbp35 from "../activity/xyhbp35";
 import { conforms } from "lodash-es";
 const { Sider, Content } = Layout;
 const history = createHashHistory();
@@ -919,6 +921,17 @@ export default class Admin extends Component {
                         <AccList package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                       </KeepAlive>
                     </Route>
+                    <Route path="/activity/zcs-28" exact>
+                      <KeepAlive name="Zcs28">
+                        <Zcs28 package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
+                      </KeepAlive>
+                    </Route>
+                    <Route path="/activity/xyhbp35" exact>
+                      <KeepAlive name="Xyhbp35">
+                        <Xyhbp35 package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
+                      </KeepAlive>
+                    </Route>
+                    
                     <Route component={NotFound} />
                   </Switch>
                   

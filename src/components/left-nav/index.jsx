@@ -332,51 +332,53 @@ class LeftNav extends Component {
         e.children = this.reduceItem(e.children)
         return {
           ...e,
-          key:this.GetIdToKey(e.id)[0],
-          type:this.GetIdToKey(e.id)[1],
+          key:this.GetIdToKey(e.title)[0],
+          type:this.GetIdToKey(e.title)[1],
           children:e.children
         }
       }else{
-        return {...e,key:this.GetIdToKey(e.id)[0],type:this.GetIdToKey(e.id)[1]
+        return {...e,key:this.GetIdToKey(e.title)[0],type:this.GetIdToKey(e.title)[1]
         }
       }
     })
   }
-  GetIdToKey(id){
+  GetIdToKey(title){
     let key = ""
     let type = "bug"
-    switch(id){
-      case 1: key = "/user";type= "user" ; break; //用户管理
-      case 2: key = "/payManage";type="pay-circle" ; break; // 支付管理
-      case 3: key = "/activity" ;type="fire"; break; // 活动管理
-      case 4: key = "/list" ;type="table"; break; // 报表管理
-      case 5: key = "/ptWorkers" ;type="team"; break; // 推广员管理
-      case 6: key = "/accManage" ;type="idcard";  break; //账户管理
-      case 7: key = "/user/user-list" ; ;break;//用户列表
-      case 8: key = "/payManage/serviceRecharge" ;break;//人工充值
-      case 9: key = "/payManage/serviceCash" ; break;//人工兑换
-      case 10: key = "/payManage/creditManage/serviceDetail" ; break; // 代充管理
-      case 11: key = "/payManage/myAgentRecharge" ; break; // 我的代充
-      case 12: key = "/payManage/myAgentCash" ; break;//我的代付
-      case 13: key = "/payManage/myGoldDetail" ; break;//充提账变
-      case 14: key = "/payManage/myGoldDetailXinyong" ; break;//信用账变
-      case 15: key = "/activity/activity-manage" ; break;//活动领取列表
-      case 16: key = "/list/daily-report" ; break;//日常运营
-      case 17: key = "/ptWorkers/personal-daily" ; break;//本级数据日报
-      case 18: key = "/ptWorkers/team-daily" ; break;//团队数据日报
-      case 19: key = "/ptWorkers/personal-list" ; break;//个人结算列表
-      case 20: key = "/ptWorkers/team-list" ; break;//团队结算列表  
-      case 21: key = "/ptWorkers/pt-link" ; break;//推广链接
-      case 22: key = "/ptWorkers/lower-manage" ; break;//下级管理
-      case 23: key = "/ptWorkers/pt-manage" ; break;//推广管理
-      case 24: key = "/accManage/accountDetail" ; break;//账户详情
-      case 25: key = "/accManage/menuManage" ;type="menu"; break;//菜单管理
-      case 26: key = "/accManage/roleManage" ; break; //权限管理
-      case 27: key = "/accManage/accountDetail" ; break; //账户管理 
-      case 38: key = "/accManage/doman-config" ; break; //权限管理 
-      case 39: key = "/accManage/acc-list" ; break; //账户列表 
-      case 40: key = "/ptWorkers/daily-settlement" ; break; //单日团队数据 
-      case 41: key = "/list/gamedatalist" ; break; //游戏数据
+    switch(title){
+      case "用户管理": key = "/user";type= "user" ; break; //用户管理
+      case "支付管理": key = "/payManage";type="pay-circle" ; break; // 支付管理
+      case "活动管理": key = "/activity" ;type="fire"; break; // 活动管理
+      case "报表管理": key = "/list" ;type="table"; break; // 报表管理
+      case "推广员管理": key = "/ptWorkers" ;type="team"; break; // 推广员管理
+      case "账户管理": key = "/accManage" ;type="idcard";  break; //账户管理
+      case "用户列表": key = "/user/user-list" ; ;break;//用户列表
+      case "人工充值": key = "/payManage/serviceRecharge" ;break;//人工充值
+      case "人工兑换": key = "/payManage/serviceCash" ; break;//人工兑换
+      case "代充管理": key = "/payManage/creditManage/serviceDetail" ; break; // 代充管理
+      case "我的代充": key = "/payManage/myAgentRecharge" ; break; // 我的代充
+      case "我的代付": key = "/payManage/myAgentCash" ; break;//我的代付
+      case "充提账变": key = "/payManage/myGoldDetail" ; break;//充提账变
+      case "信用账变": key = "/payManage/myGoldDetailXinyong" ; break;//信用账变
+      case "活动领取列表": key = "/activity/activity-manage" ; break;//活动领取列表
+      case "日常运营": key = "/list/daily-report" ; break;//日常运营
+      case "历史个人数据": key = "/ptWorkers/personal-daily" ; break;//本级数据日报
+      case "历史团队数据": key = "/ptWorkers/team-daily" ; break;//团队数据日报
+      case "个人结算列表": key = "/ptWorkers/personal-list" ; break;//个人结算列表
+      case "团队结算列表": key = "/ptWorkers/team-list" ; break;//团队结算列表  
+      case "推广链接": key = "/ptWorkers/pt-link" ; break;//推广链接
+      case "下级管理": key = "/ptWorkers/lower-manage" ; break;//下级管理
+      case "推广管理": key = "/ptWorkers/pt-manage" ; break;//推广管理
+      case "个人账户": key = "/accManage/accountDetail" ; break;//个人账户
+      case "菜单管理": key = "/accManage/menuManage" ;type="menu"; break;//菜单管理
+      case "权限管理": key = "/accManage/roleManage" ; break; //权限管理
+      case "账户管理": key = "/accManage/accountDetail" ; break; //账户管理 
+      case "域名配置": key = "/accManage/doman-config" ; break; //域名配置 
+      case "账户列表": key = "/accManage/acc-list" ; break; //账户列表 
+      case "单日团队数据": key = "/ptWorkers/daily-settlement" ; break; //单日团队数据 
+      case "游戏玩家数据": key = "/list/gamedatalist" ; break; //游戏数据
+      case "注册送28元35": key = "/activity/zcs-28" ; break; //活动，注册送28
+      case "新用户包赔活动35": key = "/activity/xyhbp35" ; break; //活动，注册送28
     }
     return [key,type]
   }

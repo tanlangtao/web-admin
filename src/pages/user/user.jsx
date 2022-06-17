@@ -177,6 +177,23 @@ export default class User extends Component {
       //   };
       // },
     },
+    {
+      title: "账号",
+      dataIndex: "role_name",
+      key: "role_name",
+      align: 'center',
+      // width: 150,
+      // onCell: (record, rowIndex) => {
+      //   return {
+      //     onClick: (event) => {
+      //       this.record = record;
+      //       this.setState({
+      //         isPhoneNumberShow: true,
+      //       });
+      //     },
+      //   };
+      // },
+    },
     // {
     //   title: "手机归属地",
     //   dataIndex: "phone_number_detail",
@@ -683,6 +700,7 @@ export default class User extends Component {
           <Option value="id">玩家ID</Option>
           <Option value="game_nick">玩家昵称</Option>
           <Option value="phone_number">手机号</Option>
+          <Option value="role_name">账号</Option>
           <Option value="proxy_pid">推广员ID</Option>
           <Option value="regin_ip">注册IP</Option>
           <Option value="login_ip">登陆IP</Option>

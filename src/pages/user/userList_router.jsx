@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 
 // import { Table, Menu, Card } from "antd";
-import _, { } from "lodash-es";
 import { Menu, Card, Modal, message, Input, Popconfirm, Button, InputNumber } from 'antd';
 
 import {
@@ -12,7 +11,7 @@ import {
     reqDaichangeUserBalance,
     getDividendRule,
     reqSetDividendRule,
-
+    reqGetGameAccountsInfo
 } from "../../api/index";
 import WrappedComponent from "./gold_details";
 import PopProxySetting from "./pop_user_proxy_setting";
@@ -22,6 +21,12 @@ import PopUserGameData from "./pop_user_game_data";
 import PopUserCashDetail from "./pop_user_cash_detail";
 import PopUserRechargeDetail from "./pop_user_recharge_detail";
 import LinkButton from "../../components/link-button/index";
+import { toNonExponential,reverseNumber } from "../../utils/commonFuntion";
+import { gameRouter,thirdPartyGameRouter } from "../../utils/public_variable";
+let gameNameMap = {
+    ...gameRouter,
+    ...thirdPartyGameRouter
+}
 const init_state = {
     isGoldDetailShow: false,
     isResetPwdShow: false,
@@ -38,6 +43,7 @@ const init_state = {
     isShowCeilGameBanlance: false,
     isShowAddProxyBanlance: false,
     isShowCeilProxyBanlance: false,
+    isShowAccountDetailModel:false,
     resetpwd: "",
     new_proxy_user_id: "",
     isShowChangeProxy: false,
@@ -49,7 +55,11 @@ const init_state = {
     canSetTreatment:false,
     editTreatment:0,
     rule_id:"",
-    proxy_user_id:0
+    proxy_user_id:0,
+    game_user:{},
+    accounts:[],
+    game_user_balance:0,
+    game_total_balance:0,
 }
 class UserListRouter extends Component {
     constructor(props) {
@@ -119,9 +129,14 @@ class UserListRouter extends Component {
                     this.setState({ isShowProxyBalanceChange: true });
                     break
                 case "14":
-                    //代理资金变动
+                    //修改
                     this.setState({ isShowEditTreatMentModel: true });
                     this.GetDividendRule()
+                    break
+                case "15":
+                    //账户明细
+                    this.setState({ isShowAccountDetailModel: true });
+                    this.GetGameAccountsInfo()
                     break
 
             }
@@ -150,6 +165,33 @@ class UserListRouter extends Component {
             })
           }
           
+        } else {
+            message.info("操作失败:" + res.msg);
+        }
+      }
+      GetGameAccountsInfo = async ()=>{
+        const res = await reqGetGameAccountsInfo(
+            this.props.recordID,
+        );
+        if (res.code == 200) {
+            console.log(res.msg.accounts)
+            this.setState({
+                game_user:res.msg.game_user && res.msg.game_user,
+                accounts:`${res.msg.accounts}` != "null" && res.msg.accounts,
+                game_user_balance:res.msg.game_user && res.msg.game_user.game_gold,
+                game_total_balance:res.msg.game_user && res.msg.game_user.game_gold,
+            })
+            if(`${res.msg.accounts}` != "null"){
+                let sum = 0
+                res.msg.accounts.forEach((e)=>{
+                    sum += e.balance
+                })
+                sum += res.msg.game_user.game_gold
+                console.log("sum",sum)
+                this.setState({
+                    game_total_balance:sum
+                })
+            }
         } else {
             message.info("操作失败:" + res.msg);
         }
@@ -273,6 +315,7 @@ class UserListRouter extends Component {
             <Menu.Item key="8">登陆日志</Menu.Item>
             <Menu.Item key="12">游戏资金变动</Menu.Item>
             <Menu.Item key="13">代理资金变动</Menu.Item>
+            <Menu.Item key="15">账户明细</Menu.Item>
         </Menu>
     }
     onClick = e => {
@@ -477,8 +520,8 @@ class UserListRouter extends Component {
                                 <span>增加金额</span>
                                 &nbsp;&nbsp;
                                 <InputNumber
-                                    // min = {1}
-                                    precision={0}
+                                    min = {0}
+                                    step="0.1"
                                     placeholder="请输入金额"
                                     value={this.state.change_banlance_amount}
                                     onBlur={(e) => this.setState({ change_banlance_amount: e.target.value })}
@@ -508,8 +551,8 @@ class UserListRouter extends Component {
                                 <span>减少金额</span>
                                 &nbsp;&nbsp;
                                 <InputNumber
-                                    // max = {-1}
-                                    precision={0}
+                                    max = {0}
+                                    step="0.1"
                                     placeholder="请输入金额"
                                     value={this.state.change_banlance_amount}
                                     onBlur={(e) => this.setState({ change_banlance_amount: e.target.value })}
@@ -539,8 +582,8 @@ class UserListRouter extends Component {
                                 <span>增加金额</span>
                                 &nbsp;&nbsp;
                                 <InputNumber
-                                    // min = {1}
-                                    precision={0}
+                                    min = {0}
+                                    step="0.1"
                                     placeholder="请输入金额"
                                     value={this.state.change_banlance_amount}
                                     onBlur={(e) => this.setState({ change_banlance_amount: e.target.value })}
@@ -570,8 +613,8 @@ class UserListRouter extends Component {
                                 <span>减少金额</span>
                                 &nbsp;&nbsp;
                                 <InputNumber
-                                    // max = {-1}
-                                    precision={0}
+                                    max = {0}
+                                    step="0.1"
                                     placeholder="请输入金额"
                                     value={this.state.change_banlance_amount}
                                     onBlur={(e) => this.setState({ change_banlance_amount: e.target.value })}
@@ -582,6 +625,40 @@ class UserListRouter extends Component {
                         </Modal>
                     )
                 }
+                {
+                    this.state.isShowAccountDetailModel && (
+                        <Modal
+                            title={`账户明细 ${this.props.recordID}`}
+                            visible={this.state.isShowAccountDetailModel}
+                            onCancel={() => {
+                                this.setState({ isShowAccountDetailModel: false });
+                            }}
+                            footer={null}
+                        >
+                            <div style ={{display:"flex",height:"30px"}}>
+                                <div style ={{width:"100px"}}>大厅可用余额</div>
+                                &nbsp;&nbsp;
+                                <div>{reverseNumber(toNonExponential(this.state.game_user_balance))}</div>
+                            </div>
+                            
+                            {
+                                this.state.accounts.length>0 && this.state.accounts.map((e,index)=>{
+                                    return <div key={index} style ={{display:"flex",height:"30px"}}>
+                                        <div style ={{width:"100px"}}>{gameNameMap[e.game_id].name}</div>
+                                        &nbsp;&nbsp;
+                                    <div>{reverseNumber(toNonExponential(e.balance))}</div>
+                                </div>
+                                })
+                            }
+                            <div style ={{display:"flex",height:"30px"}}>
+                                <div style ={{width:"100px"}}>合计</div>
+                                &nbsp;&nbsp;
+                                <div>{reverseNumber(toNonExponential(this.state.game_total_balance)) }</div>
+                            </div>
+                        </Modal>
+                    )
+                }
+                
             </Card>
         );
     }

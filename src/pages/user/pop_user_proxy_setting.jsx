@@ -40,7 +40,7 @@ class PopProxySetting extends Component {
       data: res.data?.proxy_user || [],
       count: parseInt(res.data?.count || 0),
     },()=>{
-        this.fetchData2(this.state.recordID);
+        // this.fetchData2(this.state.recordID);
         this.fetchData3(this.state.recordID);
     });
   };

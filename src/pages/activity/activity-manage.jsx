@@ -11,6 +11,7 @@ import Mytable from "../../components/MyTable";
 import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button/index";
 import { formateDate } from "../../utils/dateUtils";
+import PopProxySetting from "../user/pop_user_proxy_setting";
 import moment from "moment";
 import {
     reqActivityList
@@ -28,6 +29,7 @@ const init_state = {
   loading: false,
   data: [],
   MyDatePickerValue: null,
+  isShowProxySetting:false
 };
 export default class ActivityManage extends Component {
   constructor(props) {
@@ -79,6 +81,24 @@ export default class ActivityManage extends Component {
       key: "created_at",
       align: 'center',
       render:formateDate,
+    },
+    {
+      title: "操作",
+      dataIndex: "",
+      key: "",
+      align: 'center',
+      render:(record)=>{
+        
+        return <LinkButton onClick={()=>{
+          this.record = record
+          this.setState({
+            isShowProxySetting:true,
+  
+          })
+        }}>
+          查询代理链
+        </LinkButton>
+      }
     },
   ];
   getReqActivityList = async (page,limit)=>{
@@ -195,6 +215,22 @@ export default class ActivityManage extends Component {
             }
         }}
       />
+        {this.state.isShowProxySetting && (
+        <Modal
+          title={`代理链信息 ${this.record.user_id}`}
+          visible={this.state.isShowProxySetting}
+          onCancel={() => {
+            this.setState({ isShowProxySetting: false });
+          }}
+          footer={null}
+          width="90%"
+          top={10}
+        >
+          <PopProxySetting
+              recordID={this.record.user_id}
+          />
+        </Modal>
+      )}
     </Card>
   }
 }

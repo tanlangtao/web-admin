@@ -105,7 +105,7 @@ export default class PtLink extends Component {
     }
     componentDidMount() {
         this.envtype = 0
-        if(localStorage.BASE == "https://admin.lymrmfyp.com/creditadmin"){
+        if(localStorage.BASE == "https://creditweb.lymrmfyp.com/creditadmin"){
             this.envtype = 2
         }else{
             this.envtype = 3
@@ -182,10 +182,10 @@ export default class PtLink extends Component {
                     style={{ top: 10 }}
                 >
                     <div className="qrDiv">
-                        {getCodeDev("img1")}
-                        {getCodeDev("img2")}
-                        {getCodeDev("img3")}
-                        {getCodeDev("img4")}
+                        {getCodeDev(`img1_${this.props.package_id}`)}
+                        {getCodeDev(`img2_${this.props.package_id}`)}
+                        {getCodeDev(`img3_${this.props.package_id}`)}
+                        {getCodeDev(`img4_${this.props.package_id}`)}
                     </div>
                 </Modal>
             )}
