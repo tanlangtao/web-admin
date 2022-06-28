@@ -244,7 +244,8 @@ export default class ServiceRecharge extends Component {
       message.error(`操作失败！${result.data}`)
     }
     this.setState({
-      isShowChangeModal: false
+      isShowChangeModal: false,
+      changeID:""
     })
   }
   // 指派
@@ -265,7 +266,7 @@ export default class ServiceRecharge extends Component {
     let self = this
     this.timer = setInterval(e => {
       self.getReqDaiPayOrderList(1, 10)
-    }, 1000 * 60 * 3)
+    }, 1000*90)
   }
   componentWillUnmount() {
     clearInterval(this.timer)
@@ -391,7 +392,7 @@ export default class ServiceRecharge extends Component {
           visible={this.state.isShowChangeModal}
           onOk={this.handleChange}
           onCancel={() => {
-            this.setState({ isShowChangeModal: false });
+            this.setState({ isShowChangeModal: false,changeID:"" });
           }}
         >
           <Input

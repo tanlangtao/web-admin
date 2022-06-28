@@ -11,27 +11,29 @@ import {
 } from "antd";
 import Mytable from "../../components/MyTable";
 import MyDatePicker from "../../components/MyDatePicker";
-import { formateDate, formatDateYMD } from "../../utils/dateUtils";
+import { formatDateYMD } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-button/index";
 import moment from "moment";
 import {
-  reqGetCreditDividendInfoList,
+  reqGetCreditDividendInfo,
 } from "../../api/index";
 const { Option } = Select;
 
 const init_state = {
-  current: 1,
-  pageSize: 20,
-  data: [],
-  count: 0,
-  startTime: "",
-  endTime: "",
-  MyDatePickerValue: null,
-  packages: "",
-  loading: false,
-  platform_name: ""
+    current: 1,
+    pageSize: 20,
+    data: [],
+    count: 0,
+    startTime: "",
+    endTime: "",
+    MyDatePickerValue: null,
+    packages:"",
+    loading: false,
+    searchID:"",
+    platform_name:"",
+    inputID:"",
 };
-export default class PersonalDaily extends Component {
+export default class DailySettlement extends Component {
   constructor(props) {
     super(props);
     this.state = init_state;
@@ -64,14 +66,14 @@ export default class PersonalDaily extends Component {
       dataIndex: "top_up",
       key: "top_up",
       align: 'center',
-      // width: 150,
+      
     },
     {
       title: "今日团队兑换",
       dataIndex: "",
       key: "",
       align: 'center',
-      render: (record) => {
+      render:(record)=>{
         return Math.abs(record.withdraw)
       }
     },
@@ -152,44 +154,41 @@ export default class PersonalDaily extends Component {
   ];
   getUsers = async (page, limit) => {
     this.setState({ loading: true });
-    const result = await reqGetCreditDividendInfoList(
+    if( (moment(this.state.endTime) - moment(this.state.startTime))/1000 > 86400){
+      return message.info("仅限单日数据查询")
+    }
+    const result = await reqGetCreditDividendInfo(
       formatDateYMD(this.state.startTime),
       formatDateYMD(this.state.endTime),
-      this.props.admin_user_id,
-      this.props.package_id,
-      page,
-      limit
+      this.state.inputID,
     );
     if (result.code == 200) {
+      let data = []
+      for(var k in result.msg){
+        data = result.msg[k]
+      }
       this.setState({
-        data: result.msg,
-        count: result.msg && result.msg.length,
+        data: data,
+        count: result.msg && data.length,
+        loading: false,
       });
     } else {
       message.info(result.msg || "未检索到数据");
     }
-    this.setState({
-      loading: false
-    })
   };
   getDataByTime(num){
     let start = ""
     let end = ""
     switch(num){
       case 1 :
-        //昨天
-         start = moment().startOf("day").subtract(1, "day")
-         end = moment().endOf("day").subtract(1, "day")
+        //今天
+         start = moment().startOf("day")
+         end = moment().endOf("day")
          break;
       case 2 :
-          //本周
-         start = moment().startOf("week")
-         end = moment().endOf("week")
-         break;
-      case 3 :
-        //本周
-         start = moment().startOf("week").subtract(1, "week")
-         end = moment().endOf("week").subtract(1, "week")
+          //昨天
+         start = moment().startOf("day").subtract(1, "day")
+         end = moment().endOf("day").subtract(1, "day")
          break;
     }
     this.setState({
@@ -200,88 +199,92 @@ export default class PersonalDaily extends Component {
       this.getUsers(1,20)
     })
   }
-  componentDidMount() {
+  componentDidMount(){
     let platform_name = localStorage.getItem("name")
+    let start = moment().startOf("day");
     this.setState({
-      platform_name: platform_name
+      startTime:start.format("YYYY-MM-DD HH:mm:ss"),
+      endTime:start.format("YYYY-MM-DD HH:mm:ss"),
     })
-    let start = moment().startOf("day").subtract(1, "day")
-    let end = moment().endOf("day").subtract(1, "day")
     this.setState({
-      startTime: start.format("YYYY-MM-DD HH:mm:ss"),
-      endTime: end.format("YYYY-MM-DD HH:mm:ss"),
+        platform_name:platform_name
     })
   }
-  render() {
+  render(){
     const { data, count, current, pageSize, loading } = this.state;
-
+    
     const title = (
-      <span>
-        <MyDatePicker
-          handleValue={(data, dateString) => {
-            this.setState({
-              startTime: dateString[0],
-              endTime: dateString[1],
-              MyDatePickerValue: data,
-            });
+        <span>
+          <Input
+          type="text"
+          placeholder="请输入ID搜索"
+          style={{ width: 150 }}
+          onChange={(e) => {
+            this.setState({ inputID: e.target.value });
           }}
-          value={this.state.MyDatePickerValue}
+          value={this.state.inputID}
+        />
+        &nbsp; &nbsp;
+          <MyDatePicker
+            handleValue={(data, dateString) => {
+              this.setState({
+                startTime: dateString[0],
+                endTime: dateString[1],
+                MyDatePickerValue: data,
+              });
+            }}
+            value={this.state.MyDatePickerValue}
         />
         &nbsp; &nbsp;
         <LinkButton
-          onClick={() => {
+        onClick={() => {
             this.setState({ current: 1 });
             this.getUsers(1, this.state.pageSize);
-          }}
-          size="default"
+        }}
+        size="default"
         >
-          <Icon type="search" />
+        <Icon type="search" />
         </LinkButton>
         &nbsp; &nbsp;
         <LinkButton
           onClick={() => this.getDataByTime(1)}
           size="default"
-        >昨天
+        >今天
         </LinkButton>
         &nbsp; &nbsp;
         <LinkButton
           onClick={() => this.getDataByTime(2)}
           size="default"
-        >本周
+        >昨天
         </LinkButton>
-        &nbsp; &nbsp;
-        <LinkButton
-          onClick={() => this.getDataByTime(3)}
-          size="default"
-        >上周
-        </LinkButton>
-      </span>
+        <br/>
+        <span style={{color:"red"}}>* 仅限单日数据查询 * </span>
+        </span>
     );
-   
-    console.log(data)
-    return <Card title={title} >
-      <Mytable
-        tableData={{
-          data,
-          count,
-          columns: this.initColumns(),
-          x: "max-content",
-          // y: "65vh",
-          current,
-          pageSize,
-          loading,
-        }}
-        paginationOnchange={(page, limit) => {
-          this.getUsers(page, limit);
-        }}
-        setPagination={(current, pageSize) => {
-          if (pageSize) {
-            this.setState({ current, pageSize });
-          } else {
-            this.setState({ current });
-          }
-        }}
-      />
-    </Card>
-  }
+       
+      return  <Card title={title} >
+                <Mytable
+                    tableData={{
+                        data,
+                        count,
+                        columns: this.initColumns(),
+                        x: "max-content",
+                        // y: "65vh",
+                        current,
+                        pageSize,
+                        loading,
+                    }}
+                    paginationOnchange={(page, limit) => {
+                        this.getUsers(page, limit);
+                    }}
+                    setPagination={(current, pageSize) => {
+                        if (pageSize) {
+                            this.setState({ current, pageSize });
+                        } else {
+                            this.setState({ current });
+                        }
+                    }}
+                 />
+      </Card>
+    }
 }

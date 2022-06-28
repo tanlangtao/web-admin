@@ -12,11 +12,13 @@ import MyDatePicker from "../../components/MyDatePicker";
 import LinkButton from "../../components/link-button/index";
 import riskcontrolfn from "../../components/riskcontrol";
 import { formateDate } from "../../utils/dateUtils";
+import AgentAccountDetail from "./agentAccountDetail";
 import {
   reqUpdateDaiWithdrawID,
   reqModifyDaiWithdrawID,
   reqReviewDaiWithdraw,
-  reqDaiWithdrawOrderList
+  reqDaiWithdrawOrderList,
+  
 } from "../../api/index";
 const { Option } = Select;
 const init_state = {
@@ -35,9 +37,10 @@ const init_state = {
   changeID:"",
   total_amount:0,
   Total_arrival_amount:0,
-  time_type:1
+  time_type:1,
+  isShowAccountDetailModel:false,
 };
-export default class MyAgentCash extends Component {
+export default class ServiceCash extends Component {
   constructor(props) {
     super(props);
     this.state = init_state;
@@ -84,6 +87,24 @@ export default class MyAgentCash extends Component {
       key: "amount",
       align: 'center',
       width: 100,
+    },
+    {
+      title: "账号详情",
+      dataIndex: "",
+      key: "",
+      align: 'center',
+      render: (text, record) => (
+				<span>
+					<LinkButton
+						onClick={() => {
+							this.showAccountDetailModel(record);
+						}}
+						type="default"
+					>
+						查看
+					</LinkButton>
+				</span>
+			),
     },
     {
       title: "创建时间",
@@ -254,9 +275,16 @@ export default class MyAgentCash extends Component {
     this.setState({
       isShowChangeModal:true
     })
-    this.recordID = record.id
+    this.recordID = record.user_id
     this.package_id = record.package_id
     this.order_id = record.order_id
+  }
+  showAccountDetailModel =  (record)=>{
+    this.recordID = record.user_id
+    this.recordPID = record.package_id
+    this.setState({
+      isShowAccountDetailModel:true
+    });
   }
   // 更新代付ID
   handleUpdateId = async (record)=>{
@@ -287,7 +315,8 @@ export default class MyAgentCash extends Component {
       message.error(`操作失败！${result.data}`)
     }
     this.setState({
-      isShowChangeModal :false
+      isShowChangeModal :false,
+      changeID:""
     })
   }
   // 审核-拒绝
@@ -325,7 +354,7 @@ export default class MyAgentCash extends Component {
     let self = this;
     this.timer = setInterval(e=>{
       self.getReqDaiWithdrawOrderList(1,10)
-    },1000*60*3)
+    },1000*90)
   }
   componentWillUnmount(){
     clearInterval(this.timer)
@@ -448,7 +477,7 @@ export default class MyAgentCash extends Component {
           visible={this.state.isShowChangeModal}
           onOk={this.handleChange}
           onCancel={() => {
-            this.setState({ isShowChangeModal: false });
+            this.setState({ isShowChangeModal: false,changeID:"" });
           }}
         >
           <Input
@@ -457,6 +486,20 @@ export default class MyAgentCash extends Component {
           />
         </Modal>
       )}
+      {
+        this.state.isShowAccountDetailModel && (
+          <Modal
+            title={`${this.recordID} 账号详情`}
+            visible={this.state.isShowAccountDetailModel}
+            onCancel={() => {
+              this.setState({ isShowAccountDetailModel: false });
+            }}
+            footer={null}
+          >
+            <AgentAccountDetail recordID = {this.recordID}></AgentAccountDetail>
+          </Modal>
+        )
+      }
     </Card>
   }
 }

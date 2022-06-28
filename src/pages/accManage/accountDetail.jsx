@@ -7,18 +7,21 @@ import {
   Input,
   Popconfirm,
   Descriptions,
+  Select
 } from "antd";
 import Mytable from "../../components/MyTable";
 import { formateDate } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-button/index";
 import CreditDetail from "../payManage/creditDetail";
 import GoldDetail from "../payManage/goldDetail";
+import {getCities,getBankName}  from "../../utils/commonFuntion";
 import {
   bindInfo,
   reqUsers,
   reqSaveAccount,
   getCreditUserlist
 } from "../../api/index";
+const { Option } = Select;
 const init_state = {
   current: 1,
   pageSize: 20,
@@ -34,15 +37,19 @@ const init_state = {
   isShowGoldDetail: false,
   card_name: "",
   card_num: "",
-  bank_name: "",
-  bank_province: "",
-  bank_city: "",
+  bank_name: "选择开户行",
+  bank_province: "选择开户省",
+  bank_city: "选择开户市",
   branch_name: "",
   account_card: "",
   account_name: "",
   wallet_addr_erc: "",
   wallet_addr_trc: "",
-  user_balance: 0
+  user_balance: 0,
+  bankProvinceData:[],
+  bankNameData:[],
+  provinces:[],
+  cities:[],
 };
 export default class AccountDetail extends Component {
   constructor(props) {
@@ -56,9 +63,9 @@ export default class AccountDetail extends Component {
     this.setState({
       card_name: "",
       card_num: "",
-      bank_name: "",
-      bank_province: "",
-      bank_city: "",
+      bank_name: "选择开户行",
+      bank_province: "选择开户省",
+      bank_city: "选择开户市",
       branch_name: "",
       account_card: "",
       account_name: "",
@@ -172,8 +179,8 @@ export default class AccountDetail extends Component {
   }
   bindBankCard = async () => {
     if (this.state.card_num == "" || this.state.card_name == "" ||
-      this.state.bank_name == "" || this.state.branch_name == "" ||
-      this.state.bank_province == "" || this.state.bank_city == "") {
+      this.state.bank_name == "选择开户行" || this.state.branch_name == "" ||
+      this.state.bank_province == "选择开户省" || this.state.bank_city == "选择开户市") {
       return message.info("银行卡信息不能为空！")
     }
     //绑定银行卡
@@ -202,7 +209,7 @@ export default class AccountDetail extends Component {
       message.success("操作成功！")
       this.getBindInfo(1, 20);
     } else {
-      message.error("操作失败！")
+      message.error(result.msg)
     }
     this.setState({
       isShowBindBankModel: false
@@ -234,7 +241,7 @@ export default class AccountDetail extends Component {
       message.success("操作成功！")
       this.getBindInfo(1, 20);
     } else {
-      message.error("操作失败！")
+      message.error(result.msg)
     }
     this.setState({
       isShowBindAlipayModel: false
@@ -265,7 +272,7 @@ export default class AccountDetail extends Component {
       message.success("操作成功！")
       this.getBindInfo(1, 20);
     } else {
-      message.error("操作失败！")
+      message.error(result.msg)
     }
     this.setState({
       isShowBindUsdtErcModel: false
@@ -296,7 +303,7 @@ export default class AccountDetail extends Component {
       message.success("操作成功！")
       this.getBindInfo(1, 20);
     } else {
-      message.error("操作失败！")
+      message.error(result.msg)
     }
     this.setState({
       isShowBindUsdtTrcModel: false
@@ -306,10 +313,19 @@ export default class AccountDetail extends Component {
     this.getBindInfo(1, 20);
     this.getUsers(1, 20)
     this.reqGetCreditUserlist(1, 20)
+    let data = getCities()
+    let provinces = []
+    for(var k in data){
+      provinces.push(k)
+    } 
+    this.setState({
+      provinces,
+      bankProvinceData:data,
+      bankNameData:getBankName()
+    })
   }
   render() {
     let { data, game_user_data } = this.state;
-    console.log(game_user_data)
     if(JSON.stringify(game_user_data) == "{}" || game_user_data == undefined){
       game_user_data = {
         id:"",
@@ -340,6 +356,16 @@ export default class AccountDetail extends Component {
                 this.getUsers(1, 20);
                 this.getBindInfo(1, 20);
                 this.reqGetCreditUserlist(1, 20);
+                let data = getCities()
+                let provinces = []
+                for(var k in data){
+                  provinces.push(k)
+                } 
+                this.setState({
+                  provinces,
+                  bankProvinceData:data,
+                  bankNameData:getBankName()
+                })
               });
             }}
             icon="reload"
@@ -389,42 +415,92 @@ export default class AccountDetail extends Component {
             this.setState({ isShowBindBankModel: false });
           }}
         >
-          <li>&nbsp;开户人姓名:</li>
-          <Input
-            placeholder="输入开户人姓名"
-            value={this.state.card_name}
-            onChange={(e) => this.setState({ card_name: e.target.value })}
-          />
-          <li>&nbsp;开户行:</li>
-          <Input
-            placeholder="输入开户行"
+          <li style={{display:"flex"}} >&nbsp;开户人姓名:
+            &nbsp; &nbsp;
+            <Input
+              placeholder="输入开户人姓名"
+              value={this.state.card_name}
+              style={{ width: 200 }}
+              onChange={(e) => this.setState({ card_name: e.target.value })}
+            />
+          </li>
+          &nbsp; 
+          <li>&nbsp;开户行: 
+            &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Select
+            style={{ width: 200 }}
+            placeholder="选择开户行"
             value={this.state.bank_name}
-            onChange={(e) => this.setState({ bank_name: e.target.value })}
-          />
-          <li>&nbsp;银行卡号:</li>
-          <Input
-            placeholder="输入银行卡号"
-            value={this.state.card_num}
-            onChange={(e) => this.setState({ card_num: e.target.value })}
-          />
-          <li>&nbsp;开户省:</li>
-          <Input
-            placeholder="输入开户省"
-            value={this.state.bank_province}
-            onChange={(e) => this.setState({ bank_province: e.target.value })}
-          />
-          <li>&nbsp;开户市:</li>
-          <Input
-            placeholder="输入开户市"
-            value={this.state.bank_city}
-            onChange={(e) => this.setState({ bank_city: e.target.value })}
-          />
-          <li>&nbsp;开户支行:</li>
-          <Input
-            placeholder="输入开户支行"
-            value={this.state.branch_name}
-            onChange={(e) => this.setState({ branch_name: e.target.value })}
-          />
+            onChange={(val) => {
+              this.setState({ bank_name: val});
+            }}
+          >
+            {
+              this.state.bankNameData.map((e,index)=>{
+                return <Option value={e} key ={index}>{e}</Option>
+              })
+            }
+          </Select>
+          </li>
+          &nbsp; 
+          <li style={{display:"flex"}}>&nbsp;银行卡号: 
+            &nbsp; &nbsp; &nbsp;&nbsp;
+            <Input
+              placeholder="输入银行卡号"
+              value={this.state.card_num}
+              style={{ width: 200 }}
+              onChange={(e) => this.setState({ card_num: e.target.value })}
+            />
+          </li>
+          &nbsp; 
+          <li>&nbsp;开户省: 
+            &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Select
+              style={{ width: 200 }}
+              placeholder="选择开户省"
+              value={this.state.bank_province}
+              onChange={(val) => {
+                this.setState({ bank_province: val,cities:this.state.bankProvinceData[val],bank_city:"选择开户市"});
+              }}
+            >
+              {
+                this.state.provinces.map((e,index)=>{
+                  return <Option value={e} key ={index}>{e}</Option>
+                })
+              }
+            </Select>
+            &nbsp; &nbsp; 
+          </li>
+          &nbsp; 
+          <li>&nbsp;开户市:
+            &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Select
+              style={{ width: 200 }}
+              placeholder="选择开户市"
+              value={this.state.bank_city}
+              onChange={(val) => {
+                this.setState({ bank_city: val });
+              }}
+            >
+              {
+                this.state.cities.map((e,index)=>{
+                  return <Option value={e} key ={index} >{e}</Option>
+                })
+              }
+            </Select>
+            &nbsp; &nbsp;
+          </li>
+          &nbsp;
+          <li style={{display:"flex"}}>&nbsp;开户支行:
+            &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+            <Input
+              placeholder="输入开户支行"
+              style={{width:200}}
+              value={this.state.branch_name}
+              onChange={(e) => this.setState({ branch_name: e.target.value })}
+            />
+          </li>
+          
 
         </Modal>
       )}

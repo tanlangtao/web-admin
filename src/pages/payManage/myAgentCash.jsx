@@ -37,7 +37,8 @@ const init_state = {
   isShowAccountDetail:false,
   total_amount:0,
   total_arrival_amount:0,
-  time_type:1
+  time_type:1,
+  BtnDisabled:false
 };
 export default class MyAgentCash extends Component {
   constructor(props) {
@@ -148,7 +149,11 @@ export default class MyAgentCash extends Component {
       align: 'center',
       render: (text, record) => (
         <span>
-          { record.status != 4 && <LinkButton type="default" onClick={() => this.handleApply(record)}>
+          { record.status != 4 && <LinkButton type="default" onClick={() => {
+            if(!this.state.BtnDisabled){
+              this.handleApply(record)
+            }
+          }}>
               我已付款
               </LinkButton>
           }
@@ -196,6 +201,9 @@ export default class MyAgentCash extends Component {
     this.recordID = record.user_id
   }
   handleApply = async (record) => {
+    this.setState({
+      BtnDisabled:true
+    })
     const result = await reqApplyDaiWithdraw(
       this.props.admin_user_id,
       record.package_id,
@@ -207,6 +215,9 @@ export default class MyAgentCash extends Component {
     }else{
       message.error(`操作失败！${result.data}`)
     }
+    this.setState({
+      BtnDisabled:false
+    })
   }
 
   getReqDaiWithdrawOrderListByLoginId = async (page,limit)=>{
@@ -274,7 +285,7 @@ export default class MyAgentCash extends Component {
     let self = this
     this.timer = setInterval(e=>{
       self.getReqDaiWithdrawOrderListByLoginId(1,20)
-    },1000*60*3)
+    },1000*90)
   }
   componentWillUnmount(){
     clearInterval(this.timer)
@@ -372,7 +383,7 @@ export default class MyAgentCash extends Component {
       />
       {this.state.isShowAccountDetail && (
         <Modal
-          title="账号详情"
+          title={`${this.recordID} 账号详情`}
           visible={this.state.isShowAccountDetail}
           onCancel={() => {
             this.setState({ isShowAccountDetail: false });

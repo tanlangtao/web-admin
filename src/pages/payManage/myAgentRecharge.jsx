@@ -32,7 +32,8 @@ const init_state = {
   MyDatePickerValue: null,
   isShowModifyModel:false,
   modifyAmount:"",
-  time_type:1
+  time_type:1,
+  BtnDisabled:false
 };
 export default class MyAgentRecharge extends Component {
   constructor(props) {
@@ -161,7 +162,11 @@ export default class MyAgentRecharge extends Component {
       align: 'center',
       render: (text, record) => (
         <span>
-          <LinkButton type="default" onClick={() => this.handleApplyDaiPayAmount(record)}>
+          <LinkButton type="default" onClick={() => {
+            if(!this.state.BtnDisabled){
+              this.handleApplyDaiPayAmount(record)
+            }
+          }}>
             确认上分
               </LinkButton>
           <LinkButton type="default" onClick={() => this.showModifyModel(record)}>
@@ -172,6 +177,9 @@ export default class MyAgentRecharge extends Component {
     },
   ];
   handleApplyDaiPayAmount = async (record) => {
+    this.setState({
+      BtnDisabled:true
+    })
     const result = await reqApplyDaiPayAmount(
       record.order_id,
       Number(record.package_id),
@@ -182,10 +190,13 @@ export default class MyAgentRecharge extends Component {
     }else{
       message.error(`操作失败！${result.data}`)
     }
+    this.setState({
+      BtnDisabled:false
+    })
   }
   showModifyModel = (record) => {
     this.setState({
-      isShowModifyModel: true
+      isShowModifyModel: true,
     })
     this.record = record
   }
@@ -193,6 +204,9 @@ export default class MyAgentRecharge extends Component {
     if(this.state.modifyAmount == ""){
       return message.info("不能为空！")
     }
+    this.setState({
+      BtnDisabled:true
+    })
     const result = await reqModifyDaiPayAmount(
       this.record.order_id,
       Number(this.record.package_id),
@@ -201,12 +215,15 @@ export default class MyAgentRecharge extends Component {
     if (result.status === 0) {
       message.success("操作成功！")
       this.setState({
-        isShowModifyModel:false
+        isShowModifyModel:false,
       })
       this.getReqDaiPayOrderListByLoginId(1,20)
     }else{
       message.error(`操作失败！${result.data}`)
     }
+    this.setState({
+      BtnDisabled:false
+    })
   }
   getReqDaiPayOrderListByLoginId = async (page, limit) => {
     this.setState({ loading: true });
@@ -255,7 +272,7 @@ export default class MyAgentRecharge extends Component {
     let self = this
     this.timer = setInterval(e=>{
       self.getReqDaiPayOrderListByLoginId(1,20)
-    },1000*60*3)
+    },1000*90)
   }
   componentWillUnmount(){
     clearInterval(this.timer)
@@ -353,9 +370,13 @@ export default class MyAgentRecharge extends Component {
         <Modal
           title="修改上分"
           visible={this.state.isShowModifyModel}
-          onOk={this.handleModifyModel}
+          onOk={()=>{
+            if(!this.state.BtnDisabled){
+              this.handleModifyModel()
+            }
+          }}
           onCancel={() => {
-            this.setState({ isShowModifyModel: false });
+            this.setState({ isShowModifyModel: false,BtnDisabled:false });
           }}
         >
           <Input

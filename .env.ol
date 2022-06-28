@@ -1,4 +1,4 @@
-REACT_APP_HOST=https://creditweb.duxiqipai.com
+REACT_APP_HOST=https://creditweb.duxiqipai.com,https://creditweb.lshssc.com,https://creditweb.malegym.com,https://creditweb.minsalt.com
 REACT_APP_GAME_HOST=https://game.hfbgszx.com
 REACT_APP_IM_HOST=https://im.whhclsb.com
 REACT_APP_CENTER_HOST=https://center.hfbgszx.com

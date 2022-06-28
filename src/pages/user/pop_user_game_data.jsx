@@ -67,7 +67,7 @@ class PopUserGameData extends Component {
     componentDidMount(){
         //默认显示一个月数据
         let start_time = moment().startOf("day").subtract(1, "month")._d.getTime() /1000
-        let end_time = moment().startOf("day")._d.getTime() /1000
+        let end_time = parseInt(moment().endOf("day")._d.getTime() /1000)
         this.setState({
             recordID : this.props.recordID,
             current:{

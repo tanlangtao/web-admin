@@ -13,6 +13,7 @@ import LinkButton from "../../components/link-button/index";
 import GoldDetail from "../payManage/goldDetail";
 import CreditDetail from "../payManage/creditDetail";
 import moment from "moment";
+import {  check,checkPass } from "../../utils/commonFuntion";
 import {
     reqCreditAdduser,
     getCreditUserlists,
@@ -42,6 +43,7 @@ const init_state = {
     inputUserId:"",
     isShowAddChaoguan:false,
     isShowAddCaopan:false,
+    inputRoleId:"",
 };
 export default class AccList extends Component {
     constructor(props) {
@@ -142,6 +144,10 @@ export default class AccList extends Component {
     handleResetpwd = async () => {
         if(this.state.resetpwd == ""){
             return message.info("密码不能为空！")
+        }else if(!check(this.state.resetpwd)){
+            return message.info("密码不能包含特殊字符!");
+        }else if(!checkPass(this.state.resetpwd)){
+            return message.info("密码需包含数字和大小写字母!");
         }
         const res = await reqEditUser(
             this.record.id, 
@@ -156,6 +162,7 @@ export default class AccList extends Component {
             this.setState({ resetpwd: "", isResetPwdShow: false });
         } else {
              message.success("操作失败:" + res.msg);
+             this.setState({ resetpwd: "" });
         }
     };
     handleGoldChange = async () => {
@@ -195,10 +202,21 @@ export default class AccList extends Component {
     handlAddChaoguan =  async () => {
         if (this.state.inputAccount == "" ||this.state.inputPassword == "") {
             return message.info("账号密码不能为空!");
+        }else if (!check(this.state.inputAccount) || !check(this.state.inputPassword)){
+            return message.info("只能输入数字和大小写的字母!");
+        }else if (this.state.inputAccount.length < 4 || this.state.inputAccount.length > 12) {
+            return message.info("账号需要4-12个字符!");
+        }else if(!checkPass(this.state.inputAccount)){
+            return message.info("账号需包含数字和大小写字母!");
+        }else if(!checkPass(this.state.inputPassword)){
+            return message.info("密码需包含数字和大小写字母!");
         }
         if(this.state.inputPackageId == ""){
             return message.info("授权品牌不能为空！")
         }
+        this.setState({
+            isShowAddChaoguan:false
+        })
         const res = await reqCreditAdduser(
             this.state.inputAccount,
             this.state.inputPassword,
@@ -208,35 +226,48 @@ export default class AccList extends Component {
         );
         if (res.status == 0) {
             message.success("操作成功！");
-            this.setState({ inputPackageId: "",inputAccount: "", inputPassword: "",isShowAddChaoguan:false });
             this.getCreditUserlist(1,20)
         } else {
             message.info("操作失败:" + res.msg);
         }
+        this.setState({ inputPackageId: "",inputAccount: "", inputPassword: "" });
     }
     handlAddCaopan =  async () => {
+        
         if (this.state.inputAccount == "" ||this.state.inputPassword == "") {
             return message.info("账号密码不能为空!");
+        }else if (!check(this.state.inputAccount) || !check(this.state.inputPassword)){
+            return message.info("只能输入数字和大小写的字母!");
+        }else if (this.state.inputAccount.length < 4 || this.state.inputAccount.length > 12) {
+            return message.info("账号需要4-12个字符!");
+        }else if(!checkPass(this.state.inputAccount)){
+            return message.info("账号需包含数字和大小写字母!");
+        }else if(!checkPass(this.state.inputPassword)){
+            return message.info("密码需包含数字和大小写字母!");
         }
         if(this.state.inputPackageId == ""){
             return message.info("授权品牌不能为空！")
         }else if(this.state.inputPackageId.split("").length>2){
             return message.info("授权品牌只能传1个")
         }
+        if(!/^[1-9]\d*$/.test(this.state.inputRoleId)){
+            return message.info("角色ID只能输入正整数！")
+        }
+        this.setState({isShowAddCaopan:false });
         const res = await reqCreditAdduser(
             this.state.inputAccount,
             this.state.inputPassword,
             this.state.inputUserId,
             this.state.inputPackageId,
-            2,//操盘默认为2
+            Number(this.state.inputRoleId),
         );
         if (res.status == 0) {
             message.success("操作成功！");
-            this.setState({ inputPackageId: "",inputAccount: "", inputPassword: "",inputUserId:"",isShowAddCaopan:false });
             this.getCreditUserlist(1,20)
         } else {
             message.info("操作失败:" + res.msg);
         }
+        this.setState({ inputPackageId: "",inputAccount: "", inputPassword: "",inputUserId:"",inputRoleId:"",isShowAddCaopan:false });
     }
     componentDidMount() {
         this.setState({
@@ -358,11 +389,11 @@ export default class AccList extends Component {
             )}
             {this.state.isResetPwdShow && (
                 <Modal
-                    title="重置密码"
+                    title={`重置密码${this.record.user_id}`}
                     visible={this.state.isResetPwdShow}
                     onOk={this.handleResetpwd}
                     onCancel={() => {
-                        this.setState({ isResetPwdShow: false });
+                        this.setState({ isResetPwdShow: false ,resetpwd:""});
                     }}
                 >
                     <span>重置密码</span>
@@ -394,7 +425,7 @@ export default class AccList extends Component {
                         visible={this.state.isShowAddChaoguan}
                         onOk={this.handlAddChaoguan}
                         onCancel={() => {
-                            this.setState({ isShowAddChaoguan: false });
+                            this.setState({ isShowAddChaoguan: false ,inputPackageId: "",inputAccount: "", inputPassword: "" });
                         }}
                     >
                         <p>超管账号 <Input
@@ -423,7 +454,7 @@ export default class AccList extends Component {
                         visible={this.state.isShowAddCaopan}
                         onOk={this.handlAddCaopan}
                         onCancel={() => {
-                            this.setState({ isShowAddCaopan: false });
+                            this.setState({ isShowAddCaopan: false,inputPackageId: "",inputAccount: "", inputPassword: "",inputUserId:"",inputRoleId:"", });
                         }}
                     >
                         <p>操盘账号 <Input
@@ -447,6 +478,11 @@ export default class AccList extends Component {
                             onChange={(e) => this.setState({ inputPackageId: e.target.value })}
                         /></p>
                         <p style={{color:"red"}}>说明:授权品牌只能传1个</p>
+                        <p>角色ID <Input
+                            placeholder="请输入角色ID"
+                            value={this.state.inputRoleId}
+                            onChange={(e) => this.setState({ inputRoleId: e.target.value })}
+                        /></p>
                     </Modal>
                 )
             }

@@ -48,6 +48,12 @@ export default class TeamDaily extends Component {
       width: 100,
     },
     {
+      title: "品牌ID",
+      dataIndex: "package_id",
+      key: "package_id",
+      align: 'center',
+    },
+    {
       title: "统计时间",
       dataIndex: "date",
       key: "date",
@@ -199,6 +205,12 @@ export default class TeamDaily extends Component {
     this.setState({
         platform_name:platform_name
     })
+    let start = moment().startOf("day").subtract(1, "day")
+    let end = moment().endOf("day").subtract(1, "day")
+    this.setState({
+      startTime: start.format("YYYY-MM-DD HH:mm:ss"),
+      endTime: end.format("YYYY-MM-DD HH:mm:ss"),
+    })
   }
   render(){
     const { data, count, current, pageSize, loading } = this.state;
@@ -256,24 +268,8 @@ export default class TeamDaily extends Component {
       </span>
     );
         
-      const extra = (
-        <span>
-          <LinkButton
-            style={{ float: "right" }}
-            onClick={() => {
-              this.setState(init_state, () => {
-                this.getUsers(1, 20);
-              });
-            }}
-            icon="reload"
-            size="default"
-          />
-          <br />
-          <br />
-        </span>
-      );
       console.log(data)
-      return  <Card title={title} extra={extra}>
+      return  <Card title={title} >
                 <Mytable
                     tableData={{
                         data,

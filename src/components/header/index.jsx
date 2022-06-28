@@ -15,6 +15,7 @@ import {
 
 import LinkButton from "../link-button";
 import { getAuthCode, editPass ,getCreditUserlist,reqEditUser} from "../../api";
+import {  check,checkPass } from "../../utils/commonFuntion";
 // import QRCode from "qrcode.react";
 import "./index.less";
 const { TabPane } = Tabs;
@@ -436,6 +437,10 @@ class Header extends Component {
   handleResetpwd = async () => {
     if(this.state.resetpwd == ""){
         return message.info("密码不能为空！")
+    }else if(!check(this.state.resetpwd)){
+      return message.info("密码不能包含特殊字符!");
+    }else if(!checkPass(this.state.resetpwd)){
+      return message.info("密码需包含数字和大小写字母!");
     }
     const res = await reqEditUser(
         this.state.record.id, 

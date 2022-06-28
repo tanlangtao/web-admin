@@ -6,6 +6,7 @@ import {
   Icon,
   Input,
   Select,
+  Table
 } from "antd";
 import Mytable from "../../components/MyTable";
 import MyDatePicker from "../../components/MyDatePicker";
@@ -29,6 +30,33 @@ export default class Zcs28 extends Component {
     super(props);
     this.state = init_state;
   }
+  initColumns = () => [
+    {
+      title: "玩家ID",
+      dataIndex: "user_id",
+      key: "user_id",
+      align: 'center',
+    },
+    {
+        title: "活动ID",
+        dataIndex: "activity_id",
+        key: "activity_id",
+        align: 'center',
+    },
+    {
+        title: "活动名称",
+        dataIndex: "activity_name",
+        key: "activity_name",
+        align: 'center',
+    },
+    {
+        title: "申请时间",
+        dataIndex: "created_at",
+        key: "created_at",
+        align: 'center',
+        render:formateDate
+    },
+]
   componentDidMount() {
     
   }
@@ -76,6 +104,7 @@ export default class Zcs28 extends Component {
                 }}
                 value={this.state.input_activity_id}
             ></Input>
+            <span style={{color:"red",fontSize:"20px",width:"250px",position:"absolute",left:"350px"}}>* 请输入活动ID = 182 *</span>
         </div>
         <div style={{display:"flex",width:"300px"}}>
             <span style={{width:"80px",lineHeight:"30px"}}>玩家ID</span> &nbsp; &nbsp;
@@ -100,9 +129,16 @@ export default class Zcs28 extends Component {
             </LinkButton>
         </div>
         &nbsp;&nbsp;
-        <div>
-            {JSON.stringify(this.state.data)!= "[]" &&JSON.stringify(this.state.data) }
-        </div>
+        {
+            this.state.data.length > 0 && <Table
+            bordered
+            rowKey={(record, index) => `${index}`}
+            dataSource={this.state.data}
+            columns={this.initColumns()}
+            size="small"
+            pagination={false}
+          />
+        }
     </Card>
   }
 }

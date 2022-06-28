@@ -133,7 +133,7 @@ class LeftNav extends Component {
           console.log('item.title====', item.title)
         } else {
           // console.log('2item.title====', item.tittle)
-          if (item.title == '用户管理' || item.title == '报表管理' || item.title == "推广员管理" || item.title == "账户管理" || item.title == "支付管理" || item.title == "菜单管理" || item.title == "活动管理") {
+          if (item.title == '用户管理' || item.title == '报表管理' || item.title == "推广员管理" || item.title == "账户管理" || item.title == "支付管理" || item.title == "菜单管理" || item.title == "活动管理" || item.title == "亏损分红") {
             // console.log('2item.title====', item.children)
             //下面代码放入这里即可控制左侧标签渲染数量
             // 查找一个与当前请求路径匹配的子Item
@@ -321,7 +321,9 @@ class LeftNav extends Component {
     //     }]
     //   })
     // }
+    console.log(menuList)
     let newList = this.reduceItem(menuList)
+    console.log("newList",newList)
     localStorage.menuList = JSON.stringify(newList)
     const menuNodes = this.getMenuNodes(newList);
     this.setState({ menuNodes });
@@ -379,6 +381,12 @@ class LeftNav extends Component {
       case "游戏玩家数据": key = "/list/gamedatalist" ; break; //游戏数据
       case "注册送28元35": key = "/activity/zcs-28" ; break; //活动，注册送28
       case "新用户包赔活动35": key = "/activity/xyhbp35" ; break; //活动，注册送28
+      case "亏损分红": key = "/cgWorkers" ;type="team"; break; //亏损分红
+      case "单日团队数据CG": key = "/cgWorkers/daily-settlement" ; break; 
+      case "历史个人数据CG": key = "/cgWorkers/personal-daily" ; break; 
+      case "历史团队数据CG": key = "/cgWorkers/team-daily" ; break; 
+      case "个人结算列表CG": key = "/cgWorkers/personal-list" ; break; 
+      case "团队结算列表CG": key = "/cgWorkers/team-list" ; break; 
     }
     return [key,type]
   }

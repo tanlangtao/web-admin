@@ -14,6 +14,7 @@ import MyDatePicker from "../../components/MyDatePicker";
 import { formatDateYMD } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-button/index";
 import WrappedComponent from "../user/gold_details";
+import ExportJsonExcel from "js-export-excel";
 import moment from "moment"
 import {
   reqGetCreditDividendInfo7DayList,
@@ -32,7 +33,8 @@ const init_state = {
     packages:"",
     loading: false,
     isGoldDetailShow:false,
-    searchID:""
+    inputID:"",
+    inputPID:"",
 };
 export default class PersonalList extends Component {
   constructor(props) {
@@ -222,8 +224,8 @@ export default class PersonalList extends Component {
     const result = await reqGetCreditDividendInfo7DayList(
       formatDateYMD(this.state.startTime),
       formatDateYMD(this.state.endTime),
-      this.state.searchID,
-      this.props.package_id,
+      this.state.inputID,
+      this.state.inputPID,
       page,
       limit
     );
@@ -295,10 +297,85 @@ export default class PersonalList extends Component {
       endTime: end.format("YYYY-MM-DD HH:mm:ss"),
     })
   }
+  async download(){
+    var option = {};
+    let dataTable = [];
+    const data = this.state.data
+    data &&
+        data.forEach((ele) => {
+            let obj = {
+                玩家ID: ele.id,
+                品牌ID: ele.package_id,
+                统计时间: ele.date,
+                上级ID: ele.proxy_user_id,
+                团队充值: ele.top_up,
+                团队兑换: Math.abs(ele.withdraw),
+                期初金额: Math.round(ele.first_balance * 100) / 100,
+                期末金额: Math.round(ele.last_balance * 100) / 100,
+                营收: Math.round(ele.amount * 100) / 100,
+                分红比例: ele.percent,
+                充值成本: Math.round(ele.top_up_cost * 100) / 100,
+                运营成本: Math.round(ele.activity_cost * 100) / 100,
+                渠道费用: Math.round(ele.cost_money * 100) / 100,
+                上期结转金额: Math.round(ele.last_grant * 100) / 100,
+                直属下级分红: Math.round(ele.child_money * 100) / 100,
+                应发分红: Math.round((ele.money + ele.last_grant - ele.child_money+ele.last_child_grant) * 100) / 100,
+                状态: ele.status == 0 ? "未发" :"已发",
+            };
+            dataTable.push(obj);
+        });
+    option.datas = [
+        {
+            sheetData: dataTable,
+            sheetName: "sheet",
+            sheetHeader: [
+                "玩家ID",
+                "品牌ID",
+                "统计时间",
+                "上级ID",
+                "团队充值",
+                "团队兑换",
+                "期初金额",
+                "期末金额",
+                "营收",
+                "分红比例",
+                "充值成本",
+                "运营成本",
+                "渠道费用",
+                "上期结转金额",
+                "直属下级分红",
+                "应发分红",
+                "状态",
+            ],
+        },
+    ];
+    var toExcel = new ExportJsonExcel(option); //new
+    toExcel.saveExcel();
+  };
   render(){
     const { data, count, current, pageSize, loading } = this.state;
     const title = (
         <span>
+          <Input
+          type="text"
+          placeholder="请输入ID搜索"
+          style={{ width: 150 }}
+          onChange={(e) => {
+            this.setState({ inputID: e.target.value });
+          }}
+          value={this.state.inputID}
+        />
+        &nbsp; &nbsp;
+        <Input
+          type="text"
+          placeholder="请输入品牌搜索"
+          style={{ width: 150 }}
+          onChange={(e) => {
+            this.setState({ inputPID: e.target.value });
+          }}
+          value={this.state.inputPID}
+        />
+        &nbsp; &nbsp;
           <MyDatePicker
             handleValue={(data, dateString) => {
               this.setState({
@@ -308,16 +385,6 @@ export default class PersonalList extends Component {
               });
             }}
             value={this.state.MyDatePickerValue}
-          />
-          &nbsp; &nbsp;
-          <Input
-            type="text"
-            placeholder="请输入ID搜索"
-            style={{ width: 150 }}
-            onChange={(e) => {
-                this.setState({ searchID: e.target.value });
-            }}
-            value={this.state.searchID}
           />
           &nbsp; &nbsp;
           <LinkButton
@@ -337,6 +404,15 @@ export default class PersonalList extends Component {
           </LinkButton>
           <br/>
           <span style={{color:"red"}}>开始日期必须为周一，结束日期必须为周日</span>
+          &nbsp; &nbsp;
+          <LinkButton
+              type="primary"
+              onClick={() => {
+                  this.download();
+              }}
+          >
+              导出数据
+          </LinkButton>
         </span>
     );
       return  <Card title={title} >

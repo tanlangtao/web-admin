@@ -35,7 +35,7 @@ const init_state = {
     inputId:"0",
     inputSort:"",
     inputStatus:"",
-    version:1654155035
+    version:1656396098
 };
 export default class MenuManage extends Component {
     constructor(props) {
@@ -71,29 +71,11 @@ export default class MenuManage extends Component {
             align: 'center',
             render: (record) => {
                 let str = ""
-                switch (record.pid) {
-                    case 1:
-                        str = "用户管理"
-                        break;
-                    case 2:
-                        str = "支付管理"
-                        break;
-                    case 3:
-                        str = "活动管理"
-                        break;
-                    case 4:
-                        str = "报表管理"
-                        break;
-                    case 5:
-                        str = "推广员管理"
-                        break;  
-                    case 6:
-                        str = "账户管理"
-                        break;
-                    default:
-                        str = ""
-                        break;
-                }
+                this.state.data.forEach(e=>{
+                    if(e.id == record.pid){
+                        str = e.title
+                    }
+                })
                 return str
             }
         },

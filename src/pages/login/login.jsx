@@ -6,11 +6,17 @@ import "./login.less";
 import { reqLogin, reqAuthCode, navList, setToken, raceURL ,reqMenulist} from "../../api";
 
 const Item = Form.Item;
-
+const init_state = {
+  eyeType: true,
+};
 /*
 登陆的路由组件
  */
 class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = init_state;
+  }
   getMenuList = async () => {
     const result = await navList();
     if (result.status === 0) {
@@ -112,6 +118,11 @@ class Login extends Component {
     //发送空请求确定BASE地址
     raceURL();
   }
+  handleEye(){
+    this.setState({
+      eyeType:!this.state.eyeType
+    })
+  }
   render() {
     // 如果用户已经登陆, 自动跳转到管理界面
     const token = localStorage.token;
@@ -173,16 +184,23 @@ class Login extends Component {
                   {
                     validator: this.validatePwd,
                   },
+                  {
+                    pattern: /^[a-zA-Z0-9_]+$/,
+                    message: "密码不能包含特殊字符",
+                  },
                 ],
               })(
                 <Input
                   prefix={
                     <Icon type="lock" style={{ color: "rgba(0,0,0,.25)",fontSize: "14px !important" }} />
                   }
-                  type="password"
+                  type={this.state.eyeType?"password":""}
                   placeholder="密码"
                 />
               )}
+              <Icon type={this.state.eyeType ? "eye" :"eye-invisible"} style={{width:"30px",height:"20px",position:"absolute",right:"-30px",top:"0px"}}
+                onClick={()=>this.handleEye()}
+              />
             </Form.Item>
             {/* <Form.Item>
               {getFieldDecorator("authcode", {
@@ -217,6 +235,7 @@ class Login extends Component {
               </Button>
             </Form.Item>
           </Form>
+          
         </section>
       </div>
     );

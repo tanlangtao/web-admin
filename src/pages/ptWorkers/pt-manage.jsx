@@ -13,6 +13,7 @@ import LinkButton from "../../components/link-button/index";
 import PopProxySetting from "../user/pop_user_proxy_setting";
 import moment from "moment"
 import TeamdataQuery from "./teamdataQuery";
+import { check, checkPass } from "../../utils/commonFuntion";
 import {
     getCreditUserlist,
     getDividendRule,
@@ -208,6 +209,10 @@ export default class PtManage extends Component {
     handleResetpwd = async () => {
         if (this.state.resetpwd == "") {
             return message.info("密码不能为空！")
+        }else if(!check(this.state.resetpwd)){
+            return message.info("密码不能包含特殊字符!");
+        }else if(!checkPass(this.state.resetpwd)){
+            return message.info("密码需包含数字和大小写字母!");
         }
         const res = await reqEditUser(
             this.record.id,
@@ -222,6 +227,7 @@ export default class PtManage extends Component {
             this.setState({ resetpwd: "", isResetPwdShow: false });
         } else {
             message.success("操作失败:" + res.msg);
+            this.setState({ resetpwd: "" });
         }
     };
     GetDividendRule = async () => {
@@ -394,11 +400,11 @@ export default class PtManage extends Component {
 
             {this.state.isResetPwdShow && (
                 <Modal
-                    title="重置密码"
+                    title={`重置密码${this.record.user_id}`}
                     visible={this.state.isResetPwdShow}
                     onOk={this.handleResetpwd}
                     onCancel={() => {
-                        this.setState({ isResetPwdShow: false });
+                        this.setState({ isResetPwdShow: false,resetpwd:"" });
                     }}
                 >
                     <span>重置密码</span>

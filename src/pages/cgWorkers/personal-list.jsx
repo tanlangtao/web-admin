@@ -29,6 +29,7 @@ const init_state = {
   MyDatePickerValue: null,
   packages: "",
   loading: false,
+  inputAcc:"",
 };
 export default class PersonalList extends Component {
   constructor(props) {
@@ -113,6 +114,7 @@ export default class PersonalList extends Component {
       dataIndex: "top_up_cost",
       key: "top_up_cost",
       align: 'center',
+      // width: 150,
       render: (text, record) => {
         return (Math.round(record.top_up_cost * 100) / 100);
       },
@@ -193,7 +195,7 @@ export default class PersonalList extends Component {
     const result = await reqGetCreditDividendInfo7Day(
       formatDateYMD(this.state.startTime),
       formatDateYMD(this.state.endTime),
-      this.props.admin_user_id,
+      this.state.inputAcc,
     );
     // const result = {"status":0,"code":200,"msg":[{"_id":"ac49bbb1f423c7a5ec13d69044cc6d6c","date":"2022-04-30:2022-05-05","id":630997900,"package_id":20,"proxy_user_id":590176383,"type":4,"demand_type":3,"demand_tag":1,"game_tag":0,"money":176.19900000000234,"grant":176.19900000000234,"amount":34190.33,"percent":30,"statement":0,"deficit":0,"statement_type":0,"statement_percent":0,"deficit_percent":0,"cost_percent":2,"cost_type":0,"cost_money":1980.9,"statement_cost_money":0,"deficit_cost_money":0,"status":0,"first_balance":0,"last_balance":10809.67,"top_up":45000,"withdraw":0,"child_money":0,"last_child_grant":0,"last_grant":0,"top_up_cost":1350,"activity_cost":6750}]}
     if (result.code == 200) {
@@ -246,6 +248,16 @@ export default class PersonalList extends Component {
     const { data, count, current, pageSize, loading } = this.state;
     const title = (
       <span>
+        <Input
+          type="text"
+          placeholder="请输入ID搜索"
+          style={{ width: 150 }}
+          onChange={(e) => {
+            this.setState({ inputAcc: e.target.value });
+          }}
+          value={this.state.inputAcc}
+        />
+        &nbsp; &nbsp;
         <MyDatePicker
           handleValue={(data, dateString) => {
             this.setState({

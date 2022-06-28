@@ -19,11 +19,11 @@ export default function MyDatePicker(props) {
           ],
           最近一周: [
             moment().startOf("day").subtract(1, "weeks"),
-            moment().startOf("day"),
+            moment().endOf("day"),
           ],
           最近一年: [
             moment().startOf("day").subtract(1, "years"),
-            moment().startOf("day"),
+            moment().endOf("day"),
           ],
         }}
         showTime={{

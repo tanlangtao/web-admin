@@ -150,6 +150,11 @@ import DailySettlement from "../ptWorkers/daily-settlement";
 import AccList from "../accManage/acc-list";
 import Zcs28 from "../activity/zcs-28";
 import Xyhbp35 from "../activity/xyhbp35";
+import PersonalDailyCg from "../cgWorkers/personal-daily";
+import PersonalListCg from "../cgWorkers/personal-list";
+import TeamDailyCg from "../cgWorkers/team-daily";
+import TeamListCg from "../cgWorkers/team-list";
+import DailySettlementCg from "../cgWorkers/daily-settlement";
 import { conforms } from "lodash-es";
 const { Sider, Content } = Layout;
 const history = createHashHistory();
@@ -931,7 +936,31 @@ export default class Admin extends Component {
                         <Xyhbp35 package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
                       </KeepAlive>
                     </Route>
-                    
+                    <Route path="/cgWorkers/personal-daily" exact>
+                      <KeepAlive name="PersonalDailyCg">
+                        <PersonalDailyCg package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
+                      </KeepAlive>
+                    </Route>
+                    <Route path="/cgWorkers/team-daily" exact>
+                      <KeepAlive name="TeamDailyCg">
+                        <TeamDailyCg package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
+                      </KeepAlive>
+                    </Route>
+                    <Route path="/cgWorkers/personal-list" exact>
+                      <KeepAlive name="PersonalListCg">
+                        <PersonalListCg package_id={this.state.package_id} account = {this.state.account} admin_user_id = {this.state.admin_user_id}/>
+                      </KeepAlive>
+                    </Route>
+                    <Route path="/cgWorkers/team-list" exact>
+                      <KeepAlive name="TeamListCg">
+                        <TeamListCg package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
+                      </KeepAlive>
+                    </Route>
+                    <Route path="/cgWorkers/daily-settlement" exact>
+                      <KeepAlive name="DailySettlementCg">
+                        <DailySettlementCg package_id={this.state.package_id} admin_user_id = {this.state.admin_user_id}/>
+                      </KeepAlive>
+                    </Route>
                     <Route component={NotFound} />
                   </Switch>
                   

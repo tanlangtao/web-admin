@@ -2284,7 +2284,7 @@ export const reqGetCreditDividendInfoList = (first_date, last_date, id, package_
     "GET"
   );
 };
-export const reqGetCreditDividendInfo7Day = (first_date, last_date, account_name, page, limit) => {
+export const reqGetCreditDividendInfo7Day = (first_date, last_date, account_name) => {
   return ajax(
     BASE + "/Operation/Api/GetCreditDividendInfo7Day",
     { first_date, last_date, account_name },

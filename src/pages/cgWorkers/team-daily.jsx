@@ -11,27 +11,29 @@ import {
 } from "antd";
 import Mytable from "../../components/MyTable";
 import MyDatePicker from "../../components/MyDatePicker";
-import { formateDate, formatDateYMD } from "../../utils/dateUtils";
+import { formatDateYMD } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-button/index";
-import moment from "moment";
 import {
-  reqGetCreditDividendInfoList,
+    reqGetCreditDividendInfoList,
 } from "../../api/index";
+import moment from "moment";
 const { Option } = Select;
 
 const init_state = {
-  current: 1,
-  pageSize: 20,
-  data: [],
-  count: 0,
-  startTime: "",
-  endTime: "",
-  MyDatePickerValue: null,
-  packages: "",
-  loading: false,
-  platform_name: ""
+    current: 1,
+    pageSize: 20,
+    data: [],
+    count: 0,
+    startTime: "",
+    endTime: "",
+    MyDatePickerValue: null,
+    packages:"",
+    loading: false,
+    platform_name:"",
+    inputID:"",
+    inputPID:""
 };
-export default class PersonalDaily extends Component {
+export default class TeamDaily extends Component {
   constructor(props) {
     super(props);
     this.state = init_state;
@@ -71,7 +73,7 @@ export default class PersonalDaily extends Component {
       dataIndex: "",
       key: "",
       align: 'center',
-      render: (record) => {
+      render:(record)=>{
         return Math.abs(record.withdraw)
       }
     },
@@ -155,22 +157,21 @@ export default class PersonalDaily extends Component {
     const result = await reqGetCreditDividendInfoList(
       formatDateYMD(this.state.startTime),
       formatDateYMD(this.state.endTime),
-      this.props.admin_user_id,
-      this.props.package_id,
+      this.state.inputID,
+      this.state.inputPID,
       page,
       limit
     );
+    // const result = {"status":0,"code":200,"msg":[{"_id":"53c430d9aff2e955ca0beb399cd966b1","date":"2022-05-05:2022-05-05","id":630997900,"package_id":20,"proxy_user_id":590176383,"type":4,"demand_type":3,"demand_tag":1,"game_tag":0,"money":9194.535,"grant":0,"amount":36531.45,"percent":30,"statement":0,"deficit":0,"statement_type":0,"statement_percent":0,"deficit_percent":0,"cost_percent":2,"cost_type":0,"cost_money":864.9,"statement_cost_money":0,"deficit_cost_money":0,"status":0,"first_balance":42341.119999999995,"last_balance":10809.67,"top_up":5000,"withdraw":0,"top_up_cost":150,"activity_cost":750},{"_id":"313c663e4ca6c18ecc847da99232efa1","date":"2022-05-04:2022-05-04","id":630997900,"package_id":20,"proxy_user_id":590176383,"type":4,"demand_type":3,"demand_tag":1,"game_tag":0,"money":-6328.220999999998,"grant":0,"amount":-5374.069999999992,"percent":30,"statement":0,"deficit":0,"statement_type":0,"statement_percent":0,"deficit_percent":0,"cost_percent":2,"cost_type":0,"cost_money":1116,"statement_cost_money":0,"deficit_cost_money":0,"status":0,"first_balance":16967.05,"last_balance":42341.119999999995,"top_up":20000,"withdraw":0,"top_up_cost":600,"activity_cost":3000}]}
     if (result.code == 200) {
       this.setState({
         data: result.msg,
         count: result.msg && result.msg.length,
+        loading: false,
       });
     } else {
       message.info(result.msg || "未检索到数据");
     }
-    this.setState({
-      loading: false
-    })
   };
   getDataByTime(num){
     let start = ""
@@ -200,10 +201,10 @@ export default class PersonalDaily extends Component {
       this.getUsers(1,20)
     })
   }
-  componentDidMount() {
+  componentDidMount(){
     let platform_name = localStorage.getItem("name")
     this.setState({
-      platform_name: platform_name
+        platform_name:platform_name
     })
     let start = moment().startOf("day").subtract(1, "day")
     let end = moment().endOf("day").subtract(1, "day")
@@ -212,76 +213,97 @@ export default class PersonalDaily extends Component {
       endTime: end.format("YYYY-MM-DD HH:mm:ss"),
     })
   }
-  render() {
+  render(){
     const { data, count, current, pageSize, loading } = this.state;
-
+    
     const title = (
-      <span>
-        <MyDatePicker
-          handleValue={(data, dateString) => {
-            this.setState({
-              startTime: dateString[0],
-              endTime: dateString[1],
-              MyDatePickerValue: data,
-            });
+        <span>
+        <Input
+          type="text"
+          placeholder="请输入ID搜索"
+          style={{ width: 150 }}
+          onChange={(e) => {
+            this.setState({ inputID: e.target.value });
           }}
-          value={this.state.MyDatePickerValue}
+          value={this.state.inputID}
         />
         &nbsp; &nbsp;
+        <Input
+          type="text"
+          placeholder="请输入品牌搜索"
+          style={{ width: 150 }}
+          onChange={(e) => {
+            this.setState({ inputPID: e.target.value });
+          }}
+          value={this.state.inputPID}
+        />
+        &nbsp; &nbsp;
+          <MyDatePicker
+            handleValue={(data, dateString) => {
+              this.setState({
+                startTime: dateString[0],
+                endTime: dateString[1],
+                MyDatePickerValue: data,
+              });
+            }}
+            value={this.state.MyDatePickerValue}
+        />
+        
+        &nbsp; &nbsp;
         <LinkButton
-          onClick={() => {
+        onClick={() => {
             this.setState({ current: 1 });
             this.getUsers(1, this.state.pageSize);
-          }}
-          size="default"
+        }}
+        size="default"
         >
-          <Icon type="search" />
+        <Icon type="search" />
         </LinkButton>
         &nbsp; &nbsp;
         <LinkButton
           onClick={() => this.getDataByTime(1)}
           size="default"
-        >昨天
+          >昨天
         </LinkButton>
         &nbsp; &nbsp;
         <LinkButton
           onClick={() => this.getDataByTime(2)}
           size="default"
-        >本周
+          >本周
         </LinkButton>
         &nbsp; &nbsp;
         <LinkButton
           onClick={() => this.getDataByTime(3)}
           size="default"
-        >上周
+          >上周
         </LinkButton>
       </span>
     );
-   
-    console.log(data)
-    return <Card title={title} >
-      <Mytable
-        tableData={{
-          data,
-          count,
-          columns: this.initColumns(),
-          x: "max-content",
-          // y: "65vh",
-          current,
-          pageSize,
-          loading,
-        }}
-        paginationOnchange={(page, limit) => {
-          this.getUsers(page, limit);
-        }}
-        setPagination={(current, pageSize) => {
-          if (pageSize) {
-            this.setState({ current, pageSize });
-          } else {
-            this.setState({ current });
-          }
-        }}
-      />
-    </Card>
-  }
+        
+      console.log(data)
+      return  <Card title={title} >
+                <Mytable
+                    tableData={{
+                        data,
+                        count,
+                        columns: this.initColumns(),
+                        x: "max-content",
+                        // y: "65vh",
+                        current,
+                        pageSize,
+                        loading,
+                    }}
+                    paginationOnchange={(page, limit) => {
+                        this.getUsers(page, limit);
+                    }}
+                    setPagination={(current, pageSize) => {
+                        if (pageSize) {
+                            this.setState({ current, pageSize });
+                        } else {
+                            this.setState({ current });
+                        }
+                    }}
+                 />
+      </Card>
+    }
 }

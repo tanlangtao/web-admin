@@ -13,6 +13,7 @@ import MyDatePicker from "../../../components/MyDatePicker";
 import LinkButton from "../../../components/link-button/index";
 import GoldDetail from "../goldDetail";
 import CreditDetail from "../creditDetail";
+import {  check,checkPass } from "../../../utils/commonFuntion";
 import moment from "moment";
 import {
     reqCreditAdduser,
@@ -153,6 +154,10 @@ export default class ServiceDetail extends Component {
     handleResetpwd = async () => {
         if(this.state.resetpwd == ""){
             return message.info("密码不能为空！")
+        }else if(!check(this.state.resetpwd)){
+            return message.info("密码不能包含特殊字符!");
+        }else if(!checkPass(this.state.resetpwd)){
+            return message.info("密码需包含数字和大小写字母!");
         }
         const res = await reqEditUser(
             this.record.id, 
@@ -167,6 +172,7 @@ export default class ServiceDetail extends Component {
             this.setState({ resetpwd: "", isResetPwdShow: false });
         } else {
              message.success("操作失败:" + res.msg);
+             this.setState({ resetpwd: "" });
         }
     };
     handleGoldChange = async () => {
@@ -207,7 +213,18 @@ export default class ServiceDetail extends Component {
     handSetAgent =  async () => {
         if (this.state.setAgentAccount == "" ||this.state.setAgentpassword == "") {
             return message.info("代充账号密码不能为空!");
+        }else if (!check(this.state.setAgentAccount) || !check(this.state.setAgentpassword)){
+            return message.info("只能输入数字和大小写的字母!");
+        }else if (this.state.setAgentAccount.length < 4 || this.state.setAgentAccount.length > 12) {
+            return message.info("代充账号需要4-12个字符!");
+        }else if(!checkPass(this.state.setAgentAccount)){
+            return message.info("账号需包含数字和大小写字母!");
+        }else if(!checkPass(this.state.setAgentpassword)){
+            return message.info("密码需包含数字和大小写字母!");
         }
+        this.setState({
+            isShowSetAgent:false
+        })
         const res = await reqCreditAdduser(
             this.state.setAgentAccount,
             this.state.setAgentpassword,
@@ -217,11 +234,11 @@ export default class ServiceDetail extends Component {
         );
         if (res.status == 0) {
             message.success("操作成功！");
-            this.setState({ setAgentUserID: "",setAgentAccount: "", setAgentpassword: "",isShowSetAgent:false });
             this.getCreditUserlist(1,20)
         } else {
             message.info("操作失败:" + res.msg);
         }
+        this.setState({ setAgentUserID: "",setAgentAccount: "", setAgentpassword: ""});
     }
     componentDidMount() {
         this.setState({
@@ -319,11 +336,11 @@ export default class ServiceDetail extends Component {
             )}
             {this.state.isResetPwdShow && (
                 <Modal
-                    title="重置密码"
+                    title={`重置密码${this.record.user_id}`}
                     visible={this.state.isResetPwdShow}
                     onOk={this.handleResetpwd}
                     onCancel={() => {
-                        this.setState({ isResetPwdShow: false });
+                        this.setState({ isResetPwdShow: false ,resetpwd:''});
                     }}
                 >
                     <span>重置密码</span>
@@ -355,7 +372,7 @@ export default class ServiceDetail extends Component {
                         visible={this.state.isShowSetAgent}
                         onOk={this.handSetAgent}
                         onCancel={() => {
-                            this.setState({ isShowSetAgent: false });
+                            this.setState({ isShowSetAgent: false ,setAgentUserID:"",setAgentAccount: "", setAgentpassword: ""});
                         }}
                     >
                          <p>玩家ID <Input

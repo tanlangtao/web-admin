@@ -48,6 +48,12 @@ export default class DailySettlement extends Component {
       width: 100,
     },
     {
+      title: "品牌ID",
+      dataIndex: "package_id",
+      key: "package_id",
+      align: 'center',
+    },
+    {
       title: "统计时间",
       dataIndex: "date",
       key: "date",
@@ -244,22 +250,8 @@ export default class DailySettlement extends Component {
         <span style={{color:"red"}}>* 仅限单日数据查询 * </span>
         </span>
     );
-        
-      const extra = (
-        <span>
-          <LinkButton
-            style={{ float: "right" }}
-            onClick={() => {
-              this.getUsers(1, 20);
-            }}
-            icon="reload"
-            size="default"
-          />
-          <br />
-          <br />
-        </span>
-      );
-      return  <Card title={title} extra={extra}>
+       
+      return  <Card title={title} >
                 <Mytable
                     tableData={{
                         data,

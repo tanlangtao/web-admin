@@ -13,6 +13,7 @@ import {
 
 import { formateDate } from "../../utils/dateUtils";
 import LinkButton from "../../components/link-button/index";
+import {  check,checkPass } from "../../utils/commonFuntion";
 import {
   reqLowerUsers,
   setGameUserNickName,
@@ -525,7 +526,18 @@ export default class LowerManage extends Component {
   handSetAgent =  async () => {
     if (this.state.setAgentAccount == "" ||this.state.setAgentpassword == "") {
         return message.info("推广员账号密码不能为空!");
+    }else if (!check(this.state.setAgentAccount) || !check(this.state.setAgentpassword)){
+      return message.info("只能输入数字和大小写的字母!");
+    }else if (this.state.setAgentAccount.length < 4 || this.state.setAgentAccount.length > 12) {
+      return message.info("推广员账号需要4-12个字符!");
+    }else if(!checkPass(this.state.setAgentAccount)){
+      return message.info("账号需包含数字和大小写字母!");
+    }else if(!checkPass(this.state.setAgentpassword)){
+      return message.info("密码需包含数字和大小写字母!");
     }
+    this.setState({
+      isShowSetAgentModel:false
+    })
     const res = await reqCreditAdduser(
         this.state.setAgentAccount,
         this.state.setAgentpassword,
@@ -535,10 +547,10 @@ export default class LowerManage extends Component {
     );
     if (res.status == 0) {
         message.success("操作成功！");
-        this.setState({ setAgentAccount: "", setAgentpassword: "",isShowSetAgentModel:false });
     } else {
         message.info("操作失败:" + res.msg);
     }
+    this.setState({ setAgentAccount: "", setAgentpassword: ""});
   }
   reqGetDividendRule = async (user_id)=>{
     const res = await reqGetDividendRule(
@@ -702,28 +714,6 @@ export default class LowerManage extends Component {
         </LinkButton>
       </span>
     );
-    const extra = (
-      <span>
-        <LinkButton
-          style={{ float: "right" }}
-          onClick={() => {
-            this.setState(init_state, () => {
-              this.getUsers(1, 20);
-            });
-          }}
-          icon="reload"
-          size="default"
-        />
-        <br />
-        <br />
-        {/* <LinkButton
-          size="default"
-          style={{ float: "right" }}
-          onClick={this.download}
-          icon="download"
-        /> */}
-      </span>
-    );
     const SetTreatmentTitle = (
       <span>
         <span>设置待遇</span>
@@ -739,7 +729,7 @@ export default class LowerManage extends Component {
       </span>
     )
     return (
-      <Card title={title} extra={extra}>
+      <Card title={title} >
         <Mytable
           tableData={{
             data,
@@ -768,7 +758,7 @@ export default class LowerManage extends Component {
             visible={this.state.isShowSetAgentModel}
             onOk={this.handSetAgent}
             onCancel={() => {
-              this.setState({ isShowSetAgentModel: false });
+              this.setState({ isShowSetAgentModel: false ,setAgentAccount: "", setAgentpassword: ""});
             }}
           >
             <p>玩家ID： {this.recordID}</p>

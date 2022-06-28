@@ -21,7 +21,7 @@ import PopUserGameData from "./pop_user_game_data";
 import PopUserCashDetail from "./pop_user_cash_detail";
 import PopUserRechargeDetail from "./pop_user_recharge_detail";
 import LinkButton from "../../components/link-button/index";
-import { toNonExponential,reverseNumber } from "../../utils/commonFuntion";
+import { toNonExponential,reverseNumber ,check,checkPass} from "../../utils/commonFuntion";
 import { gameRouter,thirdPartyGameRouter } from "../../utils/public_variable";
 let gameNameMap = {
     ...gameRouter,
@@ -252,7 +252,18 @@ class UserListRouter extends Component {
     handSetAgent = async () => {
         if (this.state.setAgentAccount == "" || this.state.setAgentpassword == "") {
             return message.info("代充账号密码不能为空!");
+        }else if (!check(this.state.setAgentAccount) || !check(this.state.setAgentpassword)){
+            return message.info("只能输入数字和大小写的字母!");
+        }else if (this.state.setAgentAccount.length < 4 || this.state.setAgentAccount.length > 12) {
+            return message.info("代充账号需要4-12个字符!");
+        }else if(!checkPass(this.state.setAgentAccount)){
+            return message.info("账号需包含数字和大小写字母!");
+        }else if(!checkPass(this.state.setAgentpassword)){
+            return message.info("密码需包含数字和大小写字母!");
         }
+        this.setState({
+            isShowSetAgent:false
+        })
         const res = await reqCreditAdduser(
             this.state.setAgentAccount,
             this.state.setAgentpassword,
@@ -262,10 +273,10 @@ class UserListRouter extends Component {
         );
         if (res.status == 0) {
             message.success("操作成功！");
-            this.setState({ setAgentAccount: "", setAgentpassword: "" });
         } else {
             message.info("操作失败:" + res.msg);
         }
+        this.setState({ setAgentAccount: "", setAgentpassword: "" });
     }
     setuserstatus = async (recordID, status) => {
         let id = recordID;
